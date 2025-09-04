@@ -1,8 +1,0 @@
-from enum import Enum
-
-
-class LinuxDiscoveryRuleExpand(str, Enum):
-    DISCOVERYRULE = "DiscoveryRule"
-
-    def __str__(self) -> str:
-        return str(self.value)
