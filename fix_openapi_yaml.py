@@ -19,6 +19,16 @@ def fix_response_keys(input_path, output_path):
     )
     # Quote version numbers (e.g., version: 3.6, 3.6.1, 3.5.1 to version: "3.6", "3.6.1", "3.5.1")
     fixed = re.sub(r"(version:\s*)([0-9]+(?:\.[0-9]+)+)", r'\1"\2"', fixed)
+    # Fix union types like 'type: [string, null]' to 'type: string' (OpenAPI doesn't support null in type arrays)
+    # Replace 'type: [string, null]' or similar with 'type: string'
+    fixed = re.sub(
+        r"type:\s*\[([^\]]*?)string\s*,\s*null([^\]]*?)\]", "type: string", fixed
+    )
+    fixed = re.sub(
+        r"type:\s*\[([^\]]*?)null\s*,\s*string([^\]]*?)\]", "type: string", fixed
+    )
+    # Remove all 'nullable: true' lines (safer, non-greedy)
+    fixed = re.sub(r"^\s*nullable: true\s*$", "", fixed, flags=re.MULTILINE)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(fixed)
 
