@@ -71,7 +71,7 @@ from veeam_spc.v3_5_1.api.users import get_current_user
 # Authenticate using a REST API token
 client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
 
-with client as client:
+with client:
     user = get_current_user.sync(client=client)
     response: Response = get_current_user.sync_detailed(client=client)
 ```
@@ -83,13 +83,9 @@ from veeam_spc.v3_5_1.models import CreateUserRequest
 from veeam_spc.v3_5_1.api.users import create_user
 from veeam_spc.v3_5_1.types import Response
 
-body = CreateUserRequest(
-    username="newuser",
-    password="securepassword",
-    email="user@example.com"
-)
+client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
 
-async with client as client:
+async with client:
     user = await create_user.asyncio(client=client, json_body=body)
     response: Response = await create_user.asyncio_detailed(client=client, json_body=body)
 ```
@@ -99,14 +95,14 @@ By default, HTTPS APIs will verify SSL certificates. You can pass a custom certi
 
 ```python
 client = AuthenticatedClient(
-    base_url="https://internal_api.example.com",
+    base_url="https://internal_api.example.com/api/v3",
     token="SuperSecretToken",
     verify_ssl="/path/to/certificate_bundle.pem",
 )
 
 # Disable SSL verification (security risk)
 client = AuthenticatedClient(
-    base_url="https://internal_api.example.com",
+    base_url="https://internal_api.example.com/api/v3",
     token="SuperSecretToken",
     verify_ssl=False
 )
