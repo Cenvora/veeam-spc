@@ -66,15 +66,14 @@ from veeam_spc.v3_5_1.models import CreateUserRequest
 from veeam_spc.v3_5_1.api.users import create_user
 from veeam_spc.v3_5_1.types import Response
 
-body = CreateUserRequest(
-    username="newuser",
-    password="securepassword",
-    email="user@example.com"
-)
+from veeam_spc.v3_5_1.api.users import get_current_user
+
+# Authenticate using a REST API token
+client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
 
 with client as client:
-    user = create_user.sync(client=client, json_body=body)
-    response: Response = create_user.sync_detailed(client=client, json_body=body)
+    user = get_current_user.sync(client=client)
+    response: Response = get_current_user.sync_detailed(client=client)
 ```
 
 Or do the same thing with an async version:
