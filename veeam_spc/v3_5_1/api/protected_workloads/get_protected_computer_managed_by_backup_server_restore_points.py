@@ -1,0 +1,243 @@
+from http import HTTPStatus
+from typing import Any, Optional, Union, cast
+from uuid import UUID
+
+import httpx
+
+from ...client import AuthenticatedClient, Client
+from ...models.error_response import ErrorResponse
+from ...models.get_protected_computer_managed_by_backup_server_restore_points_response_200 import (
+    GetProtectedComputerManagedByBackupServerRestorePointsResponse200,
+)
+from ...types import UNSET, Response, Unset
+
+
+def _get_kwargs(
+    backup_agent_uid: UUID,
+    *,
+    limit: Union[Unset, int] = 100,
+    offset: Union[Unset, int] = 0,
+    x_request_id: Union[Unset, UUID] = UNSET,
+    x_client_version: Union[Unset, str] = UNSET,
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
+    if not isinstance(x_request_id, Unset):
+        headers["X-Request-id"] = x_request_id
+
+    if not isinstance(x_client_version, Unset):
+        headers["X-Client-Version"] = x_client_version
+
+    params: dict[str, Any] = {}
+
+    params["limit"] = limit
+
+    params["offset"] = offset
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
+
+    _kwargs: dict[str, Any] = {
+        "method": "get",
+        "url": f"/protectedWorkloads/computersManagedByBackupServer/{backup_agent_uid}/restorePoints",
+        "params": params,
+    }
+
+    _kwargs["headers"] = headers
+    return _kwargs
+
+
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]:
+    if response.status_code == 200:
+        response_200 = GetProtectedComputerManagedByBackupServerRestorePointsResponse200.from_dict(response.json())
+
+        return response_200
+
+    if response.status_code == 202:
+        response_202 = cast(Any, None)
+        return response_202
+
+    response_default = ErrorResponse.from_dict(response.json())
+
+    return response_default
+
+
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]]:
+    return Response(
+        status_code=HTTPStatus(response.status_code),
+        content=response.content,
+        headers=response.headers,
+        parsed=_parse_response(client=client, response=response),
+    )
+
+
+def sync_detailed(
+    backup_agent_uid: UUID,
+    *,
+    client: Union[AuthenticatedClient, Client],
+    limit: Union[Unset, int] = 100,
+    offset: Union[Unset, int] = 0,
+    x_request_id: Union[Unset, UUID] = UNSET,
+    x_client_version: Union[Unset, str] = UNSET,
+) -> Response[Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]]:
+    """Get Latest Restore Points of Protected Computer Managed by Backup Server
+
+     Returns a collection resource representation of all restore points created for a protected computer
+    managed by Veeam Backup & Replication with the specified UID of Veeam backup agent installed on the
+    computer.
+
+    Args:
+        backup_agent_uid (UUID):
+        limit (Union[Unset, int]):  Default: 100.
+        offset (Union[Unset, int]):  Default: 0.
+        x_request_id (Union[Unset, UUID]):
+        x_client_version (Union[Unset, str]):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Response[Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]]
+    """
+
+    kwargs = _get_kwargs(
+        backup_agent_uid=backup_agent_uid,
+        limit=limit,
+        offset=offset,
+        x_request_id=x_request_id,
+        x_client_version=x_client_version,
+    )
+
+    response = client.get_httpx_client().request(
+        **kwargs,
+    )
+
+    return _build_response(client=client, response=response)
+
+
+def sync(
+    backup_agent_uid: UUID,
+    *,
+    client: Union[AuthenticatedClient, Client],
+    limit: Union[Unset, int] = 100,
+    offset: Union[Unset, int] = 0,
+    x_request_id: Union[Unset, UUID] = UNSET,
+    x_client_version: Union[Unset, str] = UNSET,
+) -> Optional[Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]]:
+    """Get Latest Restore Points of Protected Computer Managed by Backup Server
+
+     Returns a collection resource representation of all restore points created for a protected computer
+    managed by Veeam Backup & Replication with the specified UID of Veeam backup agent installed on the
+    computer.
+
+    Args:
+        backup_agent_uid (UUID):
+        limit (Union[Unset, int]):  Default: 100.
+        offset (Union[Unset, int]):  Default: 0.
+        x_request_id (Union[Unset, UUID]):
+        x_client_version (Union[Unset, str]):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]
+    """
+
+    return sync_detailed(
+        backup_agent_uid=backup_agent_uid,
+        client=client,
+        limit=limit,
+        offset=offset,
+        x_request_id=x_request_id,
+        x_client_version=x_client_version,
+    ).parsed
+
+
+async def asyncio_detailed(
+    backup_agent_uid: UUID,
+    *,
+    client: Union[AuthenticatedClient, Client],
+    limit: Union[Unset, int] = 100,
+    offset: Union[Unset, int] = 0,
+    x_request_id: Union[Unset, UUID] = UNSET,
+    x_client_version: Union[Unset, str] = UNSET,
+) -> Response[Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]]:
+    """Get Latest Restore Points of Protected Computer Managed by Backup Server
+
+     Returns a collection resource representation of all restore points created for a protected computer
+    managed by Veeam Backup & Replication with the specified UID of Veeam backup agent installed on the
+    computer.
+
+    Args:
+        backup_agent_uid (UUID):
+        limit (Union[Unset, int]):  Default: 100.
+        offset (Union[Unset, int]):  Default: 0.
+        x_request_id (Union[Unset, UUID]):
+        x_client_version (Union[Unset, str]):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Response[Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]]
+    """
+
+    kwargs = _get_kwargs(
+        backup_agent_uid=backup_agent_uid,
+        limit=limit,
+        offset=offset,
+        x_request_id=x_request_id,
+        x_client_version=x_client_version,
+    )
+
+    response = await client.get_async_httpx_client().request(**kwargs)
+
+    return _build_response(client=client, response=response)
+
+
+async def asyncio(
+    backup_agent_uid: UUID,
+    *,
+    client: Union[AuthenticatedClient, Client],
+    limit: Union[Unset, int] = 100,
+    offset: Union[Unset, int] = 0,
+    x_request_id: Union[Unset, UUID] = UNSET,
+    x_client_version: Union[Unset, str] = UNSET,
+) -> Optional[Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]]:
+    """Get Latest Restore Points of Protected Computer Managed by Backup Server
+
+     Returns a collection resource representation of all restore points created for a protected computer
+    managed by Veeam Backup & Replication with the specified UID of Veeam backup agent installed on the
+    computer.
+
+    Args:
+        backup_agent_uid (UUID):
+        limit (Union[Unset, int]):  Default: 100.
+        offset (Union[Unset, int]):  Default: 0.
+        x_request_id (Union[Unset, UUID]):
+        x_client_version (Union[Unset, str]):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Union[Any, ErrorResponse, GetProtectedComputerManagedByBackupServerRestorePointsResponse200]
+    """
+
+    return (
+        await asyncio_detailed(
+            backup_agent_uid=backup_agent_uid,
+            client=client,
+            limit=limit,
+            offset=offset,
+            x_request_id=x_request_id,
+            x_client_version=x_client_version,
+        )
+    ).parsed

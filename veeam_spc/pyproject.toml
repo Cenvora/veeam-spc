@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "veeam-service-provider-console-rest-api-client"
+version = "3.5.1"
+description = "A client library for accessing Veeam Service Provider Console REST API"
+authors = []
+readme = "README.md"
+packages = [
+    { include = "veeam_service_provider_console_rest_api_client" },
+]
+include = ["CHANGELOG.md", "veeam_service_provider_console_rest_api_client/py.typed"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+httpx = ">=0.23.0,<0.29.0"
+attrs = ">=22.2.0"
+python-dateutil = "^2.8.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["F", "I", "UP"]
