@@ -2,7 +2,7 @@
 <br>
 <img src="./media/Veeam_logo_2024_RGB_main_20.png" alt="Veeam Logo" height="150">
 <br>
-Veeam Service Provider Console REST API Wrapper for Python
+Veeam Service Provider Console Python API Wrapper
 </h1>
 
 <h4 align="center">
