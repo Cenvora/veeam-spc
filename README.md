@@ -1,6 +1,6 @@
 <h1 align="center">
 <br>
-<img src="./media/Veeam_logo_2024_RGB_main_20.png" alt="Veeam Logo" height="300">
+<img src="./media/Veeam_logo_2024_RGB_main_20.png" alt="Veeam Logo" height="150">
 <br>
 Veeam Service Provider Console REST API Wrapper for Python
 </h1>
