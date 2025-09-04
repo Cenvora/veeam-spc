@@ -14,6 +14,35 @@ Python package for interacting with the Veeam Service Provider Console REST API
 This module allows for interaction with Veeam Service Provider Console via their <a href="https://helpcenter.veeam.com/docs/vac/rest/reference/vspc-rest.html">REST API</a>
 <!-- Summary -->
 
+## Supported Versions
+
+<table>
+  <thead>
+    <tr>
+      <th>VSPC Version</th>
+      <th>API Version</th>
+      <th>Supported</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>9 / 3.6</td>
+      <td>3.6</td>
+      <td style="text-align:center;">&#10060;</td>
+    </tr>
+    <tr>
+      <td>8.1 / 3.5.1</td>
+      <td>3.5.1</td>
+      <td style="text-align:center;">&#9989;</td>
+    </tr>
+    <tr>
+      <td>&lt; 8.1 / 3.5.1</td>
+      <td>&lt; 3.5.1</td>
+      <td style="text-align:center;">&#10060;</td>
+    </tr>
+  </tbody>
+</table>
+
 ## How to support new API versions
 1. Download the OpenAPI yaml into openapi_schemas
 2. Fix the OpenAPI yaml to conform to proper standards: `python fix_openapi_yaml.py .\openapi_schemas\vspc_rest_{vspc_version}.yaml .\openapi_schemas\vspc_rest_{vspc_version}_fixed.yaml`
