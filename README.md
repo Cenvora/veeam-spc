@@ -176,3 +176,13 @@ Contributions are welcome! To contribute:
 - Submit a pull request with a clear description
 
 Please follow PEP8 style and include docstrings for new functions/classes.
+
+## 🤝 Core Contributors
+This project is made possible thanks to the efforts of our core contributors:
+
+- [Jonah May](https://github.com/JonahMMay)  
+- [Maurice Kevenaar](https://github.com/mkevenaar)  
+- [CyberFortress](https://cyberfortress.com)  
+- [Integra Cloud Solutions B.V.](https://integra-cs.nl/)  
+
+We’re grateful for their continued support and contributions.
