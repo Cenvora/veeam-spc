@@ -12,3 +12,9 @@ Python package for interacting with the Veeam Service Provider Console REST API
 <!-- Summary -->
 This module allows for interaction with Veeam Service Provider Console via their <a href="https://helpcenter.veeam.com/docs/vac/rest/reference/vspc-rest.html">REST API</a>
 <!-- Summary -->
+
+## Install
+TODO: Write this
+
+## Contributing
+TODO: Write this
