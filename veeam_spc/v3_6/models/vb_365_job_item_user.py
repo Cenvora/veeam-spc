@@ -1,0 +1,121 @@
+from collections.abc import Mapping
+from typing import Any, TypeVar, Union
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..models.vb_365_job_item_user_location_type import Vb365JobItemUserLocationType
+from ..models.vb_365_job_item_user_user_type import Vb365JobItemUserUserType
+from ..types import UNSET, Unset
+
+T = TypeVar("T", bound="Vb365JobItemUser")
+
+
+@_attrs_define
+class Vb365JobItemUser:
+    """
+    Attributes:
+        id (str): ID assigned to a user.
+        user_type (Vb365JobItemUserUserType): Type of a user.
+        name (str): Name of a user.
+        display_name (str): Display name of a user.
+        on_premises_sid (Union[Unset, str]): SID assigned to a user of an on-premises organization.
+        office_name (Union[Unset, str]): Microsoft 365 Online name of an organization to which a user belongs.
+        location_type (Union[Unset, Vb365JobItemUserLocationType]): Type of a user location.
+    """
+
+    id: str
+    user_type: Vb365JobItemUserUserType
+    name: str
+    display_name: str
+    on_premises_sid: Union[Unset, str] = UNSET
+    office_name: Union[Unset, str] = UNSET
+    location_type: Union[Unset, Vb365JobItemUserLocationType] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        id = self.id
+
+        user_type = self.user_type.value
+
+        name = self.name
+
+        display_name = self.display_name
+
+        on_premises_sid = self.on_premises_sid
+
+        office_name = self.office_name
+
+        location_type: Union[Unset, str] = UNSET
+        if not isinstance(self.location_type, Unset):
+            location_type = self.location_type.value
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "id": id,
+                "userType": user_type,
+                "name": name,
+                "displayName": display_name,
+            }
+        )
+        if on_premises_sid is not UNSET:
+            field_dict["onPremisesSid"] = on_premises_sid
+        if office_name is not UNSET:
+            field_dict["officeName"] = office_name
+        if location_type is not UNSET:
+            field_dict["locationType"] = location_type
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
+        id = d.pop("id")
+
+        user_type = Vb365JobItemUserUserType(d.pop("userType"))
+
+        name = d.pop("name")
+
+        display_name = d.pop("displayName")
+
+        on_premises_sid = d.pop("onPremisesSid", UNSET)
+
+        office_name = d.pop("officeName", UNSET)
+
+        _location_type = d.pop("locationType", UNSET)
+        location_type: Union[Unset, Vb365JobItemUserLocationType]
+        if isinstance(_location_type, Unset):
+            location_type = UNSET
+        else:
+            location_type = Vb365JobItemUserLocationType(_location_type)
+
+        vb_365_job_item_user = cls(
+            id=id,
+            user_type=user_type,
+            name=name,
+            display_name=display_name,
+            on_premises_sid=on_premises_sid,
+            office_name=office_name,
+            location_type=location_type,
+        )
+
+        vb_365_job_item_user.additional_properties = d
+        return vb_365_job_item_user
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

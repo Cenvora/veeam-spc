@@ -1,0 +1,146 @@
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.management_agent_credentials import ManagementAgentCredentials
+    from ..models.v_one_deployment_distribution_source import VOneDeploymentDistributionSource
+
+
+T = TypeVar("T", bound="VOneDeploymentConfiguration")
+
+
+@_attrs_define
+class VOneDeploymentConfiguration:
+    """Deployment configuration.
+    > If the `distribution` and `usePredownloadedIso` properties have the `null` value, the most recent version of Veeam
+    ONE will be downloaded automatically.
+
+        Attributes:
+            answer_xml (str): XML string containing installation parameters.
+            distribution (Union[Unset, VOneDeploymentDistributionSource]):
+            use_predownloaded_iso (Union[Unset, bool]): Indicates whether the predownloaded Veeam ONE setup file is used for
+                installation.
+                > Provided value has higher priority than the `distribution` property value.
+            allow_auto_reboot (Union[Unset, bool]): Indicates whether a server must be automatically rebooted after the
+                installation is complete.
+            stop_all_activities (Union[Unset, bool]): Indicates whether all other tasks must be stopped during installation.
+                Can be enabled only for update installation.
+            use_management_agent_credentials (Union[Unset, bool]): Indicates whether management agent credentials must be
+                used as service account credentials.
+                > Provided value has higher priority than the `adminCredentials` property value.
+            admin_credentials (Union[Unset, ManagementAgentCredentials]):
+    """
+
+    answer_xml: str
+    distribution: Union[Unset, "VOneDeploymentDistributionSource"] = UNSET
+    use_predownloaded_iso: Union[Unset, bool] = UNSET
+    allow_auto_reboot: Union[Unset, bool] = UNSET
+    stop_all_activities: Union[Unset, bool] = UNSET
+    use_management_agent_credentials: Union[Unset, bool] = UNSET
+    admin_credentials: Union[Unset, "ManagementAgentCredentials"] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        answer_xml = self.answer_xml
+
+        distribution: Union[Unset, dict[str, Any]] = UNSET
+        if not isinstance(self.distribution, Unset):
+            distribution = self.distribution.to_dict()
+
+        use_predownloaded_iso = self.use_predownloaded_iso
+
+        allow_auto_reboot = self.allow_auto_reboot
+
+        stop_all_activities = self.stop_all_activities
+
+        use_management_agent_credentials = self.use_management_agent_credentials
+
+        admin_credentials: Union[Unset, dict[str, Any]] = UNSET
+        if not isinstance(self.admin_credentials, Unset):
+            admin_credentials = self.admin_credentials.to_dict()
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "answerXml": answer_xml,
+            }
+        )
+        if distribution is not UNSET:
+            field_dict["distribution"] = distribution
+        if use_predownloaded_iso is not UNSET:
+            field_dict["usePredownloadedIso"] = use_predownloaded_iso
+        if allow_auto_reboot is not UNSET:
+            field_dict["allowAutoReboot"] = allow_auto_reboot
+        if stop_all_activities is not UNSET:
+            field_dict["stopAllActivities"] = stop_all_activities
+        if use_management_agent_credentials is not UNSET:
+            field_dict["useManagementAgentCredentials"] = use_management_agent_credentials
+        if admin_credentials is not UNSET:
+            field_dict["adminCredentials"] = admin_credentials
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.management_agent_credentials import ManagementAgentCredentials
+        from ..models.v_one_deployment_distribution_source import VOneDeploymentDistributionSource
+
+        d = dict(src_dict)
+        answer_xml = d.pop("answerXml")
+
+        _distribution = d.pop("distribution", UNSET)
+        distribution: Union[Unset, VOneDeploymentDistributionSource]
+        if isinstance(_distribution, Unset):
+            distribution = UNSET
+        else:
+            distribution = VOneDeploymentDistributionSource.from_dict(_distribution)
+
+        use_predownloaded_iso = d.pop("usePredownloadedIso", UNSET)
+
+        allow_auto_reboot = d.pop("allowAutoReboot", UNSET)
+
+        stop_all_activities = d.pop("stopAllActivities", UNSET)
+
+        use_management_agent_credentials = d.pop("useManagementAgentCredentials", UNSET)
+
+        _admin_credentials = d.pop("adminCredentials", UNSET)
+        admin_credentials: Union[Unset, ManagementAgentCredentials]
+        if isinstance(_admin_credentials, Unset):
+            admin_credentials = UNSET
+        else:
+            admin_credentials = ManagementAgentCredentials.from_dict(_admin_credentials)
+
+        v_one_deployment_configuration = cls(
+            answer_xml=answer_xml,
+            distribution=distribution,
+            use_predownloaded_iso=use_predownloaded_iso,
+            allow_auto_reboot=allow_auto_reboot,
+            stop_all_activities=stop_all_activities,
+            use_management_agent_credentials=use_management_agent_credentials,
+            admin_credentials=admin_credentials,
+        )
+
+        v_one_deployment_configuration.additional_properties = d
+        return v_one_deployment_configuration
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

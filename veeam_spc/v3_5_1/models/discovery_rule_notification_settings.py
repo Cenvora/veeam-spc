@@ -1,0 +1,140 @@
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..models.discovery_rule_notification_settings_schedule_type import DiscoveryRuleNotificationSettingsScheduleType
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.discovery_rule_notification_settings_week_settings import (
+        DiscoveryRuleNotificationSettingsWeekSettings,
+    )
+
+
+T = TypeVar("T", bound="DiscoveryRuleNotificationSettings")
+
+
+@_attrs_define
+class DiscoveryRuleNotificationSettings:
+    """
+    Example:
+        {'isEnabled': True, 'scheduleType': 'Days', 'scheduleTime': '12:30', 'scheduleDay': 'Sunday', 'to':
+            'administrator@vac.com', 'subject': 'VSPC Discovery Results', 'notifyOnTheFirstRun': False}
+
+    Attributes:
+        schedule_type (DiscoveryRuleNotificationSettingsScheduleType): Notification frequency.
+        is_enabled (Union[Unset, bool]): Indicates whether notifications about discovery results are enabled. Default:
+            True.
+        schedule_time (Union[Unset, str]): Time at which notifications must are sent in the `hh:mm` format. Default:
+            '10:00'.
+        week_settings (Union[Unset, DiscoveryRuleNotificationSettingsWeekSettings]):
+        to (Union[Unset, str]): Email address at which notifications must be sent.
+        subject (Union[Unset, str]): Subject of a notification message.
+        notify_on_the_first_run (Union[Unset, bool]): Indicates whether a notification must be sent on the first
+            Default: False.
+    """
+
+    schedule_type: DiscoveryRuleNotificationSettingsScheduleType
+    is_enabled: Union[Unset, bool] = True
+    schedule_time: Union[Unset, str] = "10:00"
+    week_settings: Union[Unset, "DiscoveryRuleNotificationSettingsWeekSettings"] = UNSET
+    to: Union[Unset, str] = UNSET
+    subject: Union[Unset, str] = UNSET
+    notify_on_the_first_run: Union[Unset, bool] = False
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        schedule_type = self.schedule_type.value
+
+        is_enabled = self.is_enabled
+
+        schedule_time = self.schedule_time
+
+        week_settings: Union[Unset, dict[str, Any]] = UNSET
+        if not isinstance(self.week_settings, Unset):
+            week_settings = self.week_settings.to_dict()
+
+        to = self.to
+
+        subject = self.subject
+
+        notify_on_the_first_run = self.notify_on_the_first_run
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "scheduleType": schedule_type,
+            }
+        )
+        if is_enabled is not UNSET:
+            field_dict["isEnabled"] = is_enabled
+        if schedule_time is not UNSET:
+            field_dict["scheduleTime"] = schedule_time
+        if week_settings is not UNSET:
+            field_dict["weekSettings"] = week_settings
+        if to is not UNSET:
+            field_dict["to"] = to
+        if subject is not UNSET:
+            field_dict["subject"] = subject
+        if notify_on_the_first_run is not UNSET:
+            field_dict["notifyOnTheFirstRun"] = notify_on_the_first_run
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.discovery_rule_notification_settings_week_settings import (
+            DiscoveryRuleNotificationSettingsWeekSettings,
+        )
+
+        d = dict(src_dict)
+        schedule_type = DiscoveryRuleNotificationSettingsScheduleType(d.pop("scheduleType"))
+
+        is_enabled = d.pop("isEnabled", UNSET)
+
+        schedule_time = d.pop("scheduleTime", UNSET)
+
+        _week_settings = d.pop("weekSettings", UNSET)
+        week_settings: Union[Unset, DiscoveryRuleNotificationSettingsWeekSettings]
+        if isinstance(_week_settings, Unset):
+            week_settings = UNSET
+        else:
+            week_settings = DiscoveryRuleNotificationSettingsWeekSettings.from_dict(_week_settings)
+
+        to = d.pop("to", UNSET)
+
+        subject = d.pop("subject", UNSET)
+
+        notify_on_the_first_run = d.pop("notifyOnTheFirstRun", UNSET)
+
+        discovery_rule_notification_settings = cls(
+            schedule_type=schedule_type,
+            is_enabled=is_enabled,
+            schedule_time=schedule_time,
+            week_settings=week_settings,
+            to=to,
+            subject=subject,
+            notify_on_the_first_run=notify_on_the_first_run,
+        )
+
+        discovery_rule_notification_settings.additional_properties = d
+        return discovery_rule_notification_settings
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties
