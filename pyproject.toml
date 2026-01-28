@@ -51,3 +51,8 @@ Documentation = "https://github.com/Cenvora/veeam-spc#readme"
 version_scheme = "release-branch-semver"
 local_scheme = "no-local-version"
 tag_regex = "^(?:v)?(?P<version>.*)$"
+
+[tool.setuptools.packages.find]
+include = ["veeam_spc*"]
+exclude = ["media*", "openapi_schemas*"]
+
