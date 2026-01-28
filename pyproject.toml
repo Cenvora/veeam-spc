@@ -15,7 +15,7 @@ requires-python = ">=3.8"
 license = { text = "Apache-2.0" }
 
 authors = [
-    { name = "Jonah May", email = "jonah@cyberfortress.com" }
+    { name = "Jonah May", email = "jonah@mayfamily.me" }
 ]
 
 dependencies = [
