@@ -30,12 +30,12 @@ This project is an independent, open source Python client for the Veeam Service 
     <tr>
       <td>9.1</td>
       <td>3.6.1</td>
-      <td style="text-align:center;">&#8987;</td>
+      <td style="text-align:center;">&#9989;</td>
     </tr>
     <tr>
       <td>9</td>
       <td>3.6</td>
-      <td style="text-align:center;">&#8987;</td>
+      <td style="text-align:center;">&#9989;</td>
     </tr>
     <tr>
       <td>8.1</td>
