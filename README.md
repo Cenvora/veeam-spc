@@ -1,6 +1,8 @@
 <h1 align="center">
 <br>
-<img src="./media/Veeam_logo_2024_RGB_main_20.png" alt="Veeam Logo" height="100"></a>
+<img src="https://raw.githubusercontent.com/Cenvora/veeam-spc/main/media/Veeam_logo_2024_RGB_main_20.png"
+     alt="Veeam Logo"
+     height="100">
 <br>
 <br>
 Veeam Service Provider Console Python API Wrapper
