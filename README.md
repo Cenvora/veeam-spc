@@ -104,13 +104,13 @@ Now call your endpoint and use your models:
 
 ```python
 from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about
+from veeam_spc.v3_5_1.api.about import get_about_information
 from veeam_spc.v3_5_1.types import Response
 
 with client:
-    about_info: About = get_about.sync(client=client)
+    about_info: About = get_about_information.sync(client=client)
     # or if you need more info (e.g. status_code)
-    response: Response[About] = get_about.sync_detailed(client=client)
+    response: Response[About] = get_about_information.sync_detailed(client=client)
 ```
 
 ### Async Usage
@@ -118,14 +118,14 @@ Or do the same thing with an async version:
 
 ```python
 from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about
+from veeam_spc.v3_5_1.api.about import get_about_information
 from veeam_spc.v3_5_1.types import Response
 
 client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
 
 async with client:
-    about_info = await get_about.asyncio(client=client)
-    response: Response[About] = await get_about.asyncio_detailed(client=client)
+    about_info = await get_about_information.asyncio(client=client)
+    response: Response[About] = await get_about_information.asyncio_detailed(client=client)
 ```
 
 ### SSL Verification
@@ -168,20 +168,6 @@ client = Client(
 # Or get the underlying httpx client to modify directly with client.get_httpx_client() or client.get_async_httpx_client()
 ```
 
-## Building / Publishing
-This project uses [Poetry](https://python-poetry.org/) for dependencies and packaging:
-1. Update metadata in pyproject.toml (authors, version)
-2. Configure private repositories if needed
-    - `poetry config repositories.<your-repository-name> <url>`
-    - `poetry config http-basic.<your-repository-name> <username> <password>`
-3. Publish: `poetry publish --build -r <your-repository-name>` or `poetry publish --build` for PyPI
-
-To install into another project without publishing:
-1. If using Poetry: `poetry add <path-to-this-client>`
-2. If not using Poetry:
-    - Build a wheel: `poetry build -f wheel`
-    - Install: `pip install <path-to-wheel>`
-
 ## Contributing
 Contributions are welcome! To contribute:
 - Fork the repository
@@ -196,7 +182,5 @@ This project is made possible thanks to the efforts of our core contributors:
 
 - [Jonah May](https://github.com/JonahMMay)  
 - [Maurice Kevenaar](https://github.com/mkevenaar)  
-- [CyberFortress](https://cyberfortress.com)  
-- [Integra Cloud Solutions B.V.](https://integra-cs.nl/)  
 
 We’re grateful for their continued support and contributions.
