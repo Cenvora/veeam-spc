@@ -1,10 +1,14 @@
 [build-system]
-requires = ["setuptools>=65.5.0", "wheel"]
+requires = [
+    "setuptools>=65.5.0",
+    "wheel",
+    "setuptools-scm>=8.0"
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "veeam-spc"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Veeam Service Provider Console REST API wrapper for Python"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -42,3 +46,8 @@ dev = [
 Homepage = "https://github.com/Cenvora/veeam-spc"
 Repository = "https://github.com/Cenvora/veeam-spc"
 Documentation = "https://github.com/Cenvora/veeam-spc#readme"
+
+[tool.setuptools_scm]
+version_scheme = "release-branch-semver"
+local_scheme = "no-local-version"
+tag_regex = "^(?:v)?(?P<version>.*)$"
