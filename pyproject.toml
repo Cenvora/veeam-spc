@@ -7,19 +7,26 @@ name = "veeam-spc"
 version = "0.1.0"
 description = "Veeam Service Provider Console REST API wrapper for Python"
 readme = "README.md"
-readme-content-type = "text/markdown"
+requires-python = ">=3.8"
 license = { text = "Apache-2.0" }
 
 authors = [
-    { name="Jonah May", email="jonah@cyberfortress.com" }
+    { name = "Jonah May", email = "jonah@cyberfortress.com" }
 ]
 
-requires-python = ">=3.8"
-
-# Runtime dependencies
 dependencies = [
     "httpx>=0.24.0",
     "pydantic>=1.10.0"
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Operating System :: OS Independent"
 ]
 
 [project.optional-dependencies]
@@ -31,18 +38,7 @@ dev = [
     "pre-commit"
 ]
 
-# PyPI classifiers
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Operating System :: OS Independent"
-]
-
 [project.urls]
-"Homepage" = "https://github.com/Cenvora/veeam-spc"
-"Repository" = "https://github.com/Cenvora/veeam-spc"
-"Documentation" = "https://github.com/Cenvora/veeam-spc#readme"
+Homepage = "https://github.com/Cenvora/veeam-spc"
+Repository = "https://github.com/Cenvora/veeam-spc"
+Documentation = "https://github.com/Cenvora/veeam-spc#readme"
