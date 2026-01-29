@@ -59,7 +59,7 @@ This project is an independent, open source Python client for the Veeam Service 
 5. Rename the folder to match the API version (i.e., `v3_5_1`)
 6. Update pyproject.toml to support the new packages
 7. Write pytest tests
-8. If an older API has been deprecated, delete its folder and yaml, then remove it from pyproject.toml
+8. If an older API has been deprecated, delete its folder and yaml, then update the supported versions section of the readme
 
 ## Install
 ### From PyPi
