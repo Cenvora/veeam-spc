@@ -57,9 +57,8 @@ This project is an independent, open source Python client for the Veeam Service 
 3. Run `openapi-python-client generate --path ".\openapi_schemas\vspc_rest_{vspc_version}_fixed.yaml" --output-path ".\veeam_spc" --overwrite`
 4. Fix any warnings/errors (application/binary+base64 can be ignored)
 5. Rename the folder to match the API version (i.e., `v3_5_1`)
-6. Update pyproject.toml to support the new packages
-7. Write pytest tests
-8. If an older API has been deprecated, delete its folder and yaml, then update the supported versions section of the readme
+6. Write pytest tests
+7. If an older API has been deprecated, delete its folder and yaml, then update the supported versions section of the readme
 
 ## Install
 ### From PyPi
