@@ -107,9 +107,9 @@ from veeam_spc.v3_5_1.api.about import get_about_information
 from veeam_spc.v3_5_1.types import Response
 
 with client:
-    about_info: About = get_about_information.sync(client=client)
+    about_info: About = get_about_information.sync(client=client, X-Client-Version="3.5.1")
     # or if you need more info (e.g. status_code)
-    response: Response[About] = get_about_information.sync_detailed(client=client)
+    response: Response[About] = get_about_information.sync_detailed(client=client, X-Client-Version="3.5.1")
 ```
 
 ### Async Usage
@@ -123,8 +123,8 @@ from veeam_spc.v3_5_1.types import Response
 client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
 
 async with client:
-    about_info = await get_about_information.asyncio(client=client)
-    response: Response[About] = await get_about_information.asyncio_detailed(client=client)
+    about_info = await get_about_information.asyncio(client=client, X-Client-Version="3.5.1")
+    response: Response[About] = await get_about_information.asyncio_detailed(client=client, X-Client-Version="3.5.1")
 ```
 
 ### SSL Verification
