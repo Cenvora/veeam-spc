@@ -82,7 +82,129 @@ pip install -e .
 
 ## Usage
 
-### Basic Usage
+### Recommended Usage (Smart Client)
+
+The `VeeamClient` handles:
+
+- API version routing
+- Authentication
+- Token refresh
+- `X-Client-Version` header injection so package API version matches header values
+- Async calls
+- Operation discovery
+
+Each packaged version can be called independently through separate imports, but this is the **recommended way** to use this library.
+
+#### Create a client and connect
+
+You can authenticate using either **username/password** or a **pre-existing token**.
+
+**Option 1: Username/Password Authentication**
+
+```python
+import asyncio
+from veeam_spc.client import VeeamClient
+
+async def main():
+    vc = VeeamClient(
+        host="https://vspc.example.com:1280",
+        username="administrator",
+        password="SuperSecretPassword",
+        api_version="3.6",
+        verify_ssl=False,
+    )
+
+    await vc.connect()
+
+    # use the client...
+
+    await vc.close()
+
+asyncio.run(main())
+```
+
+**Option 2: Token Authentication** (recommended for long-lived access)
+
+VSPC supports permanent tokens that don't expire, making them ideal for service accounts and CI/CD pipelines.
+
+```python
+import asyncio
+from veeam_spc.client import VeeamClient
+
+async def main():
+    vc = VeeamClient(
+        host="https://vspc.example.com:1280",
+        token="your-permanent-token-here",
+        api_version="3.6",
+        verify_ssl=False,
+    )
+
+    await vc.connect()
+
+    # use the client...
+
+    await vc.close()
+
+asyncio.run(main())
+```
+
+#### Call an API endpoint (async)
+
+```python
+provider = await vc.call(
+    vc.api("provider").get_provider
+)
+
+# provider is a Provider model
+print(provider.name)
+```
+
+#### Call any endpoint
+
+Operations map directly to the OpenAPI layout:
+
+```
+api/
+└── provider/
+    └── get_provider.py
+```
+
+Call it like this:
+
+```python
+await vc.call(
+    vc.api("provider").get_provider
+)
+```
+
+Or explicitly:
+
+```python
+await vc.call(
+    vc.api("provider.get_provider")
+)
+```
+
+#### Pagination example
+
+```python
+result = await vc.call(
+    vc.api("companies").get_companies,
+    limit=50,
+    offset=0,
+)
+```
+
+#### Close the client
+
+```python
+await vc.close()
+```
+
+### Basic Usage (Direct API Access)
+
+If you prefer to use the versioned packages directly without the SmartClient:
+
 First, create a client from the appropriate API version:
 
 ```python
@@ -107,12 +229,12 @@ from veeam_spc.v3_5_1.api.about import get_about_information
 from veeam_spc.v3_5_1.types import Response
 
 with client:
-    about_info: About = get_about_information.sync(client=client, X-Client-Version="3.5.1")
+    about_info: About = get_about_information.sync(client=client, x_client_version="3.5.1")
     # or if you need more info (e.g. status_code)
-    response: Response[About] = get_about_information.sync_detailed(client=client, X-Client-Version="3.5.1")
+    response: Response[About] = get_about_information.sync_detailed(client=client, x_client_version="3.5.1")
 ```
 
-### Async Usage
+#### Async Usage
 Or do the same thing with an async version:
 
 ```python
@@ -123,8 +245,8 @@ from veeam_spc.v3_5_1.types import Response
 client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
 
 async with client:
-    about_info = await get_about_information.asyncio(client=client, X-Client-Version="3.5.1")
-    response: Response[About] = await get_about_information.asyncio_detailed(client=client, X-Client-Version="3.5.1")
+    about_info = await get_about_information.asyncio(client=client, x_client_version="3.5.1")
+    response: Response[About] = await get_about_information.asyncio_detailed(client=client, x_client_version="3.5.1")
 ```
 
 ### SSL Verification
