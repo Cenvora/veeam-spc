@@ -2,12 +2,18 @@ import pytest
 from veeam_spc.client import VeeamClient
 
 # These are integration tests - they require a live VSPC instance
-# Replace with actual values or use environment variables for real testing
+# The credentials below are PLACEHOLDERS for testing purposes only
+# For real testing, use environment variables:
+#   - VSPC_HOST
+#   - VSPC_USERNAME
+#   - VSPC_PASSWORD
+#   - VSPC_TOKEN
+#   - VSPC_API_VERSION
 
-BASE_URL = "https://vspc:1280"
-USERNAME = "administrator"
-PASSWORD = "password"
-TOKEN = "sample_token_here"
+BASE_URL = "https://vspc:1280"  # Placeholder - not a real server
+USERNAME = "administrator"  # Placeholder
+PASSWORD = "password"  # Placeholder
+TOKEN = "sample_token_here"  # Placeholder
 API_VERSION = "3.6"
 
 

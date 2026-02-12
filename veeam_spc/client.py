@@ -215,8 +215,12 @@ class VeeamClient:
                 body=body,
                 x_client_version=self.api_version,
             )
-        except Exception:
-            # fallback to password
+        except (RuntimeError, Exception) as e:
+            # If refresh fails, fallback to password authentication
+            # This handles expired refresh tokens or auth errors
+            if not self.username or not self.password:
+                raise RuntimeError("Token refresh failed and no username/password available for re-authentication") from e
+            
             tmp = Client(
                 base_url=f"{self.host}/api/v3",
                 verify_ssl=self.verify_ssl,
