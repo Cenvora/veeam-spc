@@ -66,7 +66,7 @@ class VeeamClient:
         self.host = self._normalize_host(host)
         self.api_version = api_version
         self.verify_ssl = verify_ssl
-        
+
         # Support either username/password OR token
         if token:
             self.token = token
@@ -180,7 +180,7 @@ class VeeamClient:
         # Skip refresh for permanent tokens
         if self.token:
             return
-            
+
         if self._expires_at and datetime.now(timezone.utc) < self._expires_at:
             return
 
