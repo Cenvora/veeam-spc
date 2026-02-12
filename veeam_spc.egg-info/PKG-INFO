@@ -1,3 +1,32 @@
+Metadata-Version: 2.4
+Name: veeam-spc
+Version: 0.2.0.dev1
+Summary: Veeam Service Provider Console REST API wrapper for Python
+Author-email: Jonah May <jonah@mayfamily.me>, Maurice Kevenaar <maurice@kevenaar.name>
+License: Apache-2.0
+Project-URL: Homepage, https://github.com/Cenvora/veeam-spc
+Project-URL: Repository, https://github.com/Cenvora/veeam-spc
+Project-URL: Documentation, https://github.com/Cenvora/veeam-spc#readme
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: httpx>=0.24.0
+Requires-Dist: pydantic>=1.10.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: pre-commit; extra == "dev"
+Dynamic: license-file
+
 <h1 align="center">
 <br>
 <img src="https://raw.githubusercontent.com/Cenvora/veeam-spc/main/media/Veeam_logo_2024_RGB_main_20.png"
@@ -82,101 +111,7 @@ pip install -e .
 
 ## Usage
 
-### Recommended Usage (Smart Client)
-
-The `VeeamClient` handles:
-
-- API version routing
-- Authentication
-- Token refresh
-- `X-Client-Version` header injection so package API version matches header values
-- Async calls
-- Operation discovery
-
-Each packaged version can be called independently through separate imports, but this is the **recommended way** to use this library.
-
-#### Create a client and connect
-
-```python
-import asyncio
-from veeam_spc.client import VeeamClient
-
-async def main():
-    vc = VeeamClient(
-        host="https://vspc.example.com:1280",
-        username="administrator",
-        password="SuperSecretPassword",
-        api_version="3.6",
-        verify_ssl=False,
-    )
-
-    await vc.connect()
-
-    # use the client...
-
-    await vc.close()
-
-asyncio.run(main())
-```
-
-#### Call an API endpoint (async)
-
-```python
-provider = await vc.call(
-    vc.api("provider").get_provider
-)
-
-# provider is a Provider model
-print(provider.name)
-```
-
-#### Call any endpoint
-
-Operations map directly to the OpenAPI layout:
-
-```
-api/
-└── provider/
-    └── get_provider.py
-```
-
-Call it like this:
-
-```python
-await vc.call(
-    vc.api("provider").get_provider
-)
-```
-
-Or explicitly:
-
-```python
-await vc.call(
-    vc.api("provider.get_provider")
-)
-```
-
-#### Pagination example
-
-```python
-result = await vc.call(
-    vc.api("companies").get_companies,
-    limit=50,
-    offset=0,
-)
-```
-
-#### Close the client
-
-```python
-await vc.close()
-```
-
-### Basic Usage (Direct API Access)
-
-If you prefer to use the versioned packages directly without the SmartClient:
-
-#### Basic Usage
+### Basic Usage
 First, create a client from the appropriate API version:
 
 ```python
@@ -242,90 +177,6 @@ client = AuthenticatedClient(
 ```
 
 ### Advanced Customizations
-You can customize the underlying `httpx.Client` or `httpx.AsyncClient`:
-
-```python
-from veeam_spc.v3_5_1 import Client
-
-def log_request(request):
-    print(f"Request event hook: {request.method} {request.url} - Waiting for response")
-
-def log_response(response):
-    request = response.request
-    print(f"Response event hook: {request.method} {request.url} - Status {response.status_code}")
-
-client = Client(
-    base_url="https://server:1280/api/v3",
-    httpx_args={"event_hooks": {"request": [log_request], "response": [log_response]}},
-)
-# Or get the underlying httpx client to modify directly with client.get_httpx_client() or client.get_async_httpx_client()
-```
-
-First, create a client from the appropriate API version:
-
-```python
-from veeam_spc.v3_5_1 import Client
-
-client = Client(base_url="https://server:1280/api/v3")
-```
-
-If the endpoints you're going to hit require authentication, use `AuthenticatedClient`:
-
-```python
-from veeam_spc.v3_5_1 import AuthenticatedClient
-
-client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
-```
-
-Now call your endpoint and use your models:
-
-```python
-from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about_information
-from veeam_spc.v3_5_1.types import Response
-
-with client:
-    about_info: About = get_about_information.sync(client=client, x_client_version="3.5.1")
-    # or if you need more info (e.g. status_code)
-    response: Response[About] = get_about_information.sync_detailed(client=client, x_client_version="3.5.1")
-```
-
-#### Async Usage
-Or do the same thing with an async version:
-
-```python
-from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about_information
-from veeam_spc.v3_5_1.types import Response
-
-client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
-
-async with client:
-    about_info = await get_about_information.asyncio(client=client, x_client_version="3.5.1")
-    response: Response[About] = await get_about_information.asyncio_detailed(client=client, x_client_version="3.5.1")
-```
-
-#### SSL Verification
-By default, HTTPS APIs will verify SSL certificates. You can pass a custom certificate bundle or disable verification (not recommended):
-
-```python
-from veeam_spc.v3_5_1 import AuthenticatedClient
-
-client = AuthenticatedClient(
-    base_url="https://internal_api.example.com/api/v3",
-    token="SuperSecretToken",
-    verify_ssl="/path/to/certificate_bundle.pem",
-)
-
-# Disable SSL verification (security risk)
-client = AuthenticatedClient(
-    base_url="https://internal_api.example.com/api/v3",
-    token="SuperSecretToken",
-    verify_ssl=False
-)
-```
-
-#### Advanced Customizations
 You can customize the underlying `httpx.Client` or `httpx.AsyncClient`:
 
 ```python
