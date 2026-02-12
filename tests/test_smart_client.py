@@ -7,12 +7,13 @@ from veeam_spc.client import VeeamClient
 BASE_URL = "https://vspc:1280"
 USERNAME = "administrator"
 PASSWORD = "password"
+TOKEN = "sample_token_here"
 API_VERSION = "3.6"
 
 
 @pytest.mark.asyncio
-async def test_veeam_client_init():
-    """Test that VeeamClient can be initialized with valid parameters"""
+async def test_veeam_client_init_with_password():
+    """Test that VeeamClient can be initialized with username/password"""
     client = VeeamClient(
         host=BASE_URL,
         username=USERNAME,
@@ -22,8 +23,50 @@ async def test_veeam_client_init():
     )
     assert client.host == "https://vspc:1280"
     assert client.username == USERNAME
+    assert client.password == PASSWORD
+    assert client.token is None
     assert client.api_version == API_VERSION
     assert client.package == "veeam_spc.v3_6"
+
+
+@pytest.mark.asyncio
+async def test_veeam_client_init_with_token():
+    """Test that VeeamClient can be initialized with a token"""
+    client = VeeamClient(
+        host=BASE_URL,
+        token=TOKEN,
+        api_version=API_VERSION,
+        verify_ssl=False,
+    )
+    assert client.host == "https://vspc:1280"
+    assert client.username is None
+    assert client.password is None
+    assert client.token == TOKEN
+    assert client.api_version == API_VERSION
+    assert client.package == "veeam_spc.v3_6"
+
+
+@pytest.mark.asyncio
+async def test_veeam_client_missing_credentials():
+    """Test that VeeamClient raises an error when no credentials provided"""
+    with pytest.raises(ValueError, match="Must provide either 'token' or both 'username' and 'password'"):
+        VeeamClient(
+            host=BASE_URL,
+            api_version=API_VERSION,
+            verify_ssl=False,
+        )
+
+
+@pytest.mark.asyncio
+async def test_veeam_client_incomplete_credentials():
+    """Test that VeeamClient raises an error when only username is provided"""
+    with pytest.raises(ValueError, match="Must provide either 'token' or both 'username' and 'password'"):
+        VeeamClient(
+            host=BASE_URL,
+            username=USERNAME,
+            api_version=API_VERSION,
+            verify_ssl=False,
+        )
 
 
 @pytest.mark.asyncio

@@ -97,6 +97,10 @@ Each packaged version can be called independently through separate imports, but 
 
 #### Create a client and connect
 
+You can authenticate using either **username/password** or a **pre-existing token**.
+
+**Option 1: Username/Password Authentication**
+
 ```python
 import asyncio
 from veeam_spc.client import VeeamClient
@@ -106,6 +110,31 @@ async def main():
         host="https://vspc.example.com:1280",
         username="administrator",
         password="SuperSecretPassword",
+        api_version="3.6",
+        verify_ssl=False,
+    )
+
+    await vc.connect()
+
+    # use the client...
+
+    await vc.close()
+
+asyncio.run(main())
+```
+
+**Option 2: Token Authentication** (recommended for long-lived access)
+
+VSPC supports permanent tokens that don't expire, making them ideal for service accounts and CI/CD pipelines.
+
+```python
+import asyncio
+from veeam_spc.client import VeeamClient
+
+async def main():
+    vc = VeeamClient(
+        host="https://vspc.example.com:1280",
+        token="your-permanent-token-here",
         api_version="3.6",
         verify_ssl=False,
     )
@@ -176,91 +205,6 @@ await vc.close()
 
 If you prefer to use the versioned packages directly without the SmartClient:
 
-#### Basic Usage
-First, create a client from the appropriate API version:
-
-```python
-from veeam_spc.v3_5_1 import Client
-
-client = Client(base_url="https://server:1280/api/v3")
-```
-
-If the endpoints you're going to hit require authentication, use `AuthenticatedClient`:
-
-```python
-from veeam_spc.v3_5_1 import AuthenticatedClient
-
-client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
-```
-
-Now call your endpoint and use your models:
-
-```python
-from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about_information
-from veeam_spc.v3_5_1.types import Response
-
-with client:
-    about_info: About = get_about_information.sync(client=client, X-Client-Version="3.5.1")
-    # or if you need more info (e.g. status_code)
-    response: Response[About] = get_about_information.sync_detailed(client=client, X-Client-Version="3.5.1")
-```
-
-### Async Usage
-Or do the same thing with an async version:
-
-```python
-from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about_information
-from veeam_spc.v3_5_1.types import Response
-
-client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
-
-async with client:
-    about_info = await get_about_information.asyncio(client=client, X-Client-Version="3.5.1")
-    response: Response[About] = await get_about_information.asyncio_detailed(client=client, X-Client-Version="3.5.1")
-```
-
-### SSL Verification
-By default, HTTPS APIs will verify SSL certificates. You can pass a custom certificate bundle or disable verification (not recommended):
-
-```python
-from veeam_spc.v3_5_1 import AuthenticatedClient
-
-client = AuthenticatedClient(
-    base_url="https://internal_api.example.com/api/v3",
-    token="SuperSecretToken",
-    verify_ssl="/path/to/certificate_bundle.pem",
-)
-
-# Disable SSL verification (security risk)
-client = AuthenticatedClient(
-    base_url="https://internal_api.example.com/api/v3",
-    token="SuperSecretToken",
-    verify_ssl=False
-)
-```
-
-### Advanced Customizations
-You can customize the underlying `httpx.Client` or `httpx.AsyncClient`:
-
-```python
-from veeam_spc.v3_5_1 import Client
-
-def log_request(request):
-    print(f"Request event hook: {request.method} {request.url} - Waiting for response")
-
-def log_response(response):
-    request = response.request
-    print(f"Response event hook: {request.method} {request.url} - Status {response.status_code}")
-
-client = Client(
-    base_url="https://server:1280/api/v3",
-    httpx_args={"event_hooks": {"request": [log_request], "response": [log_response]}},
-)
-# Or get the underlying httpx client to modify directly with client.get_httpx_client() or client.get_async_httpx_client()
-```
-
 First, create a client from the appropriate API version:
 
 ```python
@@ -305,7 +249,7 @@ async with client:
     response: Response[About] = await get_about_information.asyncio_detailed(client=client, x_client_version="3.5.1")
 ```
 
-#### SSL Verification
+### SSL Verification
 By default, HTTPS APIs will verify SSL certificates. You can pass a custom certificate bundle or disable verification (not recommended):
 
 ```python
@@ -325,7 +269,7 @@ client = AuthenticatedClient(
 )
 ```
 
-#### Advanced Customizations
+### Advanced Customizations
 You can customize the underlying `httpx.Client` or `httpx.AsyncClient`:
 
 ```python

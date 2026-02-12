@@ -1,6 +1,6 @@
 import importlib
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 
@@ -48,8 +48,8 @@ class VeeamClient:
 
     Responsibilities:
     - version routing
-    - authentication
-    - token refresh
+    - authentication (username/password or token)
+    - token refresh (for password-based auth)
     - X-Client-Version header injection
     - API namespace routing
     """
@@ -57,16 +57,27 @@ class VeeamClient:
     def __init__(
         self,
         host: str,
-        username: str,
-        password: str,
         api_version: str,
         verify_ssl: bool = True,
+        username: str | None = None,
+        password: str | None = None,
+        token: str | None = None,
     ):
         self.host = self._normalize_host(host)
-        self.username = username
-        self.password = password
         self.api_version = api_version
         self.verify_ssl = verify_ssl
+        
+        # Support either username/password OR token
+        if token:
+            self.token = token
+            self.username = None
+            self.password = None
+        elif username and password:
+            self.username = username
+            self.password = password
+            self.token = None
+        else:
+            raise ValueError("Must provide either 'token' or both 'username' and 'password'")
 
         from .versions import VERSION_TO_PACKAGE
 
@@ -100,6 +111,17 @@ class VeeamClient:
             importlib.import_module(f"{self.package}.client"), "AuthenticatedClient"
         )
 
+        # If using a pre-existing token, skip authentication
+        if self.token:
+            self._access_token = self.token
+            self._client = AuthenticatedClient(
+                base_url=f"{self.host}/api/v3",
+                token=self._access_token,
+                verify_ssl=self.verify_ssl,
+            )
+            return
+
+        # Otherwise, authenticate with username/password
         o_auth_2_issue_token = importlib.import_module(
             f"{self.package}.api.authentication.o_auth_2_issue_token"
         )
@@ -146,7 +168,7 @@ class VeeamClient:
     def _store_token(self, token, AuthenticatedClient):
         self._access_token = token.access_token
         self._refresh_token = token.refresh_token
-        self._expires_at = datetime.utcnow() + timedelta(seconds=token.expires_in - 30)
+        self._expires_at = datetime.now(timezone.utc) + timedelta(seconds=token.expires_in - 30)
 
         self._client = AuthenticatedClient(
             base_url=f"{self.host}/api/v3",
@@ -155,7 +177,11 @@ class VeeamClient:
         )
 
     async def _refresh_token_if_needed(self):
-        if self._expires_at and datetime.utcnow() < self._expires_at:
+        # Skip refresh for permanent tokens
+        if self.token:
+            return
+            
+        if self._expires_at and datetime.now(timezone.utc) < self._expires_at:
             return
 
         o_auth_2_issue_token = importlib.import_module(
