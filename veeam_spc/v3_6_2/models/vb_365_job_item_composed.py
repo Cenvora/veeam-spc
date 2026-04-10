@@ -1,0 +1,288 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, cast
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..models.vb_365_job_item_composed_item_type import Vb365JobItemComposedItemType
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.vb_365_job_item_group import Vb365JobItemGroup
+    from ..models.vb_365_job_item_site import Vb365JobItemSite
+    from ..models.vb_365_job_item_team import Vb365JobItemTeam
+    from ..models.vb_365_job_item_user import Vb365JobItemUser
+
+
+T = TypeVar("T", bound="Vb365JobItemComposed")
+
+
+@_attrs_define
+class Vb365JobItemComposed:
+    """
+    Attributes:
+        id (str | Unset): ID assigned to a backup job item.
+        item_type (Vb365JobItemComposedItemType | Unset): Type of a backup job item.
+        folders (list[str] | Unset): Array of folders included in a backup job.
+        backup_mailbox (bool | Unset): Indicates whether a backup job must include mailboxes. Default: False.
+        backup_one_drive (bool | Unset): Indicates whether a backup job must include OneDrive data. Default: False.
+        backup_archive_mailbox (bool | Unset): Indicates whether a backup job must include mailbox archive. Default:
+            False.
+        backup_personal_site (bool | Unset): Indicates whether a backup job must include personal sites. Default: False.
+        backup_sites (bool | Unset): Indicates whether a backup job must include sites. Default: False.
+        backup_teams (bool | Unset): Indicates whether a backup job must include Microsoft Teams data. Default: False.
+        backup_teams_chats (bool | Unset): Indicates whether a backup job must include Microsoft Teams chat data.
+            Default: False.
+        backup_members (bool | Unset): Indicates whether a backup job must include group member data. Default: False.
+        backup_member_mailbox (bool | Unset): Indicates whether a backup job must include group member mailboxes.
+            Default: False.
+        backup_member_archive_mailbox (bool | Unset): Indicates whether a backup job must include group member mailbox
+            archive. Default: False.
+        backup_member_one_drive (bool | Unset): Indicates whether a backup job must include group member OneDrive data.
+            Default: False.
+        backup_member_site (bool | Unset): Indicates whether a backup job must include group member sites. Default:
+            False.
+        backup_group_site (bool | Unset): Indicates whether a backup job must include group sites. Default: False.
+        site (Vb365JobItemSite | Unset):
+        team (Vb365JobItemTeam | Unset):
+        user (Vb365JobItemUser | Unset):
+        group (Vb365JobItemGroup | Unset):
+    """
+
+    id: str | Unset = UNSET
+    item_type: Vb365JobItemComposedItemType | Unset = UNSET
+    folders: list[str] | Unset = UNSET
+    backup_mailbox: bool | Unset = False
+    backup_one_drive: bool | Unset = False
+    backup_archive_mailbox: bool | Unset = False
+    backup_personal_site: bool | Unset = False
+    backup_sites: bool | Unset = False
+    backup_teams: bool | Unset = False
+    backup_teams_chats: bool | Unset = False
+    backup_members: bool | Unset = False
+    backup_member_mailbox: bool | Unset = False
+    backup_member_archive_mailbox: bool | Unset = False
+    backup_member_one_drive: bool | Unset = False
+    backup_member_site: bool | Unset = False
+    backup_group_site: bool | Unset = False
+    site: Vb365JobItemSite | Unset = UNSET
+    team: Vb365JobItemTeam | Unset = UNSET
+    user: Vb365JobItemUser | Unset = UNSET
+    group: Vb365JobItemGroup | Unset = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        id = self.id
+
+        item_type: str | Unset = UNSET
+        if not isinstance(self.item_type, Unset):
+            item_type = self.item_type.value
+
+        folders: list[str] | Unset = UNSET
+        if not isinstance(self.folders, Unset):
+            folders = self.folders
+
+        backup_mailbox = self.backup_mailbox
+
+        backup_one_drive = self.backup_one_drive
+
+        backup_archive_mailbox = self.backup_archive_mailbox
+
+        backup_personal_site = self.backup_personal_site
+
+        backup_sites = self.backup_sites
+
+        backup_teams = self.backup_teams
+
+        backup_teams_chats = self.backup_teams_chats
+
+        backup_members = self.backup_members
+
+        backup_member_mailbox = self.backup_member_mailbox
+
+        backup_member_archive_mailbox = self.backup_member_archive_mailbox
+
+        backup_member_one_drive = self.backup_member_one_drive
+
+        backup_member_site = self.backup_member_site
+
+        backup_group_site = self.backup_group_site
+
+        site: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.site, Unset):
+            site = self.site.to_dict()
+
+        team: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.team, Unset):
+            team = self.team.to_dict()
+
+        user: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.user, Unset):
+            user = self.user.to_dict()
+
+        group: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.group, Unset):
+            group = self.group.to_dict()
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update({})
+        if id is not UNSET:
+            field_dict["id"] = id
+        if item_type is not UNSET:
+            field_dict["itemType"] = item_type
+        if folders is not UNSET:
+            field_dict["folders"] = folders
+        if backup_mailbox is not UNSET:
+            field_dict["backupMailbox"] = backup_mailbox
+        if backup_one_drive is not UNSET:
+            field_dict["backupOneDrive"] = backup_one_drive
+        if backup_archive_mailbox is not UNSET:
+            field_dict["backupArchiveMailbox"] = backup_archive_mailbox
+        if backup_personal_site is not UNSET:
+            field_dict["backupPersonalSite"] = backup_personal_site
+        if backup_sites is not UNSET:
+            field_dict["backupSites"] = backup_sites
+        if backup_teams is not UNSET:
+            field_dict["backupTeams"] = backup_teams
+        if backup_teams_chats is not UNSET:
+            field_dict["backupTeamsChats"] = backup_teams_chats
+        if backup_members is not UNSET:
+            field_dict["backupMembers"] = backup_members
+        if backup_member_mailbox is not UNSET:
+            field_dict["backupMemberMailbox"] = backup_member_mailbox
+        if backup_member_archive_mailbox is not UNSET:
+            field_dict["backupMemberArchiveMailbox"] = backup_member_archive_mailbox
+        if backup_member_one_drive is not UNSET:
+            field_dict["backupMemberOneDrive"] = backup_member_one_drive
+        if backup_member_site is not UNSET:
+            field_dict["backupMemberSite"] = backup_member_site
+        if backup_group_site is not UNSET:
+            field_dict["backupGroupSite"] = backup_group_site
+        if site is not UNSET:
+            field_dict["site"] = site
+        if team is not UNSET:
+            field_dict["team"] = team
+        if user is not UNSET:
+            field_dict["user"] = user
+        if group is not UNSET:
+            field_dict["group"] = group
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.vb_365_job_item_group import Vb365JobItemGroup
+        from ..models.vb_365_job_item_site import Vb365JobItemSite
+        from ..models.vb_365_job_item_team import Vb365JobItemTeam
+        from ..models.vb_365_job_item_user import Vb365JobItemUser
+
+        d = dict(src_dict)
+        id = d.pop("id", UNSET)
+
+        _item_type = d.pop("itemType", UNSET)
+        item_type: Vb365JobItemComposedItemType | Unset
+        if isinstance(_item_type, Unset):
+            item_type = UNSET
+        else:
+            item_type = Vb365JobItemComposedItemType(_item_type)
+
+        folders = cast(list[str], d.pop("folders", UNSET))
+
+        backup_mailbox = d.pop("backupMailbox", UNSET)
+
+        backup_one_drive = d.pop("backupOneDrive", UNSET)
+
+        backup_archive_mailbox = d.pop("backupArchiveMailbox", UNSET)
+
+        backup_personal_site = d.pop("backupPersonalSite", UNSET)
+
+        backup_sites = d.pop("backupSites", UNSET)
+
+        backup_teams = d.pop("backupTeams", UNSET)
+
+        backup_teams_chats = d.pop("backupTeamsChats", UNSET)
+
+        backup_members = d.pop("backupMembers", UNSET)
+
+        backup_member_mailbox = d.pop("backupMemberMailbox", UNSET)
+
+        backup_member_archive_mailbox = d.pop("backupMemberArchiveMailbox", UNSET)
+
+        backup_member_one_drive = d.pop("backupMemberOneDrive", UNSET)
+
+        backup_member_site = d.pop("backupMemberSite", UNSET)
+
+        backup_group_site = d.pop("backupGroupSite", UNSET)
+
+        _site = d.pop("site", UNSET)
+        site: Vb365JobItemSite | Unset
+        if isinstance(_site, Unset):
+            site = UNSET
+        else:
+            site = Vb365JobItemSite.from_dict(_site)
+
+        _team = d.pop("team", UNSET)
+        team: Vb365JobItemTeam | Unset
+        if isinstance(_team, Unset):
+            team = UNSET
+        else:
+            team = Vb365JobItemTeam.from_dict(_team)
+
+        _user = d.pop("user", UNSET)
+        user: Vb365JobItemUser | Unset
+        if isinstance(_user, Unset):
+            user = UNSET
+        else:
+            user = Vb365JobItemUser.from_dict(_user)
+
+        _group = d.pop("group", UNSET)
+        group: Vb365JobItemGroup | Unset
+        if isinstance(_group, Unset):
+            group = UNSET
+        else:
+            group = Vb365JobItemGroup.from_dict(_group)
+
+        vb_365_job_item_composed = cls(
+            id=id,
+            item_type=item_type,
+            folders=folders,
+            backup_mailbox=backup_mailbox,
+            backup_one_drive=backup_one_drive,
+            backup_archive_mailbox=backup_archive_mailbox,
+            backup_personal_site=backup_personal_site,
+            backup_sites=backup_sites,
+            backup_teams=backup_teams,
+            backup_teams_chats=backup_teams_chats,
+            backup_members=backup_members,
+            backup_member_mailbox=backup_member_mailbox,
+            backup_member_archive_mailbox=backup_member_archive_mailbox,
+            backup_member_one_drive=backup_member_one_drive,
+            backup_member_site=backup_member_site,
+            backup_group_site=backup_group_site,
+            site=site,
+            team=team,
+            user=user,
+            group=group,
+        )
+
+        vb_365_job_item_composed.additional_properties = d
+        return vb_365_job_item_composed
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

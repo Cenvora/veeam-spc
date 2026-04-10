@@ -28,6 +28,11 @@ This project is an independent, open source Python client for the Veeam Service 
   </thead>
   <tbody>
     <tr>
+      <td>9.2</td>
+      <td>3.6.2</td>
+      <td style="text-align:center;">&#9989;</td>
+    </tr>
+    <tr>
       <td>9.1</td>
       <td>3.6.1</td>
       <td style="text-align:center;">&#9989;</td>
@@ -51,10 +56,10 @@ This project is an independent, open source Python client for the Veeam Service 
 </table>
 
 ## How to support new API versions
-1. Download the OpenAPI yaml into openapi_schemas
+1. Download the OpenAPI JSON spec into openapi_schemas
 2. Install the openapi-python-client package
-2. Fix the OpenAPI yaml to conform to proper standards: `python fix_openapi_yaml.py .\openapi_schemas\vspc_rest_{vspc_version}.yaml .\openapi_schemas\vspc_rest_{vspc_version}_fixed.yaml`
-3. Run `openapi-python-client generate --path ".\openapi_schemas\vspc_rest_{vspc_version}_fixed.yaml" --output-path ".\veeam_spc" --overwrite`
+2. Fix the OpenAPI JSON spec to conform to proper standards: `python fix_openapi_yaml.py .\openapi_schemas\vspc_rest_{vspc_version}.json .\openapi_schemas\vspc_rest_{vspc_version}_fixed.json`
+3. Run `openapi-python-client generate --path ".\openapi_schemas\vspc_rest_{vspc_version}_fixed.json" --output-path ".\veeam_spc" --overwrite`
 4. Fix any warnings/errors (application/binary+base64 can be ignored)
 5. Rename the folder to match the API version (i.e., `v3_5_1`)
 6. Update versions.py and the main readme for the new version
@@ -62,6 +67,9 @@ This project is an independent, open source Python client for the Veeam Service 
 8. If an older API has been deprecated, delete its folder and yaml as well as its versions.py reference, then update the supported versions section of the readme
 
 ## Install
+
+> **Note:** This package requires **Python 3.10 or later**. If you are on Python 3.9, please use an earlier release of this library.
+
 ### From PyPi
 `pip install veeam-spc`
 

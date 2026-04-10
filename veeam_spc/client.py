@@ -3,7 +3,6 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-
 # ----------------------------
 # helpers
 # ----------------------------
@@ -107,9 +106,7 @@ class VeeamClient:
 
     async def connect(self):
         Client = getattr(importlib.import_module(f"{self.package}.client"), "Client")
-        AuthenticatedClient = getattr(
-            importlib.import_module(f"{self.package}.client"), "AuthenticatedClient"
-        )
+        AuthenticatedClient = getattr(importlib.import_module(f"{self.package}.client"), "AuthenticatedClient")
 
         # If using a pre-existing token, skip authentication
         if self.token:
@@ -122,18 +119,14 @@ class VeeamClient:
             return
 
         # Otherwise, authenticate with username/password
-        o_auth_2_issue_token = importlib.import_module(
-            f"{self.package}.api.authentication.o_auth_2_issue_token"
-        )
+        o_auth_2_issue_token = importlib.import_module(f"{self.package}.api.authentication.o_auth_2_issue_token")
 
         OAuth2IssueTokenBody = getattr(
             importlib.import_module(f"{self.package}.models.o_auth_2_issue_token_body"),
             "OAuth2IssueTokenBody",
         )
         OAuth2IssueTokenBodyGrantType = getattr(
-            importlib.import_module(
-                f"{self.package}.models.o_auth_2_issue_token_body_grant_type"
-            ),
+            importlib.import_module(f"{self.package}.models.o_auth_2_issue_token_body_grant_type"),
             "OAuth2IssueTokenBodyGrantType",
         )
 
@@ -184,25 +177,19 @@ class VeeamClient:
         if self._expires_at and datetime.now(timezone.utc) < self._expires_at:
             return
 
-        o_auth_2_issue_token = importlib.import_module(
-            f"{self.package}.api.authentication.o_auth_2_issue_token"
-        )
+        o_auth_2_issue_token = importlib.import_module(f"{self.package}.api.authentication.o_auth_2_issue_token")
 
         OAuth2IssueTokenBody = getattr(
             importlib.import_module(f"{self.package}.models.o_auth_2_issue_token_body"),
             "OAuth2IssueTokenBody",
         )
         OAuth2IssueTokenBodyGrantType = getattr(
-            importlib.import_module(
-                f"{self.package}.models.o_auth_2_issue_token_body_grant_type"
-            ),
+            importlib.import_module(f"{self.package}.models.o_auth_2_issue_token_body_grant_type"),
             "OAuth2IssueTokenBodyGrantType",
         )
 
         Client = getattr(importlib.import_module(f"{self.package}.client"), "Client")
-        AuthenticatedClient = getattr(
-            importlib.import_module(f"{self.package}.client"), "AuthenticatedClient"
-        )
+        AuthenticatedClient = getattr(importlib.import_module(f"{self.package}.client"), "AuthenticatedClient")
 
         # try refresh first
         try:
@@ -219,8 +206,10 @@ class VeeamClient:
             # If refresh fails, fallback to password authentication
             # This handles expired refresh tokens or auth errors
             if not self.username or not self.password:
-                raise RuntimeError("Token refresh failed and no username/password available for re-authentication") from e
-            
+                raise RuntimeError(
+                    "Token refresh failed and no username/password available for re-authentication"
+                ) from e
+
             tmp = Client(
                 base_url=f"{self.host}/api/v3",
                 verify_ssl=self.verify_ssl,

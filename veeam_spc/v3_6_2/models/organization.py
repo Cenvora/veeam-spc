@@ -1,0 +1,259 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Any, TypeVar
+from uuid import UUID
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..models.organization_type import OrganizationType
+from ..types import UNSET, Unset
+
+T = TypeVar("T", bound="Organization")
+
+
+@_attrs_define
+class Organization:
+    """
+    Attributes:
+        name (str): Name of an organization.
+        instance_uid (UUID | Unset): UID assigned to an organization.
+        alias (str | Unset): Alias of an organization.
+        type_ (OrganizationType | Unset): Type of an organization.
+        tax_id (str | Unset): Organization Tax ID.
+        email (str | Unset): Contact email address.
+        phone (str | Unset): Telephone number of a primary contact of an organization.
+        country (int | Unset): System ID assigned to an organization country of residence.
+        state (int | Unset): System ID assigned to a USA state where an organization is located.
+        country_name (str | Unset): Country name.
+        region_name (str | Unset): Region name.
+        city (str | Unset): City where an organization is located.
+        street (str | Unset): Street where an organization is located.
+        location_admin_0_code (str | Unset): Code of a country where an organization is located.
+        location_admin_1_code (str | Unset): Code of a state, region or area where an organization is located.
+        location_admin_2_code (str | Unset): Code of a district or municipality where an organization is located.
+        notes (str | Unset): Additional information about an organization.
+        zip_code (str | Unset): Postal code.
+        website (str | Unset): Organization website.
+        veeam_tenant_id (str | Unset): ID of an organization used in Veeam records.
+        company_id (str | Unset): ID of an organization used for 3rd party applications.
+    """
+
+    name: str
+    instance_uid: UUID | Unset = UNSET
+    alias: str | Unset = UNSET
+    type_: OrganizationType | Unset = UNSET
+    tax_id: str | Unset = UNSET
+    email: str | Unset = UNSET
+    phone: str | Unset = UNSET
+    country: int | Unset = UNSET
+    state: int | Unset = UNSET
+    country_name: str | Unset = UNSET
+    region_name: str | Unset = UNSET
+    city: str | Unset = UNSET
+    street: str | Unset = UNSET
+    location_admin_0_code: str | Unset = UNSET
+    location_admin_1_code: str | Unset = UNSET
+    location_admin_2_code: str | Unset = UNSET
+    notes: str | Unset = UNSET
+    zip_code: str | Unset = UNSET
+    website: str | Unset = UNSET
+    veeam_tenant_id: str | Unset = UNSET
+    company_id: str | Unset = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        name = self.name
+
+        instance_uid: str | Unset = UNSET
+        if not isinstance(self.instance_uid, Unset):
+            instance_uid = str(self.instance_uid)
+
+        alias = self.alias
+
+        type_: str | Unset = UNSET
+        if not isinstance(self.type_, Unset):
+            type_ = self.type_.value
+
+        tax_id = self.tax_id
+
+        email = self.email
+
+        phone = self.phone
+
+        country = self.country
+
+        state = self.state
+
+        country_name = self.country_name
+
+        region_name = self.region_name
+
+        city = self.city
+
+        street = self.street
+
+        location_admin_0_code = self.location_admin_0_code
+
+        location_admin_1_code = self.location_admin_1_code
+
+        location_admin_2_code = self.location_admin_2_code
+
+        notes = self.notes
+
+        zip_code = self.zip_code
+
+        website = self.website
+
+        veeam_tenant_id = self.veeam_tenant_id
+
+        company_id = self.company_id
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "name": name,
+            }
+        )
+        if instance_uid is not UNSET:
+            field_dict["instanceUid"] = instance_uid
+        if alias is not UNSET:
+            field_dict["alias"] = alias
+        if type_ is not UNSET:
+            field_dict["type"] = type_
+        if tax_id is not UNSET:
+            field_dict["taxId"] = tax_id
+        if email is not UNSET:
+            field_dict["email"] = email
+        if phone is not UNSET:
+            field_dict["phone"] = phone
+        if country is not UNSET:
+            field_dict["country"] = country
+        if state is not UNSET:
+            field_dict["state"] = state
+        if country_name is not UNSET:
+            field_dict["countryName"] = country_name
+        if region_name is not UNSET:
+            field_dict["regionName"] = region_name
+        if city is not UNSET:
+            field_dict["city"] = city
+        if street is not UNSET:
+            field_dict["street"] = street
+        if location_admin_0_code is not UNSET:
+            field_dict["locationAdmin0Code"] = location_admin_0_code
+        if location_admin_1_code is not UNSET:
+            field_dict["locationAdmin1Code"] = location_admin_1_code
+        if location_admin_2_code is not UNSET:
+            field_dict["locationAdmin2Code"] = location_admin_2_code
+        if notes is not UNSET:
+            field_dict["notes"] = notes
+        if zip_code is not UNSET:
+            field_dict["zipCode"] = zip_code
+        if website is not UNSET:
+            field_dict["website"] = website
+        if veeam_tenant_id is not UNSET:
+            field_dict["veeamTenantId"] = veeam_tenant_id
+        if company_id is not UNSET:
+            field_dict["companyId"] = company_id
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
+        name = d.pop("name")
+
+        _instance_uid = d.pop("instanceUid", UNSET)
+        instance_uid: UUID | Unset
+        if isinstance(_instance_uid, Unset):
+            instance_uid = UNSET
+        else:
+            instance_uid = UUID(_instance_uid)
+
+        alias = d.pop("alias", UNSET)
+
+        _type_ = d.pop("type", UNSET)
+        type_: OrganizationType | Unset
+        if isinstance(_type_, Unset):
+            type_ = UNSET
+        else:
+            type_ = OrganizationType(_type_)
+
+        tax_id = d.pop("taxId", UNSET)
+
+        email = d.pop("email", UNSET)
+
+        phone = d.pop("phone", UNSET)
+
+        country = d.pop("country", UNSET)
+
+        state = d.pop("state", UNSET)
+
+        country_name = d.pop("countryName", UNSET)
+
+        region_name = d.pop("regionName", UNSET)
+
+        city = d.pop("city", UNSET)
+
+        street = d.pop("street", UNSET)
+
+        location_admin_0_code = d.pop("locationAdmin0Code", UNSET)
+
+        location_admin_1_code = d.pop("locationAdmin1Code", UNSET)
+
+        location_admin_2_code = d.pop("locationAdmin2Code", UNSET)
+
+        notes = d.pop("notes", UNSET)
+
+        zip_code = d.pop("zipCode", UNSET)
+
+        website = d.pop("website", UNSET)
+
+        veeam_tenant_id = d.pop("veeamTenantId", UNSET)
+
+        company_id = d.pop("companyId", UNSET)
+
+        organization = cls(
+            name=name,
+            instance_uid=instance_uid,
+            alias=alias,
+            type_=type_,
+            tax_id=tax_id,
+            email=email,
+            phone=phone,
+            country=country,
+            state=state,
+            country_name=country_name,
+            region_name=region_name,
+            city=city,
+            street=street,
+            location_admin_0_code=location_admin_0_code,
+            location_admin_1_code=location_admin_1_code,
+            location_admin_2_code=location_admin_2_code,
+            notes=notes,
+            zip_code=zip_code,
+            website=website,
+            veeam_tenant_id=veeam_tenant_id,
+            company_id=company_id,
+        )
+
+        organization.additional_properties = d
+        return organization
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties
