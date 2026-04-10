@@ -1,0 +1,205 @@
+from http import HTTPStatus
+from typing import Any, cast
+from urllib.parse import quote
+from uuid import UUID
+
+import httpx
+
+from ...client import AuthenticatedClient, Client
+from ...models.error_response import ErrorResponse
+from ...models.update_linux_backup_agent_response_200 import UpdateLinuxBackupAgentResponse200
+from ...types import UNSET, Response, Unset
+
+
+def _get_kwargs(
+    backup_agent_uid: UUID,
+    *,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
+    if not isinstance(x_request_id, Unset):
+        headers["X-Request-id"] = x_request_id
+
+    if not isinstance(x_client_version, Unset):
+        headers["X-Client-Version"] = x_client_version
+
+    _kwargs: dict[str, Any] = {
+        "method": "post",
+        "url": "/infrastructure/backupAgents/linux/{backup_agent_uid}/update".format(
+            backup_agent_uid=quote(str(backup_agent_uid), safe=""),
+        ),
+    }
+
+    _kwargs["headers"] = headers
+    return _kwargs
+
+
+def _parse_response(
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | ErrorResponse | UpdateLinuxBackupAgentResponse200:
+    if response.status_code == 200:
+        response_200 = UpdateLinuxBackupAgentResponse200.from_dict(response.json())
+
+        return response_200
+
+    if response.status_code == 202:
+        response_202 = cast(Any, None)
+        return response_202
+
+    response_default = ErrorResponse.from_dict(response.json())
+
+    return response_default
+
+
+def _build_response(
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[Any | ErrorResponse | UpdateLinuxBackupAgentResponse200]:
+    return Response(
+        status_code=HTTPStatus(response.status_code),
+        content=response.content,
+        headers=response.headers,
+        parsed=_parse_response(client=client, response=response),
+    )
+
+
+def sync_detailed(
+    backup_agent_uid: UUID,
+    *,
+    client: AuthenticatedClient,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> Response[Any | ErrorResponse | UpdateLinuxBackupAgentResponse200]:
+    """Update Veeam Agent for Linux
+
+     Updates a Veeam Agent for Linux with the specified UID.
+    > To track the deployment progress, you can use the `WaitDeploymentTask` operation.
+
+    Args:
+        backup_agent_uid (UUID):
+        x_request_id (UUID | Unset):
+        x_client_version (str | Unset):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Response[Any | ErrorResponse | UpdateLinuxBackupAgentResponse200]
+    """
+
+    kwargs = _get_kwargs(
+        backup_agent_uid=backup_agent_uid,
+        x_request_id=x_request_id,
+        x_client_version=x_client_version,
+    )
+
+    response = client.get_httpx_client().request(
+        **kwargs,
+    )
+
+    return _build_response(client=client, response=response)
+
+
+def sync(
+    backup_agent_uid: UUID,
+    *,
+    client: AuthenticatedClient,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> Any | ErrorResponse | UpdateLinuxBackupAgentResponse200 | None:
+    """Update Veeam Agent for Linux
+
+     Updates a Veeam Agent for Linux with the specified UID.
+    > To track the deployment progress, you can use the `WaitDeploymentTask` operation.
+
+    Args:
+        backup_agent_uid (UUID):
+        x_request_id (UUID | Unset):
+        x_client_version (str | Unset):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Any | ErrorResponse | UpdateLinuxBackupAgentResponse200
+    """
+
+    return sync_detailed(
+        backup_agent_uid=backup_agent_uid,
+        client=client,
+        x_request_id=x_request_id,
+        x_client_version=x_client_version,
+    ).parsed
+
+
+async def asyncio_detailed(
+    backup_agent_uid: UUID,
+    *,
+    client: AuthenticatedClient,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> Response[Any | ErrorResponse | UpdateLinuxBackupAgentResponse200]:
+    """Update Veeam Agent for Linux
+
+     Updates a Veeam Agent for Linux with the specified UID.
+    > To track the deployment progress, you can use the `WaitDeploymentTask` operation.
+
+    Args:
+        backup_agent_uid (UUID):
+        x_request_id (UUID | Unset):
+        x_client_version (str | Unset):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Response[Any | ErrorResponse | UpdateLinuxBackupAgentResponse200]
+    """
+
+    kwargs = _get_kwargs(
+        backup_agent_uid=backup_agent_uid,
+        x_request_id=x_request_id,
+        x_client_version=x_client_version,
+    )
+
+    response = await client.get_async_httpx_client().request(**kwargs)
+
+    return _build_response(client=client, response=response)
+
+
+async def asyncio(
+    backup_agent_uid: UUID,
+    *,
+    client: AuthenticatedClient,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> Any | ErrorResponse | UpdateLinuxBackupAgentResponse200 | None:
+    """Update Veeam Agent for Linux
+
+     Updates a Veeam Agent for Linux with the specified UID.
+    > To track the deployment progress, you can use the `WaitDeploymentTask` operation.
+
+    Args:
+        backup_agent_uid (UUID):
+        x_request_id (UUID | Unset):
+        x_client_version (str | Unset):
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Any | ErrorResponse | UpdateLinuxBackupAgentResponse200
+    """
+
+    return (
+        await asyncio_detailed(
+            backup_agent_uid=backup_agent_uid,
+            client=client,
+            x_request_id=x_request_id,
+            x_client_version=x_client_version,
+        )
+    ).parsed
