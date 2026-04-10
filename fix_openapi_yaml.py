@@ -3,7 +3,8 @@ import re
 import sys
 from typing import Any, cast
 
-# Usage: python fix_response_keys.py <input_yaml> <output_yaml>
+# Usage: python fix_openapi_yaml.py <input_file> <output_file>
+# Supports both YAML and JSON OpenAPI specs.
 
 
 def fix_response_keys(input_path: str, output_path: str) -> None:
@@ -86,10 +87,6 @@ def fix_response_keys(input_path: str, output_path: str) -> None:
                             node_dict["type"] = non_null_types[0]
                             node_dict["nullable"] = True
 
-                # Keep JSON behavior aligned with YAML branch by removing nullable=true.
-                if node_dict.get("nullable") is True:
-                    node_dict.pop("nullable", None)
-
                 # Every value in `properties` must be a schema object.
                 props_any = node_dict.get("properties")
                 if isinstance(props_any, dict):
@@ -164,6 +161,6 @@ def fix_response_keys(input_path: str, output_path: str) -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python fix_response_keys.py <input_yaml> <output_yaml>")
+        print("Usage: python fix_openapi_yaml.py <input_file> <output_file>")
         sys.exit(1)
     fix_response_keys(sys.argv[1], sys.argv[2])
