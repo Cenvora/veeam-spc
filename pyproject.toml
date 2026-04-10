@@ -15,7 +15,8 @@ requires-python = ">=3.8"
 license = { text = "Apache-2.0" }
 
 authors = [
-    { name = "Jonah May", email = "jonah@cyberfortress.com" }
+    { name = "Jonah May", email = "jonah@mayfamily.me" },
+    { name = "Maurice Kevenaar", email = "maurice@kevenaar.name" }
 ]
 
 dependencies = [
@@ -36,6 +37,7 @@ classifiers = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",
+    "pytest-asyncio",
     "pytest-cov",
     "black",
     "ruff",

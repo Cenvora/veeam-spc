@@ -1,6 +1,8 @@
 <h1 align="center">
 <br>
-<img src="./media/Veeam_logo_2024_RGB_main_20.png" alt="Veeam Logo" height="100"></a>
+<img src="https://raw.githubusercontent.com/Cenvora/veeam-spc/main/media/Veeam_logo_2024_RGB_main_20.png"
+     alt="Veeam Logo"
+     height="100">
 <br>
 <br>
 Veeam Service Provider Console Python API Wrapper
@@ -55,9 +57,9 @@ This project is an independent, open source Python client for the Veeam Service 
 3. Run `openapi-python-client generate --path ".\openapi_schemas\vspc_rest_{vspc_version}_fixed.yaml" --output-path ".\veeam_spc" --overwrite`
 4. Fix any warnings/errors (application/binary+base64 can be ignored)
 5. Rename the folder to match the API version (i.e., `v3_5_1`)
-6. Update pyproject.toml to support the new packages
+6. Update versions.py and the main readme for the new version
 7. Write pytest tests
-8. If an older API has been deprecated, delete its folder and yaml, then remove it from pyproject.toml
+8. If an older API has been deprecated, delete its folder and yaml as well as its versions.py reference, then update the supported versions section of the readme
 
 ## Install
 ### From PyPi
@@ -81,7 +83,129 @@ pip install -e .
 
 ## Usage
 
-### Basic Usage
+### Recommended Usage (Smart Client)
+
+The `VeeamClient` handles:
+
+- API version routing
+- Authentication
+- Token refresh
+- `X-Client-Version` header injection so package API version matches header values
+- Async calls
+- Operation discovery
+
+Each packaged version can be called independently through separate imports, but this is the **recommended way** to use this library.
+
+#### Create a client and connect
+
+You can authenticate using either **username/password** or a **pre-existing token**.
+
+**Option 1: Username/Password Authentication**
+
+```python
+import asyncio
+from veeam_spc.client import VeeamClient
+
+async def main():
+    vc = VeeamClient(
+        host="https://vspc.example.com:1280",
+        username="administrator",
+        password="SuperSecretPassword",
+        api_version="3.6",
+        verify_ssl=False,
+    )
+
+    await vc.connect()
+
+    # use the client...
+
+    await vc.close()
+
+asyncio.run(main())
+```
+
+**Option 2: Token Authentication** (recommended for long-lived access)
+
+VSPC supports permanent tokens that don't expire, making them ideal for service accounts and CI/CD pipelines.
+
+```python
+import asyncio
+from veeam_spc.client import VeeamClient
+
+async def main():
+    vc = VeeamClient(
+        host="https://vspc.example.com:1280",
+        token="your-permanent-token-here",
+        api_version="3.6",
+        verify_ssl=False,
+    )
+
+    await vc.connect()
+
+    # use the client...
+
+    await vc.close()
+
+asyncio.run(main())
+```
+
+#### Call an API endpoint (async)
+
+```python
+provider = await vc.call(
+    vc.api("provider").get_provider
+)
+
+# provider is a Provider model
+print(provider.name)
+```
+
+#### Call any endpoint
+
+Operations map directly to the OpenAPI layout:
+
+```
+api/
+└── provider/
+    └── get_provider.py
+```
+
+Call it like this:
+
+```python
+await vc.call(
+    vc.api("provider").get_provider
+)
+```
+
+Or explicitly:
+
+```python
+await vc.call(
+    vc.api("provider.get_provider")
+)
+```
+
+#### Pagination example
+
+```python
+result = await vc.call(
+    vc.api("companies").get_companies,
+    limit=50,
+    offset=0,
+)
+```
+
+#### Close the client
+
+```python
+await vc.close()
+```
+
+### Basic Usage (Direct API Access)
+
+If you prefer to use the versioned packages directly without the SmartClient:
+
 First, create a client from the appropriate API version:
 
 ```python
@@ -102,28 +226,28 @@ Now call your endpoint and use your models:
 
 ```python
 from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about
+from veeam_spc.v3_5_1.api.about import get_about_information
 from veeam_spc.v3_5_1.types import Response
 
 with client:
-    about_info: About = get_about.sync(client=client)
+    about_info: About = get_about_information.sync(client=client, x_client_version="3.5.1")
     # or if you need more info (e.g. status_code)
-    response: Response[About] = get_about.sync_detailed(client=client)
+    response: Response[About] = get_about_information.sync_detailed(client=client, x_client_version="3.5.1")
 ```
 
-### Async Usage
+#### Async Usage
 Or do the same thing with an async version:
 
 ```python
 from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about
+from veeam_spc.v3_5_1.api.about import get_about_information
 from veeam_spc.v3_5_1.types import Response
 
 client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
 
 async with client:
-    about_info = await get_about.asyncio(client=client)
-    response: Response[About] = await get_about.asyncio_detailed(client=client)
+    about_info = await get_about_information.asyncio(client=client, x_client_version="3.5.1")
+    response: Response[About] = await get_about_information.asyncio_detailed(client=client, x_client_version="3.5.1")
 ```
 
 ### SSL Verification
@@ -166,20 +290,6 @@ client = Client(
 # Or get the underlying httpx client to modify directly with client.get_httpx_client() or client.get_async_httpx_client()
 ```
 
-## Building / Publishing
-This project uses [Poetry](https://python-poetry.org/) for dependencies and packaging:
-1. Update metadata in pyproject.toml (authors, version)
-2. Configure private repositories if needed
-    - `poetry config repositories.<your-repository-name> <url>`
-    - `poetry config http-basic.<your-repository-name> <username> <password>`
-3. Publish: `poetry publish --build -r <your-repository-name>` or `poetry publish --build` for PyPI
-
-To install into another project without publishing:
-1. If using Poetry: `poetry add <path-to-this-client>`
-2. If not using Poetry:
-    - Build a wheel: `poetry build -f wheel`
-    - Install: `pip install <path-to-wheel>`
-
 ## Contributing
 Contributions are welcome! To contribute:
 - Fork the repository
@@ -194,7 +304,5 @@ This project is made possible thanks to the efforts of our core contributors:
 
 - [Jonah May](https://github.com/JonahMMay)  
 - [Maurice Kevenaar](https://github.com/mkevenaar)  
-- [CyberFortress](https://cyberfortress.com)  
-- [Integra Cloud Solutions B.V.](https://integra-cs.nl/)  
 
 We’re grateful for their continued support and contributions.

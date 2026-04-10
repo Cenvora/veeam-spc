@@ -1,0 +1,24 @@
+from enum import Enum
+
+
+class UserInputRole(str, Enum):
+    COMPANYADMINISTRATOR = "CompanyAdministrator"
+    COMPANYINVOICEAUDITOR = "CompanyInvoiceAuditor"
+    COMPANYLOCATIONADMINISTRATOR = "CompanyLocationAdministrator"
+    COMPANYLOCATIONUSER = "CompanyLocationUser"
+    COMPANYOWNER = "CompanyOwner"
+    COMPANYSUBTENANT = "CompanySubtenant"
+    COMPANYTENANT = "CompanyTenant"
+    PORTALADMINISTRATOR = "PortalAdministrator"
+    PORTALOPERATOR = "PortalOperator"
+    PORTALREADONLYOPERATOR = "PortalReadonlyOperator"
+    RESELLERADMINISTRATOR = "ResellerAdministrator"
+    RESELLERINVOICEAUDITOR = "ResellerInvoiceAuditor"
+    RESELLEROPERATOR = "ResellerOperator"
+    RESELLEROWNER = "ResellerOwner"
+    RESELLERUSER = "ResellerUser"
+    SITEADMINISTRATOR = "SiteAdministrator"
+    UNKNOWN = "Unknown"
+
+    def __str__(self) -> str:
+        return str(self.value)

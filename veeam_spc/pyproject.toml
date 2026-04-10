@@ -1,14 +1,13 @@
 [tool.poetry]
-name = "veeam-spc"
-version = "0.1.0"
+name = "veeam-service-provider-console-rest-api-client"
+version = "3.6.1"
 description = "A client library for accessing Veeam Service Provider Console REST API"
 authors = []
 readme = "README.md"
 packages = [
-    { include = "v3_5_1" },
-    { include = "v3_6" },
+    { include = "veeam_service_provider_console_rest_api_client" },
 ]
-include = ["CHANGELOG.md", "v3_5_1/py.typed"]
+include = ["CHANGELOG.md", "veeam_service_provider_console_rest_api_client/py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.9"

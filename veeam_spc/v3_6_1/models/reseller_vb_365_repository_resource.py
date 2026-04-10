@@ -1,0 +1,199 @@
+from collections.abc import Mapping
+from typing import Any, TypeVar, Union, cast
+from uuid import UUID
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..types import UNSET, Unset
+
+T = TypeVar("T", bound="ResellerVb365RepositoryResource")
+
+
+@_attrs_define
+class ResellerVb365RepositoryResource:
+    """
+    Attributes:
+        instance_uid (UUID): UID assigned to a Veeam Backup for Microsoft 365 backup repository.
+        reseller_uid (Union[Unset, UUID]): UID assigned to a reseller.
+        vb_365_resource_uid (Union[Unset, UUID]): UID assigned to a Veeam Backup for Microsoft 365 resource.
+        repository_uid (Union[Unset, UUID]): UID assigned to a backup repository.
+        proxy_uid (Union[None, UUID, Unset]): UID assigned to a backup proxy.
+        proxy_pool_uid (Union[None, UUID, Unset]): UID assigned to a backup proxy pool.
+        storage_quota (Union[None, Unset, int]): Amount of allocated storage space, in bytes.
+        is_storage_quota_unlimited (Union[Unset, bool]): Indicates whether a storage quota is unlimited. Default: False.
+    """
+
+    instance_uid: UUID
+    reseller_uid: Union[Unset, UUID] = UNSET
+    vb_365_resource_uid: Union[Unset, UUID] = UNSET
+    repository_uid: Union[Unset, UUID] = UNSET
+    proxy_uid: Union[None, UUID, Unset] = UNSET
+    proxy_pool_uid: Union[None, UUID, Unset] = UNSET
+    storage_quota: Union[None, Unset, int] = UNSET
+    is_storage_quota_unlimited: Union[Unset, bool] = False
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        instance_uid = str(self.instance_uid)
+
+        reseller_uid: Union[Unset, str] = UNSET
+        if not isinstance(self.reseller_uid, Unset):
+            reseller_uid = str(self.reseller_uid)
+
+        vb_365_resource_uid: Union[Unset, str] = UNSET
+        if not isinstance(self.vb_365_resource_uid, Unset):
+            vb_365_resource_uid = str(self.vb_365_resource_uid)
+
+        repository_uid: Union[Unset, str] = UNSET
+        if not isinstance(self.repository_uid, Unset):
+            repository_uid = str(self.repository_uid)
+
+        proxy_uid: Union[None, Unset, str]
+        if isinstance(self.proxy_uid, Unset):
+            proxy_uid = UNSET
+        elif isinstance(self.proxy_uid, UUID):
+            proxy_uid = str(self.proxy_uid)
+        else:
+            proxy_uid = self.proxy_uid
+
+        proxy_pool_uid: Union[None, Unset, str]
+        if isinstance(self.proxy_pool_uid, Unset):
+            proxy_pool_uid = UNSET
+        elif isinstance(self.proxy_pool_uid, UUID):
+            proxy_pool_uid = str(self.proxy_pool_uid)
+        else:
+            proxy_pool_uid = self.proxy_pool_uid
+
+        storage_quota: Union[None, Unset, int]
+        if isinstance(self.storage_quota, Unset):
+            storage_quota = UNSET
+        else:
+            storage_quota = self.storage_quota
+
+        is_storage_quota_unlimited = self.is_storage_quota_unlimited
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "instanceUid": instance_uid,
+            }
+        )
+        if reseller_uid is not UNSET:
+            field_dict["resellerUid"] = reseller_uid
+        if vb_365_resource_uid is not UNSET:
+            field_dict["vb365ResourceUid"] = vb_365_resource_uid
+        if repository_uid is not UNSET:
+            field_dict["repositoryUid"] = repository_uid
+        if proxy_uid is not UNSET:
+            field_dict["proxyUid"] = proxy_uid
+        if proxy_pool_uid is not UNSET:
+            field_dict["proxyPoolUid"] = proxy_pool_uid
+        if storage_quota is not UNSET:
+            field_dict["storageQuota"] = storage_quota
+        if is_storage_quota_unlimited is not UNSET:
+            field_dict["isStorageQuotaUnlimited"] = is_storage_quota_unlimited
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
+        instance_uid = UUID(d.pop("instanceUid"))
+
+        _reseller_uid = d.pop("resellerUid", UNSET)
+        reseller_uid: Union[Unset, UUID]
+        if isinstance(_reseller_uid, Unset):
+            reseller_uid = UNSET
+        else:
+            reseller_uid = UUID(_reseller_uid)
+
+        _vb_365_resource_uid = d.pop("vb365ResourceUid", UNSET)
+        vb_365_resource_uid: Union[Unset, UUID]
+        if isinstance(_vb_365_resource_uid, Unset):
+            vb_365_resource_uid = UNSET
+        else:
+            vb_365_resource_uid = UUID(_vb_365_resource_uid)
+
+        _repository_uid = d.pop("repositoryUid", UNSET)
+        repository_uid: Union[Unset, UUID]
+        if isinstance(_repository_uid, Unset):
+            repository_uid = UNSET
+        else:
+            repository_uid = UUID(_repository_uid)
+
+        def _parse_proxy_uid(data: object) -> Union[None, UUID, Unset]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                proxy_uid_type_0 = UUID(data)
+
+                return proxy_uid_type_0
+            except:  # noqa: E722
+                pass
+            return cast(Union[None, UUID, Unset], data)
+
+        proxy_uid = _parse_proxy_uid(d.pop("proxyUid", UNSET))
+
+        def _parse_proxy_pool_uid(data: object) -> Union[None, UUID, Unset]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                proxy_pool_uid_type_0 = UUID(data)
+
+                return proxy_pool_uid_type_0
+            except:  # noqa: E722
+                pass
+            return cast(Union[None, UUID, Unset], data)
+
+        proxy_pool_uid = _parse_proxy_pool_uid(d.pop("proxyPoolUid", UNSET))
+
+        def _parse_storage_quota(data: object) -> Union[None, Unset, int]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, int], data)
+
+        storage_quota = _parse_storage_quota(d.pop("storageQuota", UNSET))
+
+        is_storage_quota_unlimited = d.pop("isStorageQuotaUnlimited", UNSET)
+
+        reseller_vb_365_repository_resource = cls(
+            instance_uid=instance_uid,
+            reseller_uid=reseller_uid,
+            vb_365_resource_uid=vb_365_resource_uid,
+            repository_uid=repository_uid,
+            proxy_uid=proxy_uid,
+            proxy_pool_uid=proxy_pool_uid,
+            storage_quota=storage_quota,
+            is_storage_quota_unlimited=is_storage_quota_unlimited,
+        )
+
+        reseller_vb_365_repository_resource.additional_properties = d
+        return reseller_vb_365_repository_resource
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

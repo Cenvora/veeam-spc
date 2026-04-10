@@ -1,76 +1,46 @@
-# veeam-spc
+# veeam-service-provider-console-rest-api-client
 A client library for accessing Veeam Service Provider Console REST API
 
 ## Usage
-
-### Simple Client Usage
-For basic REST API operations, use the main `VeeamSPCClient`:
+First, create a client:
 
 ```python
-from veeam_spc import VeeamSPCClient
+from veeam_service_provider_console_rest_api_client import Client
 
-# Username/password authentication
-client = VeeamSPCClient(
-    base_url="https://server:1280/api/v3",
-    username="your_username",
-    password="your_password"
-)
-
-# Token authentication
-client = VeeamSPCClient(
-    base_url="https://server:1280/api/v3",
-    token="SuperSecretToken"
-)
-
-# Make API calls
-about_info = client.get("/about")
-organizations = client.get("/organizations")
-
-# Context manager for automatic cleanup
-with VeeamSPCClient("https://server:1280/api/v3", token="token") as client:
-    data = client.get("/organizations")
+client = Client(base_url="https://api.example.com")
 ```
 
-### Advanced Client Usage
-For full type safety and advanced features, use the version-specific generated clients:
+If the endpoints you're going to hit require authentication, use `AuthenticatedClient` instead:
 
 ```python
-from veeam_spc.v3_5_1 import Client, AuthenticatedClient
+from veeam_service_provider_console_rest_api_client import AuthenticatedClient
 
-client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
-```
-
-If the endpoints you're going to hit require authentication, use `AuthenticatedClient`:
-
-```python
-from veeam_spc.v3_5_1 import AuthenticatedClient
-
-client = AuthenticatedClient(base_url="https://server:1280/api/v3", token="SuperSecretToken")
+client = AuthenticatedClient(base_url="https://api.example.com", token="SuperSecretToken")
 ```
 
 Now call your endpoint and use your models:
 
 ```python
-from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about
-from veeam_spc.v3_5_1.types import Response
+from veeam_service_provider_console_rest_api_client.models import MyDataModel
+from veeam_service_provider_console_rest_api_client.api.my_tag import get_my_data_model
+from veeam_service_provider_console_rest_api_client.types import Response
 
 with client as client:
-    about_data: About = get_about.sync(client=client)
+    my_data: MyDataModel = get_my_data_model.sync(client=client)
     # or if you need more info (e.g. status_code)
-    response: Response[About] = get_about.sync_detailed(client=client)
+    response: Response[MyDataModel] = get_my_data_model.sync_detailed(client=client)
 ```
 
 Or do the same thing with an async version:
 
 ```python
-from veeam_spc.v3_5_1.models import About
-from veeam_spc.v3_5_1.api.about import get_about
-from veeam_spc.v3_5_1.types import Response
+from veeam_service_provider_console_rest_api_client.models import MyDataModel
+from veeam_service_provider_console_rest_api_client.api.my_tag import get_my_data_model
+from veeam_service_provider_console_rest_api_client.types import Response
 
 async with client as client:
-    about_data: About = await get_about.asyncio(client=client)
-    response: Response[About] = await get_about.asyncio_detailed(client=client)
+    my_data: MyDataModel = await get_my_data_model.asyncio(client=client)
+    response: Response[MyDataModel] = await get_my_data_model.asyncio_detailed(client=client)
 ```
 
 By default, when you're calling an HTTPS API it will attempt to verify that SSL is working correctly. Using certificate verification is highly recommended most of the time, but sometimes you may need to authenticate to a server (especially an internal server) using a custom certificate bundle.
