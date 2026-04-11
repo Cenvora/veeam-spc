@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -25,8 +25,9 @@ T = TypeVar("T", bound="BackupServerJobSchedule")
 class BackupServerJobSchedule:
     """
     Attributes:
-        start_date_time (datetime.datetime | Unset): Start date and time of the next scheduled job session.
-        start_date_time_utc (datetime.datetime | Unset): Start date and time of the next scheduled job session in UTC.
+        start_date_time (datetime.datetime | None | Unset): Start date and time of the next scheduled job session.
+        start_date_time_utc (datetime.datetime | None | Unset): Start date and time of the next scheduled job session in
+            UTC.
         daily_schedule_options (BackupServerJobScheduleOptionsDaily | Unset):
         monthly_schedule_options (BackupServerJobScheduleOptionsMonthly | Unset):
         periodically_schedule_options (BackupServerJobScheduleOptionsPeriodically | Unset):
@@ -35,8 +36,8 @@ class BackupServerJobSchedule:
         chaining_options (BackupServerJobScheduleOptionsChaining | Unset):
     """
 
-    start_date_time: datetime.datetime | Unset = UNSET
-    start_date_time_utc: datetime.datetime | Unset = UNSET
+    start_date_time: datetime.datetime | None | Unset = UNSET
+    start_date_time_utc: datetime.datetime | None | Unset = UNSET
     daily_schedule_options: BackupServerJobScheduleOptionsDaily | Unset = UNSET
     monthly_schedule_options: BackupServerJobScheduleOptionsMonthly | Unset = UNSET
     periodically_schedule_options: BackupServerJobScheduleOptionsPeriodically | Unset = UNSET
@@ -46,13 +47,21 @@ class BackupServerJobSchedule:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        start_date_time: str | Unset = UNSET
-        if not isinstance(self.start_date_time, Unset):
+        start_date_time: None | str | Unset
+        if isinstance(self.start_date_time, Unset):
+            start_date_time = UNSET
+        elif isinstance(self.start_date_time, datetime.datetime):
             start_date_time = self.start_date_time.isoformat()
+        else:
+            start_date_time = self.start_date_time
 
-        start_date_time_utc: str | Unset = UNSET
-        if not isinstance(self.start_date_time_utc, Unset):
+        start_date_time_utc: None | str | Unset
+        if isinstance(self.start_date_time_utc, Unset):
+            start_date_time_utc = UNSET
+        elif isinstance(self.start_date_time_utc, datetime.datetime):
             start_date_time_utc = self.start_date_time_utc.isoformat()
+        else:
+            start_date_time_utc = self.start_date_time_utc
 
         daily_schedule_options: dict[str, Any] | Unset = UNSET
         if not isinstance(self.daily_schedule_options, Unset):
@@ -107,19 +116,40 @@ class BackupServerJobSchedule:
         from ..models.backup_server_job_schedule_options_periodically import BackupServerJobScheduleOptionsPeriodically
 
         d = dict(src_dict)
-        _start_date_time = d.pop("startDateTime", UNSET)
-        start_date_time: datetime.datetime | Unset
-        if isinstance(_start_date_time, Unset):
-            start_date_time = UNSET
-        else:
-            start_date_time = isoparse(_start_date_time)
 
-        _start_date_time_utc = d.pop("startDateTimeUtc", UNSET)
-        start_date_time_utc: datetime.datetime | Unset
-        if isinstance(_start_date_time_utc, Unset):
-            start_date_time_utc = UNSET
-        else:
-            start_date_time_utc = isoparse(_start_date_time_utc)
+        def _parse_start_date_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                start_date_time_type_0 = isoparse(data)
+
+                return start_date_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        start_date_time = _parse_start_date_time(d.pop("startDateTime", UNSET))
+
+        def _parse_start_date_time_utc(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                start_date_time_utc_type_0 = isoparse(data)
+
+                return start_date_time_utc_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        start_date_time_utc = _parse_start_date_time_utc(d.pop("startDateTimeUtc", UNSET))
 
         _daily_schedule_options = d.pop("dailyScheduleOptions", UNSET)
         daily_schedule_options: BackupServerJobScheduleOptionsDaily | Unset

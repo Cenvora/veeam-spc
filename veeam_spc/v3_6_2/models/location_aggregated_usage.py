@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -23,14 +23,14 @@ class LocationAggregatedUsage:
     """
     Attributes:
         company_uid (UUID | Unset): UID assigned to a company.
-        reseller_uid (UUID | Unset): UID assigned to a reseller.
+        reseller_uid (None | Unset | UUID): UID assigned to a reseller.
         location_uid (UUID | Unset): UID assigned to a location.
         date (datetime.date | Unset): Date of data aggregation.
         counters (list[AggregatedUsage] | Unset): Managed services counters.
     """
 
     company_uid: UUID | Unset = UNSET
-    reseller_uid: UUID | Unset = UNSET
+    reseller_uid: None | Unset | UUID = UNSET
     location_uid: UUID | Unset = UNSET
     date: datetime.date | Unset = UNSET
     counters: list[AggregatedUsage] | Unset = UNSET
@@ -41,9 +41,13 @@ class LocationAggregatedUsage:
         if not isinstance(self.company_uid, Unset):
             company_uid = str(self.company_uid)
 
-        reseller_uid: str | Unset = UNSET
-        if not isinstance(self.reseller_uid, Unset):
+        reseller_uid: None | str | Unset
+        if isinstance(self.reseller_uid, Unset):
+            reseller_uid = UNSET
+        elif isinstance(self.reseller_uid, UUID):
             reseller_uid = str(self.reseller_uid)
+        else:
+            reseller_uid = self.reseller_uid
 
         location_uid: str | Unset = UNSET
         if not isinstance(self.location_uid, Unset):
@@ -88,12 +92,22 @@ class LocationAggregatedUsage:
         else:
             company_uid = UUID(_company_uid)
 
-        _reseller_uid = d.pop("resellerUid", UNSET)
-        reseller_uid: UUID | Unset
-        if isinstance(_reseller_uid, Unset):
-            reseller_uid = UNSET
-        else:
-            reseller_uid = UUID(_reseller_uid)
+        def _parse_reseller_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                reseller_uid_type_0 = UUID(data)
+
+                return reseller_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        reseller_uid = _parse_reseller_uid(d.pop("resellerUid", UNSET))
 
         _location_uid = d.pop("locationUid", UNSET)
         location_uid: UUID | Unset

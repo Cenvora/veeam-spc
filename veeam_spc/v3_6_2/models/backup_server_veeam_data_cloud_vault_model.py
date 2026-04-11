@@ -18,16 +18,16 @@ class BackupServerVeeamDataCloudVaultModel:
     Attributes:
         vault_id (str): Veeam Data Cloud Vault ID.
         is_initialized (bool): Indicates whether a Veeam Data Cloud Vault is initialized.
-        vault_name (str | Unset): Name of a Veeam Data Cloud Vault.
-        storage_container_name (str | Unset): Name of a storage container.
-        folders (list[str] | Unset): Array of folders located in the storage container.
+        vault_name (None | str | Unset): Name of a Veeam Data Cloud Vault.
+        storage_container_name (None | str | Unset): Name of a storage container.
+        folders (list[str] | None | Unset): Array of folders located in the storage container.
     """
 
     vault_id: str
     is_initialized: bool
-    vault_name: str | Unset = UNSET
-    storage_container_name: str | Unset = UNSET
-    folders: list[str] | Unset = UNSET
+    vault_name: None | str | Unset = UNSET
+    storage_container_name: None | str | Unset = UNSET
+    folders: list[str] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -35,12 +35,25 @@ class BackupServerVeeamDataCloudVaultModel:
 
         is_initialized = self.is_initialized
 
-        vault_name = self.vault_name
+        vault_name: None | str | Unset
+        if isinstance(self.vault_name, Unset):
+            vault_name = UNSET
+        else:
+            vault_name = self.vault_name
 
-        storage_container_name = self.storage_container_name
+        storage_container_name: None | str | Unset
+        if isinstance(self.storage_container_name, Unset):
+            storage_container_name = UNSET
+        else:
+            storage_container_name = self.storage_container_name
 
-        folders: list[str] | Unset = UNSET
-        if not isinstance(self.folders, Unset):
+        folders: list[str] | None | Unset
+        if isinstance(self.folders, Unset):
+            folders = UNSET
+        elif isinstance(self.folders, list):
+            folders = self.folders
+
+        else:
             folders = self.folders
 
         field_dict: dict[str, Any] = {}
@@ -67,11 +80,40 @@ class BackupServerVeeamDataCloudVaultModel:
 
         is_initialized = d.pop("isInitialized")
 
-        vault_name = d.pop("vaultName", UNSET)
+        def _parse_vault_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        storage_container_name = d.pop("storageContainerName", UNSET)
+        vault_name = _parse_vault_name(d.pop("vaultName", UNSET))
 
-        folders = cast(list[str], d.pop("folders", UNSET))
+        def _parse_storage_container_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        storage_container_name = _parse_storage_container_name(d.pop("storageContainerName", UNSET))
+
+        def _parse_folders(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                folders_type_0 = cast(list[str], data)
+
+                return folders_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        folders = _parse_folders(d.pop("folders", UNSET))
 
         backup_server_veeam_data_cloud_vault_model = cls(
             vault_id=vault_id,

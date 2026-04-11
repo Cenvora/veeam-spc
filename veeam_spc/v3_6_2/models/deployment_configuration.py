@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,7 +21,7 @@ T = TypeVar("T", bound="DeploymentConfiguration")
 class DeploymentConfiguration:
     """
     Attributes:
-        backup_policy_uid (UUID | Unset): UID of a backup policy that must be assigned to Veeam backup agent.
+        backup_policy_uid (None | Unset | UUID): UID of a backup policy that must be assigned to Veeam backup agent.
         allow_auto_reboot_if_needed (bool | Unset): Indicates whether system reboot is allowed. Default: False.
         set_read_only_access (bool | Unset): Indicates whether the read-only access mode is enabled for Veeam backup
             agents. Default: True.
@@ -31,7 +31,7 @@ class DeploymentConfiguration:
         backup_agent_settings (BackupAgentSettings | Unset):
     """
 
-    backup_policy_uid: UUID | Unset = UNSET
+    backup_policy_uid: None | Unset | UUID = UNSET
     allow_auto_reboot_if_needed: bool | Unset = False
     set_read_only_access: bool | Unset = True
     install_cbt_driver: bool | Unset = False
@@ -40,9 +40,13 @@ class DeploymentConfiguration:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        backup_policy_uid: str | Unset = UNSET
-        if not isinstance(self.backup_policy_uid, Unset):
+        backup_policy_uid: None | str | Unset
+        if isinstance(self.backup_policy_uid, Unset):
+            backup_policy_uid = UNSET
+        elif isinstance(self.backup_policy_uid, UUID):
             backup_policy_uid = str(self.backup_policy_uid)
+        else:
+            backup_policy_uid = self.backup_policy_uid
 
         allow_auto_reboot_if_needed = self.allow_auto_reboot_if_needed
 
@@ -82,12 +86,23 @@ class DeploymentConfiguration:
         from ..models.domain_credentials import DomainCredentials
 
         d = dict(src_dict)
-        _backup_policy_uid = d.pop("backupPolicyUid", UNSET)
-        backup_policy_uid: UUID | Unset
-        if isinstance(_backup_policy_uid, Unset):
-            backup_policy_uid = UNSET
-        else:
-            backup_policy_uid = UUID(_backup_policy_uid)
+
+        def _parse_backup_policy_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                backup_policy_uid_type_0 = UUID(data)
+
+                return backup_policy_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        backup_policy_uid = _parse_backup_policy_uid(d.pop("backupPolicyUid", UNSET))
 
         allow_auto_reboot_if_needed = d.pop("allowAutoRebootIfNeeded", UNSET)
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,11 +20,11 @@ class LinuxOracleArchivedLogsTruncationConfig:
     Attributes:
         truncation_mode (LinuxOracleArchivedLogsTruncationConfigTruncationMode | Unset): Archived log processing mode.
             Default: LinuxOracleArchivedLogsTruncationConfigTruncationMode.TRUNCATEDISABLED.
-        size_gb (int | Unset): Maximum threshold for archived log file size, in GB. If an archived log file exceeds the
-            limitation, it is deleted.
+        size_gb (int | None | Unset): Maximum threshold for archived log file size, in GB. If an archived log file
+            exceeds the limitation, it is deleted.
             > For the `TruncateBySize` archived log processing mode the property value must not be `0`.
              Default: 10.
-        life_time_hours (int | Unset): Amount of time after which archived logs must be deleted, in hours.
+        life_time_hours (int | None | Unset): Amount of time after which archived logs must be deleted, in hours.
             > For the `TruncateByAge` archived log processing mode the property value must not be `0`.
              Default: 24.
     """
@@ -32,8 +32,8 @@ class LinuxOracleArchivedLogsTruncationConfig:
     truncation_mode: LinuxOracleArchivedLogsTruncationConfigTruncationMode | Unset = (
         LinuxOracleArchivedLogsTruncationConfigTruncationMode.TRUNCATEDISABLED
     )
-    size_gb: int | Unset = 10
-    life_time_hours: int | Unset = 24
+    size_gb: int | None | Unset = 10
+    life_time_hours: int | None | Unset = 24
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -41,9 +41,17 @@ class LinuxOracleArchivedLogsTruncationConfig:
         if not isinstance(self.truncation_mode, Unset):
             truncation_mode = self.truncation_mode.value
 
-        size_gb = self.size_gb
+        size_gb: int | None | Unset
+        if isinstance(self.size_gb, Unset):
+            size_gb = UNSET
+        else:
+            size_gb = self.size_gb
 
-        life_time_hours = self.life_time_hours
+        life_time_hours: int | None | Unset
+        if isinstance(self.life_time_hours, Unset):
+            life_time_hours = UNSET
+        else:
+            life_time_hours = self.life_time_hours
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -67,9 +75,23 @@ class LinuxOracleArchivedLogsTruncationConfig:
         else:
             truncation_mode = LinuxOracleArchivedLogsTruncationConfigTruncationMode(_truncation_mode)
 
-        size_gb = d.pop("sizeGB", UNSET)
+        def _parse_size_gb(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        life_time_hours = d.pop("lifeTimeHours", UNSET)
+        size_gb = _parse_size_gb(d.pop("sizeGB", UNSET))
+
+        def _parse_life_time_hours(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        life_time_hours = _parse_life_time_hours(d.pop("lifeTimeHours", UNSET))
 
         linux_oracle_archived_logs_truncation_config = cls(
             truncation_mode=truncation_mode,

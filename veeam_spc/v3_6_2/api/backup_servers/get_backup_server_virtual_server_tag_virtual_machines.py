@@ -21,7 +21,7 @@ def _get_kwargs(
     virtual_center_uid: UUID,
     tag_urn: str,
     *,
-    name_filter: str | Unset = UNSET,
+    name_filter: None | str | Unset = UNSET,
     name_sorting_direction: GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection
     | Unset = GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -38,7 +38,12 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    params["nameFilter"] = name_filter
+    json_name_filter: None | str | Unset
+    if isinstance(name_filter, Unset):
+        json_name_filter = UNSET
+    else:
+        json_name_filter = name_filter
+    params["nameFilter"] = json_name_filter
 
     json_name_sorting_direction: str | Unset = UNSET
     if not isinstance(name_sorting_direction, Unset):
@@ -100,7 +105,7 @@ def sync_detailed(
     tag_urn: str,
     *,
     client: AuthenticatedClient,
-    name_filter: str | Unset = UNSET,
+    name_filter: None | str | Unset = UNSET,
     name_sorting_direction: GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection
     | Unset = GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -117,7 +122,7 @@ def sync_detailed(
         backup_server_uid (UUID):
         virtual_center_uid (UUID):
         tag_urn (str):
-        name_filter (str | Unset):
+        name_filter (None | str | Unset):
         name_sorting_direction (GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection
             | Unset):  Default:
             GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection.ASCENDING.
@@ -159,7 +164,7 @@ def sync(
     tag_urn: str,
     *,
     client: AuthenticatedClient,
-    name_filter: str | Unset = UNSET,
+    name_filter: None | str | Unset = UNSET,
     name_sorting_direction: GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection
     | Unset = GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -176,7 +181,7 @@ def sync(
         backup_server_uid (UUID):
         virtual_center_uid (UUID):
         tag_urn (str):
-        name_filter (str | Unset):
+        name_filter (None | str | Unset):
         name_sorting_direction (GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection
             | Unset):  Default:
             GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection.ASCENDING.
@@ -213,7 +218,7 @@ async def asyncio_detailed(
     tag_urn: str,
     *,
     client: AuthenticatedClient,
-    name_filter: str | Unset = UNSET,
+    name_filter: None | str | Unset = UNSET,
     name_sorting_direction: GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection
     | Unset = GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -230,7 +235,7 @@ async def asyncio_detailed(
         backup_server_uid (UUID):
         virtual_center_uid (UUID):
         tag_urn (str):
-        name_filter (str | Unset):
+        name_filter (None | str | Unset):
         name_sorting_direction (GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection
             | Unset):  Default:
             GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection.ASCENDING.
@@ -270,7 +275,7 @@ async def asyncio(
     tag_urn: str,
     *,
     client: AuthenticatedClient,
-    name_filter: str | Unset = UNSET,
+    name_filter: None | str | Unset = UNSET,
     name_sorting_direction: GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection
     | Unset = GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -287,7 +292,7 @@ async def asyncio(
         backup_server_uid (UUID):
         virtual_center_uid (UUID):
         tag_urn (str):
-        name_filter (str | Unset):
+        name_filter (None | str | Unset):
         name_sorting_direction (GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection
             | Unset):  Default:
             GetBackupServerVirtualServerTagVirtualMachinesNameSortingDirection.ASCENDING.

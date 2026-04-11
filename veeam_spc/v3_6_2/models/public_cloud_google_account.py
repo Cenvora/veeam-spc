@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,7 +19,7 @@ class PublicCloudGoogleAccount:
         name (str): Name of a Google Cloud account.
         instance_uid (UUID | Unset): UID assigned to a Google Cloud account.
         credential_tag (UUID | Unset): Tag of Google Cloud account credentials.
-        description (str | Unset): Description of a Google Cloud account.
+        description (None | str | Unset): Description of a Google Cloud account.
         project_id (str | Unset): ID assigned to a project in which a Google Cloud account is created.
         created_by (str | Unset): Name of a user that created a Google Cloud account.
         site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site on which a Google Cloud account is
@@ -27,19 +27,19 @@ class PublicCloudGoogleAccount:
         organization_uid (UUID | Unset): UID assigned to a mapped organization.
         appliances (list[UUID] | Unset): Array of UIDs assigned to Veeam Backup for Public Clouds appliances to which a
             Google Cloud account is assigned.
-        json_configuration (str | Unset): Configuration file of a Google Cloud account in the `JSON` format.
+        json_configuration (None | str | Unset): Configuration file of a Google Cloud account in the `JSON` format.
     """
 
     name: str
     instance_uid: UUID | Unset = UNSET
     credential_tag: UUID | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     project_id: str | Unset = UNSET
     created_by: str | Unset = UNSET
     site_uid: UUID | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
     appliances: list[UUID] | Unset = UNSET
-    json_configuration: str | Unset = UNSET
+    json_configuration: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -53,7 +53,11 @@ class PublicCloudGoogleAccount:
         if not isinstance(self.credential_tag, Unset):
             credential_tag = str(self.credential_tag)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         project_id = self.project_id
 
@@ -74,7 +78,11 @@ class PublicCloudGoogleAccount:
                 appliances_item = str(appliances_item_data)
                 appliances.append(appliances_item)
 
-        json_configuration = self.json_configuration
+        json_configuration: None | str | Unset
+        if isinstance(self.json_configuration, Unset):
+            json_configuration = UNSET
+        else:
+            json_configuration = self.json_configuration
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -123,7 +131,14 @@ class PublicCloudGoogleAccount:
         else:
             credential_tag = UUID(_credential_tag)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         project_id = d.pop("projectId", UNSET)
 
@@ -152,7 +167,14 @@ class PublicCloudGoogleAccount:
 
                 appliances.append(appliances_item)
 
-        json_configuration = d.pop("jsonConfiguration", UNSET)
+        def _parse_json_configuration(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        json_configuration = _parse_json_configuration(d.pop("jsonConfiguration", UNSET))
 
         public_cloud_google_account = cls(
             name=name,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -26,7 +26,7 @@ class PulseLicenseInput:
         contract_id (str): ID assigned to a rental agreement contract.
         expiration_date (datetime.datetime): Date of the VCSP Pulse license expiration.
         workloads (list[PulseLicenseWorkloadInput]): Array of workloads that must be licensed.
-        description (str | Unset): Description of a VCSP Pulse license.
+        description (None | str | Unset): Description of a VCSP Pulse license.
         type_ (PulseLicenseInputType | Unset): Type of a VCSP Pulse license. Default: PulseLicenseInputType.RENTAL.
         is_automatic_reporting_enabled (bool | Unset): Defines whether automatic license reporting is enabled. Default:
             False.
@@ -36,7 +36,7 @@ class PulseLicenseInput:
     contract_id: str
     expiration_date: datetime.datetime
     workloads: list[PulseLicenseWorkloadInput]
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     type_: PulseLicenseInputType | Unset = PulseLicenseInputType.RENTAL
     is_automatic_reporting_enabled: bool | Unset = False
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -53,7 +53,11 @@ class PulseLicenseInput:
             workloads_item = workloads_item_data.to_dict()
             workloads.append(workloads_item)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         type_: str | Unset = UNSET
         if not isinstance(self.type_, Unset):
@@ -98,7 +102,14 @@ class PulseLicenseInput:
 
             workloads.append(workloads_item)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         _type_ = d.pop("type", UNSET)
         type_: PulseLicenseInputType | Unset

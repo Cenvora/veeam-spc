@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.linux_active_full_settings_schedule_type import LinuxActiveFullSettingsScheduleType
-from ..models.linux_active_full_settings_weekly_on_days_item import LinuxActiveFullSettingsWeeklyOnDaysItem
+from ..models.linux_active_full_settings_weekly_on_days_type_0_item import LinuxActiveFullSettingsWeeklyOnDaysType0Item
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -24,12 +24,12 @@ class LinuxActiveFullSettings:
         schedule_type (LinuxActiveFullSettingsScheduleType | Unset): Type of periodicity. Default:
             LinuxActiveFullSettingsScheduleType.NOTSCHEDULED.
         monthly (LinuxMonthlyScheduleSettings | Unset):
-        weekly_on_days (list[LinuxActiveFullSettingsWeeklyOnDaysItem] | Unset): Name of the week day.
+        weekly_on_days (list[LinuxActiveFullSettingsWeeklyOnDaysType0Item] | None | Unset): Name of the week day.
     """
 
     schedule_type: LinuxActiveFullSettingsScheduleType | Unset = LinuxActiveFullSettingsScheduleType.NOTSCHEDULED
     monthly: LinuxMonthlyScheduleSettings | Unset = UNSET
-    weekly_on_days: list[LinuxActiveFullSettingsWeeklyOnDaysItem] | Unset = UNSET
+    weekly_on_days: list[LinuxActiveFullSettingsWeeklyOnDaysType0Item] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -41,12 +41,17 @@ class LinuxActiveFullSettings:
         if not isinstance(self.monthly, Unset):
             monthly = self.monthly.to_dict()
 
-        weekly_on_days: list[str] | Unset = UNSET
-        if not isinstance(self.weekly_on_days, Unset):
+        weekly_on_days: list[str] | None | Unset
+        if isinstance(self.weekly_on_days, Unset):
+            weekly_on_days = UNSET
+        elif isinstance(self.weekly_on_days, list):
             weekly_on_days = []
-            for weekly_on_days_item_data in self.weekly_on_days:
-                weekly_on_days_item = weekly_on_days_item_data.value
-                weekly_on_days.append(weekly_on_days_item)
+            for weekly_on_days_type_0_item_data in self.weekly_on_days:
+                weekly_on_days_type_0_item = weekly_on_days_type_0_item_data.value
+                weekly_on_days.append(weekly_on_days_type_0_item)
+
+        else:
+            weekly_on_days = self.weekly_on_days
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -79,14 +84,29 @@ class LinuxActiveFullSettings:
         else:
             monthly = LinuxMonthlyScheduleSettings.from_dict(_monthly)
 
-        _weekly_on_days = d.pop("weeklyOnDays", UNSET)
-        weekly_on_days: list[LinuxActiveFullSettingsWeeklyOnDaysItem] | Unset = UNSET
-        if _weekly_on_days is not UNSET:
-            weekly_on_days = []
-            for weekly_on_days_item_data in _weekly_on_days:
-                weekly_on_days_item = LinuxActiveFullSettingsWeeklyOnDaysItem(weekly_on_days_item_data)
+        def _parse_weekly_on_days(data: object) -> list[LinuxActiveFullSettingsWeeklyOnDaysType0Item] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                weekly_on_days_type_0 = []
+                _weekly_on_days_type_0 = data
+                for weekly_on_days_type_0_item_data in _weekly_on_days_type_0:
+                    weekly_on_days_type_0_item = LinuxActiveFullSettingsWeeklyOnDaysType0Item(
+                        weekly_on_days_type_0_item_data
+                    )
 
-                weekly_on_days.append(weekly_on_days_item)
+                    weekly_on_days_type_0.append(weekly_on_days_type_0_item)
+
+                return weekly_on_days_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[LinuxActiveFullSettingsWeeklyOnDaysType0Item] | None | Unset, data)
+
+        weekly_on_days = _parse_weekly_on_days(d.pop("weeklyOnDays", UNSET))
 
         linux_active_full_settings = cls(
             schedule_type=schedule_type,

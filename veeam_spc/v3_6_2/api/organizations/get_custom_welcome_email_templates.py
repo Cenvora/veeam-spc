@@ -18,7 +18,7 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetCustomWelcomeEmailTemplatesOrganizationType | Unset = UNSET,
     organization_scope: GetCustomWelcomeEmailTemplatesOrganizationScope | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
@@ -33,9 +33,13 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_organization_uid: str | Unset = UNSET
-    if not isinstance(organization_uid, Unset):
+    json_organization_uid: None | str | Unset
+    if isinstance(organization_uid, Unset):
+        json_organization_uid = UNSET
+    elif isinstance(organization_uid, UUID):
         json_organization_uid = str(organization_uid)
+    else:
+        json_organization_uid = organization_uid
     params["organizationUid"] = json_organization_uid
 
     json_organization_type: str | Unset = UNSET
@@ -93,7 +97,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetCustomWelcomeEmailTemplatesOrganizationType | Unset = UNSET,
     organization_scope: GetCustomWelcomeEmailTemplatesOrganizationScope | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
@@ -105,7 +109,7 @@ def sync_detailed(
     notifications.
 
     Args:
-        organization_uid (UUID | Unset): Organization UID.
+        organization_uid (None | Unset | UUID): Organization UID.
         organization_type (GetCustomWelcomeEmailTemplatesOrganizationType | Unset): Organization
             type.
         organization_scope (GetCustomWelcomeEmailTemplatesOrganizationScope | Unset): Scope of
@@ -139,7 +143,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetCustomWelcomeEmailTemplatesOrganizationType | Unset = UNSET,
     organization_scope: GetCustomWelcomeEmailTemplatesOrganizationScope | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
@@ -151,7 +155,7 @@ def sync(
     notifications.
 
     Args:
-        organization_uid (UUID | Unset): Organization UID.
+        organization_uid (None | Unset | UUID): Organization UID.
         organization_type (GetCustomWelcomeEmailTemplatesOrganizationType | Unset): Organization
             type.
         organization_scope (GetCustomWelcomeEmailTemplatesOrganizationScope | Unset): Scope of
@@ -180,7 +184,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetCustomWelcomeEmailTemplatesOrganizationType | Unset = UNSET,
     organization_scope: GetCustomWelcomeEmailTemplatesOrganizationScope | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
@@ -192,7 +196,7 @@ async def asyncio_detailed(
     notifications.
 
     Args:
-        organization_uid (UUID | Unset): Organization UID.
+        organization_uid (None | Unset | UUID): Organization UID.
         organization_type (GetCustomWelcomeEmailTemplatesOrganizationType | Unset): Organization
             type.
         organization_scope (GetCustomWelcomeEmailTemplatesOrganizationScope | Unset): Scope of
@@ -224,7 +228,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetCustomWelcomeEmailTemplatesOrganizationType | Unset = UNSET,
     organization_scope: GetCustomWelcomeEmailTemplatesOrganizationScope | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
@@ -236,7 +240,7 @@ async def asyncio(
     notifications.
 
     Args:
-        organization_uid (UUID | Unset): Organization UID.
+        organization_uid (None | Unset | UUID): Organization UID.
         organization_type (GetCustomWelcomeEmailTemplatesOrganizationType | Unset): Organization
             type.
         organization_scope (GetCustomWelcomeEmailTemplatesOrganizationScope | Unset): Scope of

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -17,29 +17,34 @@ class CompanyVb365Resource:
     """
     Attributes:
         vb_365_server_uid (UUID): UID assigned to a Veeam Backup for Microsoft 365 server.
-        friendly_name (str): Friendly name of a Veeam Backup for Microsoft 365 resource.
+        friendly_name (None | str): Friendly name of a Veeam Backup for Microsoft 365 resource.
         instance_uid (UUID | Unset): UID assigned to a Veeam Backup for Microsoft 365 resource.
-        company_uid (UUID | Unset): UID assigned to a company.
+        company_uid (None | Unset | UUID): UID assigned to a company.
     """
 
     vb_365_server_uid: UUID
-    friendly_name: str
+    friendly_name: None | str
     instance_uid: UUID | Unset = UNSET
-    company_uid: UUID | Unset = UNSET
+    company_uid: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         vb_365_server_uid = str(self.vb_365_server_uid)
 
+        friendly_name: None | str
         friendly_name = self.friendly_name
 
         instance_uid: str | Unset = UNSET
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        company_uid: str | Unset = UNSET
-        if not isinstance(self.company_uid, Unset):
+        company_uid: None | str | Unset
+        if isinstance(self.company_uid, Unset):
+            company_uid = UNSET
+        elif isinstance(self.company_uid, UUID):
             company_uid = str(self.company_uid)
+        else:
+            company_uid = self.company_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -61,7 +66,12 @@ class CompanyVb365Resource:
         d = dict(src_dict)
         vb_365_server_uid = UUID(d.pop("vb365ServerUid"))
 
-        friendly_name = d.pop("friendlyName")
+        def _parse_friendly_name(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        friendly_name = _parse_friendly_name(d.pop("friendlyName"))
 
         _instance_uid = d.pop("instanceUid", UNSET)
         instance_uid: UUID | Unset
@@ -70,12 +80,22 @@ class CompanyVb365Resource:
         else:
             instance_uid = UUID(_instance_uid)
 
-        _company_uid = d.pop("companyUid", UNSET)
-        company_uid: UUID | Unset
-        if isinstance(_company_uid, Unset):
-            company_uid = UNSET
-        else:
-            company_uid = UUID(_company_uid)
+        def _parse_company_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                company_uid_type_0 = UUID(data)
+
+                return company_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        company_uid = _parse_company_uid(d.pop("companyUid", UNSET))
 
         company_vb_365_resource = cls(
             vb_365_server_uid=vb_365_server_uid,

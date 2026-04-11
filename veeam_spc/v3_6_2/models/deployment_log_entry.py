@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,8 +24,8 @@ class DeploymentLogEntry:
         bios_uuid (UUID | Unset): UUID in Win32_ComputerSystem WMI class.
         host_name (str | Unset): Hostname of a target computer.
         task_name (str | Unset): Name of a deployment task.
-        message (str | Unset): Message.
-        time (datetime.datetime | Unset): Date and time of an event.
+        message (None | str | Unset): Message.
+        time (datetime.datetime | None | Unset): Date and time of an event.
     """
 
     task_uid: UUID | Unset = UNSET
@@ -34,8 +34,8 @@ class DeploymentLogEntry:
     bios_uuid: UUID | Unset = UNSET
     host_name: str | Unset = UNSET
     task_name: str | Unset = UNSET
-    message: str | Unset = UNSET
-    time: datetime.datetime | Unset = UNSET
+    message: None | str | Unset = UNSET
+    time: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,11 +57,19 @@ class DeploymentLogEntry:
 
         task_name = self.task_name
 
-        message = self.message
+        message: None | str | Unset
+        if isinstance(self.message, Unset):
+            message = UNSET
+        else:
+            message = self.message
 
-        time: str | Unset = UNSET
-        if not isinstance(self.time, Unset):
+        time: None | str | Unset
+        if isinstance(self.time, Unset):
+            time = UNSET
+        elif isinstance(self.time, datetime.datetime):
             time = self.time.isoformat()
+        else:
+            time = self.time
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -115,14 +123,31 @@ class DeploymentLogEntry:
 
         task_name = d.pop("taskName", UNSET)
 
-        message = d.pop("message", UNSET)
+        def _parse_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _time = d.pop("time", UNSET)
-        time: datetime.datetime | Unset
-        if isinstance(_time, Unset):
-            time = UNSET
-        else:
-            time = isoparse(_time)
+        message = _parse_message(d.pop("message", UNSET))
+
+        def _parse_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                time_type_0 = isoparse(data)
+
+                return time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        time = _parse_time(d.pop("time", UNSET))
 
         deployment_log_entry = cls(
             task_uid=task_uid,

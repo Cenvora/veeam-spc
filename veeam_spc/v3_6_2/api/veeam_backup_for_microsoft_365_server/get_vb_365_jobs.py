@@ -14,9 +14,9 @@ def _get_kwargs(
     *,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -33,23 +33,35 @@ def _get_kwargs(
 
     params["offset"] = offset
 
-    json_site_filter: list[str] | Unset = UNSET
-    if not isinstance(site_filter, Unset):
+    json_site_filter: list[str] | None | Unset
+    if isinstance(site_filter, Unset):
+        json_site_filter = UNSET
+    elif isinstance(site_filter, list):
         json_site_filter = []
-        for site_filter_item_data in site_filter:
-            site_filter_item = str(site_filter_item_data)
-            json_site_filter.append(site_filter_item)
+        for site_filter_type_0_item_data in site_filter:
+            site_filter_type_0_item = str(site_filter_type_0_item_data)
+            json_site_filter.append(site_filter_type_0_item)
 
+    else:
+        json_site_filter = site_filter
     params["siteFilter"] = json_site_filter
 
-    json_organization_filter: str | Unset = UNSET
-    if not isinstance(organization_filter, Unset):
+    json_organization_filter: None | str | Unset
+    if isinstance(organization_filter, Unset):
+        json_organization_filter = UNSET
+    elif isinstance(organization_filter, UUID):
         json_organization_filter = str(organization_filter)
+    else:
+        json_organization_filter = organization_filter
     params["organizationFilter"] = json_organization_filter
 
-    json_location_filter: str | Unset = UNSET
-    if not isinstance(location_filter, Unset):
+    json_location_filter: None | str | Unset
+    if isinstance(location_filter, Unset):
+        json_location_filter = UNSET
+    elif isinstance(location_filter, UUID):
         json_location_filter = str(location_filter)
+    else:
+        json_location_filter = location_filter
     params["locationFilter"] = json_location_filter
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
@@ -97,9 +109,9 @@ def sync_detailed(
     client: AuthenticatedClient,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | ErrorResponse | GetVb365JobsResponse200]:
@@ -110,9 +122,9 @@ def sync_detailed(
     Args:
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
-        site_filter (list[UUID] | Unset):
-        organization_filter (UUID | Unset):
-        location_filter (UUID | Unset):
+        site_filter (list[UUID] | None | Unset):
+        organization_filter (None | Unset | UUID):
+        location_filter (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -146,9 +158,9 @@ def sync(
     client: AuthenticatedClient,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | ErrorResponse | GetVb365JobsResponse200 | None:
@@ -159,9 +171,9 @@ def sync(
     Args:
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
-        site_filter (list[UUID] | Unset):
-        organization_filter (UUID | Unset):
-        location_filter (UUID | Unset):
+        site_filter (list[UUID] | None | Unset):
+        organization_filter (None | Unset | UUID):
+        location_filter (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -190,9 +202,9 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | ErrorResponse | GetVb365JobsResponse200]:
@@ -203,9 +215,9 @@ async def asyncio_detailed(
     Args:
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
-        site_filter (list[UUID] | Unset):
-        organization_filter (UUID | Unset):
-        location_filter (UUID | Unset):
+        site_filter (list[UUID] | None | Unset):
+        organization_filter (None | Unset | UUID):
+        location_filter (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -237,9 +249,9 @@ async def asyncio(
     client: AuthenticatedClient,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | ErrorResponse | GetVb365JobsResponse200 | None:
@@ -250,9 +262,9 @@ async def asyncio(
     Args:
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
-        site_filter (list[UUID] | Unset):
-        organization_filter (UUID | Unset):
-        location_filter (UUID | Unset):
+        site_filter (list[UUID] | None | Unset):
+        organization_filter (None | Unset | UUID):
+        location_filter (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 

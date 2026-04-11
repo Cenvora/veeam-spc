@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,27 +17,35 @@ class Saml2RequestedAttribute:
     """
     Attributes:
         name (str): Unique name of an attribute.
-        friendly_name (str | Unset): Friendy name of an attribute.
+        friendly_name (None | str | Unset): Friendy name of an attribute.
         name_format (Saml2RequestedAttributeNameFormat | Unset): Format of the `name` value.
-        is_required (bool | Unset): Indicates whether an attribute is required by a service provider.
+        is_required (bool | None | Unset): Indicates whether an attribute is required by a service provider.
     """
 
     name: str
-    friendly_name: str | Unset = UNSET
+    friendly_name: None | str | Unset = UNSET
     name_format: Saml2RequestedAttributeNameFormat | Unset = UNSET
-    is_required: bool | Unset = UNSET
+    is_required: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         name = self.name
 
-        friendly_name = self.friendly_name
+        friendly_name: None | str | Unset
+        if isinstance(self.friendly_name, Unset):
+            friendly_name = UNSET
+        else:
+            friendly_name = self.friendly_name
 
         name_format: str | Unset = UNSET
         if not isinstance(self.name_format, Unset):
             name_format = self.name_format.value
 
-        is_required = self.is_required
+        is_required: bool | None | Unset
+        if isinstance(self.is_required, Unset):
+            is_required = UNSET
+        else:
+            is_required = self.is_required
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,7 +68,14 @@ class Saml2RequestedAttribute:
         d = dict(src_dict)
         name = d.pop("name")
 
-        friendly_name = d.pop("friendlyName", UNSET)
+        def _parse_friendly_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        friendly_name = _parse_friendly_name(d.pop("friendlyName", UNSET))
 
         _name_format = d.pop("nameFormat", UNSET)
         name_format: Saml2RequestedAttributeNameFormat | Unset
@@ -69,7 +84,14 @@ class Saml2RequestedAttribute:
         else:
             name_format = Saml2RequestedAttributeNameFormat(_name_format)
 
-        is_required = d.pop("isRequired", UNSET)
+        def _parse_is_required(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        is_required = _parse_is_required(d.pop("isRequired", UNSET))
 
         saml_2_requested_attribute = cls(
             name=name,

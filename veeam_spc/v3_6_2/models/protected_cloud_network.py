@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,15 +20,15 @@ class ProtectedCloudNetwork:
     """
     Attributes:
         instance_id (str | Unset): ID assigned to a cloud network.
-        account_uid (UUID | Unset): UID assigned to a public cloud account.
+        account_uid (None | Unset | UUID): UID assigned to a public cloud account.
         account_name (str | Unset): Name of a public cloud account.
-        subscription_uid (UUID | Unset): UID assigned to a cloud subscription.
+        subscription_uid (None | Unset | UUID): UID assigned to a cloud subscription.
         subscription_name (str | Unset): Name of a cloud subscription.
         region_tag (str | Unset): Tag of a cloud network region.
         region_name (str | Unset): Name of a cloud network region.
         policy_uid (UUID | Unset): UID assigned to a cloud network policy.
         policy_name (str | Unset): Name of a cloud network policy.
-        appliance_uid (UUID | Unset): UID assigned to a Veeam Backup for Public Clouds appliance.
+        appliance_uid (None | Unset | UUID): UID assigned to a Veeam Backup for Public Clouds appliance.
         backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server.
         backup_server_name (str | Unset): Name of a Veeam Backup & Replication server.
         restore_points_count (int | Unset): Number of restore points.
@@ -40,15 +40,15 @@ class ProtectedCloudNetwork:
     """
 
     instance_id: str | Unset = UNSET
-    account_uid: UUID | Unset = UNSET
+    account_uid: None | Unset | UUID = UNSET
     account_name: str | Unset = UNSET
-    subscription_uid: UUID | Unset = UNSET
+    subscription_uid: None | Unset | UUID = UNSET
     subscription_name: str | Unset = UNSET
     region_tag: str | Unset = UNSET
     region_name: str | Unset = UNSET
     policy_uid: UUID | Unset = UNSET
     policy_name: str | Unset = UNSET
-    appliance_uid: UUID | Unset = UNSET
+    appliance_uid: None | Unset | UUID = UNSET
     backup_server_uid: UUID | Unset = UNSET
     backup_server_name: str | Unset = UNSET
     restore_points_count: int | Unset = UNSET
@@ -61,15 +61,23 @@ class ProtectedCloudNetwork:
     def to_dict(self) -> dict[str, Any]:
         instance_id = self.instance_id
 
-        account_uid: str | Unset = UNSET
-        if not isinstance(self.account_uid, Unset):
+        account_uid: None | str | Unset
+        if isinstance(self.account_uid, Unset):
+            account_uid = UNSET
+        elif isinstance(self.account_uid, UUID):
             account_uid = str(self.account_uid)
+        else:
+            account_uid = self.account_uid
 
         account_name = self.account_name
 
-        subscription_uid: str | Unset = UNSET
-        if not isinstance(self.subscription_uid, Unset):
+        subscription_uid: None | str | Unset
+        if isinstance(self.subscription_uid, Unset):
+            subscription_uid = UNSET
+        elif isinstance(self.subscription_uid, UUID):
             subscription_uid = str(self.subscription_uid)
+        else:
+            subscription_uid = self.subscription_uid
 
         subscription_name = self.subscription_name
 
@@ -83,9 +91,13 @@ class ProtectedCloudNetwork:
 
         policy_name = self.policy_name
 
-        appliance_uid: str | Unset = UNSET
-        if not isinstance(self.appliance_uid, Unset):
+        appliance_uid: None | str | Unset
+        if isinstance(self.appliance_uid, Unset):
+            appliance_uid = UNSET
+        elif isinstance(self.appliance_uid, UUID):
             appliance_uid = str(self.appliance_uid)
+        else:
+            appliance_uid = self.appliance_uid
 
         backup_server_uid: str | Unset = UNSET
         if not isinstance(self.backup_server_uid, Unset):
@@ -156,21 +168,41 @@ class ProtectedCloudNetwork:
         d = dict(src_dict)
         instance_id = d.pop("instanceId", UNSET)
 
-        _account_uid = d.pop("accountUid", UNSET)
-        account_uid: UUID | Unset
-        if isinstance(_account_uid, Unset):
-            account_uid = UNSET
-        else:
-            account_uid = UUID(_account_uid)
+        def _parse_account_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                account_uid_type_0 = UUID(data)
+
+                return account_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        account_uid = _parse_account_uid(d.pop("accountUid", UNSET))
 
         account_name = d.pop("accountName", UNSET)
 
-        _subscription_uid = d.pop("subscriptionUid", UNSET)
-        subscription_uid: UUID | Unset
-        if isinstance(_subscription_uid, Unset):
-            subscription_uid = UNSET
-        else:
-            subscription_uid = UUID(_subscription_uid)
+        def _parse_subscription_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                subscription_uid_type_0 = UUID(data)
+
+                return subscription_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        subscription_uid = _parse_subscription_uid(d.pop("subscriptionUid", UNSET))
 
         subscription_name = d.pop("subscriptionName", UNSET)
 
@@ -187,12 +219,22 @@ class ProtectedCloudNetwork:
 
         policy_name = d.pop("policyName", UNSET)
 
-        _appliance_uid = d.pop("applianceUid", UNSET)
-        appliance_uid: UUID | Unset
-        if isinstance(_appliance_uid, Unset):
-            appliance_uid = UNSET
-        else:
-            appliance_uid = UUID(_appliance_uid)
+        def _parse_appliance_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                appliance_uid_type_0 = UUID(data)
+
+                return appliance_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        appliance_uid = _parse_appliance_uid(d.pop("applianceUid", UNSET))
 
         _backup_server_uid = d.pop("backupServerUid", UNSET)
         backup_server_uid: UUID | Unset

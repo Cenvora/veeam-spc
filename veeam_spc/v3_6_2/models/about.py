@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,9 +20,9 @@ class About:
     Attributes:
         installation_id (UUID | Unset): UID assigned to a Veeam Service Provider Console unique installation type.
         installation_date (datetime.datetime | Unset): Date of Veeam Service Provider Console installation.
-        actual_vaw_version (str | Unset): Current version of Veeam Agent for Windows.
-        actual_val_version (str | Unset): Current version of Veeam Agent for Linux.
-        actual_vam_version (str | Unset): Current version of Veeam Agent for Mac.
+        actual_vaw_version (None | str | Unset): Current version of Veeam Agent for Windows.
+        actual_val_version (None | str | Unset): Current version of Veeam Agent for Linux.
+        actual_vam_version (None | str | Unset): Current version of Veeam Agent for Mac.
         server_version (str | Unset): Veeam Service Provider Console Server version.
         windows_management_agent_version (str | Unset): Version of management agents for Microsoft Windows computers.
         linux_management_agent_version (str | Unset): Version of management agents for Linux computers.
@@ -31,9 +31,9 @@ class About:
 
     installation_id: UUID | Unset = UNSET
     installation_date: datetime.datetime | Unset = UNSET
-    actual_vaw_version: str | Unset = UNSET
-    actual_val_version: str | Unset = UNSET
-    actual_vam_version: str | Unset = UNSET
+    actual_vaw_version: None | str | Unset = UNSET
+    actual_val_version: None | str | Unset = UNSET
+    actual_vam_version: None | str | Unset = UNSET
     server_version: str | Unset = UNSET
     windows_management_agent_version: str | Unset = UNSET
     linux_management_agent_version: str | Unset = UNSET
@@ -49,11 +49,23 @@ class About:
         if not isinstance(self.installation_date, Unset):
             installation_date = self.installation_date.isoformat()
 
-        actual_vaw_version = self.actual_vaw_version
+        actual_vaw_version: None | str | Unset
+        if isinstance(self.actual_vaw_version, Unset):
+            actual_vaw_version = UNSET
+        else:
+            actual_vaw_version = self.actual_vaw_version
 
-        actual_val_version = self.actual_val_version
+        actual_val_version: None | str | Unset
+        if isinstance(self.actual_val_version, Unset):
+            actual_val_version = UNSET
+        else:
+            actual_val_version = self.actual_val_version
 
-        actual_vam_version = self.actual_vam_version
+        actual_vam_version: None | str | Unset
+        if isinstance(self.actual_vam_version, Unset):
+            actual_vam_version = UNSET
+        else:
+            actual_vam_version = self.actual_vam_version
 
         server_version = self.server_version
 
@@ -104,11 +116,32 @@ class About:
         else:
             installation_date = isoparse(_installation_date)
 
-        actual_vaw_version = d.pop("actualVawVersion", UNSET)
+        def _parse_actual_vaw_version(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        actual_val_version = d.pop("actualValVersion", UNSET)
+        actual_vaw_version = _parse_actual_vaw_version(d.pop("actualVawVersion", UNSET))
 
-        actual_vam_version = d.pop("actualVamVersion", UNSET)
+        def _parse_actual_val_version(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        actual_val_version = _parse_actual_val_version(d.pop("actualValVersion", UNSET))
+
+        def _parse_actual_vam_version(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        actual_vam_version = _parse_actual_vam_version(d.pop("actualVamVersion", UNSET))
 
         server_version = d.pop("serverVersion", UNSET)
 

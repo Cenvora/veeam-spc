@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
         GrantPublicCloudCredentialsForMigrationResult,
     )
     from ..models.response_error import ResponseError
-    from ..models.response_metadata import ResponseMetadata
+    from ..models.response_metadata_type_0 import ResponseMetadataType0
 
 
 T = TypeVar("T", bound="GrantPublicCloudAppliancePlatformCredentialsForMigrationResponse200")
@@ -24,28 +24,39 @@ class GrantPublicCloudAppliancePlatformCredentialsForMigrationResponse200:
     """
     Attributes:
         data (GrantPublicCloudCredentialsForMigrationResult):
-        meta (ResponseMetadata | Unset):
-        errors (list[ResponseError] | Unset):
+        meta (None | ResponseMetadataType0 | Unset):
+        errors (list[ResponseError] | None | Unset):
     """
 
     data: GrantPublicCloudCredentialsForMigrationResult
-    meta: ResponseMetadata | Unset = UNSET
-    errors: list[ResponseError] | Unset = UNSET
+    meta: None | ResponseMetadataType0 | Unset = UNSET
+    errors: list[ResponseError] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.response_metadata_type_0 import ResponseMetadataType0
+
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.meta, Unset):
+        meta: dict[str, Any] | None | Unset
+        if isinstance(self.meta, Unset):
+            meta = UNSET
+        elif isinstance(self.meta, ResponseMetadataType0):
             meta = self.meta.to_dict()
+        else:
+            meta = self.meta
 
-        errors: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.errors, Unset):
+        errors: list[dict[str, Any]] | None | Unset
+        if isinstance(self.errors, Unset):
+            errors = UNSET
+        elif isinstance(self.errors, list):
             errors = []
-            for errors_item_data in self.errors:
-                errors_item = errors_item_data.to_dict()
-                errors.append(errors_item)
+            for errors_type_0_item_data in self.errors:
+                errors_type_0_item = errors_type_0_item_data.to_dict()
+                errors.append(errors_type_0_item)
+
+        else:
+            errors = self.errors
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -67,26 +78,49 @@ class GrantPublicCloudAppliancePlatformCredentialsForMigrationResponse200:
             GrantPublicCloudCredentialsForMigrationResult,
         )
         from ..models.response_error import ResponseError
-        from ..models.response_metadata import ResponseMetadata
+        from ..models.response_metadata_type_0 import ResponseMetadataType0
 
         d = dict(src_dict)
         data = GrantPublicCloudCredentialsForMigrationResult.from_dict(d.pop("data"))
 
-        _meta = d.pop("meta", UNSET)
-        meta: ResponseMetadata | Unset
-        if isinstance(_meta, Unset):
-            meta = UNSET
-        else:
-            meta = ResponseMetadata.from_dict(_meta)
+        def _parse_meta(data: object) -> None | ResponseMetadataType0 | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_response_metadata_type_0 = ResponseMetadataType0.from_dict(data)
 
-        _errors = d.pop("errors", UNSET)
-        errors: list[ResponseError] | Unset = UNSET
-        if _errors is not UNSET:
-            errors = []
-            for errors_item_data in _errors:
-                errors_item = ResponseError.from_dict(errors_item_data)
+                return componentsschemas_response_metadata_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | ResponseMetadataType0 | Unset, data)
 
-                errors.append(errors_item)
+        meta = _parse_meta(d.pop("meta", UNSET))
+
+        def _parse_errors(data: object) -> list[ResponseError] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                errors_type_0 = []
+                _errors_type_0 = data
+                for errors_type_0_item_data in _errors_type_0:
+                    errors_type_0_item = ResponseError.from_dict(errors_type_0_item_data)
+
+                    errors_type_0.append(errors_type_0_item)
+
+                return errors_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[ResponseError] | None | Unset, data)
+
+        errors = _parse_errors(d.pop("errors", UNSET))
 
         grant_public_cloud_appliance_platform_credentials_for_migration_response_200 = cls(
             data=data,

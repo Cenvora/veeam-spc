@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -35,7 +35,7 @@ class DiscoveryRuleMonthlyScheduleCalendarWithDaySettings:
             > Required for the `DayOfWeek` schedule type.
         day_of_week (DiscoveryRuleMonthlyScheduleCalendarWithDaySettingsDayOfWeek | Unset): Week day.
             > Required for the `DayOfWeek` schedule type.
-        day (int | Unset): Day of the month.
+        day (int | None | Unset): Day of the month.
             > Required for the `Day` schedule type.
     """
 
@@ -45,7 +45,7 @@ class DiscoveryRuleMonthlyScheduleCalendarWithDaySettings:
     )
     week_day_number: DiscoveryRuleMonthlyScheduleCalendarWithDaySettingsWeekDayNumber | Unset = UNSET
     day_of_week: DiscoveryRuleMonthlyScheduleCalendarWithDaySettingsDayOfWeek | Unset = UNSET
-    day: int | Unset = UNSET
+    day: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -64,7 +64,11 @@ class DiscoveryRuleMonthlyScheduleCalendarWithDaySettings:
         if not isinstance(self.day_of_week, Unset):
             day_of_week = self.day_of_week.value
 
-        day = self.day
+        day: int | None | Unset
+        if isinstance(self.day, Unset):
+            day = UNSET
+        else:
+            day = self.day
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -109,7 +113,14 @@ class DiscoveryRuleMonthlyScheduleCalendarWithDaySettings:
         else:
             day_of_week = DiscoveryRuleMonthlyScheduleCalendarWithDaySettingsDayOfWeek(_day_of_week)
 
-        day = d.pop("day", UNSET)
+        def _parse_day(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        day = _parse_day(d.pop("day", UNSET))
 
         discovery_rule_monthly_schedule_calendar_with_day_settings = cls(
             monthly_mode=monthly_mode,

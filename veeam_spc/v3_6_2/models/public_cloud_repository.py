@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -10,7 +10,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.creating_object_info import CreatingObjectInfo
+    from ..models.creating_object_info_type_0 import CreatingObjectInfoType0
 
 
 T = TypeVar("T", bound="PublicCloudRepository")
@@ -35,9 +35,9 @@ class PublicCloudRepository:
             belongs.
         site_name (str): Name of a Veeam Cloud Connect site.
         site_uid (UUID): UID assigned to a Veeam Cloud Connect site.
-        creating_state (CreatingObjectInfo): Status of a repository creation.
-        is_encrypted (bool | Unset): Indicates whether stored data encryption is enabled.
-        immutability_enabled (bool | Unset): Indicates whether immutability is enabled.
+        creating_state (CreatingObjectInfoType0 | None): Status of a repository creation.
+        is_encrypted (bool | None | Unset): Indicates whether stored data encryption is enabled.
+        immutability_enabled (bool | None | Unset): Indicates whether immutability is enabled.
     """
 
     instance_uid: str
@@ -54,12 +54,14 @@ class PublicCloudRepository:
     organization_uid: UUID
     site_name: str
     site_uid: UUID
-    creating_state: CreatingObjectInfo
-    is_encrypted: bool | Unset = UNSET
-    immutability_enabled: bool | Unset = UNSET
+    creating_state: CreatingObjectInfoType0 | None
+    is_encrypted: bool | None | Unset = UNSET
+    immutability_enabled: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.creating_object_info_type_0 import CreatingObjectInfoType0
+
         instance_uid = self.instance_uid
 
         repository_name = self.repository_name
@@ -88,11 +90,23 @@ class PublicCloudRepository:
 
         site_uid = str(self.site_uid)
 
-        creating_state = self.creating_state.to_dict()
+        creating_state: dict[str, Any] | None
+        if isinstance(self.creating_state, CreatingObjectInfoType0):
+            creating_state = self.creating_state.to_dict()
+        else:
+            creating_state = self.creating_state
 
-        is_encrypted = self.is_encrypted
+        is_encrypted: bool | None | Unset
+        if isinstance(self.is_encrypted, Unset):
+            is_encrypted = UNSET
+        else:
+            is_encrypted = self.is_encrypted
 
-        immutability_enabled = self.immutability_enabled
+        immutability_enabled: bool | None | Unset
+        if isinstance(self.immutability_enabled, Unset):
+            immutability_enabled = UNSET
+        else:
+            immutability_enabled = self.immutability_enabled
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -124,7 +138,7 @@ class PublicCloudRepository:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.creating_object_info import CreatingObjectInfo
+        from ..models.creating_object_info_type_0 import CreatingObjectInfoType0
 
         d = dict(src_dict)
         instance_uid = d.pop("instanceUid")
@@ -155,11 +169,38 @@ class PublicCloudRepository:
 
         site_uid = UUID(d.pop("siteUid"))
 
-        creating_state = CreatingObjectInfo.from_dict(d.pop("creatingState"))
+        def _parse_creating_state(data: object) -> CreatingObjectInfoType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_creating_object_info_type_0 = CreatingObjectInfoType0.from_dict(data)
 
-        is_encrypted = d.pop("isEncrypted", UNSET)
+                return componentsschemas_creating_object_info_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(CreatingObjectInfoType0 | None, data)
 
-        immutability_enabled = d.pop("immutabilityEnabled", UNSET)
+        creating_state = _parse_creating_state(d.pop("creatingState"))
+
+        def _parse_is_encrypted(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        is_encrypted = _parse_is_encrypted(d.pop("isEncrypted", UNSET))
+
+        def _parse_immutability_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        immutability_enabled = _parse_immutability_enabled(d.pop("immutabilityEnabled", UNSET))
 
         public_cloud_repository = cls(
             instance_uid=instance_uid,

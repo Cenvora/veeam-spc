@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -11,7 +11,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.o_auth_2_credential import OAuth2Credential
-    from ..models.smtp_settings_password_credential import SmtpSettingsPasswordCredential
+    from ..models.smtp_settings_password_credential_type_0 import SmtpSettingsPasswordCredentialType0
 
 
 T = TypeVar("T", bound="SmtpSettings")
@@ -24,36 +24,47 @@ class SmtpSettings:
         server_address (str): SMTP server URI containing protocol, host and port.
         tls_mode (SmtpSettingsTlsMode): Type of secure socket comminucation used to connect to an SMTP server.
         timeout (str): Connection timeout.
-        password_credential (SmtpSettingsPasswordCredential | Unset): Credentials required to access an SMTP server.
+        password_credential (None | SmtpSettingsPasswordCredentialType0 | Unset): Credentials required to access an SMTP
+            server.
         o_auth_2_credential (OAuth2Credential | Unset):
-        exclusively_accepted_certificate_hash (str | Unset): Server X509 certificate hex-encoded hash in the `<hash-
-            algorithm>:<hash-hex>` format.
+        exclusively_accepted_certificate_hash (None | str | Unset): Server X509 certificate hex-encoded hash in the
+            `<hash-algorithm>:<hash-hex>` format.
     """
 
     server_address: str
     tls_mode: SmtpSettingsTlsMode
     timeout: str
-    password_credential: SmtpSettingsPasswordCredential | Unset = UNSET
+    password_credential: None | SmtpSettingsPasswordCredentialType0 | Unset = UNSET
     o_auth_2_credential: OAuth2Credential | Unset = UNSET
-    exclusively_accepted_certificate_hash: str | Unset = UNSET
+    exclusively_accepted_certificate_hash: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.smtp_settings_password_credential_type_0 import SmtpSettingsPasswordCredentialType0
+
         server_address = self.server_address
 
         tls_mode = self.tls_mode.value
 
         timeout = self.timeout
 
-        password_credential: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.password_credential, Unset):
+        password_credential: dict[str, Any] | None | Unset
+        if isinstance(self.password_credential, Unset):
+            password_credential = UNSET
+        elif isinstance(self.password_credential, SmtpSettingsPasswordCredentialType0):
             password_credential = self.password_credential.to_dict()
+        else:
+            password_credential = self.password_credential
 
         o_auth_2_credential: dict[str, Any] | Unset = UNSET
         if not isinstance(self.o_auth_2_credential, Unset):
             o_auth_2_credential = self.o_auth_2_credential.to_dict()
 
-        exclusively_accepted_certificate_hash = self.exclusively_accepted_certificate_hash
+        exclusively_accepted_certificate_hash: None | str | Unset
+        if isinstance(self.exclusively_accepted_certificate_hash, Unset):
+            exclusively_accepted_certificate_hash = UNSET
+        else:
+            exclusively_accepted_certificate_hash = self.exclusively_accepted_certificate_hash
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -76,7 +87,7 @@ class SmtpSettings:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.o_auth_2_credential import OAuth2Credential
-        from ..models.smtp_settings_password_credential import SmtpSettingsPasswordCredential
+        from ..models.smtp_settings_password_credential_type_0 import SmtpSettingsPasswordCredentialType0
 
         d = dict(src_dict)
         server_address = d.pop("serverAddress")
@@ -85,12 +96,22 @@ class SmtpSettings:
 
         timeout = d.pop("timeout")
 
-        _password_credential = d.pop("passwordCredential", UNSET)
-        password_credential: SmtpSettingsPasswordCredential | Unset
-        if isinstance(_password_credential, Unset):
-            password_credential = UNSET
-        else:
-            password_credential = SmtpSettingsPasswordCredential.from_dict(_password_credential)
+        def _parse_password_credential(data: object) -> None | SmtpSettingsPasswordCredentialType0 | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                password_credential_type_0 = SmtpSettingsPasswordCredentialType0.from_dict(data)
+
+                return password_credential_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | SmtpSettingsPasswordCredentialType0 | Unset, data)
+
+        password_credential = _parse_password_credential(d.pop("passwordCredential", UNSET))
 
         _o_auth_2_credential = d.pop("oAuth2Credential", UNSET)
         o_auth_2_credential: OAuth2Credential | Unset
@@ -99,7 +120,16 @@ class SmtpSettings:
         else:
             o_auth_2_credential = OAuth2Credential.from_dict(_o_auth_2_credential)
 
-        exclusively_accepted_certificate_hash = d.pop("exclusivelyAcceptedCertificateHash", UNSET)
+        def _parse_exclusively_accepted_certificate_hash(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        exclusively_accepted_certificate_hash = _parse_exclusively_accepted_certificate_hash(
+            d.pop("exclusivelyAcceptedCertificateHash", UNSET)
+        )
 
         smtp_settings = cls(
             server_address=server_address,

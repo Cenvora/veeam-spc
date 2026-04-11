@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -31,37 +31,37 @@ class PulseLicense:
         type_ (PulseLicenseType): Type of a VCSP Pulse license.
         assign_status (PulseLicenseAssignStatus): Status of VCSP Pulse license assignement.
         usage_type (PulseLicenseUsageType): Type of VCSP Pulse license usage.
-        contract_id (str): ID assigned to a rental agreement contract.
+        contract_id (None | str): ID assigned to a rental agreement contract.
         product_id (str): ID asigned to a Veeam product that requires a license.
         points (float): Number of license points.
         automatic_reporting_status (PulseLicenseAutomaticReportingStatus): Status of the automatic license reporting.
         workloads (list[PulseLicenseWorkload]): Array of licensed workloads.
-        license_id (UUID | Unset): ID assigned to a VCSP Pulse license in SalesForce.
-        created_by (str | Unset): Name of an organization that created VCSP Pulse license.
-        description (str | Unset): Description of a VCSP Pulse license.
-        expiration_date (datetime.datetime | Unset): Date of the VCSP Pulse license expiration.
+        license_id (None | Unset | UUID): ID assigned to a VCSP Pulse license in SalesForce.
+        created_by (None | str | Unset): Name of an organization that created VCSP Pulse license.
+        description (None | str | Unset): Description of a VCSP Pulse license.
+        expiration_date (datetime.datetime | None | Unset): Date of the VCSP Pulse license expiration.
         automatic_extension_status (PulseLicenseAutomaticExtensionStatus | Unset): Status of the VCSP Pulse license
             automatic update.
-        assigned_company_uid (UUID | Unset): UID of a company to which a VCSP Pulse license is assigned.
-        assigned_reseller_uid (UUID | Unset): UID of a reseller to which a VCSP Pulse license is assigned.
+        assigned_company_uid (None | Unset | UUID): UID of a company to which a VCSP Pulse license is assigned.
+        assigned_reseller_uid (None | Unset | UUID): UID of a reseller to which a VCSP Pulse license is assigned.
     """
 
     instance_uid: UUID
     type_: PulseLicenseType
     assign_status: PulseLicenseAssignStatus
     usage_type: PulseLicenseUsageType
-    contract_id: str
+    contract_id: None | str
     product_id: str
     points: float
     automatic_reporting_status: PulseLicenseAutomaticReportingStatus
     workloads: list[PulseLicenseWorkload]
-    license_id: UUID | Unset = UNSET
-    created_by: str | Unset = UNSET
-    description: str | Unset = UNSET
-    expiration_date: datetime.datetime | Unset = UNSET
+    license_id: None | Unset | UUID = UNSET
+    created_by: None | str | Unset = UNSET
+    description: None | str | Unset = UNSET
+    expiration_date: datetime.datetime | None | Unset = UNSET
     automatic_extension_status: PulseLicenseAutomaticExtensionStatus | Unset = UNSET
-    assigned_company_uid: UUID | Unset = UNSET
-    assigned_reseller_uid: UUID | Unset = UNSET
+    assigned_company_uid: None | Unset | UUID = UNSET
+    assigned_reseller_uid: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -73,6 +73,7 @@ class PulseLicense:
 
         usage_type = self.usage_type.value
 
+        contract_id: None | str
         contract_id = self.contract_id
 
         product_id = self.product_id
@@ -86,29 +87,53 @@ class PulseLicense:
             workloads_item = workloads_item_data.to_dict()
             workloads.append(workloads_item)
 
-        license_id: str | Unset = UNSET
-        if not isinstance(self.license_id, Unset):
+        license_id: None | str | Unset
+        if isinstance(self.license_id, Unset):
+            license_id = UNSET
+        elif isinstance(self.license_id, UUID):
             license_id = str(self.license_id)
+        else:
+            license_id = self.license_id
 
-        created_by = self.created_by
+        created_by: None | str | Unset
+        if isinstance(self.created_by, Unset):
+            created_by = UNSET
+        else:
+            created_by = self.created_by
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
-        expiration_date: str | Unset = UNSET
-        if not isinstance(self.expiration_date, Unset):
+        expiration_date: None | str | Unset
+        if isinstance(self.expiration_date, Unset):
+            expiration_date = UNSET
+        elif isinstance(self.expiration_date, datetime.datetime):
             expiration_date = self.expiration_date.isoformat()
+        else:
+            expiration_date = self.expiration_date
 
         automatic_extension_status: str | Unset = UNSET
         if not isinstance(self.automatic_extension_status, Unset):
             automatic_extension_status = self.automatic_extension_status.value
 
-        assigned_company_uid: str | Unset = UNSET
-        if not isinstance(self.assigned_company_uid, Unset):
+        assigned_company_uid: None | str | Unset
+        if isinstance(self.assigned_company_uid, Unset):
+            assigned_company_uid = UNSET
+        elif isinstance(self.assigned_company_uid, UUID):
             assigned_company_uid = str(self.assigned_company_uid)
+        else:
+            assigned_company_uid = self.assigned_company_uid
 
-        assigned_reseller_uid: str | Unset = UNSET
-        if not isinstance(self.assigned_reseller_uid, Unset):
+        assigned_reseller_uid: None | str | Unset
+        if isinstance(self.assigned_reseller_uid, Unset):
+            assigned_reseller_uid = UNSET
+        elif isinstance(self.assigned_reseller_uid, UUID):
             assigned_reseller_uid = str(self.assigned_reseller_uid)
+        else:
+            assigned_reseller_uid = self.assigned_reseller_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -155,7 +180,12 @@ class PulseLicense:
 
         usage_type = PulseLicenseUsageType(d.pop("usageType"))
 
-        contract_id = d.pop("contractId")
+        def _parse_contract_id(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        contract_id = _parse_contract_id(d.pop("contractId"))
 
         product_id = d.pop("productId")
 
@@ -170,23 +200,57 @@ class PulseLicense:
 
             workloads.append(workloads_item)
 
-        _license_id = d.pop("licenseId", UNSET)
-        license_id: UUID | Unset
-        if isinstance(_license_id, Unset):
-            license_id = UNSET
-        else:
-            license_id = UUID(_license_id)
+        def _parse_license_id(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                license_id_type_0 = UUID(data)
 
-        created_by = d.pop("createdBy", UNSET)
+                return license_id_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        description = d.pop("description", UNSET)
+        license_id = _parse_license_id(d.pop("licenseId", UNSET))
 
-        _expiration_date = d.pop("expirationDate", UNSET)
-        expiration_date: datetime.datetime | Unset
-        if isinstance(_expiration_date, Unset):
-            expiration_date = UNSET
-        else:
-            expiration_date = isoparse(_expiration_date)
+        def _parse_created_by(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        created_by = _parse_created_by(d.pop("createdBy", UNSET))
+
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
+
+        def _parse_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                expiration_date_type_0 = isoparse(data)
+
+                return expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        expiration_date = _parse_expiration_date(d.pop("expirationDate", UNSET))
 
         _automatic_extension_status = d.pop("automaticExtensionStatus", UNSET)
         automatic_extension_status: PulseLicenseAutomaticExtensionStatus | Unset
@@ -195,19 +259,39 @@ class PulseLicense:
         else:
             automatic_extension_status = PulseLicenseAutomaticExtensionStatus(_automatic_extension_status)
 
-        _assigned_company_uid = d.pop("assignedCompanyUid", UNSET)
-        assigned_company_uid: UUID | Unset
-        if isinstance(_assigned_company_uid, Unset):
-            assigned_company_uid = UNSET
-        else:
-            assigned_company_uid = UUID(_assigned_company_uid)
+        def _parse_assigned_company_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                assigned_company_uid_type_0 = UUID(data)
 
-        _assigned_reseller_uid = d.pop("assignedResellerUid", UNSET)
-        assigned_reseller_uid: UUID | Unset
-        if isinstance(_assigned_reseller_uid, Unset):
-            assigned_reseller_uid = UNSET
-        else:
-            assigned_reseller_uid = UUID(_assigned_reseller_uid)
+                return assigned_company_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        assigned_company_uid = _parse_assigned_company_uid(d.pop("assignedCompanyUid", UNSET))
+
+        def _parse_assigned_reseller_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                assigned_reseller_uid_type_0 = UUID(data)
+
+                return assigned_reseller_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        assigned_reseller_uid = _parse_assigned_reseller_uid(d.pop("assignedResellerUid", UNSET))
 
         pulse_license = cls(
             instance_uid=instance_uid,

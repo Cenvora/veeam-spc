@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -38,15 +38,15 @@ class BackupAgent:
         management_agent_status (ManagementAgentStatus | Unset): Status of a management agent.
         management_agent_uid (UUID | Unset): UID assigned to a management agent that is deployed along with Veeam backup
             agent.
-        site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site on which an organization that owns Veeam
-            backup agents is registered.
+        site_uid (None | Unset | UUID): UID assigned to a Veeam Cloud Connect site on which an organization that owns
+            Veeam backup agents is registered.
         organization_uid (UUID | Unset): UID assigned to an organization to which Veeam backup agents belong.
         name (str | Unset): Name of a managed computer on which Veeam backup agent is deployed.
         operation_mode (BackupAgentOperationMode | Unset): Backup job operation mode.
         platform (BackupAgentPlatform | Unset): Computer platform on which Veeam backup agent is deployed.
         version (str | Unset): Version of Veeam backup agent deployed on a managed computer.
         version_status (BackupAgentVersionStatus | Unset): Status of a backup agent version.
-        activation_time (datetime.datetime | Unset): Date and time when Veeam backup agent was activated.
+        activation_time (datetime.datetime | None | Unset): Date and time when Veeam backup agent was activated.
         management_mode (BackupAgentManagementMode | Unset): Management mode of Veeam backup agent.
             > You can change management mode to `ManagedByConsole` or `UnManaged` using the PATCH endpoint.
         installation_type (BackupAgentInstallationType | Unset): Type of Veeam backup agent installation procedure.
@@ -61,14 +61,14 @@ class BackupAgent:
     status: BackupAgentStatus | Unset = UNSET
     management_agent_status: ManagementAgentStatus | Unset = UNSET
     management_agent_uid: UUID | Unset = UNSET
-    site_uid: UUID | Unset = UNSET
+    site_uid: None | Unset | UUID = UNSET
     organization_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
     operation_mode: BackupAgentOperationMode | Unset = UNSET
     platform: BackupAgentPlatform | Unset = UNSET
     version: str | Unset = UNSET
     version_status: BackupAgentVersionStatus | Unset = UNSET
-    activation_time: datetime.datetime | Unset = UNSET
+    activation_time: datetime.datetime | None | Unset = UNSET
     management_mode: BackupAgentManagementMode | Unset = UNSET
     installation_type: BackupAgentInstallationType | Unset = UNSET
     total_jobs_count: int | Unset = UNSET
@@ -99,9 +99,13 @@ class BackupAgent:
         if not isinstance(self.management_agent_uid, Unset):
             management_agent_uid = str(self.management_agent_uid)
 
-        site_uid: str | Unset = UNSET
-        if not isinstance(self.site_uid, Unset):
+        site_uid: None | str | Unset
+        if isinstance(self.site_uid, Unset):
+            site_uid = UNSET
+        elif isinstance(self.site_uid, UUID):
             site_uid = str(self.site_uid)
+        else:
+            site_uid = self.site_uid
 
         organization_uid: str | Unset = UNSET
         if not isinstance(self.organization_uid, Unset):
@@ -123,9 +127,13 @@ class BackupAgent:
         if not isinstance(self.version_status, Unset):
             version_status = self.version_status.value
 
-        activation_time: str | Unset = UNSET
-        if not isinstance(self.activation_time, Unset):
+        activation_time: None | str | Unset
+        if isinstance(self.activation_time, Unset):
+            activation_time = UNSET
+        elif isinstance(self.activation_time, datetime.datetime):
             activation_time = self.activation_time.isoformat()
+        else:
+            activation_time = self.activation_time
 
         management_mode: str | Unset = UNSET
         if not isinstance(self.management_mode, Unset):
@@ -227,12 +235,22 @@ class BackupAgent:
         else:
             management_agent_uid = UUID(_management_agent_uid)
 
-        _site_uid = d.pop("siteUid", UNSET)
-        site_uid: UUID | Unset
-        if isinstance(_site_uid, Unset):
-            site_uid = UNSET
-        else:
-            site_uid = UUID(_site_uid)
+        def _parse_site_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                site_uid_type_0 = UUID(data)
+
+                return site_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        site_uid = _parse_site_uid(d.pop("siteUid", UNSET))
 
         _organization_uid = d.pop("organizationUid", UNSET)
         organization_uid: UUID | Unset
@@ -266,12 +284,22 @@ class BackupAgent:
         else:
             version_status = BackupAgentVersionStatus(_version_status)
 
-        _activation_time = d.pop("activationTime", UNSET)
-        activation_time: datetime.datetime | Unset
-        if isinstance(_activation_time, Unset):
-            activation_time = UNSET
-        else:
-            activation_time = isoparse(_activation_time)
+        def _parse_activation_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                activation_time_type_0 = isoparse(data)
+
+                return activation_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        activation_time = _parse_activation_time(d.pop("activationTime", UNSET))
 
         _management_mode = d.pop("managementMode", UNSET)
         management_mode: BackupAgentManagementMode | Unset

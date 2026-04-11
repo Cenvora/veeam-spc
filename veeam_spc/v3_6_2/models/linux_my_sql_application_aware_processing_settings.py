@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -30,7 +30,7 @@ class LinuxMySqlApplicationAwareProcessingSettings:
         credentials (LinuxBaseCredentials | Unset):
         auth_type (LinuxMySqlApplicationAwareProcessingSettingsAuthType | Unset): Type of credentials format. Default:
             LinuxMySqlApplicationAwareProcessingSettingsAuthType.MYSQLPASSWORD.
-        password_file_path (str | Unset): Path to the password file.
+        password_file_path (None | str | Unset): Path to the password file.
     """
 
     processing_type: LinuxMySqlApplicationAwareProcessingSettingsProcessingType | Unset = (
@@ -40,7 +40,7 @@ class LinuxMySqlApplicationAwareProcessingSettings:
     auth_type: LinuxMySqlApplicationAwareProcessingSettingsAuthType | Unset = (
         LinuxMySqlApplicationAwareProcessingSettingsAuthType.MYSQLPASSWORD
     )
-    password_file_path: str | Unset = UNSET
+    password_file_path: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -56,7 +56,11 @@ class LinuxMySqlApplicationAwareProcessingSettings:
         if not isinstance(self.auth_type, Unset):
             auth_type = self.auth_type.value
 
-        password_file_path = self.password_file_path
+        password_file_path: None | str | Unset
+        if isinstance(self.password_file_path, Unset):
+            password_file_path = UNSET
+        else:
+            password_file_path = self.password_file_path
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -98,7 +102,14 @@ class LinuxMySqlApplicationAwareProcessingSettings:
         else:
             auth_type = LinuxMySqlApplicationAwareProcessingSettingsAuthType(_auth_type)
 
-        password_file_path = d.pop("passwordFilePath", UNSET)
+        def _parse_password_file_path(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        password_file_path = _parse_password_file_path(d.pop("passwordFilePath", UNSET))
 
         linux_my_sql_application_aware_processing_settings = cls(
             processing_type=processing_type,

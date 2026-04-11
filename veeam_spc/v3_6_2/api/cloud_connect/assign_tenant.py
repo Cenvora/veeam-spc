@@ -14,7 +14,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     tenant_uid: UUID,
     *,
-    company_uid: UUID,
+    company_uid: None | UUID,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -27,7 +27,11 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_company_uid = str(company_uid)
+    json_company_uid: None | str
+    if isinstance(company_uid, UUID):
+        json_company_uid = str(company_uid)
+    else:
+        json_company_uid = company_uid
     params["companyUid"] = json_company_uid
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
@@ -76,7 +80,7 @@ def sync_detailed(
     tenant_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID,
+    company_uid: None | UUID,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | AssignTenantResponse200 | ErrorResponse]:
@@ -86,7 +90,7 @@ def sync_detailed(
 
     Args:
         tenant_uid (UUID):
-        company_uid (UUID):
+        company_uid (None | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -116,7 +120,7 @@ def sync(
     tenant_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID,
+    company_uid: None | UUID,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | AssignTenantResponse200 | ErrorResponse | None:
@@ -126,7 +130,7 @@ def sync(
 
     Args:
         tenant_uid (UUID):
-        company_uid (UUID):
+        company_uid (None | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -151,7 +155,7 @@ async def asyncio_detailed(
     tenant_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID,
+    company_uid: None | UUID,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | AssignTenantResponse200 | ErrorResponse]:
@@ -161,7 +165,7 @@ async def asyncio_detailed(
 
     Args:
         tenant_uid (UUID):
-        company_uid (UUID):
+        company_uid (None | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -189,7 +193,7 @@ async def asyncio(
     tenant_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID,
+    company_uid: None | UUID,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | AssignTenantResponse200 | ErrorResponse | None:
@@ -199,7 +203,7 @@ async def asyncio(
 
     Args:
         tenant_uid (UUID):
-        company_uid (UUID):
+        company_uid (None | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 

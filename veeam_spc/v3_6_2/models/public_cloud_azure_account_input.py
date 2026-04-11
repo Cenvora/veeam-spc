@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,13 +19,13 @@ class PublicCloudAzureAccountInput:
         account_name (str): Name of an account.
         environment (EAzureAccountEnvironmentId): Type of a Microsoft Azure cloud environment.
         user_code (str): User code.
-        description (str | Unset): Description of an account.
+        description (None | str | Unset): Description of an account.
     """
 
     account_name: str
     environment: EAzureAccountEnvironmentId
     user_code: str
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -35,7 +35,11 @@ class PublicCloudAzureAccountInput:
 
         user_code = self.user_code
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,7 +64,14 @@ class PublicCloudAzureAccountInput:
 
         user_code = d.pop("userCode")
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         public_cloud_azure_account_input = cls(
             account_name=account_name,

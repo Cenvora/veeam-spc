@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -9,9 +9,9 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.company_backup_agents_management import CompanyBackupAgentsManagement
-    from ..models.company_backup_server_management import CompanyBackupServerManagement
-    from ..models.company_vb_365_server_management import CompanyVb365ServerManagement
+    from ..models.company_backup_agents_management_type_0 import CompanyBackupAgentsManagementType0
+    from ..models.company_backup_server_management_type_0 import CompanyBackupServerManagementType0
+    from ..models.company_vb_365_server_management_type_0 import CompanyVb365ServerManagementType0
 
 
 T = TypeVar("T", bound="CompanyRemoteServices")
@@ -23,37 +23,53 @@ class CompanyRemoteServices:
     Attributes:
         is_backup_resources_enabled (bool | Unset): Indicates whether cloud backup resources are allocated to a company.
             Default: True.
-        backup_agents_management (CompanyBackupAgentsManagement | Unset): Number of Veeam backup agents that a company
-            is allowed to manage.
-        backup_servers_management (CompanyBackupServerManagement | Unset): Managed Veeam Backup & Replication server
-            quota.
-        vb_365_servers_management (CompanyVb365ServerManagement | Unset): Managed Veeam Backup for Microsoft 365 server
-            quota.
+        backup_agents_management (CompanyBackupAgentsManagementType0 | None | Unset): Number of Veeam backup agents that
+            a company is allowed to manage.
+        backup_servers_management (CompanyBackupServerManagementType0 | None | Unset): Managed Veeam Backup &
+            Replication server quota.
+        vb_365_servers_management (CompanyVb365ServerManagementType0 | None | Unset): Managed Veeam Backup for Microsoft
+            365 server quota.
         is_vb_public_cloud_management_enabled (bool | Unset): Indicates whether a company is allowed to manage public
             cloud appliances.' Default: False.
     """
 
     is_backup_resources_enabled: bool | Unset = True
-    backup_agents_management: CompanyBackupAgentsManagement | Unset = UNSET
-    backup_servers_management: CompanyBackupServerManagement | Unset = UNSET
-    vb_365_servers_management: CompanyVb365ServerManagement | Unset = UNSET
+    backup_agents_management: CompanyBackupAgentsManagementType0 | None | Unset = UNSET
+    backup_servers_management: CompanyBackupServerManagementType0 | None | Unset = UNSET
+    vb_365_servers_management: CompanyVb365ServerManagementType0 | None | Unset = UNSET
     is_vb_public_cloud_management_enabled: bool | Unset = False
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.company_backup_agents_management_type_0 import CompanyBackupAgentsManagementType0
+        from ..models.company_backup_server_management_type_0 import CompanyBackupServerManagementType0
+        from ..models.company_vb_365_server_management_type_0 import CompanyVb365ServerManagementType0
+
         is_backup_resources_enabled = self.is_backup_resources_enabled
 
-        backup_agents_management: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.backup_agents_management, Unset):
+        backup_agents_management: dict[str, Any] | None | Unset
+        if isinstance(self.backup_agents_management, Unset):
+            backup_agents_management = UNSET
+        elif isinstance(self.backup_agents_management, CompanyBackupAgentsManagementType0):
             backup_agents_management = self.backup_agents_management.to_dict()
+        else:
+            backup_agents_management = self.backup_agents_management
 
-        backup_servers_management: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.backup_servers_management, Unset):
+        backup_servers_management: dict[str, Any] | None | Unset
+        if isinstance(self.backup_servers_management, Unset):
+            backup_servers_management = UNSET
+        elif isinstance(self.backup_servers_management, CompanyBackupServerManagementType0):
             backup_servers_management = self.backup_servers_management.to_dict()
+        else:
+            backup_servers_management = self.backup_servers_management
 
-        vb_365_servers_management: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.vb_365_servers_management, Unset):
+        vb_365_servers_management: dict[str, Any] | None | Unset
+        if isinstance(self.vb_365_servers_management, Unset):
+            vb_365_servers_management = UNSET
+        elif isinstance(self.vb_365_servers_management, CompanyVb365ServerManagementType0):
             vb_365_servers_management = self.vb_365_servers_management.to_dict()
+        else:
+            vb_365_servers_management = self.vb_365_servers_management
 
         is_vb_public_cloud_management_enabled = self.is_vb_public_cloud_management_enabled
 
@@ -75,33 +91,69 @@ class CompanyRemoteServices:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.company_backup_agents_management import CompanyBackupAgentsManagement
-        from ..models.company_backup_server_management import CompanyBackupServerManagement
-        from ..models.company_vb_365_server_management import CompanyVb365ServerManagement
+        from ..models.company_backup_agents_management_type_0 import CompanyBackupAgentsManagementType0
+        from ..models.company_backup_server_management_type_0 import CompanyBackupServerManagementType0
+        from ..models.company_vb_365_server_management_type_0 import CompanyVb365ServerManagementType0
 
         d = dict(src_dict)
         is_backup_resources_enabled = d.pop("isBackupResourcesEnabled", UNSET)
 
-        _backup_agents_management = d.pop("backupAgentsManagement", UNSET)
-        backup_agents_management: CompanyBackupAgentsManagement | Unset
-        if isinstance(_backup_agents_management, Unset):
-            backup_agents_management = UNSET
-        else:
-            backup_agents_management = CompanyBackupAgentsManagement.from_dict(_backup_agents_management)
+        def _parse_backup_agents_management(data: object) -> CompanyBackupAgentsManagementType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_company_backup_agents_management_type_0 = (
+                    CompanyBackupAgentsManagementType0.from_dict(data)
+                )
 
-        _backup_servers_management = d.pop("backupServersManagement", UNSET)
-        backup_servers_management: CompanyBackupServerManagement | Unset
-        if isinstance(_backup_servers_management, Unset):
-            backup_servers_management = UNSET
-        else:
-            backup_servers_management = CompanyBackupServerManagement.from_dict(_backup_servers_management)
+                return componentsschemas_company_backup_agents_management_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(CompanyBackupAgentsManagementType0 | None | Unset, data)
 
-        _vb_365_servers_management = d.pop("vb365ServersManagement", UNSET)
-        vb_365_servers_management: CompanyVb365ServerManagement | Unset
-        if isinstance(_vb_365_servers_management, Unset):
-            vb_365_servers_management = UNSET
-        else:
-            vb_365_servers_management = CompanyVb365ServerManagement.from_dict(_vb_365_servers_management)
+        backup_agents_management = _parse_backup_agents_management(d.pop("backupAgentsManagement", UNSET))
+
+        def _parse_backup_servers_management(data: object) -> CompanyBackupServerManagementType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_company_backup_server_management_type_0 = (
+                    CompanyBackupServerManagementType0.from_dict(data)
+                )
+
+                return componentsschemas_company_backup_server_management_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(CompanyBackupServerManagementType0 | None | Unset, data)
+
+        backup_servers_management = _parse_backup_servers_management(d.pop("backupServersManagement", UNSET))
+
+        def _parse_vb_365_servers_management(data: object) -> CompanyVb365ServerManagementType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_company_vb_365_server_management_type_0 = CompanyVb365ServerManagementType0.from_dict(
+                    data
+                )
+
+                return componentsschemas_company_vb_365_server_management_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(CompanyVb365ServerManagementType0 | None | Unset, data)
+
+        vb_365_servers_management = _parse_vb_365_servers_management(d.pop("vb365ServersManagement", UNSET))
 
         is_vb_public_cloud_management_enabled = d.pop("isVbPublicCloudManagementEnabled", UNSET)
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,15 +21,15 @@ class PublicCloudGuestOsCredentialsInput:
         role (PublicCloudGuestOsCredentialsInputRole): Role of a user.
         username (str): User name.
         password (str): Password.
-        description (str | Unset): Description of a user.
-        site_uid (UUID | Unset): Veeam Cloud Connect site UID.
+        description (None | str | Unset): Description of a user.
+        site_uid (None | Unset | UUID): Veeam Cloud Connect site UID.
     """
 
     role: PublicCloudGuestOsCredentialsInputRole
     username: str
     password: str
-    description: str | Unset = UNSET
-    site_uid: UUID | Unset = UNSET
+    description: None | str | Unset = UNSET
+    site_uid: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -39,11 +39,19 @@ class PublicCloudGuestOsCredentialsInput:
 
         password = self.password
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
-        site_uid: str | Unset = UNSET
-        if not isinstance(self.site_uid, Unset):
+        site_uid: None | str | Unset
+        if isinstance(self.site_uid, Unset):
+            site_uid = UNSET
+        elif isinstance(self.site_uid, UUID):
             site_uid = str(self.site_uid)
+        else:
+            site_uid = self.site_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -70,14 +78,31 @@ class PublicCloudGuestOsCredentialsInput:
 
         password = d.pop("password")
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _site_uid = d.pop("siteUid", UNSET)
-        site_uid: UUID | Unset
-        if isinstance(_site_uid, Unset):
-            site_uid = UNSET
-        else:
-            site_uid = UUID(_site_uid)
+        description = _parse_description(d.pop("description", UNSET))
+
+        def _parse_site_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                site_uid_type_0 = UUID(data)
+
+                return site_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        site_uid = _parse_site_uid(d.pop("siteUid", UNSET))
 
         public_cloud_guest_os_credentials_input = cls(
             role=role,

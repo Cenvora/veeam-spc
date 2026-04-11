@@ -7,7 +7,7 @@ from uuid import UUID
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.computer_info_applications_item import ComputerInfoApplicationsItem
+from ..models.computer_info_applications_type_0_item import ComputerInfoApplicationsType0Item
 from ..models.computer_info_guest_os_type import ComputerInfoGuestOsType
 from ..models.computer_info_platform_type import ComputerInfoPlatformType
 from ..types import UNSET, Unset
@@ -27,11 +27,12 @@ class ComputerInfo:
         guest_os (str | Unset): Operating system installed on a computer.
         guest_os_type (ComputerInfoGuestOsType | Unset): Type of a computer operating system.
         guest_os_version (str | Unset): Version of a computer operating system.
-        guest_os_sku (int | Unset): SKU of a computer operating system.
+        guest_os_sku (int | None | Unset): SKU of a computer operating system.
         platform_type (ComputerInfoPlatformType | Unset): Type of a computer platform.
         ip_addresses (list[str] | Unset): Computer IP addresses.
         mac_addresses (list[str] | Unset): Computer MAC addresses.
-        applications (list[ComputerInfoApplicationsItem] | Unset): Array of applications installed on a computer.
+        applications (list[ComputerInfoApplicationsType0Item] | None | Unset): Array of applications installed on a
+            computer.
     """
 
     unique_uid: UUID | Unset = UNSET
@@ -41,11 +42,11 @@ class ComputerInfo:
     guest_os: str | Unset = UNSET
     guest_os_type: ComputerInfoGuestOsType | Unset = UNSET
     guest_os_version: str | Unset = UNSET
-    guest_os_sku: int | Unset = UNSET
+    guest_os_sku: int | None | Unset = UNSET
     platform_type: ComputerInfoPlatformType | Unset = UNSET
     ip_addresses: list[str] | Unset = UNSET
     mac_addresses: list[str] | Unset = UNSET
-    applications: list[ComputerInfoApplicationsItem] | Unset = UNSET
+    applications: list[ComputerInfoApplicationsType0Item] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -69,7 +70,11 @@ class ComputerInfo:
 
         guest_os_version = self.guest_os_version
 
-        guest_os_sku = self.guest_os_sku
+        guest_os_sku: int | None | Unset
+        if isinstance(self.guest_os_sku, Unset):
+            guest_os_sku = UNSET
+        else:
+            guest_os_sku = self.guest_os_sku
 
         platform_type: str | Unset = UNSET
         if not isinstance(self.platform_type, Unset):
@@ -83,12 +88,17 @@ class ComputerInfo:
         if not isinstance(self.mac_addresses, Unset):
             mac_addresses = self.mac_addresses
 
-        applications: list[str] | Unset = UNSET
-        if not isinstance(self.applications, Unset):
+        applications: list[str] | None | Unset
+        if isinstance(self.applications, Unset):
+            applications = UNSET
+        elif isinstance(self.applications, list):
             applications = []
-            for applications_item_data in self.applications:
-                applications_item = applications_item_data.value
-                applications.append(applications_item)
+            for applications_type_0_item_data in self.applications:
+                applications_type_0_item = applications_type_0_item_data.value
+                applications.append(applications_type_0_item)
+
+        else:
+            applications = self.applications
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -152,7 +162,14 @@ class ComputerInfo:
 
         guest_os_version = d.pop("guestOsVersion", UNSET)
 
-        guest_os_sku = d.pop("guestOsSku", UNSET)
+        def _parse_guest_os_sku(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        guest_os_sku = _parse_guest_os_sku(d.pop("guestOsSku", UNSET))
 
         _platform_type = d.pop("platformType", UNSET)
         platform_type: ComputerInfoPlatformType | Unset
@@ -165,14 +182,27 @@ class ComputerInfo:
 
         mac_addresses = cast(list[str], d.pop("macAddresses", UNSET))
 
-        _applications = d.pop("applications", UNSET)
-        applications: list[ComputerInfoApplicationsItem] | Unset = UNSET
-        if _applications is not UNSET:
-            applications = []
-            for applications_item_data in _applications:
-                applications_item = ComputerInfoApplicationsItem(applications_item_data)
+        def _parse_applications(data: object) -> list[ComputerInfoApplicationsType0Item] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                applications_type_0 = []
+                _applications_type_0 = data
+                for applications_type_0_item_data in _applications_type_0:
+                    applications_type_0_item = ComputerInfoApplicationsType0Item(applications_type_0_item_data)
 
-                applications.append(applications_item)
+                    applications_type_0.append(applications_type_0_item)
+
+                return applications_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[ComputerInfoApplicationsType0Item] | None | Unset, data)
+
+        applications = _parse_applications(d.pop("applications", UNSET))
 
         computer_info = cls(
             unique_uid=unique_uid,

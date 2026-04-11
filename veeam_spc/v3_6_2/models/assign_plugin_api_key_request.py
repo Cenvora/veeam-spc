@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,14 +15,18 @@ T = TypeVar("T", bound="AssignPluginApiKeyRequest")
 class AssignPluginApiKeyRequest:
     """
     Attributes:
-        api_key (str | Unset): API key that must be assigned to a plugin.
+        api_key (None | str | Unset): API key that must be assigned to a plugin.
     """
 
-    api_key: str | Unset = UNSET
+    api_key: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        api_key = self.api_key
+        api_key: None | str | Unset
+        if isinstance(self.api_key, Unset):
+            api_key = UNSET
+        else:
+            api_key = self.api_key
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -35,7 +39,15 @@ class AssignPluginApiKeyRequest:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        api_key = d.pop("apiKey", UNSET)
+
+        def _parse_api_key(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        api_key = _parse_api_key(d.pop("apiKey", UNSET))
 
         assign_plugin_api_key_request = cls(
             api_key=api_key,

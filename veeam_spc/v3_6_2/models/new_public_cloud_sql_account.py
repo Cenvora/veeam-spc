@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,18 +19,18 @@ class NewPublicCloudSqlAccount:
     Attributes:
         account_name (str): Name of a public cloud SQL account.
         database_type (PublicCloudSqlAccountDatabaseType): Type of a public cloud SQL database.
-        user_name (str): User name.
-        password (str): Password.
+        user_name (None | str): User name.
+        password (None | str): Password.
         appliance_uid (UUID): UID assigned to a Veeam Backup for Public Clouds appliance.
-        description (str | Unset): Description of a public cloud SQL account.
+        description (None | str | Unset): Description of a public cloud SQL account.
     """
 
     account_name: str
     database_type: PublicCloudSqlAccountDatabaseType
-    user_name: str
-    password: str
+    user_name: None | str
+    password: None | str
     appliance_uid: UUID
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -38,13 +38,19 @@ class NewPublicCloudSqlAccount:
 
         database_type = self.database_type.value
 
+        user_name: None | str
         user_name = self.user_name
 
+        password: None | str
         password = self.password
 
         appliance_uid = str(self.appliance_uid)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -69,13 +75,30 @@ class NewPublicCloudSqlAccount:
 
         database_type = PublicCloudSqlAccountDatabaseType(d.pop("databaseType"))
 
-        user_name = d.pop("userName")
+        def _parse_user_name(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
 
-        password = d.pop("password")
+        user_name = _parse_user_name(d.pop("userName"))
+
+        def _parse_password(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        password = _parse_password(d.pop("password"))
 
         appliance_uid = UUID(d.pop("applianceUid"))
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         new_public_cloud_sql_account = cls(
             account_name=account_name,

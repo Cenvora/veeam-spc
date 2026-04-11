@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -10,7 +10,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+    from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
 
 T = TypeVar("T", bound="BackupServerReplicationVmJob")
@@ -24,28 +24,30 @@ class BackupServerReplicationVmJob:
         unique_uid (UUID | Unset): UID assigned to a job in Veeam Service Provider Console.
         protected_vm_count (int | Unset): Number of VMs included in a job.
         is_cloud_job (bool | Unset): Indicates whether VM replicas are created on a cloud host.
-        cloud_host_uid (UUID | Unset): UID assigned to a cloud host.
+        cloud_host_uid (None | Unset | UUID): UID assigned to a cloud host.
         target_host_uid (UUID | Unset): UID assigned to a target host for VM replicas.
-        source_wan_accelerator_uid (UUID | Unset): UID assigned to a source WAN accelerator.
-        target_wan_accelerator_uid (UUID | Unset): UID assigned to a target WAN accelerator.
+        source_wan_accelerator_uid (None | Unset | UUID): UID assigned to a source WAN accelerator.
+        target_wan_accelerator_uid (None | Unset | UUID): UID assigned to a target WAN accelerator.
         through_wan_accelerators (bool | Unset): Indicates whether WAN acceleration is enabled.
-        field_embedded (EmbeddedForBackupServerJobChildren | Unset): Resource representation of the related Veeam Backup
-            & Replication server job entity.
+        field_embedded (EmbeddedForBackupServerJobChildrenType0 | None | Unset): Resource representation of the related
+            Veeam Backup & Replication server job entity.
     """
 
     instance_uid: UUID | Unset = UNSET
     unique_uid: UUID | Unset = UNSET
     protected_vm_count: int | Unset = UNSET
     is_cloud_job: bool | Unset = UNSET
-    cloud_host_uid: UUID | Unset = UNSET
+    cloud_host_uid: None | Unset | UUID = UNSET
     target_host_uid: UUID | Unset = UNSET
-    source_wan_accelerator_uid: UUID | Unset = UNSET
-    target_wan_accelerator_uid: UUID | Unset = UNSET
+    source_wan_accelerator_uid: None | Unset | UUID = UNSET
+    target_wan_accelerator_uid: None | Unset | UUID = UNSET
     through_wan_accelerators: bool | Unset = UNSET
-    field_embedded: EmbeddedForBackupServerJobChildren | Unset = UNSET
+    field_embedded: EmbeddedForBackupServerJobChildrenType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
+
         instance_uid: str | Unset = UNSET
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
@@ -58,27 +60,43 @@ class BackupServerReplicationVmJob:
 
         is_cloud_job = self.is_cloud_job
 
-        cloud_host_uid: str | Unset = UNSET
-        if not isinstance(self.cloud_host_uid, Unset):
+        cloud_host_uid: None | str | Unset
+        if isinstance(self.cloud_host_uid, Unset):
+            cloud_host_uid = UNSET
+        elif isinstance(self.cloud_host_uid, UUID):
             cloud_host_uid = str(self.cloud_host_uid)
+        else:
+            cloud_host_uid = self.cloud_host_uid
 
         target_host_uid: str | Unset = UNSET
         if not isinstance(self.target_host_uid, Unset):
             target_host_uid = str(self.target_host_uid)
 
-        source_wan_accelerator_uid: str | Unset = UNSET
-        if not isinstance(self.source_wan_accelerator_uid, Unset):
+        source_wan_accelerator_uid: None | str | Unset
+        if isinstance(self.source_wan_accelerator_uid, Unset):
+            source_wan_accelerator_uid = UNSET
+        elif isinstance(self.source_wan_accelerator_uid, UUID):
             source_wan_accelerator_uid = str(self.source_wan_accelerator_uid)
+        else:
+            source_wan_accelerator_uid = self.source_wan_accelerator_uid
 
-        target_wan_accelerator_uid: str | Unset = UNSET
-        if not isinstance(self.target_wan_accelerator_uid, Unset):
+        target_wan_accelerator_uid: None | str | Unset
+        if isinstance(self.target_wan_accelerator_uid, Unset):
+            target_wan_accelerator_uid = UNSET
+        elif isinstance(self.target_wan_accelerator_uid, UUID):
             target_wan_accelerator_uid = str(self.target_wan_accelerator_uid)
+        else:
+            target_wan_accelerator_uid = self.target_wan_accelerator_uid
 
         through_wan_accelerators = self.through_wan_accelerators
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForBackupServerJobChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -108,7 +126,7 @@ class BackupServerReplicationVmJob:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
         d = dict(src_dict)
         _instance_uid = d.pop("instanceUid", UNSET)
@@ -129,12 +147,22 @@ class BackupServerReplicationVmJob:
 
         is_cloud_job = d.pop("isCloudJob", UNSET)
 
-        _cloud_host_uid = d.pop("cloudHostUid", UNSET)
-        cloud_host_uid: UUID | Unset
-        if isinstance(_cloud_host_uid, Unset):
-            cloud_host_uid = UNSET
-        else:
-            cloud_host_uid = UUID(_cloud_host_uid)
+        def _parse_cloud_host_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                cloud_host_uid_type_0 = UUID(data)
+
+                return cloud_host_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        cloud_host_uid = _parse_cloud_host_uid(d.pop("cloudHostUid", UNSET))
 
         _target_host_uid = d.pop("targetHostUid", UNSET)
         target_host_uid: UUID | Unset
@@ -143,28 +171,60 @@ class BackupServerReplicationVmJob:
         else:
             target_host_uid = UUID(_target_host_uid)
 
-        _source_wan_accelerator_uid = d.pop("sourceWanAcceleratorUid", UNSET)
-        source_wan_accelerator_uid: UUID | Unset
-        if isinstance(_source_wan_accelerator_uid, Unset):
-            source_wan_accelerator_uid = UNSET
-        else:
-            source_wan_accelerator_uid = UUID(_source_wan_accelerator_uid)
+        def _parse_source_wan_accelerator_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                source_wan_accelerator_uid_type_0 = UUID(data)
 
-        _target_wan_accelerator_uid = d.pop("targetWanAcceleratorUid", UNSET)
-        target_wan_accelerator_uid: UUID | Unset
-        if isinstance(_target_wan_accelerator_uid, Unset):
-            target_wan_accelerator_uid = UNSET
-        else:
-            target_wan_accelerator_uid = UUID(_target_wan_accelerator_uid)
+                return source_wan_accelerator_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        source_wan_accelerator_uid = _parse_source_wan_accelerator_uid(d.pop("sourceWanAcceleratorUid", UNSET))
+
+        def _parse_target_wan_accelerator_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                target_wan_accelerator_uid_type_0 = UUID(data)
+
+                return target_wan_accelerator_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        target_wan_accelerator_uid = _parse_target_wan_accelerator_uid(d.pop("targetWanAcceleratorUid", UNSET))
 
         through_wan_accelerators = d.pop("throughWanAccelerators", UNSET)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForBackupServerJobChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForBackupServerJobChildren.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> EmbeddedForBackupServerJobChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_backup_server_job_children_type_0 = (
+                    EmbeddedForBackupServerJobChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_backup_server_job_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForBackupServerJobChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         backup_server_replication_vm_job = cls(
             instance_uid=instance_uid,

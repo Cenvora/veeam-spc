@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -28,9 +28,10 @@ class DiscoveredComputer:
     """
     Attributes:
         instance_uid (UUID | Unset): UID assigned to a discovered computer.
-        rule_uid (UUID | Unset): UID assigned to a rule used to discover a computer.
-        management_agent_uid (UUID | Unset): UID assigned to a management agent installed on a discovered computer.
-        discovered_time (datetime.datetime | Unset): Date and time when a computer was discovered.
+        rule_uid (None | Unset | UUID): UID assigned to a rule used to discover a computer.
+        management_agent_uid (None | Unset | UUID): UID assigned to a management agent installed on a discovered
+            computer.
+        discovered_time (datetime.datetime | None | Unset): Date and time when a computer was discovered.
         backup_agent_installation_status (DiscoveredComputerBackupAgentInstallationStatus | Unset): Status of Veeam
             backup agent installation on a discovered computer.
         status (DiscoveredComputerStatus | Unset): Computer connection status.
@@ -42,9 +43,9 @@ class DiscoveredComputer:
     """
 
     instance_uid: UUID | Unset = UNSET
-    rule_uid: UUID | Unset = UNSET
-    management_agent_uid: UUID | Unset = UNSET
-    discovered_time: datetime.datetime | Unset = UNSET
+    rule_uid: None | Unset | UUID = UNSET
+    management_agent_uid: None | Unset | UUID = UNSET
+    discovered_time: datetime.datetime | None | Unset = UNSET
     backup_agent_installation_status: DiscoveredComputerBackupAgentInstallationStatus | Unset = UNSET
     status: DiscoveredComputerStatus | Unset = UNSET
     backup_agent_version: str | Unset = UNSET
@@ -57,17 +58,29 @@ class DiscoveredComputer:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        rule_uid: str | Unset = UNSET
-        if not isinstance(self.rule_uid, Unset):
+        rule_uid: None | str | Unset
+        if isinstance(self.rule_uid, Unset):
+            rule_uid = UNSET
+        elif isinstance(self.rule_uid, UUID):
             rule_uid = str(self.rule_uid)
+        else:
+            rule_uid = self.rule_uid
 
-        management_agent_uid: str | Unset = UNSET
-        if not isinstance(self.management_agent_uid, Unset):
+        management_agent_uid: None | str | Unset
+        if isinstance(self.management_agent_uid, Unset):
+            management_agent_uid = UNSET
+        elif isinstance(self.management_agent_uid, UUID):
             management_agent_uid = str(self.management_agent_uid)
+        else:
+            management_agent_uid = self.management_agent_uid
 
-        discovered_time: str | Unset = UNSET
-        if not isinstance(self.discovered_time, Unset):
+        discovered_time: None | str | Unset
+        if isinstance(self.discovered_time, Unset):
+            discovered_time = UNSET
+        elif isinstance(self.discovered_time, datetime.datetime):
             discovered_time = self.discovered_time.isoformat()
+        else:
+            discovered_time = self.discovered_time
 
         backup_agent_installation_status: str | Unset = UNSET
         if not isinstance(self.backup_agent_installation_status, Unset):
@@ -123,26 +136,56 @@ class DiscoveredComputer:
         else:
             instance_uid = UUID(_instance_uid)
 
-        _rule_uid = d.pop("ruleUid", UNSET)
-        rule_uid: UUID | Unset
-        if isinstance(_rule_uid, Unset):
-            rule_uid = UNSET
-        else:
-            rule_uid = UUID(_rule_uid)
+        def _parse_rule_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                rule_uid_type_0 = UUID(data)
 
-        _management_agent_uid = d.pop("managementAgentUid", UNSET)
-        management_agent_uid: UUID | Unset
-        if isinstance(_management_agent_uid, Unset):
-            management_agent_uid = UNSET
-        else:
-            management_agent_uid = UUID(_management_agent_uid)
+                return rule_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        _discovered_time = d.pop("discoveredTime", UNSET)
-        discovered_time: datetime.datetime | Unset
-        if isinstance(_discovered_time, Unset):
-            discovered_time = UNSET
-        else:
-            discovered_time = isoparse(_discovered_time)
+        rule_uid = _parse_rule_uid(d.pop("ruleUid", UNSET))
+
+        def _parse_management_agent_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                management_agent_uid_type_0 = UUID(data)
+
+                return management_agent_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        management_agent_uid = _parse_management_agent_uid(d.pop("managementAgentUid", UNSET))
+
+        def _parse_discovered_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                discovered_time_type_0 = isoparse(data)
+
+                return discovered_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        discovered_time = _parse_discovered_time(d.pop("discoveredTime", UNSET))
 
         _backup_agent_installation_status = d.pop("backupAgentInstallationStatus", UNSET)
         backup_agent_installation_status: DiscoveredComputerBackupAgentInstallationStatus | Unset

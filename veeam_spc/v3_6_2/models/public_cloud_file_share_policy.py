@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,38 +24,38 @@ class PublicCloudFileSharePolicy:
     Attributes:
         instance_uid (UUID | Unset): UID assigned to a cloud file share.
         name (str | Unset): Name of a cloud file share.
-        appliance_uid (UUID | Unset): UID assigned to a Veeam Backup for Public Clouds appliance.
+        appliance_uid (None | Unset | UUID): UID assigned to a Veeam Backup for Public Clouds appliance.
         status (PublicCloudPolicyStatus | Unset): Status of a Veeam Backup for Public Clouds policy.
         state (PublicCloudPolicyState | Unset): State of a Veeam Backup for Public Clouds policy.
         appliance_management_type (BackupServerPublicCloudApplianceManagementType | Unset): Management type of a Veeam
             Backup for Public Clouds appliance.
         management_agent_uid (UUID | Unset): UID assigned to a management agent.
         backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server.
-        organization_uid (UUID | Unset): UID assigned to mapped organization.
-        location_uid (UUID | Unset): UID assigned to a cloud file share policy location.
+        organization_uid (None | Unset | UUID): UID assigned to mapped organization.
+        location_uid (None | Unset | UUID): UID assigned to a cloud file share policy location.
         instances_count (int | Unset): Number of cloud file shares included in a policy.
         platform_type (BackupServerPublicCloudAppliancePlatform | Unset): Platform of a Veeam Backup for Public Clouds
             appliance.
-        next_run (datetime.datetime | Unset): Date and time of the next scheduled policy run.
-        backup_target_vault_name (str | Unset): Name of a vault that stores backups.
-        backup_copy_target_vault_name (str | Unset): Name of a vault that stores backup copies.
+        next_run (datetime.datetime | None | Unset): Date and time of the next scheduled policy run.
+        backup_target_vault_name (None | str | Unset): Name of a vault that stores backups.
+        backup_copy_target_vault_name (None | str | Unset): Name of a vault that stores backup copies.
     """
 
     instance_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
-    appliance_uid: UUID | Unset = UNSET
+    appliance_uid: None | Unset | UUID = UNSET
     status: PublicCloudPolicyStatus | Unset = UNSET
     state: PublicCloudPolicyState | Unset = UNSET
     appliance_management_type: BackupServerPublicCloudApplianceManagementType | Unset = UNSET
     management_agent_uid: UUID | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
-    organization_uid: UUID | Unset = UNSET
-    location_uid: UUID | Unset = UNSET
+    organization_uid: None | Unset | UUID = UNSET
+    location_uid: None | Unset | UUID = UNSET
     instances_count: int | Unset = UNSET
     platform_type: BackupServerPublicCloudAppliancePlatform | Unset = UNSET
-    next_run: datetime.datetime | Unset = UNSET
-    backup_target_vault_name: str | Unset = UNSET
-    backup_copy_target_vault_name: str | Unset = UNSET
+    next_run: datetime.datetime | None | Unset = UNSET
+    backup_target_vault_name: None | str | Unset = UNSET
+    backup_copy_target_vault_name: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -65,9 +65,13 @@ class PublicCloudFileSharePolicy:
 
         name = self.name
 
-        appliance_uid: str | Unset = UNSET
-        if not isinstance(self.appliance_uid, Unset):
+        appliance_uid: None | str | Unset
+        if isinstance(self.appliance_uid, Unset):
+            appliance_uid = UNSET
+        elif isinstance(self.appliance_uid, UUID):
             appliance_uid = str(self.appliance_uid)
+        else:
+            appliance_uid = self.appliance_uid
 
         status: str | Unset = UNSET
         if not isinstance(self.status, Unset):
@@ -89,13 +93,21 @@ class PublicCloudFileSharePolicy:
         if not isinstance(self.backup_server_uid, Unset):
             backup_server_uid = str(self.backup_server_uid)
 
-        organization_uid: str | Unset = UNSET
-        if not isinstance(self.organization_uid, Unset):
+        organization_uid: None | str | Unset
+        if isinstance(self.organization_uid, Unset):
+            organization_uid = UNSET
+        elif isinstance(self.organization_uid, UUID):
             organization_uid = str(self.organization_uid)
+        else:
+            organization_uid = self.organization_uid
 
-        location_uid: str | Unset = UNSET
-        if not isinstance(self.location_uid, Unset):
+        location_uid: None | str | Unset
+        if isinstance(self.location_uid, Unset):
+            location_uid = UNSET
+        elif isinstance(self.location_uid, UUID):
             location_uid = str(self.location_uid)
+        else:
+            location_uid = self.location_uid
 
         instances_count = self.instances_count
 
@@ -103,13 +115,25 @@ class PublicCloudFileSharePolicy:
         if not isinstance(self.platform_type, Unset):
             platform_type = self.platform_type.value
 
-        next_run: str | Unset = UNSET
-        if not isinstance(self.next_run, Unset):
+        next_run: None | str | Unset
+        if isinstance(self.next_run, Unset):
+            next_run = UNSET
+        elif isinstance(self.next_run, datetime.datetime):
             next_run = self.next_run.isoformat()
+        else:
+            next_run = self.next_run
 
-        backup_target_vault_name = self.backup_target_vault_name
+        backup_target_vault_name: None | str | Unset
+        if isinstance(self.backup_target_vault_name, Unset):
+            backup_target_vault_name = UNSET
+        else:
+            backup_target_vault_name = self.backup_target_vault_name
 
-        backup_copy_target_vault_name = self.backup_copy_target_vault_name
+        backup_copy_target_vault_name: None | str | Unset
+        if isinstance(self.backup_copy_target_vault_name, Unset):
+            backup_copy_target_vault_name = UNSET
+        else:
+            backup_copy_target_vault_name = self.backup_copy_target_vault_name
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -159,12 +183,22 @@ class PublicCloudFileSharePolicy:
 
         name = d.pop("name", UNSET)
 
-        _appliance_uid = d.pop("applianceUid", UNSET)
-        appliance_uid: UUID | Unset
-        if isinstance(_appliance_uid, Unset):
-            appliance_uid = UNSET
-        else:
-            appliance_uid = UUID(_appliance_uid)
+        def _parse_appliance_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                appliance_uid_type_0 = UUID(data)
+
+                return appliance_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        appliance_uid = _parse_appliance_uid(d.pop("applianceUid", UNSET))
 
         _status = d.pop("status", UNSET)
         status: PublicCloudPolicyStatus | Unset
@@ -201,19 +235,39 @@ class PublicCloudFileSharePolicy:
         else:
             backup_server_uid = UUID(_backup_server_uid)
 
-        _organization_uid = d.pop("organizationUid", UNSET)
-        organization_uid: UUID | Unset
-        if isinstance(_organization_uid, Unset):
-            organization_uid = UNSET
-        else:
-            organization_uid = UUID(_organization_uid)
+        def _parse_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                organization_uid_type_0 = UUID(data)
 
-        _location_uid = d.pop("locationUid", UNSET)
-        location_uid: UUID | Unset
-        if isinstance(_location_uid, Unset):
-            location_uid = UNSET
-        else:
-            location_uid = UUID(_location_uid)
+                return organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        organization_uid = _parse_organization_uid(d.pop("organizationUid", UNSET))
+
+        def _parse_location_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                location_uid_type_0 = UUID(data)
+
+                return location_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        location_uid = _parse_location_uid(d.pop("locationUid", UNSET))
 
         instances_count = d.pop("instancesCount", UNSET)
 
@@ -224,16 +278,40 @@ class PublicCloudFileSharePolicy:
         else:
             platform_type = BackupServerPublicCloudAppliancePlatform(_platform_type)
 
-        _next_run = d.pop("nextRun", UNSET)
-        next_run: datetime.datetime | Unset
-        if isinstance(_next_run, Unset):
-            next_run = UNSET
-        else:
-            next_run = isoparse(_next_run)
+        def _parse_next_run(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                next_run_type_0 = isoparse(data)
 
-        backup_target_vault_name = d.pop("backupTargetVaultName", UNSET)
+                return next_run_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
 
-        backup_copy_target_vault_name = d.pop("backupCopyTargetVaultName", UNSET)
+        next_run = _parse_next_run(d.pop("nextRun", UNSET))
+
+        def _parse_backup_target_vault_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        backup_target_vault_name = _parse_backup_target_vault_name(d.pop("backupTargetVaultName", UNSET))
+
+        def _parse_backup_copy_target_vault_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        backup_copy_target_vault_name = _parse_backup_copy_target_vault_name(d.pop("backupCopyTargetVaultName", UNSET))
 
         public_cloud_file_share_policy = cls(
             instance_uid=instance_uid,

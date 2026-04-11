@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,8 +15,8 @@ if TYPE_CHECKING:
     from ..models.public_cloud_aws_add_existing_appliance_input_guest_os_credentials import (
         PublicCloudAwsAddExistingApplianceInputGuestOsCredentials,
     )
-    from ..models.public_cloud_aws_add_existing_appliance_input_network import (
-        PublicCloudAwsAddExistingApplianceInputNetwork,
+    from ..models.public_cloud_aws_add_existing_appliance_input_network_type_0 import (
+        PublicCloudAwsAddExistingApplianceInputNetworkType0,
     )
     from ..models.public_cloud_aws_add_existing_appliance_input_virtual_machine import (
         PublicCloudAwsAddExistingApplianceInputVirtualMachine,
@@ -33,25 +33,33 @@ class PublicCloudAwsAddExistingApplianceInput:
         account (PublicCloudAwsAddExistingApplianceInputAccount):
         virtual_machine (PublicCloudAwsAddExistingApplianceInputVirtualMachine):
         guest_os_credentials (PublicCloudAwsAddExistingApplianceInputGuestOsCredentials):
-        network (PublicCloudAwsAddExistingApplianceInputNetwork | Unset):
+        network (None | PublicCloudAwsAddExistingApplianceInputNetworkType0 | Unset):
     """
 
     account: PublicCloudAwsAddExistingApplianceInputAccount
     virtual_machine: PublicCloudAwsAddExistingApplianceInputVirtualMachine
     guest_os_credentials: PublicCloudAwsAddExistingApplianceInputGuestOsCredentials
-    network: PublicCloudAwsAddExistingApplianceInputNetwork | Unset = UNSET
+    network: None | PublicCloudAwsAddExistingApplianceInputNetworkType0 | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.public_cloud_aws_add_existing_appliance_input_network_type_0 import (
+            PublicCloudAwsAddExistingApplianceInputNetworkType0,
+        )
+
         account = self.account.to_dict()
 
         virtual_machine = self.virtual_machine.to_dict()
 
         guest_os_credentials = self.guest_os_credentials.to_dict()
 
-        network: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.network, Unset):
+        network: dict[str, Any] | None | Unset
+        if isinstance(self.network, Unset):
+            network = UNSET
+        elif isinstance(self.network, PublicCloudAwsAddExistingApplianceInputNetworkType0):
             network = self.network.to_dict()
+        else:
+            network = self.network
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -75,8 +83,8 @@ class PublicCloudAwsAddExistingApplianceInput:
         from ..models.public_cloud_aws_add_existing_appliance_input_guest_os_credentials import (
             PublicCloudAwsAddExistingApplianceInputGuestOsCredentials,
         )
-        from ..models.public_cloud_aws_add_existing_appliance_input_network import (
-            PublicCloudAwsAddExistingApplianceInputNetwork,
+        from ..models.public_cloud_aws_add_existing_appliance_input_network_type_0 import (
+            PublicCloudAwsAddExistingApplianceInputNetworkType0,
         )
         from ..models.public_cloud_aws_add_existing_appliance_input_virtual_machine import (
             PublicCloudAwsAddExistingApplianceInputVirtualMachine,
@@ -91,12 +99,22 @@ class PublicCloudAwsAddExistingApplianceInput:
             d.pop("guestOsCredentials")
         )
 
-        _network = d.pop("network", UNSET)
-        network: PublicCloudAwsAddExistingApplianceInputNetwork | Unset
-        if isinstance(_network, Unset):
-            network = UNSET
-        else:
-            network = PublicCloudAwsAddExistingApplianceInputNetwork.from_dict(_network)
+        def _parse_network(data: object) -> None | PublicCloudAwsAddExistingApplianceInputNetworkType0 | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                network_type_0 = PublicCloudAwsAddExistingApplianceInputNetworkType0.from_dict(data)
+
+                return network_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | PublicCloudAwsAddExistingApplianceInputNetworkType0 | Unset, data)
+
+        network = _parse_network(d.pop("network", UNSET))
 
         public_cloud_aws_add_existing_appliance_input = cls(
             account=account,

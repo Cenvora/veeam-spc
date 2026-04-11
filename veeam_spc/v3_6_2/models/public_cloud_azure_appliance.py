@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -25,9 +25,9 @@ class PublicCloudAzureAppliance:
         environment (EAzureEnvironmentIdReadonly | Unset): Type of a Microsoft Azure cloud environment.
         subscription_id (str | Unset): ID assigned to a Microsoft Azure subscription.
         tenant_id (str | Unset): ID assigned to a tenant available to a Microsoft Azure account.
-        description (str | Unset): Description of a Veeam Backup for Public Clouds appliance.
+        description (None | str | Unset): Description of a Veeam Backup for Public Clouds appliance.
         public_address (str | Unset): URL of a Veeam Backup for Public Clouds appliance.
-        private_network_address (str | Unset): Private IP address or DNS name of a network.
+        private_network_address (None | str | Unset): Private IP address or DNS name of a network.
         virtual_machine_id (str | Unset): ID assigned to a VM.
         certificate_thumbprint (str | Unset): Thumbprint of a security certificate.
         data_center_id (str | Unset): ID assigned to a Microsoft Azure datacenter
@@ -40,9 +40,9 @@ class PublicCloudAzureAppliance:
     environment: EAzureEnvironmentIdReadonly | Unset = UNSET
     subscription_id: str | Unset = UNSET
     tenant_id: str | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     public_address: str | Unset = UNSET
-    private_network_address: str | Unset = UNSET
+    private_network_address: None | str | Unset = UNSET
     virtual_machine_id: str | Unset = UNSET
     certificate_thumbprint: str | Unset = UNSET
     data_center_id: str | Unset = UNSET
@@ -69,11 +69,19 @@ class PublicCloudAzureAppliance:
 
         tenant_id = self.tenant_id
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         public_address = self.public_address
 
-        private_network_address = self.private_network_address
+        private_network_address: None | str | Unset
+        if isinstance(self.private_network_address, Unset):
+            private_network_address = UNSET
+        else:
+            private_network_address = self.private_network_address
 
         virtual_machine_id = self.virtual_machine_id
 
@@ -146,11 +154,25 @@ class PublicCloudAzureAppliance:
 
         tenant_id = d.pop("tenantId", UNSET)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         public_address = d.pop("publicAddress", UNSET)
 
-        private_network_address = d.pop("privateNetworkAddress", UNSET)
+        def _parse_private_network_address(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        private_network_address = _parse_private_network_address(d.pop("privateNetworkAddress", UNSET))
 
         virtual_machine_id = d.pop("virtualMachineId", UNSET)
 

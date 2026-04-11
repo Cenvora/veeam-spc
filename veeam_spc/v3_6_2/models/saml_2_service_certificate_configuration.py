@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -25,13 +25,13 @@ class Saml2ServiceCertificateConfiguration:
             Saml2ServiceCertificateConfigurationUse.BOTH.
         status (Saml2ServiceCertificateConfigurationStatus | Unset): Indicates whether certificate is currently in use
             or will be used in the future. Default: Saml2ServiceCertificateConfigurationStatus.CURRENT.
-        private_key_content (str | Unset): Private key content in base64 format.
+        private_key_content (None | str | Unset): Private key content in base64 format.
             > You can use the `GenerateNewPkcs12KeyPair` operation to generate a key.
             > For identity provider configuration, this property is required.
-        certificate_thumbprint (str | Unset): Thumbprint of a currently used certificate.
-        store_name (str | Unset): Name of a certificate store.
-        store_location (str | Unset): Location of a certificate store.
-        x_509_find_type (str | Unset): Type of an expression used to serch for a certificate according to
+        certificate_thumbprint (None | str | Unset): Thumbprint of a currently used certificate.
+        store_name (None | str | Unset): Name of a certificate store.
+        store_location (None | str | Unset): Location of a certificate store.
+        x_509_find_type (None | str | Unset): Type of an expression used to serch for a certificate according to
         metadata_publish_override (Saml2ServiceCertificateConfigurationMetadataPublishOverride | Unset): Type of
             certificate usage rule that overrides the default certificate usage rule.
             > For datails on certificate usage rules, see the [Sustainsys.Saml2
@@ -40,11 +40,11 @@ class Saml2ServiceCertificateConfiguration:
 
     use: Saml2ServiceCertificateConfigurationUse | Unset = Saml2ServiceCertificateConfigurationUse.BOTH
     status: Saml2ServiceCertificateConfigurationStatus | Unset = Saml2ServiceCertificateConfigurationStatus.CURRENT
-    private_key_content: str | Unset = UNSET
-    certificate_thumbprint: str | Unset = UNSET
-    store_name: str | Unset = UNSET
-    store_location: str | Unset = UNSET
-    x_509_find_type: str | Unset = UNSET
+    private_key_content: None | str | Unset = UNSET
+    certificate_thumbprint: None | str | Unset = UNSET
+    store_name: None | str | Unset = UNSET
+    store_location: None | str | Unset = UNSET
+    x_509_find_type: None | str | Unset = UNSET
     metadata_publish_override: Saml2ServiceCertificateConfigurationMetadataPublishOverride | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -57,15 +57,35 @@ class Saml2ServiceCertificateConfiguration:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        private_key_content = self.private_key_content
+        private_key_content: None | str | Unset
+        if isinstance(self.private_key_content, Unset):
+            private_key_content = UNSET
+        else:
+            private_key_content = self.private_key_content
 
-        certificate_thumbprint = self.certificate_thumbprint
+        certificate_thumbprint: None | str | Unset
+        if isinstance(self.certificate_thumbprint, Unset):
+            certificate_thumbprint = UNSET
+        else:
+            certificate_thumbprint = self.certificate_thumbprint
 
-        store_name = self.store_name
+        store_name: None | str | Unset
+        if isinstance(self.store_name, Unset):
+            store_name = UNSET
+        else:
+            store_name = self.store_name
 
-        store_location = self.store_location
+        store_location: None | str | Unset
+        if isinstance(self.store_location, Unset):
+            store_location = UNSET
+        else:
+            store_location = self.store_location
 
-        x_509_find_type = self.x_509_find_type
+        x_509_find_type: None | str | Unset
+        if isinstance(self.x_509_find_type, Unset):
+            x_509_find_type = UNSET
+        else:
+            x_509_find_type = self.x_509_find_type
 
         metadata_publish_override: str | Unset = UNSET
         if not isinstance(self.metadata_publish_override, Unset):
@@ -110,15 +130,50 @@ class Saml2ServiceCertificateConfiguration:
         else:
             status = Saml2ServiceCertificateConfigurationStatus(_status)
 
-        private_key_content = d.pop("privateKeyContent", UNSET)
+        def _parse_private_key_content(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        certificate_thumbprint = d.pop("certificateThumbprint", UNSET)
+        private_key_content = _parse_private_key_content(d.pop("privateKeyContent", UNSET))
 
-        store_name = d.pop("storeName", UNSET)
+        def _parse_certificate_thumbprint(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        store_location = d.pop("storeLocation", UNSET)
+        certificate_thumbprint = _parse_certificate_thumbprint(d.pop("certificateThumbprint", UNSET))
 
-        x_509_find_type = d.pop("x509FindType", UNSET)
+        def _parse_store_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        store_name = _parse_store_name(d.pop("storeName", UNSET))
+
+        def _parse_store_location(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        store_location = _parse_store_location(d.pop("storeLocation", UNSET))
+
+        def _parse_x_509_find_type(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        x_509_find_type = _parse_x_509_find_type(d.pop("x509FindType", UNSET))
 
         _metadata_publish_override = d.pop("metadataPublishOverride", UNSET)
         metadata_publish_override: Saml2ServiceCertificateConfigurationMetadataPublishOverride | Unset

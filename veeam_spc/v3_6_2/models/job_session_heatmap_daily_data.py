@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,11 +22,11 @@ class JobSessionHeatmapDailyData:
     """
     Attributes:
         date (datetime.date | Unset): Date.
-        sessions (list[JobSessionHeatmapSession] | Unset): Array of job sessions.
+        sessions (list[JobSessionHeatmapSession] | None | Unset): Array of job sessions.
     """
 
     date: datetime.date | Unset = UNSET
-    sessions: list[JobSessionHeatmapSession] | Unset = UNSET
+    sessions: list[JobSessionHeatmapSession] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -34,12 +34,17 @@ class JobSessionHeatmapDailyData:
         if not isinstance(self.date, Unset):
             date = self.date.isoformat()
 
-        sessions: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.sessions, Unset):
+        sessions: list[dict[str, Any]] | None | Unset
+        if isinstance(self.sessions, Unset):
+            sessions = UNSET
+        elif isinstance(self.sessions, list):
             sessions = []
-            for sessions_item_data in self.sessions:
-                sessions_item = sessions_item_data.to_dict()
-                sessions.append(sessions_item)
+            for sessions_type_0_item_data in self.sessions:
+                sessions_type_0_item = sessions_type_0_item_data.to_dict()
+                sessions.append(sessions_type_0_item)
+
+        else:
+            sessions = self.sessions
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -63,14 +68,27 @@ class JobSessionHeatmapDailyData:
         else:
             date = isoparse(_date).date()
 
-        _sessions = d.pop("sessions", UNSET)
-        sessions: list[JobSessionHeatmapSession] | Unset = UNSET
-        if _sessions is not UNSET:
-            sessions = []
-            for sessions_item_data in _sessions:
-                sessions_item = JobSessionHeatmapSession.from_dict(sessions_item_data)
+        def _parse_sessions(data: object) -> list[JobSessionHeatmapSession] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                sessions_type_0 = []
+                _sessions_type_0 = data
+                for sessions_type_0_item_data in _sessions_type_0:
+                    sessions_type_0_item = JobSessionHeatmapSession.from_dict(sessions_type_0_item_data)
 
-                sessions.append(sessions_item)
+                    sessions_type_0.append(sessions_type_0_item)
+
+                return sessions_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[JobSessionHeatmapSession] | None | Unset, data)
+
+        sessions = _parse_sessions(d.pop("sessions", UNSET))
 
         job_session_heatmap_daily_data = cls(
             date=date,

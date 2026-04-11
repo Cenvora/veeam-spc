@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,19 +17,23 @@ class Vb365Microsoft365ModernAppOnlyAuthenticationSharePointConnectionSettings:
     Attributes:
         share_point_save_all_web_parts (bool | Unset): Indicates whether the export mode for SharePoint Web Parts must
             be changed to back up a customized content of Microsoft SharePoint Online sites. Default: False.
-        office_organization_name (str | Unset): Name of a Microsoft SharePoint Online organization in the following
-            format: `<name>.onmicrosoft.com`.
+        office_organization_name (None | str | Unset): Name of a Microsoft SharePoint Online organization in the
+            following format: `<name>.onmicrosoft.com`.
             > Required only for an existing Azure AD application.
     """
 
     share_point_save_all_web_parts: bool | Unset = False
-    office_organization_name: str | Unset = UNSET
+    office_organization_name: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         share_point_save_all_web_parts = self.share_point_save_all_web_parts
 
-        office_organization_name = self.office_organization_name
+        office_organization_name: None | str | Unset
+        if isinstance(self.office_organization_name, Unset):
+            office_organization_name = UNSET
+        else:
+            office_organization_name = self.office_organization_name
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -46,7 +50,14 @@ class Vb365Microsoft365ModernAppOnlyAuthenticationSharePointConnectionSettings:
         d = dict(src_dict)
         share_point_save_all_web_parts = d.pop("sharePointSaveAllWebParts", UNSET)
 
-        office_organization_name = d.pop("officeOrganizationName", UNSET)
+        def _parse_office_organization_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        office_organization_name = _parse_office_organization_name(d.pop("officeOrganizationName", UNSET))
 
         vb_365_microsoft_365_modern_app_only_authentication_share_point_connection_settings = cls(
             share_point_save_all_web_parts=share_point_save_all_web_parts,

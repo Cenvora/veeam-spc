@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -23,8 +23,8 @@ class Vb365ProtectedObject:
         name (str | Unset): Name of an object protected by Veeam Backup for Microsoft 365.
         repository_uid (UUID | Unset): UID assigned to a backup repository.
         repository_name (str | Unset): Name Of a backup repository.
-        archive_repository_uid (UUID | Unset): UID assigned to an archive repository.
-        archive_repository_name (str | Unset): Name an archive repository.
+        archive_repository_uid (None | Unset | UUID): UID assigned to an archive repository.
+        archive_repository_name (None | str | Unset): Name an archive repository.
         protected_data_type (Vb365ProtectedObjectType | Unset): Type of a protected object.
         restore_points_count (int | Unset): Number of restore points created for an object protected by Veeam Backup for
             Microsoft 365.
@@ -34,22 +34,23 @@ class Vb365ProtectedObject:
             for an object protected by Veeam Backup for Microsoft 365.
         vb_365_server_uid (UUID | Unset): UID assigned to a Veeam Backup for Microsoft 365 server.
         vb_365_server_name (str | Unset): Name of a Veeam Backup for Microsoft 365 server.
-        organization_uid (UUID | Unset): UID assigned to an organization to which a Veeam Backup for Microsoft 365
-            server belongs.
-        organization_name (str | Unset): Name of an organization to which a Veeam Backup for Microsoft 365 server
+        organization_uid (None | Unset | UUID): UID assigned to an organization to which a Veeam Backup for Microsoft
+            365 server belongs.
+        organization_name (None | str | Unset): Name of an organization to which a Veeam Backup for Microsoft 365 server
             belongs.
-        vb_365_organization_uid (UUID | Unset): UID assigned to a Microsoft organization.
-        vb_365_organization_name (str | Unset): Name of a Microsoft organization.
-        site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site on which an organization that owns a Veeam
+        vb_365_organization_uid (None | Unset | UUID): UID assigned to a Microsoft organization.
+        vb_365_organization_name (None | str | Unset): Name of a Microsoft organization.
+        site_uid (None | Unset | UUID): UID assigned to a Veeam Cloud Connect site on which an organization that owns a
+            Veeam backup agent protecting an object is registered.
+        site_name (None | str | Unset): Name of a Veeam Cloud Connect site on which an organization that owns Veeam
             backup agent protecting an object is registered.
-        site_name (str | Unset): Name of a Veeam Cloud Connect site on which an organization that owns Veeam backup
-            agent protecting an object is registered.
-        location_uid (UUID | Unset): UID assigned to a location assigned to Veeam backup agent protecting an object.
-        location_name (str | Unset): Name of a location assigned to a Veeam backup agent protecting an object.
-        consumes_license (bool | Unset): Indicates whether a protected object consumes license units.
-        is_educational_user (bool | Unset): Indicates whether a protected user has Microsoft 365 educational
+        location_uid (None | Unset | UUID): UID assigned to a location assigned to Veeam backup agent protecting an
+            object.
+        location_name (None | str | Unset): Name of a location assigned to a Veeam backup agent protecting an object.
+        consumes_license (bool | None | Unset): Indicates whether a protected object consumes license units.
+        is_educational_user (bool | None | Unset): Indicates whether a protected user has Microsoft 365 educational
             subscription.
-        file_restore_portal_url (str | Unset): URL of a file restore portal.
+        file_restore_portal_url (None | str | Unset): URL of a file restore portal.
         is_file_restore_portal_enabled (bool | Unset): Indicates whether a file restore portal is enabled.
         is_restore_portal_access_enabled (bool | Unset): Indicates whether access to a file restore portal is enabled by
             a service provider.
@@ -59,25 +60,25 @@ class Vb365ProtectedObject:
     name: str | Unset = UNSET
     repository_uid: UUID | Unset = UNSET
     repository_name: str | Unset = UNSET
-    archive_repository_uid: UUID | Unset = UNSET
-    archive_repository_name: str | Unset = UNSET
+    archive_repository_uid: None | Unset | UUID = UNSET
+    archive_repository_name: None | str | Unset = UNSET
     protected_data_type: Vb365ProtectedObjectType | Unset = UNSET
     restore_points_count: int | Unset = UNSET
     archive_restore_points_count: int | Unset = UNSET
     latest_restore_point_date: datetime.datetime | Unset = UNSET
     vb_365_server_uid: UUID | Unset = UNSET
     vb_365_server_name: str | Unset = UNSET
-    organization_uid: UUID | Unset = UNSET
-    organization_name: str | Unset = UNSET
-    vb_365_organization_uid: UUID | Unset = UNSET
-    vb_365_organization_name: str | Unset = UNSET
-    site_uid: UUID | Unset = UNSET
-    site_name: str | Unset = UNSET
-    location_uid: UUID | Unset = UNSET
-    location_name: str | Unset = UNSET
-    consumes_license: bool | Unset = UNSET
-    is_educational_user: bool | Unset = UNSET
-    file_restore_portal_url: str | Unset = UNSET
+    organization_uid: None | Unset | UUID = UNSET
+    organization_name: None | str | Unset = UNSET
+    vb_365_organization_uid: None | Unset | UUID = UNSET
+    vb_365_organization_name: None | str | Unset = UNSET
+    site_uid: None | Unset | UUID = UNSET
+    site_name: None | str | Unset = UNSET
+    location_uid: None | Unset | UUID = UNSET
+    location_name: None | str | Unset = UNSET
+    consumes_license: bool | None | Unset = UNSET
+    is_educational_user: bool | None | Unset = UNSET
+    file_restore_portal_url: None | str | Unset = UNSET
     is_file_restore_portal_enabled: bool | Unset = UNSET
     is_restore_portal_access_enabled: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -93,11 +94,19 @@ class Vb365ProtectedObject:
 
         repository_name = self.repository_name
 
-        archive_repository_uid: str | Unset = UNSET
-        if not isinstance(self.archive_repository_uid, Unset):
+        archive_repository_uid: None | str | Unset
+        if isinstance(self.archive_repository_uid, Unset):
+            archive_repository_uid = UNSET
+        elif isinstance(self.archive_repository_uid, UUID):
             archive_repository_uid = str(self.archive_repository_uid)
+        else:
+            archive_repository_uid = self.archive_repository_uid
 
-        archive_repository_name = self.archive_repository_name
+        archive_repository_name: None | str | Unset
+        if isinstance(self.archive_repository_name, Unset):
+            archive_repository_name = UNSET
+        else:
+            archive_repository_name = self.archive_repository_name
 
         protected_data_type: str | Unset = UNSET
         if not isinstance(self.protected_data_type, Unset):
@@ -117,35 +126,79 @@ class Vb365ProtectedObject:
 
         vb_365_server_name = self.vb_365_server_name
 
-        organization_uid: str | Unset = UNSET
-        if not isinstance(self.organization_uid, Unset):
+        organization_uid: None | str | Unset
+        if isinstance(self.organization_uid, Unset):
+            organization_uid = UNSET
+        elif isinstance(self.organization_uid, UUID):
             organization_uid = str(self.organization_uid)
+        else:
+            organization_uid = self.organization_uid
 
-        organization_name = self.organization_name
+        organization_name: None | str | Unset
+        if isinstance(self.organization_name, Unset):
+            organization_name = UNSET
+        else:
+            organization_name = self.organization_name
 
-        vb_365_organization_uid: str | Unset = UNSET
-        if not isinstance(self.vb_365_organization_uid, Unset):
+        vb_365_organization_uid: None | str | Unset
+        if isinstance(self.vb_365_organization_uid, Unset):
+            vb_365_organization_uid = UNSET
+        elif isinstance(self.vb_365_organization_uid, UUID):
             vb_365_organization_uid = str(self.vb_365_organization_uid)
+        else:
+            vb_365_organization_uid = self.vb_365_organization_uid
 
-        vb_365_organization_name = self.vb_365_organization_name
+        vb_365_organization_name: None | str | Unset
+        if isinstance(self.vb_365_organization_name, Unset):
+            vb_365_organization_name = UNSET
+        else:
+            vb_365_organization_name = self.vb_365_organization_name
 
-        site_uid: str | Unset = UNSET
-        if not isinstance(self.site_uid, Unset):
+        site_uid: None | str | Unset
+        if isinstance(self.site_uid, Unset):
+            site_uid = UNSET
+        elif isinstance(self.site_uid, UUID):
             site_uid = str(self.site_uid)
+        else:
+            site_uid = self.site_uid
 
-        site_name = self.site_name
+        site_name: None | str | Unset
+        if isinstance(self.site_name, Unset):
+            site_name = UNSET
+        else:
+            site_name = self.site_name
 
-        location_uid: str | Unset = UNSET
-        if not isinstance(self.location_uid, Unset):
+        location_uid: None | str | Unset
+        if isinstance(self.location_uid, Unset):
+            location_uid = UNSET
+        elif isinstance(self.location_uid, UUID):
             location_uid = str(self.location_uid)
+        else:
+            location_uid = self.location_uid
 
-        location_name = self.location_name
+        location_name: None | str | Unset
+        if isinstance(self.location_name, Unset):
+            location_name = UNSET
+        else:
+            location_name = self.location_name
 
-        consumes_license = self.consumes_license
+        consumes_license: bool | None | Unset
+        if isinstance(self.consumes_license, Unset):
+            consumes_license = UNSET
+        else:
+            consumes_license = self.consumes_license
 
-        is_educational_user = self.is_educational_user
+        is_educational_user: bool | None | Unset
+        if isinstance(self.is_educational_user, Unset):
+            is_educational_user = UNSET
+        else:
+            is_educational_user = self.is_educational_user
 
-        file_restore_portal_url = self.file_restore_portal_url
+        file_restore_portal_url: None | str | Unset
+        if isinstance(self.file_restore_portal_url, Unset):
+            file_restore_portal_url = UNSET
+        else:
+            file_restore_portal_url = self.file_restore_portal_url
 
         is_file_restore_portal_enabled = self.is_file_restore_portal_enabled
 
@@ -223,14 +276,31 @@ class Vb365ProtectedObject:
 
         repository_name = d.pop("repositoryName", UNSET)
 
-        _archive_repository_uid = d.pop("archiveRepositoryUid", UNSET)
-        archive_repository_uid: UUID | Unset
-        if isinstance(_archive_repository_uid, Unset):
-            archive_repository_uid = UNSET
-        else:
-            archive_repository_uid = UUID(_archive_repository_uid)
+        def _parse_archive_repository_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                archive_repository_uid_type_0 = UUID(data)
 
-        archive_repository_name = d.pop("archiveRepositoryName", UNSET)
+                return archive_repository_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        archive_repository_uid = _parse_archive_repository_uid(d.pop("archiveRepositoryUid", UNSET))
+
+        def _parse_archive_repository_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        archive_repository_name = _parse_archive_repository_name(d.pop("archiveRepositoryName", UNSET))
 
         _protected_data_type = d.pop("protectedDataType", UNSET)
         protected_data_type: Vb365ProtectedObjectType | Unset
@@ -259,47 +329,136 @@ class Vb365ProtectedObject:
 
         vb_365_server_name = d.pop("vb365ServerName", UNSET)
 
-        _organization_uid = d.pop("organizationUid", UNSET)
-        organization_uid: UUID | Unset
-        if isinstance(_organization_uid, Unset):
-            organization_uid = UNSET
-        else:
-            organization_uid = UUID(_organization_uid)
+        def _parse_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                organization_uid_type_0 = UUID(data)
 
-        organization_name = d.pop("organizationName", UNSET)
+                return organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        _vb_365_organization_uid = d.pop("vb365OrganizationUid", UNSET)
-        vb_365_organization_uid: UUID | Unset
-        if isinstance(_vb_365_organization_uid, Unset):
-            vb_365_organization_uid = UNSET
-        else:
-            vb_365_organization_uid = UUID(_vb_365_organization_uid)
+        organization_uid = _parse_organization_uid(d.pop("organizationUid", UNSET))
 
-        vb_365_organization_name = d.pop("vb365OrganizationName", UNSET)
+        def _parse_organization_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _site_uid = d.pop("siteUid", UNSET)
-        site_uid: UUID | Unset
-        if isinstance(_site_uid, Unset):
-            site_uid = UNSET
-        else:
-            site_uid = UUID(_site_uid)
+        organization_name = _parse_organization_name(d.pop("organizationName", UNSET))
 
-        site_name = d.pop("siteName", UNSET)
+        def _parse_vb_365_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                vb_365_organization_uid_type_0 = UUID(data)
 
-        _location_uid = d.pop("locationUid", UNSET)
-        location_uid: UUID | Unset
-        if isinstance(_location_uid, Unset):
-            location_uid = UNSET
-        else:
-            location_uid = UUID(_location_uid)
+                return vb_365_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        location_name = d.pop("locationName", UNSET)
+        vb_365_organization_uid = _parse_vb_365_organization_uid(d.pop("vb365OrganizationUid", UNSET))
 
-        consumes_license = d.pop("consumesLicense", UNSET)
+        def _parse_vb_365_organization_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        is_educational_user = d.pop("isEducationalUser", UNSET)
+        vb_365_organization_name = _parse_vb_365_organization_name(d.pop("vb365OrganizationName", UNSET))
 
-        file_restore_portal_url = d.pop("fileRestorePortalUrl", UNSET)
+        def _parse_site_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                site_uid_type_0 = UUID(data)
+
+                return site_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        site_uid = _parse_site_uid(d.pop("siteUid", UNSET))
+
+        def _parse_site_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        site_name = _parse_site_name(d.pop("siteName", UNSET))
+
+        def _parse_location_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                location_uid_type_0 = UUID(data)
+
+                return location_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        location_uid = _parse_location_uid(d.pop("locationUid", UNSET))
+
+        def _parse_location_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        location_name = _parse_location_name(d.pop("locationName", UNSET))
+
+        def _parse_consumes_license(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        consumes_license = _parse_consumes_license(d.pop("consumesLicense", UNSET))
+
+        def _parse_is_educational_user(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        is_educational_user = _parse_is_educational_user(d.pop("isEducationalUser", UNSET))
+
+        def _parse_file_restore_portal_url(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        file_restore_portal_url = _parse_file_restore_portal_url(d.pop("fileRestorePortalUrl", UNSET))
 
         is_file_restore_portal_enabled = d.pop("isFileRestorePortalEnabled", UNSET)
 

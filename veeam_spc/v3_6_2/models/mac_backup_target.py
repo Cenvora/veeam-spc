@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,7 +22,7 @@ class MacBackupTarget:
     """
     Attributes:
         target_type (MacBackupTargetTargetType): Type of a target location for the created backup.
-        local_path (str | Unset): Path to the folder where backup files must be stored.
+        local_path (None | str | Unset): Path to the folder where backup files must be stored.
             > Required for the `LocalFolder` target location.
         shared_folder (MacSharedFolderTarget | Unset):
         backup_repository (MacBackupServerSettings | Unset):
@@ -33,7 +33,7 @@ class MacBackupTarget:
     """
 
     target_type: MacBackupTargetTargetType
-    local_path: str | Unset = UNSET
+    local_path: None | str | Unset = UNSET
     shared_folder: MacSharedFolderTarget | Unset = UNSET
     backup_repository: MacBackupServerSettings | Unset = UNSET
     enable_deleted_files_retention: bool | Unset = False
@@ -43,7 +43,11 @@ class MacBackupTarget:
     def to_dict(self) -> dict[str, Any]:
         target_type = self.target_type.value
 
-        local_path = self.local_path
+        local_path: None | str | Unset
+        if isinstance(self.local_path, Unset):
+            local_path = UNSET
+        else:
+            local_path = self.local_path
 
         shared_folder: dict[str, Any] | Unset = UNSET
         if not isinstance(self.shared_folder, Unset):
@@ -85,7 +89,14 @@ class MacBackupTarget:
         d = dict(src_dict)
         target_type = MacBackupTargetTargetType(d.pop("targetType"))
 
-        local_path = d.pop("localPath", UNSET)
+        def _parse_local_path(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        local_path = _parse_local_path(d.pop("localPath", UNSET))
 
         _shared_folder = d.pop("sharedFolder", UNSET)
         shared_folder: MacSharedFolderTarget | Unset

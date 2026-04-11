@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -29,10 +29,10 @@ class LocalUserRuleInput:
         scope (list[LocalUserRuleObject]): Array of services available to a user or group.
         type_ (LocalUserRuleTypeReadOnly): Type of a user or group.
         mfa_policy_status (LocalUserRuleMfaPolicyStatus): Status of MFA configuration requirement for a user or group.
-        description (str | Unset): Description of a user or group.
+        description (None | str | Unset): Description of a user or group.
         enabled (bool | Unset): Indicates whether a user or group is enabled. Default: True.
         role_type (LocalUserRuleRoleType | Unset): Role of a user or group users.
-        has_access_to_provider (bool | Unset):
+        has_access_to_provider (bool | None | Unset):
     """
 
     sid: str
@@ -41,10 +41,10 @@ class LocalUserRuleInput:
     scope: list[LocalUserRuleObject]
     type_: LocalUserRuleTypeReadOnly
     mfa_policy_status: LocalUserRuleMfaPolicyStatus
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     enabled: bool | Unset = True
     role_type: LocalUserRuleRoleType | Unset = UNSET
-    has_access_to_provider: bool | Unset = UNSET
+    has_access_to_provider: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -63,7 +63,11 @@ class LocalUserRuleInput:
 
         mfa_policy_status = self.mfa_policy_status.value
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         enabled = self.enabled
 
@@ -71,7 +75,11 @@ class LocalUserRuleInput:
         if not isinstance(self.role_type, Unset):
             role_type = self.role_type.value
 
-        has_access_to_provider = self.has_access_to_provider
+        has_access_to_provider: bool | None | Unset
+        if isinstance(self.has_access_to_provider, Unset):
+            has_access_to_provider = UNSET
+        else:
+            has_access_to_provider = self.has_access_to_provider
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -118,7 +126,14 @@ class LocalUserRuleInput:
 
         mfa_policy_status = LocalUserRuleMfaPolicyStatus(d.pop("mfaPolicyStatus"))
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         enabled = d.pop("enabled", UNSET)
 
@@ -129,7 +144,14 @@ class LocalUserRuleInput:
         else:
             role_type = LocalUserRuleRoleType(_role_type)
 
-        has_access_to_provider = d.pop("hasAccessToProvider", UNSET)
+        def _parse_has_access_to_provider(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        has_access_to_provider = _parse_has_access_to_provider(d.pop("hasAccessToProvider", UNSET))
 
         local_user_rule_input = cls(
             sid=sid,

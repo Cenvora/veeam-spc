@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,15 +22,15 @@ class TenantReplicationResourceInput:
         hardware_plans (list[TenantReplicationResourceHardwarePlan] | Unset): Array of hardware plans.
         is_failover_capabilities_enabled (bool | Unset): Indicates whether performing failover is available to a
             company. Default: False.
-        is_public_allocation_enabled (bool | Unset): Indicates whether public IP addresses are allocated to a company.
-            Default: False.
-        number_of_public_ips (int | Unset): Number of allocated public IP addresses. Default: 0.
+        is_public_allocation_enabled (bool | None | Unset): Indicates whether public IP addresses are allocated to a
+            company. Default: False.
+        number_of_public_ips (int | None | Unset): Number of allocated public IP addresses. Default: 0.
     """
 
     hardware_plans: list[TenantReplicationResourceHardwarePlan] | Unset = UNSET
     is_failover_capabilities_enabled: bool | Unset = False
-    is_public_allocation_enabled: bool | Unset = False
-    number_of_public_ips: int | Unset = 0
+    is_public_allocation_enabled: bool | None | Unset = False
+    number_of_public_ips: int | None | Unset = 0
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -43,9 +43,17 @@ class TenantReplicationResourceInput:
 
         is_failover_capabilities_enabled = self.is_failover_capabilities_enabled
 
-        is_public_allocation_enabled = self.is_public_allocation_enabled
+        is_public_allocation_enabled: bool | None | Unset
+        if isinstance(self.is_public_allocation_enabled, Unset):
+            is_public_allocation_enabled = UNSET
+        else:
+            is_public_allocation_enabled = self.is_public_allocation_enabled
 
-        number_of_public_ips = self.number_of_public_ips
+        number_of_public_ips: int | None | Unset
+        if isinstance(self.number_of_public_ips, Unset):
+            number_of_public_ips = UNSET
+        else:
+            number_of_public_ips = self.number_of_public_ips
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -77,9 +85,23 @@ class TenantReplicationResourceInput:
 
         is_failover_capabilities_enabled = d.pop("isFailoverCapabilitiesEnabled", UNSET)
 
-        is_public_allocation_enabled = d.pop("isPublicAllocationEnabled", UNSET)
+        def _parse_is_public_allocation_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        number_of_public_ips = d.pop("numberOfPublicIps", UNSET)
+        is_public_allocation_enabled = _parse_is_public_allocation_enabled(d.pop("isPublicAllocationEnabled", UNSET))
+
+        def _parse_number_of_public_ips(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        number_of_public_ips = _parse_number_of_public_ips(d.pop("numberOfPublicIps", UNSET))
 
         tenant_replication_resource_input = cls(
             hardware_plans=hardware_plans,

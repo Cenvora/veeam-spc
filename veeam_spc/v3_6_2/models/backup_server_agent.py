@@ -20,33 +20,33 @@ T = TypeVar("T", bound="BackupServerAgent")
 class BackupServerAgent:
     """
     Attributes:
-        instance_uid (UUID | Unset): UID assigned to a Veeam backup agent.
-        name (str | Unset): Name of a Veeam backup agent.
-        machine_name (str | Unset): DNS name of a machine on which a Veeam backup agent is installed.
-        guest_os (str | Unset): Operating system installed on a computer.
-        version (str | Unset): Version of a Veeam backup agent.
-        bios_uid (UUID | Unset): UUID in Win32_ComputerSystem WMI class.
-        ip_addresses (list[str] | Unset): Computer IP addresses.
-        protection_groups (list[UUID] | Unset): Protection group UIDs.
+        instance_uid (None | Unset | UUID): UID assigned to a Veeam backup agent.
+        name (None | str | Unset): Name of a Veeam backup agent.
+        machine_name (None | str | Unset): DNS name of a machine on which a Veeam backup agent is installed.
+        guest_os (None | str | Unset): Operating system installed on a computer.
+        version (None | str | Unset): Version of a Veeam backup agent.
+        bios_uid (None | Unset | UUID): UUID in Win32_ComputerSystem WMI class.
+        ip_addresses (list[str] | None | Unset): Computer IP addresses.
+        protection_groups (list[UUID] | None | Unset): Protection group UIDs.
         backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server that manages a Veeam
             backup agent.
-        is_unmanaged (bool | Unset): Indicates whether a Veeam backup agent is unmanaged.
+        is_unmanaged (bool | None | Unset): Indicates whether a Veeam backup agent is unmanaged.
         installation_status (BackupServerAgentInstallationStatus | Unset): Status of Veeam backup agent installation.
         license_ (BackupServerAgentLicense | Unset): Type of a Veeam backup agent license.
         license_status (BackupServerAgentLicenseStatus | Unset): Status of a Veeam backup agent license.
         os_type (BackupServerAgentOsType | Unset): Type of a Veeam backup agent operating system.
     """
 
-    instance_uid: UUID | Unset = UNSET
-    name: str | Unset = UNSET
-    machine_name: str | Unset = UNSET
-    guest_os: str | Unset = UNSET
-    version: str | Unset = UNSET
-    bios_uid: UUID | Unset = UNSET
-    ip_addresses: list[str] | Unset = UNSET
-    protection_groups: list[UUID] | Unset = UNSET
+    instance_uid: None | Unset | UUID = UNSET
+    name: None | str | Unset = UNSET
+    machine_name: None | str | Unset = UNSET
+    guest_os: None | str | Unset = UNSET
+    version: None | str | Unset = UNSET
+    bios_uid: None | Unset | UUID = UNSET
+    ip_addresses: list[str] | None | Unset = UNSET
+    protection_groups: list[UUID] | None | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
-    is_unmanaged: bool | Unset = UNSET
+    is_unmanaged: bool | None | Unset = UNSET
     installation_status: BackupServerAgentInstallationStatus | Unset = UNSET
     license_: BackupServerAgentLicense | Unset = UNSET
     license_status: BackupServerAgentLicenseStatus | Unset = UNSET
@@ -54,38 +54,76 @@ class BackupServerAgent:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        instance_uid: str | Unset = UNSET
-        if not isinstance(self.instance_uid, Unset):
+        instance_uid: None | str | Unset
+        if isinstance(self.instance_uid, Unset):
+            instance_uid = UNSET
+        elif isinstance(self.instance_uid, UUID):
             instance_uid = str(self.instance_uid)
+        else:
+            instance_uid = self.instance_uid
 
-        name = self.name
+        name: None | str | Unset
+        if isinstance(self.name, Unset):
+            name = UNSET
+        else:
+            name = self.name
 
-        machine_name = self.machine_name
+        machine_name: None | str | Unset
+        if isinstance(self.machine_name, Unset):
+            machine_name = UNSET
+        else:
+            machine_name = self.machine_name
 
-        guest_os = self.guest_os
+        guest_os: None | str | Unset
+        if isinstance(self.guest_os, Unset):
+            guest_os = UNSET
+        else:
+            guest_os = self.guest_os
 
-        version = self.version
+        version: None | str | Unset
+        if isinstance(self.version, Unset):
+            version = UNSET
+        else:
+            version = self.version
 
-        bios_uid: str | Unset = UNSET
-        if not isinstance(self.bios_uid, Unset):
+        bios_uid: None | str | Unset
+        if isinstance(self.bios_uid, Unset):
+            bios_uid = UNSET
+        elif isinstance(self.bios_uid, UUID):
             bios_uid = str(self.bios_uid)
+        else:
+            bios_uid = self.bios_uid
 
-        ip_addresses: list[str] | Unset = UNSET
-        if not isinstance(self.ip_addresses, Unset):
+        ip_addresses: list[str] | None | Unset
+        if isinstance(self.ip_addresses, Unset):
+            ip_addresses = UNSET
+        elif isinstance(self.ip_addresses, list):
             ip_addresses = self.ip_addresses
 
-        protection_groups: list[str] | Unset = UNSET
-        if not isinstance(self.protection_groups, Unset):
+        else:
+            ip_addresses = self.ip_addresses
+
+        protection_groups: list[str] | None | Unset
+        if isinstance(self.protection_groups, Unset):
+            protection_groups = UNSET
+        elif isinstance(self.protection_groups, list):
             protection_groups = []
-            for protection_groups_item_data in self.protection_groups:
-                protection_groups_item = str(protection_groups_item_data)
-                protection_groups.append(protection_groups_item)
+            for protection_groups_type_0_item_data in self.protection_groups:
+                protection_groups_type_0_item = str(protection_groups_type_0_item_data)
+                protection_groups.append(protection_groups_type_0_item)
+
+        else:
+            protection_groups = self.protection_groups
 
         backup_server_uid: str | Unset = UNSET
         if not isinstance(self.backup_server_uid, Unset):
             backup_server_uid = str(self.backup_server_uid)
 
-        is_unmanaged = self.is_unmanaged
+        is_unmanaged: bool | None | Unset
+        if isinstance(self.is_unmanaged, Unset):
+            is_unmanaged = UNSET
+        else:
+            is_unmanaged = self.is_unmanaged
 
         installation_status: str | Unset = UNSET
         if not isinstance(self.installation_status, Unset):
@@ -140,38 +178,115 @@ class BackupServerAgent:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        _instance_uid = d.pop("instanceUid", UNSET)
-        instance_uid: UUID | Unset
-        if isinstance(_instance_uid, Unset):
-            instance_uid = UNSET
-        else:
-            instance_uid = UUID(_instance_uid)
 
-        name = d.pop("name", UNSET)
+        def _parse_instance_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                instance_uid_type_0 = UUID(data)
 
-        machine_name = d.pop("machineName", UNSET)
+                return instance_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        guest_os = d.pop("guestOs", UNSET)
+        instance_uid = _parse_instance_uid(d.pop("instanceUid", UNSET))
 
-        version = d.pop("version", UNSET)
+        def _parse_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _bios_uid = d.pop("biosUid", UNSET)
-        bios_uid: UUID | Unset
-        if isinstance(_bios_uid, Unset):
-            bios_uid = UNSET
-        else:
-            bios_uid = UUID(_bios_uid)
+        name = _parse_name(d.pop("name", UNSET))
 
-        ip_addresses = cast(list[str], d.pop("ipAddresses", UNSET))
+        def _parse_machine_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _protection_groups = d.pop("protectionGroups", UNSET)
-        protection_groups: list[UUID] | Unset = UNSET
-        if _protection_groups is not UNSET:
-            protection_groups = []
-            for protection_groups_item_data in _protection_groups:
-                protection_groups_item = UUID(protection_groups_item_data)
+        machine_name = _parse_machine_name(d.pop("machineName", UNSET))
 
-                protection_groups.append(protection_groups_item)
+        def _parse_guest_os(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        guest_os = _parse_guest_os(d.pop("guestOs", UNSET))
+
+        def _parse_version(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        version = _parse_version(d.pop("version", UNSET))
+
+        def _parse_bios_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                bios_uid_type_0 = UUID(data)
+
+                return bios_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        bios_uid = _parse_bios_uid(d.pop("biosUid", UNSET))
+
+        def _parse_ip_addresses(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                ip_addresses_type_0 = cast(list[str], data)
+
+                return ip_addresses_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        ip_addresses = _parse_ip_addresses(d.pop("ipAddresses", UNSET))
+
+        def _parse_protection_groups(data: object) -> list[UUID] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                protection_groups_type_0 = []
+                _protection_groups_type_0 = data
+                for protection_groups_type_0_item_data in _protection_groups_type_0:
+                    protection_groups_type_0_item = UUID(protection_groups_type_0_item_data)
+
+                    protection_groups_type_0.append(protection_groups_type_0_item)
+
+                return protection_groups_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[UUID] | None | Unset, data)
+
+        protection_groups = _parse_protection_groups(d.pop("protectionGroups", UNSET))
 
         _backup_server_uid = d.pop("backupServerUid", UNSET)
         backup_server_uid: UUID | Unset
@@ -180,7 +295,14 @@ class BackupServerAgent:
         else:
             backup_server_uid = UUID(_backup_server_uid)
 
-        is_unmanaged = d.pop("isUnmanaged", UNSET)
+        def _parse_is_unmanaged(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        is_unmanaged = _parse_is_unmanaged(d.pop("isUnmanaged", UNSET))
 
         _installation_status = d.pop("installationStatus", UNSET)
         installation_status: BackupServerAgentInstallationStatus | Unset

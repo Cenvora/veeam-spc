@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -18,17 +18,17 @@ class OAuth2ClientSettings:
     Attributes:
         kind (OAuth2ClientSettingsKind): Type of OAuth 2.0 identity provider.
         client_id (str): ID assigned to a client.
-        client_secret (str | Unset): Client secret.
-        scope (str | Unset): Access token scope.
+        client_secret (None | str | Unset): Client secret.
+        scope (None | str | Unset): Access token scope.
             > Leave empty to use default scope.
-        tenant_id (str | Unset): Tenant ID for Azure OAuth 2.0 service provider.
+        tenant_id (None | str | Unset): Tenant ID for Azure OAuth 2.0 service provider.
     """
 
     kind: OAuth2ClientSettingsKind
     client_id: str
-    client_secret: str | Unset = UNSET
-    scope: str | Unset = UNSET
-    tenant_id: str | Unset = UNSET
+    client_secret: None | str | Unset = UNSET
+    scope: None | str | Unset = UNSET
+    tenant_id: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,11 +36,23 @@ class OAuth2ClientSettings:
 
         client_id = self.client_id
 
-        client_secret = self.client_secret
+        client_secret: None | str | Unset
+        if isinstance(self.client_secret, Unset):
+            client_secret = UNSET
+        else:
+            client_secret = self.client_secret
 
-        scope = self.scope
+        scope: None | str | Unset
+        if isinstance(self.scope, Unset):
+            scope = UNSET
+        else:
+            scope = self.scope
 
-        tenant_id = self.tenant_id
+        tenant_id: None | str | Unset
+        if isinstance(self.tenant_id, Unset):
+            tenant_id = UNSET
+        else:
+            tenant_id = self.tenant_id
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -66,11 +78,32 @@ class OAuth2ClientSettings:
 
         client_id = d.pop("clientId")
 
-        client_secret = d.pop("clientSecret", UNSET)
+        def _parse_client_secret(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        scope = d.pop("scope", UNSET)
+        client_secret = _parse_client_secret(d.pop("clientSecret", UNSET))
 
-        tenant_id = d.pop("tenantId", UNSET)
+        def _parse_scope(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        scope = _parse_scope(d.pop("scope", UNSET))
+
+        def _parse_tenant_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        tenant_id = _parse_tenant_id(d.pop("tenantId", UNSET))
 
         o_auth_2_client_settings = cls(
             kind=kind,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,19 +19,24 @@ T = TypeVar("T", bound="BackupServerJobScheduleOptionsBackupWindow")
 class BackupServerJobScheduleOptionsBackupWindow:
     """
     Attributes:
-        time_periods (list[BackupServerJobTimePeriod] | Unset): Array of the backup window periods.
+        time_periods (list[BackupServerJobTimePeriod] | None | Unset): Array of the backup window periods.
     """
 
-    time_periods: list[BackupServerJobTimePeriod] | Unset = UNSET
+    time_periods: list[BackupServerJobTimePeriod] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        time_periods: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.time_periods, Unset):
+        time_periods: list[dict[str, Any]] | None | Unset
+        if isinstance(self.time_periods, Unset):
+            time_periods = UNSET
+        elif isinstance(self.time_periods, list):
             time_periods = []
-            for time_periods_item_data in self.time_periods:
-                time_periods_item = time_periods_item_data.to_dict()
-                time_periods.append(time_periods_item)
+            for time_periods_type_0_item_data in self.time_periods:
+                time_periods_type_0_item = time_periods_type_0_item_data.to_dict()
+                time_periods.append(time_periods_type_0_item)
+
+        else:
+            time_periods = self.time_periods
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -46,14 +51,28 @@ class BackupServerJobScheduleOptionsBackupWindow:
         from ..models.backup_server_job_time_period import BackupServerJobTimePeriod
 
         d = dict(src_dict)
-        _time_periods = d.pop("timePeriods", UNSET)
-        time_periods: list[BackupServerJobTimePeriod] | Unset = UNSET
-        if _time_periods is not UNSET:
-            time_periods = []
-            for time_periods_item_data in _time_periods:
-                time_periods_item = BackupServerJobTimePeriod.from_dict(time_periods_item_data)
 
-                time_periods.append(time_periods_item)
+        def _parse_time_periods(data: object) -> list[BackupServerJobTimePeriod] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                time_periods_type_0 = []
+                _time_periods_type_0 = data
+                for time_periods_type_0_item_data in _time_periods_type_0:
+                    time_periods_type_0_item = BackupServerJobTimePeriod.from_dict(time_periods_type_0_item_data)
+
+                    time_periods_type_0.append(time_periods_type_0_item)
+
+                return time_periods_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[BackupServerJobTimePeriod] | None | Unset, data)
+
+        time_periods = _parse_time_periods(d.pop("timePeriods", UNSET))
 
         backup_server_job_schedule_options_backup_window = cls(
             time_periods=time_periods,

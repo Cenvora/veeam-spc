@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -25,7 +25,7 @@ class WindowsBackupPolicyInput:
         operation_mode (BackupJobOperationMode): Backup job operation mode.
         access_mode (BackupPolicyAccessMode): Backup policy access mode.
         job_configuration (WindowsBackupJobConfiguration):
-        description (str | Unset): Backup policy description.
+        description (None | str | Unset): Backup policy description.
         create_subtenants (bool | Unset): Defines whether a subtenant must be created for each Veeam Agent for Microsoft
             Windows.
             > Available if a cloud repository is selected as backup destination.
@@ -38,7 +38,7 @@ class WindowsBackupPolicyInput:
             repository.
             > Available if a cloud repository is selected as backup destination.
              Default: False.
-        repository_quota_gb (int | Unset): Maximum amount of space that a subtenant can consume on a repository.
+        repository_quota_gb (int | None | Unset): Maximum amount of space that a subtenant can consume on a repository.
             > If a subtenant can consume unlimited amount of space, the value of this property is ignored. <br>
             > Available if a cloud repository is selected as backup destination.
              Default: 100.
@@ -48,11 +48,11 @@ class WindowsBackupPolicyInput:
     operation_mode: BackupJobOperationMode
     access_mode: BackupPolicyAccessMode
     job_configuration: WindowsBackupJobConfiguration
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     create_subtenants: bool | Unset = True
     create_sub_folders: bool | Unset = False
     unlimited_subtenant_quota: bool | Unset = False
-    repository_quota_gb: int | Unset = 100
+    repository_quota_gb: int | None | Unset = 100
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -64,7 +64,11 @@ class WindowsBackupPolicyInput:
 
         job_configuration = self.job_configuration.to_dict()
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         create_subtenants = self.create_subtenants
 
@@ -72,7 +76,11 @@ class WindowsBackupPolicyInput:
 
         unlimited_subtenant_quota = self.unlimited_subtenant_quota
 
-        repository_quota_gb = self.repository_quota_gb
+        repository_quota_gb: int | None | Unset
+        if isinstance(self.repository_quota_gb, Unset):
+            repository_quota_gb = UNSET
+        else:
+            repository_quota_gb = self.repository_quota_gb
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -110,7 +118,14 @@ class WindowsBackupPolicyInput:
 
         job_configuration = WindowsBackupJobConfiguration.from_dict(d.pop("jobConfiguration"))
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         create_subtenants = d.pop("createSubtenants", UNSET)
 
@@ -118,7 +133,14 @@ class WindowsBackupPolicyInput:
 
         unlimited_subtenant_quota = d.pop("unlimitedSubtenantQuota", UNSET)
 
-        repository_quota_gb = d.pop("repositoryQuotaGb", UNSET)
+        def _parse_repository_quota_gb(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        repository_quota_gb = _parse_repository_quota_gb(d.pop("repositoryQuotaGb", UNSET))
 
         windows_backup_policy_input = cls(
             name=name,

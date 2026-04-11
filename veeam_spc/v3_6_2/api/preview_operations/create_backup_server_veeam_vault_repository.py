@@ -18,9 +18,9 @@ def _get_kwargs(
     backup_server_uid: UUID,
     *,
     body: BackupServerVeeamVaultRepository,
-    overwrite_owner: bool | Unset = UNSET,
-    import_backup: bool | Unset = False,
-    import_index: bool | Unset = False,
+    overwrite_owner: bool | None | Unset = UNSET,
+    import_backup: bool | None | Unset = False,
+    import_index: bool | None | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -33,11 +33,26 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    params["overwriteOwner"] = overwrite_owner
+    json_overwrite_owner: bool | None | Unset
+    if isinstance(overwrite_owner, Unset):
+        json_overwrite_owner = UNSET
+    else:
+        json_overwrite_owner = overwrite_owner
+    params["overwriteOwner"] = json_overwrite_owner
 
-    params["importBackup"] = import_backup
+    json_import_backup: bool | None | Unset
+    if isinstance(import_backup, Unset):
+        json_import_backup = UNSET
+    else:
+        json_import_backup = import_backup
+    params["importBackup"] = json_import_backup
 
-    params["importIndex"] = import_index
+    json_import_index: bool | None | Unset
+    if isinstance(import_index, Unset):
+        json_import_index = UNSET
+    else:
+        json_import_index = import_index
+    params["importIndex"] = json_import_index
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -90,9 +105,9 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: BackupServerVeeamVaultRepository,
-    overwrite_owner: bool | Unset = UNSET,
-    import_backup: bool | Unset = False,
-    import_index: bool | Unset = False,
+    overwrite_owner: bool | None | Unset = UNSET,
+    import_backup: bool | None | Unset = False,
+    import_index: bool | None | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | CreateBackupServerVeeamVaultRepositoryResponse200 | ErrorResponse]:
@@ -103,11 +118,11 @@ def sync_detailed(
 
     Args:
         backup_server_uid (UUID):
-        overwrite_owner (bool | Unset):
-        import_backup (bool | Unset): Defines whether Veeam Backup & Replication will search the
-            repository for existing backups and import them automatically. Default: False.
-        import_index (bool | Unset): Defines whether Veeam Backup & Replication will import the
-            guest OS file system index. Default: False.
+        overwrite_owner (bool | None | Unset):
+        import_backup (bool | None | Unset): Defines whether Veeam Backup & Replication will
+            search the repository for existing backups and import them automatically. Default: False.
+        import_index (bool | None | Unset): Defines whether Veeam Backup & Replication will import
+            the guest OS file system index. Default: False.
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerVeeamVaultRepository):
@@ -142,9 +157,9 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: BackupServerVeeamVaultRepository,
-    overwrite_owner: bool | Unset = UNSET,
-    import_backup: bool | Unset = False,
-    import_index: bool | Unset = False,
+    overwrite_owner: bool | None | Unset = UNSET,
+    import_backup: bool | None | Unset = False,
+    import_index: bool | None | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | CreateBackupServerVeeamVaultRepositoryResponse200 | ErrorResponse | None:
@@ -155,11 +170,11 @@ def sync(
 
     Args:
         backup_server_uid (UUID):
-        overwrite_owner (bool | Unset):
-        import_backup (bool | Unset): Defines whether Veeam Backup & Replication will search the
-            repository for existing backups and import them automatically. Default: False.
-        import_index (bool | Unset): Defines whether Veeam Backup & Replication will import the
-            guest OS file system index. Default: False.
+        overwrite_owner (bool | None | Unset):
+        import_backup (bool | None | Unset): Defines whether Veeam Backup & Replication will
+            search the repository for existing backups and import them automatically. Default: False.
+        import_index (bool | None | Unset): Defines whether Veeam Backup & Replication will import
+            the guest OS file system index. Default: False.
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerVeeamVaultRepository):
@@ -189,9 +204,9 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: BackupServerVeeamVaultRepository,
-    overwrite_owner: bool | Unset = UNSET,
-    import_backup: bool | Unset = False,
-    import_index: bool | Unset = False,
+    overwrite_owner: bool | None | Unset = UNSET,
+    import_backup: bool | None | Unset = False,
+    import_index: bool | None | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | CreateBackupServerVeeamVaultRepositoryResponse200 | ErrorResponse]:
@@ -202,11 +217,11 @@ async def asyncio_detailed(
 
     Args:
         backup_server_uid (UUID):
-        overwrite_owner (bool | Unset):
-        import_backup (bool | Unset): Defines whether Veeam Backup & Replication will search the
-            repository for existing backups and import them automatically. Default: False.
-        import_index (bool | Unset): Defines whether Veeam Backup & Replication will import the
-            guest OS file system index. Default: False.
+        overwrite_owner (bool | None | Unset):
+        import_backup (bool | None | Unset): Defines whether Veeam Backup & Replication will
+            search the repository for existing backups and import them automatically. Default: False.
+        import_index (bool | None | Unset): Defines whether Veeam Backup & Replication will import
+            the guest OS file system index. Default: False.
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerVeeamVaultRepository):
@@ -239,9 +254,9 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: BackupServerVeeamVaultRepository,
-    overwrite_owner: bool | Unset = UNSET,
-    import_backup: bool | Unset = False,
-    import_index: bool | Unset = False,
+    overwrite_owner: bool | None | Unset = UNSET,
+    import_backup: bool | None | Unset = False,
+    import_index: bool | None | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | CreateBackupServerVeeamVaultRepositoryResponse200 | ErrorResponse | None:
@@ -252,11 +267,11 @@ async def asyncio(
 
     Args:
         backup_server_uid (UUID):
-        overwrite_owner (bool | Unset):
-        import_backup (bool | Unset): Defines whether Veeam Backup & Replication will search the
-            repository for existing backups and import them automatically. Default: False.
-        import_index (bool | Unset): Defines whether Veeam Backup & Replication will import the
-            guest OS file system index. Default: False.
+        overwrite_owner (bool | None | Unset):
+        import_backup (bool | None | Unset): Defines whether Veeam Backup & Replication will
+            search the repository for existing backups and import them automatically. Default: False.
+        import_index (bool | None | Unset): Defines whether Veeam Backup & Replication will import
+            the guest OS file system index. Default: False.
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerVeeamVaultRepository):

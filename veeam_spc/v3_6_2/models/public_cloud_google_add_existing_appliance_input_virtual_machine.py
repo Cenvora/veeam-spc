@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,17 +16,22 @@ class PublicCloudGoogleAddExistingApplianceInputVirtualMachine:
     """
     Attributes:
         virtual_machine_id (str): ID assigned to a VM on which Veeam Backup for Google Cloud appliance is deployed.
-        description (str | Unset): Description of a VM on which Veeam Backup for Google Cloud appliance is deployed.
+        description (None | str | Unset): Description of a VM on which Veeam Backup for Google Cloud appliance is
+            deployed.
     """
 
     virtual_machine_id: str
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         virtual_machine_id = self.virtual_machine_id
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -45,7 +50,14 @@ class PublicCloudGoogleAddExistingApplianceInputVirtualMachine:
         d = dict(src_dict)
         virtual_machine_id = d.pop("virtualMachineId")
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         public_cloud_google_add_existing_appliance_input_virtual_machine = cls(
             virtual_machine_id=virtual_machine_id,

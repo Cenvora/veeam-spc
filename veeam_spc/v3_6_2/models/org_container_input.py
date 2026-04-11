@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -17,32 +17,42 @@ class OrgContainerInput:
     """
     Attributes:
         name (str): Name of a container.
-        children_organizations (list[UUID] | Unset): Array of UIDs assigned to organizations that must be included in a
-            container.
-        children_containers (list[UUID] | Unset): Array of UIDs assigned to child organization containers.
+        children_organizations (list[UUID] | None | Unset): Array of UIDs assigned to organizations that must be
+            included in a container.
+        children_containers (list[UUID] | None | Unset): Array of UIDs assigned to child organization containers.
     """
 
     name: str
-    children_organizations: list[UUID] | Unset = UNSET
-    children_containers: list[UUID] | Unset = UNSET
+    children_organizations: list[UUID] | None | Unset = UNSET
+    children_containers: list[UUID] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         name = self.name
 
-        children_organizations: list[str] | Unset = UNSET
-        if not isinstance(self.children_organizations, Unset):
+        children_organizations: list[str] | None | Unset
+        if isinstance(self.children_organizations, Unset):
+            children_organizations = UNSET
+        elif isinstance(self.children_organizations, list):
             children_organizations = []
-            for children_organizations_item_data in self.children_organizations:
-                children_organizations_item = str(children_organizations_item_data)
-                children_organizations.append(children_organizations_item)
+            for children_organizations_type_0_item_data in self.children_organizations:
+                children_organizations_type_0_item = str(children_organizations_type_0_item_data)
+                children_organizations.append(children_organizations_type_0_item)
 
-        children_containers: list[str] | Unset = UNSET
-        if not isinstance(self.children_containers, Unset):
+        else:
+            children_organizations = self.children_organizations
+
+        children_containers: list[str] | None | Unset
+        if isinstance(self.children_containers, Unset):
+            children_containers = UNSET
+        elif isinstance(self.children_containers, list):
             children_containers = []
-            for children_containers_item_data in self.children_containers:
-                children_containers_item = str(children_containers_item_data)
-                children_containers.append(children_containers_item)
+            for children_containers_type_0_item_data in self.children_containers:
+                children_containers_type_0_item = str(children_containers_type_0_item_data)
+                children_containers.append(children_containers_type_0_item)
+
+        else:
+            children_containers = self.children_containers
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -63,23 +73,49 @@ class OrgContainerInput:
         d = dict(src_dict)
         name = d.pop("name")
 
-        _children_organizations = d.pop("childrenOrganizations", UNSET)
-        children_organizations: list[UUID] | Unset = UNSET
-        if _children_organizations is not UNSET:
-            children_organizations = []
-            for children_organizations_item_data in _children_organizations:
-                children_organizations_item = UUID(children_organizations_item_data)
+        def _parse_children_organizations(data: object) -> list[UUID] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                children_organizations_type_0 = []
+                _children_organizations_type_0 = data
+                for children_organizations_type_0_item_data in _children_organizations_type_0:
+                    children_organizations_type_0_item = UUID(children_organizations_type_0_item_data)
 
-                children_organizations.append(children_organizations_item)
+                    children_organizations_type_0.append(children_organizations_type_0_item)
 
-        _children_containers = d.pop("childrenContainers", UNSET)
-        children_containers: list[UUID] | Unset = UNSET
-        if _children_containers is not UNSET:
-            children_containers = []
-            for children_containers_item_data in _children_containers:
-                children_containers_item = UUID(children_containers_item_data)
+                return children_organizations_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[UUID] | None | Unset, data)
 
-                children_containers.append(children_containers_item)
+        children_organizations = _parse_children_organizations(d.pop("childrenOrganizations", UNSET))
+
+        def _parse_children_containers(data: object) -> list[UUID] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                children_containers_type_0 = []
+                _children_containers_type_0 = data
+                for children_containers_type_0_item_data in _children_containers_type_0:
+                    children_containers_type_0_item = UUID(children_containers_type_0_item_data)
+
+                    children_containers_type_0.append(children_containers_type_0_item)
+
+                return children_containers_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[UUID] | None | Unset, data)
+
+        children_containers = _parse_children_containers(d.pop("childrenContainers", UNSET))
 
         org_container_input = cls(
             name=name,

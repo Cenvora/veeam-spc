@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,48 +19,48 @@ class Organization:
     Attributes:
         name (str): Name of an organization.
         instance_uid (UUID | Unset): UID assigned to an organization.
-        alias (str | Unset): Alias of an organization.
+        alias (None | str | Unset): Alias of an organization.
         type_ (OrganizationType | Unset): Type of an organization.
-        tax_id (str | Unset): Organization Tax ID.
-        email (str | Unset): Contact email address.
-        phone (str | Unset): Telephone number of a primary contact of an organization.
-        country (int | Unset): System ID assigned to an organization country of residence.
-        state (int | Unset): System ID assigned to a USA state where an organization is located.
-        country_name (str | Unset): Country name.
-        region_name (str | Unset): Region name.
-        city (str | Unset): City where an organization is located.
-        street (str | Unset): Street where an organization is located.
-        location_admin_0_code (str | Unset): Code of a country where an organization is located.
-        location_admin_1_code (str | Unset): Code of a state, region or area where an organization is located.
-        location_admin_2_code (str | Unset): Code of a district or municipality where an organization is located.
-        notes (str | Unset): Additional information about an organization.
-        zip_code (str | Unset): Postal code.
-        website (str | Unset): Organization website.
-        veeam_tenant_id (str | Unset): ID of an organization used in Veeam records.
-        company_id (str | Unset): ID of an organization used for 3rd party applications.
+        tax_id (None | str | Unset): Organization Tax ID.
+        email (None | str | Unset): Contact email address.
+        phone (None | str | Unset): Telephone number of a primary contact of an organization.
+        country (int | None | Unset): System ID assigned to an organization country of residence.
+        state (int | None | Unset): System ID assigned to a USA state where an organization is located.
+        country_name (None | str | Unset): Country name.
+        region_name (None | str | Unset): Region name.
+        city (None | str | Unset): City where an organization is located.
+        street (None | str | Unset): Street where an organization is located.
+        location_admin_0_code (None | str | Unset): Code of a country where an organization is located.
+        location_admin_1_code (None | str | Unset): Code of a state, region or area where an organization is located.
+        location_admin_2_code (None | str | Unset): Code of a district or municipality where an organization is located.
+        notes (None | str | Unset): Additional information about an organization.
+        zip_code (None | str | Unset): Postal code.
+        website (None | str | Unset): Organization website.
+        veeam_tenant_id (None | str | Unset): ID of an organization used in Veeam records.
+        company_id (None | str | Unset): ID of an organization used for 3rd party applications.
     """
 
     name: str
     instance_uid: UUID | Unset = UNSET
-    alias: str | Unset = UNSET
+    alias: None | str | Unset = UNSET
     type_: OrganizationType | Unset = UNSET
-    tax_id: str | Unset = UNSET
-    email: str | Unset = UNSET
-    phone: str | Unset = UNSET
-    country: int | Unset = UNSET
-    state: int | Unset = UNSET
-    country_name: str | Unset = UNSET
-    region_name: str | Unset = UNSET
-    city: str | Unset = UNSET
-    street: str | Unset = UNSET
-    location_admin_0_code: str | Unset = UNSET
-    location_admin_1_code: str | Unset = UNSET
-    location_admin_2_code: str | Unset = UNSET
-    notes: str | Unset = UNSET
-    zip_code: str | Unset = UNSET
-    website: str | Unset = UNSET
-    veeam_tenant_id: str | Unset = UNSET
-    company_id: str | Unset = UNSET
+    tax_id: None | str | Unset = UNSET
+    email: None | str | Unset = UNSET
+    phone: None | str | Unset = UNSET
+    country: int | None | Unset = UNSET
+    state: int | None | Unset = UNSET
+    country_name: None | str | Unset = UNSET
+    region_name: None | str | Unset = UNSET
+    city: None | str | Unset = UNSET
+    street: None | str | Unset = UNSET
+    location_admin_0_code: None | str | Unset = UNSET
+    location_admin_1_code: None | str | Unset = UNSET
+    location_admin_2_code: None | str | Unset = UNSET
+    notes: None | str | Unset = UNSET
+    zip_code: None | str | Unset = UNSET
+    website: None | str | Unset = UNSET
+    veeam_tenant_id: None | str | Unset = UNSET
+    company_id: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -70,45 +70,117 @@ class Organization:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        alias = self.alias
+        alias: None | str | Unset
+        if isinstance(self.alias, Unset):
+            alias = UNSET
+        else:
+            alias = self.alias
 
         type_: str | Unset = UNSET
         if not isinstance(self.type_, Unset):
             type_ = self.type_.value
 
-        tax_id = self.tax_id
+        tax_id: None | str | Unset
+        if isinstance(self.tax_id, Unset):
+            tax_id = UNSET
+        else:
+            tax_id = self.tax_id
 
-        email = self.email
+        email: None | str | Unset
+        if isinstance(self.email, Unset):
+            email = UNSET
+        else:
+            email = self.email
 
-        phone = self.phone
+        phone: None | str | Unset
+        if isinstance(self.phone, Unset):
+            phone = UNSET
+        else:
+            phone = self.phone
 
-        country = self.country
+        country: int | None | Unset
+        if isinstance(self.country, Unset):
+            country = UNSET
+        else:
+            country = self.country
 
-        state = self.state
+        state: int | None | Unset
+        if isinstance(self.state, Unset):
+            state = UNSET
+        else:
+            state = self.state
 
-        country_name = self.country_name
+        country_name: None | str | Unset
+        if isinstance(self.country_name, Unset):
+            country_name = UNSET
+        else:
+            country_name = self.country_name
 
-        region_name = self.region_name
+        region_name: None | str | Unset
+        if isinstance(self.region_name, Unset):
+            region_name = UNSET
+        else:
+            region_name = self.region_name
 
-        city = self.city
+        city: None | str | Unset
+        if isinstance(self.city, Unset):
+            city = UNSET
+        else:
+            city = self.city
 
-        street = self.street
+        street: None | str | Unset
+        if isinstance(self.street, Unset):
+            street = UNSET
+        else:
+            street = self.street
 
-        location_admin_0_code = self.location_admin_0_code
+        location_admin_0_code: None | str | Unset
+        if isinstance(self.location_admin_0_code, Unset):
+            location_admin_0_code = UNSET
+        else:
+            location_admin_0_code = self.location_admin_0_code
 
-        location_admin_1_code = self.location_admin_1_code
+        location_admin_1_code: None | str | Unset
+        if isinstance(self.location_admin_1_code, Unset):
+            location_admin_1_code = UNSET
+        else:
+            location_admin_1_code = self.location_admin_1_code
 
-        location_admin_2_code = self.location_admin_2_code
+        location_admin_2_code: None | str | Unset
+        if isinstance(self.location_admin_2_code, Unset):
+            location_admin_2_code = UNSET
+        else:
+            location_admin_2_code = self.location_admin_2_code
 
-        notes = self.notes
+        notes: None | str | Unset
+        if isinstance(self.notes, Unset):
+            notes = UNSET
+        else:
+            notes = self.notes
 
-        zip_code = self.zip_code
+        zip_code: None | str | Unset
+        if isinstance(self.zip_code, Unset):
+            zip_code = UNSET
+        else:
+            zip_code = self.zip_code
 
-        website = self.website
+        website: None | str | Unset
+        if isinstance(self.website, Unset):
+            website = UNSET
+        else:
+            website = self.website
 
-        veeam_tenant_id = self.veeam_tenant_id
+        veeam_tenant_id: None | str | Unset
+        if isinstance(self.veeam_tenant_id, Unset):
+            veeam_tenant_id = UNSET
+        else:
+            veeam_tenant_id = self.veeam_tenant_id
 
-        company_id = self.company_id
+        company_id: None | str | Unset
+        if isinstance(self.company_id, Unset):
+            company_id = UNSET
+        else:
+            company_id = self.company_id
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -172,7 +244,14 @@ class Organization:
         else:
             instance_uid = UUID(_instance_uid)
 
-        alias = d.pop("alias", UNSET)
+        def _parse_alias(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        alias = _parse_alias(d.pop("alias", UNSET))
 
         _type_ = d.pop("type", UNSET)
         type_: OrganizationType | Unset
@@ -181,39 +260,158 @@ class Organization:
         else:
             type_ = OrganizationType(_type_)
 
-        tax_id = d.pop("taxId", UNSET)
+        def _parse_tax_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        email = d.pop("email", UNSET)
+        tax_id = _parse_tax_id(d.pop("taxId", UNSET))
 
-        phone = d.pop("phone", UNSET)
+        def _parse_email(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        country = d.pop("country", UNSET)
+        email = _parse_email(d.pop("email", UNSET))
 
-        state = d.pop("state", UNSET)
+        def _parse_phone(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        country_name = d.pop("countryName", UNSET)
+        phone = _parse_phone(d.pop("phone", UNSET))
 
-        region_name = d.pop("regionName", UNSET)
+        def _parse_country(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        city = d.pop("city", UNSET)
+        country = _parse_country(d.pop("country", UNSET))
 
-        street = d.pop("street", UNSET)
+        def _parse_state(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        location_admin_0_code = d.pop("locationAdmin0Code", UNSET)
+        state = _parse_state(d.pop("state", UNSET))
 
-        location_admin_1_code = d.pop("locationAdmin1Code", UNSET)
+        def _parse_country_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        location_admin_2_code = d.pop("locationAdmin2Code", UNSET)
+        country_name = _parse_country_name(d.pop("countryName", UNSET))
 
-        notes = d.pop("notes", UNSET)
+        def _parse_region_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        zip_code = d.pop("zipCode", UNSET)
+        region_name = _parse_region_name(d.pop("regionName", UNSET))
 
-        website = d.pop("website", UNSET)
+        def _parse_city(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        veeam_tenant_id = d.pop("veeamTenantId", UNSET)
+        city = _parse_city(d.pop("city", UNSET))
 
-        company_id = d.pop("companyId", UNSET)
+        def _parse_street(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        street = _parse_street(d.pop("street", UNSET))
+
+        def _parse_location_admin_0_code(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        location_admin_0_code = _parse_location_admin_0_code(d.pop("locationAdmin0Code", UNSET))
+
+        def _parse_location_admin_1_code(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        location_admin_1_code = _parse_location_admin_1_code(d.pop("locationAdmin1Code", UNSET))
+
+        def _parse_location_admin_2_code(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        location_admin_2_code = _parse_location_admin_2_code(d.pop("locationAdmin2Code", UNSET))
+
+        def _parse_notes(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        notes = _parse_notes(d.pop("notes", UNSET))
+
+        def _parse_zip_code(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        zip_code = _parse_zip_code(d.pop("zipCode", UNSET))
+
+        def _parse_website(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        website = _parse_website(d.pop("website", UNSET))
+
+        def _parse_veeam_tenant_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        veeam_tenant_id = _parse_veeam_tenant_id(d.pop("veeamTenantId", UNSET))
+
+        def _parse_company_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        company_id = _parse_company_id(d.pop("companyId", UNSET))
 
         organization = cls(
             name=name,

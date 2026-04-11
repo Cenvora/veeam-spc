@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -16,16 +16,20 @@ T = TypeVar("T", bound="DeploymentTaskResponse")
 class DeploymentTaskResponse:
     """
     Attributes:
-        deployment_task_uid (UUID | Unset): UID assigned to a deployment task.
+        deployment_task_uid (None | Unset | UUID): UID assigned to a deployment task.
     """
 
-    deployment_task_uid: UUID | Unset = UNSET
+    deployment_task_uid: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        deployment_task_uid: str | Unset = UNSET
-        if not isinstance(self.deployment_task_uid, Unset):
+        deployment_task_uid: None | str | Unset
+        if isinstance(self.deployment_task_uid, Unset):
+            deployment_task_uid = UNSET
+        elif isinstance(self.deployment_task_uid, UUID):
             deployment_task_uid = str(self.deployment_task_uid)
+        else:
+            deployment_task_uid = self.deployment_task_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -38,12 +42,23 @@ class DeploymentTaskResponse:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        _deployment_task_uid = d.pop("deploymentTaskUid", UNSET)
-        deployment_task_uid: UUID | Unset
-        if isinstance(_deployment_task_uid, Unset):
-            deployment_task_uid = UNSET
-        else:
-            deployment_task_uid = UUID(_deployment_task_uid)
+
+        def _parse_deployment_task_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                deployment_task_uid_type_0 = UUID(data)
+
+                return deployment_task_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        deployment_task_uid = _parse_deployment_task_uid(d.pop("deploymentTaskUid", UNSET))
 
         deployment_task_response = cls(
             deployment_task_uid=deployment_task_uid,

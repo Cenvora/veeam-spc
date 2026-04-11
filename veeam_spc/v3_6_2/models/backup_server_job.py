@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -46,31 +46,31 @@ class BackupServerJob:
         name (str | Unset): Name of a job.
         description (str | Unset): Description of a job.
         created_by (str | Unset): Name of a user that created a job.
-        creation_time (datetime.datetime | Unset): Date and time when a job was created.
+        creation_time (datetime.datetime | None | Unset): Date and time when a job was created.
         backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server.
         location_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server location.
-        site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site.
+        site_uid (None | Unset | UUID): UID assigned to a Veeam Cloud Connect site.
         organization_uid (UUID | Unset): UID assigned to an organization that owns a Veeam Backup & Replication server.
-        mapped_organization_uid (UUID | Unset): UID assigned to an organization to whom the job is assigned.
+        mapped_organization_uid (None | Unset | UUID): UID assigned to an organization to whom the job is assigned.
         type_ (BackupServerJobType | Unset): Type of a job.
-        last_run (datetime.datetime | Unset): Date and time when the latest job session started.
-        last_end_time (datetime.datetime | Unset): Date and time when the latest job session ended.
-        last_duration (int | Unset): Duration of the latest job session, in seconds.
-        processing_rate (float | Unset): Rate at which VM data was processed during the latest job session.
-        avg_duration (int | Unset): Average time a job session takes to complete, in seconds.
-        transferred_data (int | Unset): Total amount of data that was transferred to target during the latest job
+        last_run (datetime.datetime | None | Unset): Date and time when the latest job session started.
+        last_end_time (datetime.datetime | None | Unset): Date and time when the latest job session ended.
+        last_duration (int | None | Unset): Duration of the latest job session, in seconds.
+        processing_rate (float | None | Unset): Rate at which VM data was processed during the latest job session.
+        avg_duration (int | None | Unset): Average time a job session takes to complete, in seconds.
+        transferred_data (int | None | Unset): Total amount of data that was transferred to target during the latest job
             session, in bytes.
-        backup_chain_size (int | Unset): Size of all backup files created by the backup job, in bytes.
+        backup_chain_size (int | None | Unset): Size of all backup files created by the backup job, in bytes.
             > Available only for VMware vSphere and Microsoft HyperV VMs.
         bottleneck (BackupServerJobBottleneck | Unset): Bottleneck in the process of transferring the data from source
             to target.
         schedule_type (BackupServerJobScheduleType | Unset): Type of a schedule configured for a job.
         schedule (BackupServerJobSchedule | Unset):
-        failure_message (str | Unset): Message that is displayed in case a backup job fails.
+        failure_message (None | str | Unset): Message that is displayed in case a backup job fails.
             > Every line break is represented by the `\r\n` control characters.
         target_type (BackupServerJobTargetType | Unset): Type of a target backup location.
-        destination (str | Unset): Name of a target backup location.
-        retention_limit (int | Unset): Number of retention policy units.
+        destination (None | str | Unset): Name of a target backup location.
+        retention_limit (int | None | Unset): Number of retention policy units.
         retention_limit_type (BackupServerJobRetentionLimitType | Unset): Type of retention policy units.
         is_gfs_option_enabled (bool | Unset): Indicates whether the GFS retention is enabled.
         last_session_tasks (list[BackupServerJobSessionTask] | Unset): Latest job session tasks.
@@ -84,27 +84,27 @@ class BackupServerJob:
     name: str | Unset = UNSET
     description: str | Unset = UNSET
     created_by: str | Unset = UNSET
-    creation_time: datetime.datetime | Unset = UNSET
+    creation_time: datetime.datetime | None | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
     location_uid: UUID | Unset = UNSET
-    site_uid: UUID | Unset = UNSET
+    site_uid: None | Unset | UUID = UNSET
     organization_uid: UUID | Unset = UNSET
-    mapped_organization_uid: UUID | Unset = UNSET
+    mapped_organization_uid: None | Unset | UUID = UNSET
     type_: BackupServerJobType | Unset = UNSET
-    last_run: datetime.datetime | Unset = UNSET
-    last_end_time: datetime.datetime | Unset = UNSET
-    last_duration: int | Unset = UNSET
-    processing_rate: float | Unset = UNSET
-    avg_duration: int | Unset = UNSET
-    transferred_data: int | Unset = UNSET
-    backup_chain_size: int | Unset = UNSET
+    last_run: datetime.datetime | None | Unset = UNSET
+    last_end_time: datetime.datetime | None | Unset = UNSET
+    last_duration: int | None | Unset = UNSET
+    processing_rate: float | None | Unset = UNSET
+    avg_duration: int | None | Unset = UNSET
+    transferred_data: int | None | Unset = UNSET
+    backup_chain_size: int | None | Unset = UNSET
     bottleneck: BackupServerJobBottleneck | Unset = UNSET
     schedule_type: BackupServerJobScheduleType | Unset = UNSET
     schedule: BackupServerJobSchedule | Unset = UNSET
-    failure_message: str | Unset = UNSET
+    failure_message: None | str | Unset = UNSET
     target_type: BackupServerJobTargetType | Unset = UNSET
-    destination: str | Unset = UNSET
-    retention_limit: int | Unset = UNSET
+    destination: None | str | Unset = UNSET
+    retention_limit: int | None | Unset = UNSET
     retention_limit_type: BackupServerJobRetentionLimitType | Unset = UNSET
     is_gfs_option_enabled: bool | Unset = UNSET
     last_session_tasks: list[BackupServerJobSessionTask] | Unset = UNSET
@@ -129,9 +129,13 @@ class BackupServerJob:
 
         created_by = self.created_by
 
-        creation_time: str | Unset = UNSET
-        if not isinstance(self.creation_time, Unset):
+        creation_time: None | str | Unset
+        if isinstance(self.creation_time, Unset):
+            creation_time = UNSET
+        elif isinstance(self.creation_time, datetime.datetime):
             creation_time = self.creation_time.isoformat()
+        else:
+            creation_time = self.creation_time
 
         backup_server_uid: str | Unset = UNSET
         if not isinstance(self.backup_server_uid, Unset):
@@ -141,39 +145,75 @@ class BackupServerJob:
         if not isinstance(self.location_uid, Unset):
             location_uid = str(self.location_uid)
 
-        site_uid: str | Unset = UNSET
-        if not isinstance(self.site_uid, Unset):
+        site_uid: None | str | Unset
+        if isinstance(self.site_uid, Unset):
+            site_uid = UNSET
+        elif isinstance(self.site_uid, UUID):
             site_uid = str(self.site_uid)
+        else:
+            site_uid = self.site_uid
 
         organization_uid: str | Unset = UNSET
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        mapped_organization_uid: str | Unset = UNSET
-        if not isinstance(self.mapped_organization_uid, Unset):
+        mapped_organization_uid: None | str | Unset
+        if isinstance(self.mapped_organization_uid, Unset):
+            mapped_organization_uid = UNSET
+        elif isinstance(self.mapped_organization_uid, UUID):
             mapped_organization_uid = str(self.mapped_organization_uid)
+        else:
+            mapped_organization_uid = self.mapped_organization_uid
 
         type_: str | Unset = UNSET
         if not isinstance(self.type_, Unset):
             type_ = self.type_.value
 
-        last_run: str | Unset = UNSET
-        if not isinstance(self.last_run, Unset):
+        last_run: None | str | Unset
+        if isinstance(self.last_run, Unset):
+            last_run = UNSET
+        elif isinstance(self.last_run, datetime.datetime):
             last_run = self.last_run.isoformat()
+        else:
+            last_run = self.last_run
 
-        last_end_time: str | Unset = UNSET
-        if not isinstance(self.last_end_time, Unset):
+        last_end_time: None | str | Unset
+        if isinstance(self.last_end_time, Unset):
+            last_end_time = UNSET
+        elif isinstance(self.last_end_time, datetime.datetime):
             last_end_time = self.last_end_time.isoformat()
+        else:
+            last_end_time = self.last_end_time
 
-        last_duration = self.last_duration
+        last_duration: int | None | Unset
+        if isinstance(self.last_duration, Unset):
+            last_duration = UNSET
+        else:
+            last_duration = self.last_duration
 
-        processing_rate = self.processing_rate
+        processing_rate: float | None | Unset
+        if isinstance(self.processing_rate, Unset):
+            processing_rate = UNSET
+        else:
+            processing_rate = self.processing_rate
 
-        avg_duration = self.avg_duration
+        avg_duration: int | None | Unset
+        if isinstance(self.avg_duration, Unset):
+            avg_duration = UNSET
+        else:
+            avg_duration = self.avg_duration
 
-        transferred_data = self.transferred_data
+        transferred_data: int | None | Unset
+        if isinstance(self.transferred_data, Unset):
+            transferred_data = UNSET
+        else:
+            transferred_data = self.transferred_data
 
-        backup_chain_size = self.backup_chain_size
+        backup_chain_size: int | None | Unset
+        if isinstance(self.backup_chain_size, Unset):
+            backup_chain_size = UNSET
+        else:
+            backup_chain_size = self.backup_chain_size
 
         bottleneck: str | Unset = UNSET
         if not isinstance(self.bottleneck, Unset):
@@ -187,15 +227,27 @@ class BackupServerJob:
         if not isinstance(self.schedule, Unset):
             schedule = self.schedule.to_dict()
 
-        failure_message = self.failure_message
+        failure_message: None | str | Unset
+        if isinstance(self.failure_message, Unset):
+            failure_message = UNSET
+        else:
+            failure_message = self.failure_message
 
         target_type: str | Unset = UNSET
         if not isinstance(self.target_type, Unset):
             target_type = self.target_type.value
 
-        destination = self.destination
+        destination: None | str | Unset
+        if isinstance(self.destination, Unset):
+            destination = UNSET
+        else:
+            destination = self.destination
 
-        retention_limit = self.retention_limit
+        retention_limit: int | None | Unset
+        if isinstance(self.retention_limit, Unset):
+            retention_limit = UNSET
+        else:
+            retention_limit = self.retention_limit
 
         retention_limit_type: str | Unset = UNSET
         if not isinstance(self.retention_limit_type, Unset):
@@ -309,12 +361,22 @@ class BackupServerJob:
 
         created_by = d.pop("createdBy", UNSET)
 
-        _creation_time = d.pop("creationTime", UNSET)
-        creation_time: datetime.datetime | Unset
-        if isinstance(_creation_time, Unset):
-            creation_time = UNSET
-        else:
-            creation_time = isoparse(_creation_time)
+        def _parse_creation_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                creation_time_type_0 = isoparse(data)
+
+                return creation_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        creation_time = _parse_creation_time(d.pop("creationTime", UNSET))
 
         _backup_server_uid = d.pop("backupServerUid", UNSET)
         backup_server_uid: UUID | Unset
@@ -330,12 +392,22 @@ class BackupServerJob:
         else:
             location_uid = UUID(_location_uid)
 
-        _site_uid = d.pop("siteUid", UNSET)
-        site_uid: UUID | Unset
-        if isinstance(_site_uid, Unset):
-            site_uid = UNSET
-        else:
-            site_uid = UUID(_site_uid)
+        def _parse_site_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                site_uid_type_0 = UUID(data)
+
+                return site_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        site_uid = _parse_site_uid(d.pop("siteUid", UNSET))
 
         _organization_uid = d.pop("organizationUid", UNSET)
         organization_uid: UUID | Unset
@@ -344,12 +416,22 @@ class BackupServerJob:
         else:
             organization_uid = UUID(_organization_uid)
 
-        _mapped_organization_uid = d.pop("mappedOrganizationUid", UNSET)
-        mapped_organization_uid: UUID | Unset
-        if isinstance(_mapped_organization_uid, Unset):
-            mapped_organization_uid = UNSET
-        else:
-            mapped_organization_uid = UUID(_mapped_organization_uid)
+        def _parse_mapped_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                mapped_organization_uid_type_0 = UUID(data)
+
+                return mapped_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        mapped_organization_uid = _parse_mapped_organization_uid(d.pop("mappedOrganizationUid", UNSET))
 
         _type_ = d.pop("type", UNSET)
         type_: BackupServerJobType | Unset
@@ -358,29 +440,84 @@ class BackupServerJob:
         else:
             type_ = BackupServerJobType(_type_)
 
-        _last_run = d.pop("lastRun", UNSET)
-        last_run: datetime.datetime | Unset
-        if isinstance(_last_run, Unset):
-            last_run = UNSET
-        else:
-            last_run = isoparse(_last_run)
+        def _parse_last_run(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_run_type_0 = isoparse(data)
 
-        _last_end_time = d.pop("lastEndTime", UNSET)
-        last_end_time: datetime.datetime | Unset
-        if isinstance(_last_end_time, Unset):
-            last_end_time = UNSET
-        else:
-            last_end_time = isoparse(_last_end_time)
+                return last_run_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
 
-        last_duration = d.pop("lastDuration", UNSET)
+        last_run = _parse_last_run(d.pop("lastRun", UNSET))
 
-        processing_rate = d.pop("processingRate", UNSET)
+        def _parse_last_end_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_end_time_type_0 = isoparse(data)
 
-        avg_duration = d.pop("avgDuration", UNSET)
+                return last_end_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
 
-        transferred_data = d.pop("transferredData", UNSET)
+        last_end_time = _parse_last_end_time(d.pop("lastEndTime", UNSET))
 
-        backup_chain_size = d.pop("backupChainSize", UNSET)
+        def _parse_last_duration(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        last_duration = _parse_last_duration(d.pop("lastDuration", UNSET))
+
+        def _parse_processing_rate(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        processing_rate = _parse_processing_rate(d.pop("processingRate", UNSET))
+
+        def _parse_avg_duration(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        avg_duration = _parse_avg_duration(d.pop("avgDuration", UNSET))
+
+        def _parse_transferred_data(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        transferred_data = _parse_transferred_data(d.pop("transferredData", UNSET))
+
+        def _parse_backup_chain_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        backup_chain_size = _parse_backup_chain_size(d.pop("backupChainSize", UNSET))
 
         _bottleneck = d.pop("bottleneck", UNSET)
         bottleneck: BackupServerJobBottleneck | Unset
@@ -403,7 +540,14 @@ class BackupServerJob:
         else:
             schedule = BackupServerJobSchedule.from_dict(_schedule)
 
-        failure_message = d.pop("failureMessage", UNSET)
+        def _parse_failure_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        failure_message = _parse_failure_message(d.pop("failureMessage", UNSET))
 
         _target_type = d.pop("targetType", UNSET)
         target_type: BackupServerJobTargetType | Unset
@@ -412,9 +556,23 @@ class BackupServerJob:
         else:
             target_type = BackupServerJobTargetType(_target_type)
 
-        destination = d.pop("destination", UNSET)
+        def _parse_destination(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        retention_limit = d.pop("retentionLimit", UNSET)
+        destination = _parse_destination(d.pop("destination", UNSET))
+
+        def _parse_retention_limit(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        retention_limit = _parse_retention_limit(d.pop("retentionLimit", UNSET))
 
         _retention_limit_type = d.pop("retentionLimitType", UNSET)
         retention_limit_type: BackupServerJobRetentionLimitType | Unset

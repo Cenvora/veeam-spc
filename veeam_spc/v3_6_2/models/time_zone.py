@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,21 +16,29 @@ class TimeZone:
     """
     Attributes:
         time_zone_id (str): ID assigned to a time zone.
-        display_name (str | Unset): Time zone name.
-        utc_offset (int | Unset): UTC offset, in minutes.
+        display_name (None | str | Unset): Time zone name.
+        utc_offset (int | None | Unset): UTC offset, in minutes.
     """
 
     time_zone_id: str
-    display_name: str | Unset = UNSET
-    utc_offset: int | Unset = UNSET
+    display_name: None | str | Unset = UNSET
+    utc_offset: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         time_zone_id = self.time_zone_id
 
-        display_name = self.display_name
+        display_name: None | str | Unset
+        if isinstance(self.display_name, Unset):
+            display_name = UNSET
+        else:
+            display_name = self.display_name
 
-        utc_offset = self.utc_offset
+        utc_offset: int | None | Unset
+        if isinstance(self.utc_offset, Unset):
+            utc_offset = UNSET
+        else:
+            utc_offset = self.utc_offset
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -51,9 +59,23 @@ class TimeZone:
         d = dict(src_dict)
         time_zone_id = d.pop("timeZoneId")
 
-        display_name = d.pop("displayName", UNSET)
+        def _parse_display_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        utc_offset = d.pop("utcOffset", UNSET)
+        display_name = _parse_display_name(d.pop("displayName", UNSET))
+
+        def _parse_utc_offset(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        utc_offset = _parse_utc_offset(d.pop("utcOffset", UNSET))
 
         time_zone = cls(
             time_zone_id=time_zone_id,

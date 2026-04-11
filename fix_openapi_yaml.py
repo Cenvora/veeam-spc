@@ -127,6 +127,14 @@ def fix_response_keys(input_path: str, output_path: str) -> None:
 
         fix_null_schema_nodes(data)
 
+        # openapi-python-client (0.28.x) can fail on SmtpSettings when the parent
+        # object itself is nullable. Keep field-level nullability intact.
+        schemas_any = data.get("components", {}).get("schemas", {})
+        if isinstance(schemas_any, dict):
+            smtp_settings = schemas_any.get("SmtpSettings")
+            if isinstance(smtp_settings, dict):
+                smtp_settings.pop("nullable", None)
+
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
             f.write("\n")
@@ -144,16 +152,20 @@ def fix_response_keys(input_path: str, output_path: str) -> None:
     )
     # Quote version numbers (e.g., version: 3.6, 3.6.1, 3.5.1 to version: "3.6", "3.6.1", "3.5.1")
     fixed = re.sub(r"(version:\s*)([0-9]+(?:\.[0-9]+)+)", r'\1"\2"', fixed)
-    # Fix union types like 'type: [string, null]' to 'type: string' (OpenAPI doesn't support null in type arrays)
-    # Replace 'type: [string, null]' or similar with 'type: string'
+    # Convert YAML type unions like `type: [string, null]` into OpenAPI style
+    # while preserving nullability semantics.
     fixed = re.sub(
-        r"type:\s*\[([^\]]*?)string\s*,\s*null([^\]]*?)\]", "type: string", fixed
+        r"^(\s*)type:\s*\[\s*string\s*,\s*null\s*\]\s*$",
+        r"\1type: string\n\1nullable: true",
+        fixed,
+        flags=re.MULTILINE,
     )
     fixed = re.sub(
-        r"type:\s*\[([^\]]*?)null\s*,\s*string([^\]]*?)\]", "type: string", fixed
+        r"^(\s*)type:\s*\[\s*null\s*,\s*string\s*\]\s*$",
+        r"\1type: string\n\1nullable: true",
+        fixed,
+        flags=re.MULTILINE,
     )
-    # Remove all 'nullable: true' lines (safer, non-greedy)
-    fixed = re.sub(r"^\s*nullable: true\s*$", "", fixed, flags=re.MULTILINE)
     fixed = redact_secret_text(fixed)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(fixed)

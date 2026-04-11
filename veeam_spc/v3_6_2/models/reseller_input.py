@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -23,8 +23,8 @@ class ResellerInput:
     Attributes:
         organization_input (OrganizationInput):
         owner_credentials (OwnerCredentials):
-        description (str | Unset): Description of a reseller.
-        pro_partner_id (str | Unset): ProPartner Portal ID assigned to a reseller.
+        description (None | str | Unset): Description of a reseller.
+        pro_partner_id (None | str | Unset): ProPartner Portal ID assigned to a reseller.
         reseller_services (ResellerServices | Unset):
         is_rest_access_enabled (bool | Unset): Defines whether access to REST API is enabled for a reseller. Default:
             False.
@@ -32,8 +32,8 @@ class ResellerInput:
 
     organization_input: OrganizationInput
     owner_credentials: OwnerCredentials
-    description: str | Unset = UNSET
-    pro_partner_id: str | Unset = UNSET
+    description: None | str | Unset = UNSET
+    pro_partner_id: None | str | Unset = UNSET
     reseller_services: ResellerServices | Unset = UNSET
     is_rest_access_enabled: bool | Unset = False
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -43,9 +43,17 @@ class ResellerInput:
 
         owner_credentials = self.owner_credentials.to_dict()
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
-        pro_partner_id = self.pro_partner_id
+        pro_partner_id: None | str | Unset
+        if isinstance(self.pro_partner_id, Unset):
+            pro_partner_id = UNSET
+        else:
+            pro_partner_id = self.pro_partner_id
 
         reseller_services: dict[str, Any] | Unset = UNSET
         if not isinstance(self.reseller_services, Unset):
@@ -83,9 +91,23 @@ class ResellerInput:
 
         owner_credentials = OwnerCredentials.from_dict(d.pop("ownerCredentials"))
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        pro_partner_id = d.pop("proPartnerId", UNSET)
+        description = _parse_description(d.pop("description", UNSET))
+
+        def _parse_pro_partner_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        pro_partner_id = _parse_pro_partner_id(d.pop("proPartnerId", UNSET))
 
         _reseller_services = d.pop("resellerServices", UNSET)
         reseller_services: ResellerServices | Unset

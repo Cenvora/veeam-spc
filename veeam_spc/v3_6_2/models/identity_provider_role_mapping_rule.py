@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -13,8 +13,8 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.identity_provider_attribute_mapping import IdentityProviderAttributeMapping
     from ..models.identity_provider_claim_match_rule import IdentityProviderClaimMatchRule
-    from ..models.identity_provider_company_tenant_mapping_parameters import (
-        IdentityProviderCompanyTenantMappingParameters,
+    from ..models.identity_provider_company_tenant_mapping_parameters_type_0 import (
+        IdentityProviderCompanyTenantMappingParametersType0,
     )
     from ..models.identity_provider_role_mapping_rule_embedded import IdentityProviderRoleMappingRuleEmbedded
 
@@ -48,26 +48,26 @@ class IdentityProviderRoleMappingRule:
         organization_mapping_source_claim_type (str): Organization mapping claim type containing organization alias.
         instance_uid (UUID | Unset): UID assigned to a mapping rule.
         provider_name (str | Unset): Name of an identity provider.
-        description (str | Unset): Mapping rule description.
+        description (None | str | Unset): Mapping rule description.
         enabled (bool | Unset): Indicates whether a mapping rule is enabled. Default: True.
-        managed_companies_uids (list[UUID] | Unset): Array of UIDs assigned to companies managed by a user.
+        managed_companies_uids (list[UUID] | None | Unset): Array of UIDs assigned to companies managed by a user.
             >Required for the `PortalOperator`, `PortalReadonlyOperator`, `ResellerOperator`, `ResellerUser`
             and `ResellerAdministrator` user roles.
         manage_all_companies (bool | Unset): Indicates whether a user must manage all available companies. Overrides
             values of the `managedCompaniesUids` property. Default: True.
-        has_access_to_provider (bool | Unset): Indicates whether a user is permitted to view service provider
+        has_access_to_provider (bool | None | Unset): Indicates whether a user is permitted to view service provider
             organization resources.
             >Required for the `PortalOperator` and `PortalReadonlyOperator` user roles.
-        locations_mapping_source_claim_type (str | Unset): Location mapping claim containing user locations in the
-            following format: `Location1;Location2`.
+        locations_mapping_source_claim_type (None | str | Unset): Location mapping claim containing user locations in
+            the following format: `Location1;Location2`.
             >This property can be specified for the `CompanyLocationUser`, `CompanyLocationAdministrator` and
             `CompanySubtenant` user roles. Otherwise a user is assigned to the first available company location.
-        company_tenant_mapping_claims (IdentityProviderCompanyTenantMappingParameters | Unset): Parameters required to
-            create a mapping rule for users with `CompanyTenant` role.
-        additional_mappings (list[IdentityProviderClaimMatchRule] | Unset): Array of additional mappings required for
-            rule selection.
-        attribute_mappings (list[IdentityProviderAttributeMapping] | Unset): Array of mapping claims attributed to user
-            parameters.
+        company_tenant_mapping_claims (IdentityProviderCompanyTenantMappingParametersType0 | None | Unset): Parameters
+            required to create a mapping rule for users with `CompanyTenant` role.
+        additional_mappings (list[IdentityProviderClaimMatchRule] | None | Unset): Array of additional mappings required
+            for rule selection.
+        attribute_mappings (list[IdentityProviderAttributeMapping] | None | Unset): Array of mapping claims attributed
+            to user parameters.
         field_embedded (IdentityProviderRoleMappingRuleEmbedded | Unset): Resource representation of the related
             identity provider entity.
     """
@@ -77,19 +77,23 @@ class IdentityProviderRoleMappingRule:
     organization_mapping_source_claim_type: str
     instance_uid: UUID | Unset = UNSET
     provider_name: str | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     enabled: bool | Unset = True
-    managed_companies_uids: list[UUID] | Unset = UNSET
+    managed_companies_uids: list[UUID] | None | Unset = UNSET
     manage_all_companies: bool | Unset = True
-    has_access_to_provider: bool | Unset = UNSET
-    locations_mapping_source_claim_type: str | Unset = UNSET
-    company_tenant_mapping_claims: IdentityProviderCompanyTenantMappingParameters | Unset = UNSET
-    additional_mappings: list[IdentityProviderClaimMatchRule] | Unset = UNSET
-    attribute_mappings: list[IdentityProviderAttributeMapping] | Unset = UNSET
+    has_access_to_provider: bool | None | Unset = UNSET
+    locations_mapping_source_claim_type: None | str | Unset = UNSET
+    company_tenant_mapping_claims: IdentityProviderCompanyTenantMappingParametersType0 | None | Unset = UNSET
+    additional_mappings: list[IdentityProviderClaimMatchRule] | None | Unset = UNSET
+    attribute_mappings: list[IdentityProviderAttributeMapping] | None | Unset = UNSET
     field_embedded: IdentityProviderRoleMappingRuleEmbedded | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.identity_provider_company_tenant_mapping_parameters_type_0 import (
+            IdentityProviderCompanyTenantMappingParametersType0,
+        )
+
         name = self.name
 
         role = self.role.value
@@ -102,40 +106,71 @@ class IdentityProviderRoleMappingRule:
 
         provider_name = self.provider_name
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         enabled = self.enabled
 
-        managed_companies_uids: list[str] | Unset = UNSET
-        if not isinstance(self.managed_companies_uids, Unset):
+        managed_companies_uids: list[str] | None | Unset
+        if isinstance(self.managed_companies_uids, Unset):
+            managed_companies_uids = UNSET
+        elif isinstance(self.managed_companies_uids, list):
             managed_companies_uids = []
-            for managed_companies_uids_item_data in self.managed_companies_uids:
-                managed_companies_uids_item = str(managed_companies_uids_item_data)
-                managed_companies_uids.append(managed_companies_uids_item)
+            for managed_companies_uids_type_0_item_data in self.managed_companies_uids:
+                managed_companies_uids_type_0_item = str(managed_companies_uids_type_0_item_data)
+                managed_companies_uids.append(managed_companies_uids_type_0_item)
+
+        else:
+            managed_companies_uids = self.managed_companies_uids
 
         manage_all_companies = self.manage_all_companies
 
-        has_access_to_provider = self.has_access_to_provider
+        has_access_to_provider: bool | None | Unset
+        if isinstance(self.has_access_to_provider, Unset):
+            has_access_to_provider = UNSET
+        else:
+            has_access_to_provider = self.has_access_to_provider
 
-        locations_mapping_source_claim_type = self.locations_mapping_source_claim_type
+        locations_mapping_source_claim_type: None | str | Unset
+        if isinstance(self.locations_mapping_source_claim_type, Unset):
+            locations_mapping_source_claim_type = UNSET
+        else:
+            locations_mapping_source_claim_type = self.locations_mapping_source_claim_type
 
-        company_tenant_mapping_claims: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.company_tenant_mapping_claims, Unset):
+        company_tenant_mapping_claims: dict[str, Any] | None | Unset
+        if isinstance(self.company_tenant_mapping_claims, Unset):
+            company_tenant_mapping_claims = UNSET
+        elif isinstance(self.company_tenant_mapping_claims, IdentityProviderCompanyTenantMappingParametersType0):
             company_tenant_mapping_claims = self.company_tenant_mapping_claims.to_dict()
+        else:
+            company_tenant_mapping_claims = self.company_tenant_mapping_claims
 
-        additional_mappings: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.additional_mappings, Unset):
+        additional_mappings: list[dict[str, Any]] | None | Unset
+        if isinstance(self.additional_mappings, Unset):
+            additional_mappings = UNSET
+        elif isinstance(self.additional_mappings, list):
             additional_mappings = []
-            for additional_mappings_item_data in self.additional_mappings:
-                additional_mappings_item = additional_mappings_item_data.to_dict()
-                additional_mappings.append(additional_mappings_item)
+            for additional_mappings_type_0_item_data in self.additional_mappings:
+                additional_mappings_type_0_item = additional_mappings_type_0_item_data.to_dict()
+                additional_mappings.append(additional_mappings_type_0_item)
 
-        attribute_mappings: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.attribute_mappings, Unset):
+        else:
+            additional_mappings = self.additional_mappings
+
+        attribute_mappings: list[dict[str, Any]] | None | Unset
+        if isinstance(self.attribute_mappings, Unset):
+            attribute_mappings = UNSET
+        elif isinstance(self.attribute_mappings, list):
             attribute_mappings = []
-            for attribute_mappings_item_data in self.attribute_mappings:
-                attribute_mappings_item = attribute_mappings_item_data.to_dict()
-                attribute_mappings.append(attribute_mappings_item)
+            for attribute_mappings_type_0_item_data in self.attribute_mappings:
+                attribute_mappings_type_0_item = attribute_mappings_type_0_item_data.to_dict()
+                attribute_mappings.append(attribute_mappings_type_0_item)
+
+        else:
+            attribute_mappings = self.attribute_mappings
 
         field_embedded: dict[str, Any] | Unset = UNSET
         if not isinstance(self.field_embedded, Unset):
@@ -181,8 +216,8 @@ class IdentityProviderRoleMappingRule:
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.identity_provider_attribute_mapping import IdentityProviderAttributeMapping
         from ..models.identity_provider_claim_match_rule import IdentityProviderClaimMatchRule
-        from ..models.identity_provider_company_tenant_mapping_parameters import (
-            IdentityProviderCompanyTenantMappingParameters,
+        from ..models.identity_provider_company_tenant_mapping_parameters_type_0 import (
+            IdentityProviderCompanyTenantMappingParametersType0,
         )
         from ..models.identity_provider_role_mapping_rule_embedded import IdentityProviderRoleMappingRuleEmbedded
 
@@ -202,51 +237,129 @@ class IdentityProviderRoleMappingRule:
 
         provider_name = d.pop("providerName", UNSET)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         enabled = d.pop("enabled", UNSET)
 
-        _managed_companies_uids = d.pop("managedCompaniesUids", UNSET)
-        managed_companies_uids: list[UUID] | Unset = UNSET
-        if _managed_companies_uids is not UNSET:
-            managed_companies_uids = []
-            for managed_companies_uids_item_data in _managed_companies_uids:
-                managed_companies_uids_item = UUID(managed_companies_uids_item_data)
+        def _parse_managed_companies_uids(data: object) -> list[UUID] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                managed_companies_uids_type_0 = []
+                _managed_companies_uids_type_0 = data
+                for managed_companies_uids_type_0_item_data in _managed_companies_uids_type_0:
+                    managed_companies_uids_type_0_item = UUID(managed_companies_uids_type_0_item_data)
 
-                managed_companies_uids.append(managed_companies_uids_item)
+                    managed_companies_uids_type_0.append(managed_companies_uids_type_0_item)
+
+                return managed_companies_uids_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[UUID] | None | Unset, data)
+
+        managed_companies_uids = _parse_managed_companies_uids(d.pop("managedCompaniesUids", UNSET))
 
         manage_all_companies = d.pop("manageAllCompanies", UNSET)
 
-        has_access_to_provider = d.pop("hasAccessToProvider", UNSET)
+        def _parse_has_access_to_provider(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        locations_mapping_source_claim_type = d.pop("locationsMappingSourceClaimType", UNSET)
+        has_access_to_provider = _parse_has_access_to_provider(d.pop("hasAccessToProvider", UNSET))
 
-        _company_tenant_mapping_claims = d.pop("companyTenantMappingClaims", UNSET)
-        company_tenant_mapping_claims: IdentityProviderCompanyTenantMappingParameters | Unset
-        if isinstance(_company_tenant_mapping_claims, Unset):
-            company_tenant_mapping_claims = UNSET
-        else:
-            company_tenant_mapping_claims = IdentityProviderCompanyTenantMappingParameters.from_dict(
-                _company_tenant_mapping_claims
-            )
+        def _parse_locations_mapping_source_claim_type(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _additional_mappings = d.pop("additionalMappings", UNSET)
-        additional_mappings: list[IdentityProviderClaimMatchRule] | Unset = UNSET
-        if _additional_mappings is not UNSET:
-            additional_mappings = []
-            for additional_mappings_item_data in _additional_mappings:
-                additional_mappings_item = IdentityProviderClaimMatchRule.from_dict(additional_mappings_item_data)
+        locations_mapping_source_claim_type = _parse_locations_mapping_source_claim_type(
+            d.pop("locationsMappingSourceClaimType", UNSET)
+        )
 
-                additional_mappings.append(additional_mappings_item)
+        def _parse_company_tenant_mapping_claims(
+            data: object,
+        ) -> IdentityProviderCompanyTenantMappingParametersType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_identity_provider_company_tenant_mapping_parameters_type_0 = (
+                    IdentityProviderCompanyTenantMappingParametersType0.from_dict(data)
+                )
 
-        _attribute_mappings = d.pop("attributeMappings", UNSET)
-        attribute_mappings: list[IdentityProviderAttributeMapping] | Unset = UNSET
-        if _attribute_mappings is not UNSET:
-            attribute_mappings = []
-            for attribute_mappings_item_data in _attribute_mappings:
-                attribute_mappings_item = IdentityProviderAttributeMapping.from_dict(attribute_mappings_item_data)
+                return componentsschemas_identity_provider_company_tenant_mapping_parameters_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(IdentityProviderCompanyTenantMappingParametersType0 | None | Unset, data)
 
-                attribute_mappings.append(attribute_mappings_item)
+        company_tenant_mapping_claims = _parse_company_tenant_mapping_claims(d.pop("companyTenantMappingClaims", UNSET))
+
+        def _parse_additional_mappings(data: object) -> list[IdentityProviderClaimMatchRule] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                additional_mappings_type_0 = []
+                _additional_mappings_type_0 = data
+                for additional_mappings_type_0_item_data in _additional_mappings_type_0:
+                    additional_mappings_type_0_item = IdentityProviderClaimMatchRule.from_dict(
+                        additional_mappings_type_0_item_data
+                    )
+
+                    additional_mappings_type_0.append(additional_mappings_type_0_item)
+
+                return additional_mappings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[IdentityProviderClaimMatchRule] | None | Unset, data)
+
+        additional_mappings = _parse_additional_mappings(d.pop("additionalMappings", UNSET))
+
+        def _parse_attribute_mappings(data: object) -> list[IdentityProviderAttributeMapping] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                attribute_mappings_type_0 = []
+                _attribute_mappings_type_0 = data
+                for attribute_mappings_type_0_item_data in _attribute_mappings_type_0:
+                    attribute_mappings_type_0_item = IdentityProviderAttributeMapping.from_dict(
+                        attribute_mappings_type_0_item_data
+                    )
+
+                    attribute_mappings_type_0.append(attribute_mappings_type_0_item)
+
+                return attribute_mappings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[IdentityProviderAttributeMapping] | None | Unset, data)
+
+        attribute_mappings = _parse_attribute_mappings(d.pop("attributeMappings", UNSET))
 
         _field_embedded = d.pop("_embedded", UNSET)
         field_embedded: IdentityProviderRoleMappingRuleEmbedded | Unset

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -22,24 +22,25 @@ class ProtectedComputerManagedByConsoleJob:
     """
     Attributes:
         backup_agent_uid (UUID | Unset): UID assigned to a Veeam backup agent.
-        job_uid (UUID | Unset): UID assigned to a job that protects the computer.
+        job_uid (None | Unset | UUID): UID assigned to a job that protects the computer.
         job_name (str | Unset): Name of a job that protects the computer.
-        source_size (int | Unset): Size of protected data, in bytes.
+        source_size (int | None | Unset): Size of protected data, in bytes.
         total_restore_point_size (int | Unset): Total size of all restore points, in bytes.
         latest_restore_point_size (int | Unset): Size of the latest restore point, in bytes.
         restore_points (int | Unset): Number of restore points.
-        latest_restore_point_date (datetime.datetime | Unset): Date and time of the latest restore point creation.
+        latest_restore_point_date (datetime.datetime | None | Unset): Date and time of the latest restore point
+            creation.
         target_type (ProtectedComputerManagedByConsoleJobTargetType | Unset): Type of a target repository.
     """
 
     backup_agent_uid: UUID | Unset = UNSET
-    job_uid: UUID | Unset = UNSET
+    job_uid: None | Unset | UUID = UNSET
     job_name: str | Unset = UNSET
-    source_size: int | Unset = UNSET
+    source_size: int | None | Unset = UNSET
     total_restore_point_size: int | Unset = UNSET
     latest_restore_point_size: int | Unset = UNSET
     restore_points: int | Unset = UNSET
-    latest_restore_point_date: datetime.datetime | Unset = UNSET
+    latest_restore_point_date: datetime.datetime | None | Unset = UNSET
     target_type: ProtectedComputerManagedByConsoleJobTargetType | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -48,13 +49,21 @@ class ProtectedComputerManagedByConsoleJob:
         if not isinstance(self.backup_agent_uid, Unset):
             backup_agent_uid = str(self.backup_agent_uid)
 
-        job_uid: str | Unset = UNSET
-        if not isinstance(self.job_uid, Unset):
+        job_uid: None | str | Unset
+        if isinstance(self.job_uid, Unset):
+            job_uid = UNSET
+        elif isinstance(self.job_uid, UUID):
             job_uid = str(self.job_uid)
+        else:
+            job_uid = self.job_uid
 
         job_name = self.job_name
 
-        source_size = self.source_size
+        source_size: int | None | Unset
+        if isinstance(self.source_size, Unset):
+            source_size = UNSET
+        else:
+            source_size = self.source_size
 
         total_restore_point_size = self.total_restore_point_size
 
@@ -62,9 +71,13 @@ class ProtectedComputerManagedByConsoleJob:
 
         restore_points = self.restore_points
 
-        latest_restore_point_date: str | Unset = UNSET
-        if not isinstance(self.latest_restore_point_date, Unset):
+        latest_restore_point_date: None | str | Unset
+        if isinstance(self.latest_restore_point_date, Unset):
+            latest_restore_point_date = UNSET
+        elif isinstance(self.latest_restore_point_date, datetime.datetime):
             latest_restore_point_date = self.latest_restore_point_date.isoformat()
+        else:
+            latest_restore_point_date = self.latest_restore_point_date
 
         target_type: str | Unset = UNSET
         if not isinstance(self.target_type, Unset):
@@ -104,16 +117,33 @@ class ProtectedComputerManagedByConsoleJob:
         else:
             backup_agent_uid = UUID(_backup_agent_uid)
 
-        _job_uid = d.pop("jobUid", UNSET)
-        job_uid: UUID | Unset
-        if isinstance(_job_uid, Unset):
-            job_uid = UNSET
-        else:
-            job_uid = UUID(_job_uid)
+        def _parse_job_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                job_uid_type_0 = UUID(data)
+
+                return job_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        job_uid = _parse_job_uid(d.pop("jobUid", UNSET))
 
         job_name = d.pop("jobName", UNSET)
 
-        source_size = d.pop("sourceSize", UNSET)
+        def _parse_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        source_size = _parse_source_size(d.pop("sourceSize", UNSET))
 
         total_restore_point_size = d.pop("totalRestorePointSize", UNSET)
 
@@ -121,12 +151,22 @@ class ProtectedComputerManagedByConsoleJob:
 
         restore_points = d.pop("restorePoints", UNSET)
 
-        _latest_restore_point_date = d.pop("latestRestorePointDate", UNSET)
-        latest_restore_point_date: datetime.datetime | Unset
-        if isinstance(_latest_restore_point_date, Unset):
-            latest_restore_point_date = UNSET
-        else:
-            latest_restore_point_date = isoparse(_latest_restore_point_date)
+        def _parse_latest_restore_point_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                latest_restore_point_date_type_0 = isoparse(data)
+
+                return latest_restore_point_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        latest_restore_point_date = _parse_latest_restore_point_date(d.pop("latestRestorePointDate", UNSET))
 
         _target_type = d.pop("targetType", UNSET)
         target_type: ProtectedComputerManagedByConsoleJobTargetType | Unset

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,21 +22,22 @@ class PulseConfiguration:
         is_license_management_enabled (bool): Indicates whether license management in VCSP Pulse is enabled.
         is_pushing_new_companies_to_pulse_enabled (bool): Indicates whether a VCSP Pulse tenant must be created for each
             new company.
-        token (str | Unset): VCSP Pulse authentication token.
+        token (None | str | Unset): VCSP Pulse authentication token.
         status (PulseConfigurationStatus | Unset): Status of VCSP Pulse configuration.
         status_message (str | Unset): Status message.
-        last_update_date (datetime.datetime | Unset): Date of the last VCSP Pulse integration update.
-        token_expiration_date (datetime.datetime | Unset): Date when the VCSP Pulse Portal connection token expires.
+        last_update_date (datetime.datetime | None | Unset): Date of the last VCSP Pulse integration update.
+        token_expiration_date (datetime.datetime | None | Unset): Date when the VCSP Pulse Portal connection token
+            expires.
     """
 
     is_company_mapping_enabled: bool
     is_license_management_enabled: bool
     is_pushing_new_companies_to_pulse_enabled: bool
-    token: str | Unset = UNSET
+    token: None | str | Unset = UNSET
     status: PulseConfigurationStatus | Unset = UNSET
     status_message: str | Unset = UNSET
-    last_update_date: datetime.datetime | Unset = UNSET
-    token_expiration_date: datetime.datetime | Unset = UNSET
+    last_update_date: datetime.datetime | None | Unset = UNSET
+    token_expiration_date: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -46,7 +47,11 @@ class PulseConfiguration:
 
         is_pushing_new_companies_to_pulse_enabled = self.is_pushing_new_companies_to_pulse_enabled
 
-        token = self.token
+        token: None | str | Unset
+        if isinstance(self.token, Unset):
+            token = UNSET
+        else:
+            token = self.token
 
         status: str | Unset = UNSET
         if not isinstance(self.status, Unset):
@@ -54,13 +59,21 @@ class PulseConfiguration:
 
         status_message = self.status_message
 
-        last_update_date: str | Unset = UNSET
-        if not isinstance(self.last_update_date, Unset):
+        last_update_date: None | str | Unset
+        if isinstance(self.last_update_date, Unset):
+            last_update_date = UNSET
+        elif isinstance(self.last_update_date, datetime.datetime):
             last_update_date = self.last_update_date.isoformat()
+        else:
+            last_update_date = self.last_update_date
 
-        token_expiration_date: str | Unset = UNSET
-        if not isinstance(self.token_expiration_date, Unset):
+        token_expiration_date: None | str | Unset
+        if isinstance(self.token_expiration_date, Unset):
+            token_expiration_date = UNSET
+        elif isinstance(self.token_expiration_date, datetime.datetime):
             token_expiration_date = self.token_expiration_date.isoformat()
+        else:
+            token_expiration_date = self.token_expiration_date
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -93,7 +106,14 @@ class PulseConfiguration:
 
         is_pushing_new_companies_to_pulse_enabled = d.pop("isPushingNewCompaniesToPulseEnabled")
 
-        token = d.pop("token", UNSET)
+        def _parse_token(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        token = _parse_token(d.pop("token", UNSET))
 
         _status = d.pop("status", UNSET)
         status: PulseConfigurationStatus | Unset
@@ -104,19 +124,39 @@ class PulseConfiguration:
 
         status_message = d.pop("statusMessage", UNSET)
 
-        _last_update_date = d.pop("lastUpdateDate", UNSET)
-        last_update_date: datetime.datetime | Unset
-        if isinstance(_last_update_date, Unset):
-            last_update_date = UNSET
-        else:
-            last_update_date = isoparse(_last_update_date)
+        def _parse_last_update_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_update_date_type_0 = isoparse(data)
 
-        _token_expiration_date = d.pop("tokenExpirationDate", UNSET)
-        token_expiration_date: datetime.datetime | Unset
-        if isinstance(_token_expiration_date, Unset):
-            token_expiration_date = UNSET
-        else:
-            token_expiration_date = isoparse(_token_expiration_date)
+                return last_update_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        last_update_date = _parse_last_update_date(d.pop("lastUpdateDate", UNSET))
+
+        def _parse_token_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                token_expiration_date_type_0 = isoparse(data)
+
+                return token_expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        token_expiration_date = _parse_token_expiration_date(d.pop("tokenExpirationDate", UNSET))
 
         pulse_configuration = cls(
             is_company_mapping_enabled=is_company_mapping_enabled,

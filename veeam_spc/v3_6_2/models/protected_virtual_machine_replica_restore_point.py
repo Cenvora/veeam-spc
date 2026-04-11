@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,17 +21,17 @@ class ProtectedVirtualMachineReplicaRestorePoint:
         instance_uid (UUID | Unset): UID assigned to a restore point.
         virtual_machine_uid (UUID | Unset): UID assigned to a virtual machine.
         backup_uid (UUID | Unset): UID assigned to a replication chain.
-        job_uid (UUID | Unset): UID assigned to a replication job.
-        hardware_plan_uid (UUID | Unset): UID assigned to a hardware plan.
-        creation_date (datetime.datetime | Unset): Date and time when a restore point was created.
+        job_uid (None | Unset | UUID): UID assigned to a replication job.
+        hardware_plan_uid (None | Unset | UUID): UID assigned to a hardware plan.
+        creation_date (datetime.datetime | None | Unset): Date and time when a restore point was created.
     """
 
     instance_uid: UUID | Unset = UNSET
     virtual_machine_uid: UUID | Unset = UNSET
     backup_uid: UUID | Unset = UNSET
-    job_uid: UUID | Unset = UNSET
-    hardware_plan_uid: UUID | Unset = UNSET
-    creation_date: datetime.datetime | Unset = UNSET
+    job_uid: None | Unset | UUID = UNSET
+    hardware_plan_uid: None | Unset | UUID = UNSET
+    creation_date: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -47,17 +47,29 @@ class ProtectedVirtualMachineReplicaRestorePoint:
         if not isinstance(self.backup_uid, Unset):
             backup_uid = str(self.backup_uid)
 
-        job_uid: str | Unset = UNSET
-        if not isinstance(self.job_uid, Unset):
+        job_uid: None | str | Unset
+        if isinstance(self.job_uid, Unset):
+            job_uid = UNSET
+        elif isinstance(self.job_uid, UUID):
             job_uid = str(self.job_uid)
+        else:
+            job_uid = self.job_uid
 
-        hardware_plan_uid: str | Unset = UNSET
-        if not isinstance(self.hardware_plan_uid, Unset):
+        hardware_plan_uid: None | str | Unset
+        if isinstance(self.hardware_plan_uid, Unset):
+            hardware_plan_uid = UNSET
+        elif isinstance(self.hardware_plan_uid, UUID):
             hardware_plan_uid = str(self.hardware_plan_uid)
+        else:
+            hardware_plan_uid = self.hardware_plan_uid
 
-        creation_date: str | Unset = UNSET
-        if not isinstance(self.creation_date, Unset):
+        creation_date: None | str | Unset
+        if isinstance(self.creation_date, Unset):
+            creation_date = UNSET
+        elif isinstance(self.creation_date, datetime.datetime):
             creation_date = self.creation_date.isoformat()
+        else:
+            creation_date = self.creation_date
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -101,26 +113,56 @@ class ProtectedVirtualMachineReplicaRestorePoint:
         else:
             backup_uid = UUID(_backup_uid)
 
-        _job_uid = d.pop("jobUid", UNSET)
-        job_uid: UUID | Unset
-        if isinstance(_job_uid, Unset):
-            job_uid = UNSET
-        else:
-            job_uid = UUID(_job_uid)
+        def _parse_job_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                job_uid_type_0 = UUID(data)
 
-        _hardware_plan_uid = d.pop("hardwarePlanUid", UNSET)
-        hardware_plan_uid: UUID | Unset
-        if isinstance(_hardware_plan_uid, Unset):
-            hardware_plan_uid = UNSET
-        else:
-            hardware_plan_uid = UUID(_hardware_plan_uid)
+                return job_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        _creation_date = d.pop("creationDate", UNSET)
-        creation_date: datetime.datetime | Unset
-        if isinstance(_creation_date, Unset):
-            creation_date = UNSET
-        else:
-            creation_date = isoparse(_creation_date)
+        job_uid = _parse_job_uid(d.pop("jobUid", UNSET))
+
+        def _parse_hardware_plan_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                hardware_plan_uid_type_0 = UUID(data)
+
+                return hardware_plan_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        hardware_plan_uid = _parse_hardware_plan_uid(d.pop("hardwarePlanUid", UNSET))
+
+        def _parse_creation_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                creation_date_type_0 = isoparse(data)
+
+                return creation_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        creation_date = _parse_creation_date(d.pop("creationDate", UNSET))
 
         protected_virtual_machine_replica_restore_point = cls(
             instance_uid=instance_uid,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -12,7 +12,7 @@ from ..models.backup_failover_plan_type import BackupFailoverPlanType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.backup_failover_plan_last_session import BackupFailoverPlanLastSession
+    from ..models.backup_failover_plan_last_session_type_0 import BackupFailoverPlanLastSessionType0
 
 
 T = TypeVar("T", bound="BackupFailoverPlan")
@@ -29,17 +29,18 @@ class BackupFailoverPlan:
         name (str | Unset): Name of a failover plan.
         type_ (BackupFailoverPlanType | Unset): Type of a failover plan.
         status (BackupFailoverPlanStatus | Unset): Status of a failover plan.
-        tenant_uid (UUID | Unset): UID assigned to a tenant for which a failover plan is configured.
+        tenant_uid (None | Unset | UUID): UID assigned to a tenant for which a failover plan is configured.
         objects_count (int | Unset): Number of objects in a job.
-        pre_failover_script_enabled (bool | Unset): Indicates whether a custom script must be executed before a failover
-            plan.
-        pre_failover_command (str | Unset): Path to a script file that is executed before a failover.
+        pre_failover_script_enabled (bool | None | Unset): Indicates whether a custom script must be executed before a
+            failover plan.
+        pre_failover_command (None | str | Unset): Path to a script file that is executed before a failover.
             > Property modification is performed asynchronously and cannot be tracked.
-        post_failover_command (str | Unset): Path to a script file that is executed after a failover.
+        post_failover_command (None | str | Unset): Path to a script file that is executed after a failover.
             > Property modification is performed asynchronously and cannot be tracked.
-        post_failover_script_enabled (bool | Unset): Indicates whether a custom script must be executed after a failover
-            plan.
-        last_session (BackupFailoverPlanLastSession | Unset): Information on the latest failover plan session.
+        post_failover_script_enabled (bool | None | Unset): Indicates whether a custom script must be executed after a
+            failover plan.
+        last_session (BackupFailoverPlanLastSessionType0 | None | Unset): Information on the latest failover plan
+            session.
     """
 
     instance_uid: UUID | Unset = UNSET
@@ -48,16 +49,18 @@ class BackupFailoverPlan:
     name: str | Unset = UNSET
     type_: BackupFailoverPlanType | Unset = UNSET
     status: BackupFailoverPlanStatus | Unset = UNSET
-    tenant_uid: UUID | Unset = UNSET
+    tenant_uid: None | Unset | UUID = UNSET
     objects_count: int | Unset = UNSET
-    pre_failover_script_enabled: bool | Unset = UNSET
-    pre_failover_command: str | Unset = UNSET
-    post_failover_command: str | Unset = UNSET
-    post_failover_script_enabled: bool | Unset = UNSET
-    last_session: BackupFailoverPlanLastSession | Unset = UNSET
+    pre_failover_script_enabled: bool | None | Unset = UNSET
+    pre_failover_command: None | str | Unset = UNSET
+    post_failover_command: None | str | Unset = UNSET
+    post_failover_script_enabled: bool | None | Unset = UNSET
+    last_session: BackupFailoverPlanLastSessionType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.backup_failover_plan_last_session_type_0 import BackupFailoverPlanLastSessionType0
+
         instance_uid: str | Unset = UNSET
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
@@ -80,23 +83,47 @@ class BackupFailoverPlan:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        tenant_uid: str | Unset = UNSET
-        if not isinstance(self.tenant_uid, Unset):
+        tenant_uid: None | str | Unset
+        if isinstance(self.tenant_uid, Unset):
+            tenant_uid = UNSET
+        elif isinstance(self.tenant_uid, UUID):
             tenant_uid = str(self.tenant_uid)
+        else:
+            tenant_uid = self.tenant_uid
 
         objects_count = self.objects_count
 
-        pre_failover_script_enabled = self.pre_failover_script_enabled
+        pre_failover_script_enabled: bool | None | Unset
+        if isinstance(self.pre_failover_script_enabled, Unset):
+            pre_failover_script_enabled = UNSET
+        else:
+            pre_failover_script_enabled = self.pre_failover_script_enabled
 
-        pre_failover_command = self.pre_failover_command
+        pre_failover_command: None | str | Unset
+        if isinstance(self.pre_failover_command, Unset):
+            pre_failover_command = UNSET
+        else:
+            pre_failover_command = self.pre_failover_command
 
-        post_failover_command = self.post_failover_command
+        post_failover_command: None | str | Unset
+        if isinstance(self.post_failover_command, Unset):
+            post_failover_command = UNSET
+        else:
+            post_failover_command = self.post_failover_command
 
-        post_failover_script_enabled = self.post_failover_script_enabled
+        post_failover_script_enabled: bool | None | Unset
+        if isinstance(self.post_failover_script_enabled, Unset):
+            post_failover_script_enabled = UNSET
+        else:
+            post_failover_script_enabled = self.post_failover_script_enabled
 
-        last_session: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.last_session, Unset):
+        last_session: dict[str, Any] | None | Unset
+        if isinstance(self.last_session, Unset):
+            last_session = UNSET
+        elif isinstance(self.last_session, BackupFailoverPlanLastSessionType0):
             last_session = self.last_session.to_dict()
+        else:
+            last_session = self.last_session
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -132,7 +159,7 @@ class BackupFailoverPlan:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.backup_failover_plan_last_session import BackupFailoverPlanLastSession
+        from ..models.backup_failover_plan_last_session_type_0 import BackupFailoverPlanLastSessionType0
 
         d = dict(src_dict)
         _instance_uid = d.pop("instanceUid", UNSET)
@@ -172,29 +199,79 @@ class BackupFailoverPlan:
         else:
             status = BackupFailoverPlanStatus(_status)
 
-        _tenant_uid = d.pop("tenantUid", UNSET)
-        tenant_uid: UUID | Unset
-        if isinstance(_tenant_uid, Unset):
-            tenant_uid = UNSET
-        else:
-            tenant_uid = UUID(_tenant_uid)
+        def _parse_tenant_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                tenant_uid_type_0 = UUID(data)
+
+                return tenant_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        tenant_uid = _parse_tenant_uid(d.pop("tenantUid", UNSET))
 
         objects_count = d.pop("objectsCount", UNSET)
 
-        pre_failover_script_enabled = d.pop("preFailoverScriptEnabled", UNSET)
+        def _parse_pre_failover_script_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        pre_failover_command = d.pop("preFailoverCommand", UNSET)
+        pre_failover_script_enabled = _parse_pre_failover_script_enabled(d.pop("preFailoverScriptEnabled", UNSET))
 
-        post_failover_command = d.pop("postFailoverCommand", UNSET)
+        def _parse_pre_failover_command(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        post_failover_script_enabled = d.pop("postFailoverScriptEnabled", UNSET)
+        pre_failover_command = _parse_pre_failover_command(d.pop("preFailoverCommand", UNSET))
 
-        _last_session = d.pop("lastSession", UNSET)
-        last_session: BackupFailoverPlanLastSession | Unset
-        if isinstance(_last_session, Unset):
-            last_session = UNSET
-        else:
-            last_session = BackupFailoverPlanLastSession.from_dict(_last_session)
+        def _parse_post_failover_command(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        post_failover_command = _parse_post_failover_command(d.pop("postFailoverCommand", UNSET))
+
+        def _parse_post_failover_script_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        post_failover_script_enabled = _parse_post_failover_script_enabled(d.pop("postFailoverScriptEnabled", UNSET))
+
+        def _parse_last_session(data: object) -> BackupFailoverPlanLastSessionType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_failover_plan_last_session_type_0 = (
+                    BackupFailoverPlanLastSessionType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_failover_plan_last_session_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupFailoverPlanLastSessionType0 | None | Unset, data)
+
+        last_session = _parse_last_session(d.pop("lastSession", UNSET))
 
         backup_failover_plan = cls(
             instance_uid=instance_uid,

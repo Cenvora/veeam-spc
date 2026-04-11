@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -14,7 +14,7 @@ from ..models.backup_server_simple_backup_copy_job_rpo_options_unit import Backu
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+    from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
 
 T = TypeVar("T", bound="BackupServerSimpleBackupCopyJob")
@@ -27,8 +27,8 @@ class BackupServerSimpleBackupCopyJob:
         instance_uid (UUID | Unset): UID assigned to a job in Veeam Backup & Replication.
         unique_uid (UUID | Unset): UID assigned to a job in Veeam Service Provider Console.
         target_repository_uid (UUID | Unset): UID assigned to a target backup repository.
-        target_wan_accelerator_uid (UUID | Unset): UID assigned to a target WAN accelerator.
-        source_wan_accelerator_uid (UUID | Unset): UID assigned to a source WAN accelerator.
+        target_wan_accelerator_uid (None | Unset | UUID): UID assigned to a target WAN accelerator.
+        source_wan_accelerator_uid (None | Unset | UUID): UID assigned to a source WAN accelerator.
         weekly_restore_points_to_keep (int | Unset): Number of weeks during which the weekly backup must be stored on
             the target repository.
         monthly_restore_points_to_keep (int | Unset): Number of months during which the monthly backup must be stored on
@@ -42,15 +42,15 @@ class BackupServerSimpleBackupCopyJob:
         rpo_options_value (int | Unset): Desired RPO interval value.
         rpo_options_unit (BackupServerSimpleBackupCopyJobRpoOptionsUnit | Unset): Measurement units of a desired RPO
             interval value.
-        field_embedded (EmbeddedForBackupServerJobChildren | Unset): Resource representation of the related Veeam Backup
-            & Replication server job entity.
+        field_embedded (EmbeddedForBackupServerJobChildrenType0 | None | Unset): Resource representation of the related
+            Veeam Backup & Replication server job entity.
     """
 
     instance_uid: UUID | Unset = UNSET
     unique_uid: UUID | Unset = UNSET
     target_repository_uid: UUID | Unset = UNSET
-    target_wan_accelerator_uid: UUID | Unset = UNSET
-    source_wan_accelerator_uid: UUID | Unset = UNSET
+    target_wan_accelerator_uid: None | Unset | UUID = UNSET
+    source_wan_accelerator_uid: None | Unset | UUID = UNSET
     weekly_restore_points_to_keep: int | Unset = UNSET
     monthly_restore_points_to_keep: int | Unset = UNSET
     yearly_restore_points_to_keep: int | Unset = UNSET
@@ -58,10 +58,12 @@ class BackupServerSimpleBackupCopyJob:
     is_rpo_options_enabled: bool | Unset = UNSET
     rpo_options_value: int | Unset = UNSET
     rpo_options_unit: BackupServerSimpleBackupCopyJobRpoOptionsUnit | Unset = UNSET
-    field_embedded: EmbeddedForBackupServerJobChildren | Unset = UNSET
+    field_embedded: EmbeddedForBackupServerJobChildrenType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
+
         instance_uid: str | Unset = UNSET
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
@@ -74,13 +76,21 @@ class BackupServerSimpleBackupCopyJob:
         if not isinstance(self.target_repository_uid, Unset):
             target_repository_uid = str(self.target_repository_uid)
 
-        target_wan_accelerator_uid: str | Unset = UNSET
-        if not isinstance(self.target_wan_accelerator_uid, Unset):
+        target_wan_accelerator_uid: None | str | Unset
+        if isinstance(self.target_wan_accelerator_uid, Unset):
+            target_wan_accelerator_uid = UNSET
+        elif isinstance(self.target_wan_accelerator_uid, UUID):
             target_wan_accelerator_uid = str(self.target_wan_accelerator_uid)
+        else:
+            target_wan_accelerator_uid = self.target_wan_accelerator_uid
 
-        source_wan_accelerator_uid: str | Unset = UNSET
-        if not isinstance(self.source_wan_accelerator_uid, Unset):
+        source_wan_accelerator_uid: None | str | Unset
+        if isinstance(self.source_wan_accelerator_uid, Unset):
+            source_wan_accelerator_uid = UNSET
+        elif isinstance(self.source_wan_accelerator_uid, UUID):
             source_wan_accelerator_uid = str(self.source_wan_accelerator_uid)
+        else:
+            source_wan_accelerator_uid = self.source_wan_accelerator_uid
 
         weekly_restore_points_to_keep = self.weekly_restore_points_to_keep
 
@@ -100,9 +110,13 @@ class BackupServerSimpleBackupCopyJob:
         if not isinstance(self.rpo_options_unit, Unset):
             rpo_options_unit = self.rpo_options_unit.value
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForBackupServerJobChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -138,7 +152,7 @@ class BackupServerSimpleBackupCopyJob:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
         d = dict(src_dict)
         _instance_uid = d.pop("instanceUid", UNSET)
@@ -162,19 +176,39 @@ class BackupServerSimpleBackupCopyJob:
         else:
             target_repository_uid = UUID(_target_repository_uid)
 
-        _target_wan_accelerator_uid = d.pop("targetWanAcceleratorUid", UNSET)
-        target_wan_accelerator_uid: UUID | Unset
-        if isinstance(_target_wan_accelerator_uid, Unset):
-            target_wan_accelerator_uid = UNSET
-        else:
-            target_wan_accelerator_uid = UUID(_target_wan_accelerator_uid)
+        def _parse_target_wan_accelerator_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                target_wan_accelerator_uid_type_0 = UUID(data)
 
-        _source_wan_accelerator_uid = d.pop("sourceWanAcceleratorUid", UNSET)
-        source_wan_accelerator_uid: UUID | Unset
-        if isinstance(_source_wan_accelerator_uid, Unset):
-            source_wan_accelerator_uid = UNSET
-        else:
-            source_wan_accelerator_uid = UUID(_source_wan_accelerator_uid)
+                return target_wan_accelerator_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        target_wan_accelerator_uid = _parse_target_wan_accelerator_uid(d.pop("targetWanAcceleratorUid", UNSET))
+
+        def _parse_source_wan_accelerator_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                source_wan_accelerator_uid_type_0 = UUID(data)
+
+                return source_wan_accelerator_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        source_wan_accelerator_uid = _parse_source_wan_accelerator_uid(d.pop("sourceWanAcceleratorUid", UNSET))
 
         weekly_restore_points_to_keep = d.pop("weeklyRestorePointsToKeep", UNSET)
 
@@ -200,12 +234,24 @@ class BackupServerSimpleBackupCopyJob:
         else:
             rpo_options_unit = BackupServerSimpleBackupCopyJobRpoOptionsUnit(_rpo_options_unit)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForBackupServerJobChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForBackupServerJobChildren.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> EmbeddedForBackupServerJobChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_backup_server_job_children_type_0 = (
+                    EmbeddedForBackupServerJobChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_backup_server_job_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForBackupServerJobChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         backup_server_simple_backup_copy_job = cls(
             instance_uid=instance_uid,

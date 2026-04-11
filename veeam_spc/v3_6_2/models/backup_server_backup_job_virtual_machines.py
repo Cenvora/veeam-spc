@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -9,7 +9,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.backup_server_backup_job_exclusions import BackupServerBackupJobExclusions
+    from ..models.backup_server_backup_job_exclusions_type_0 import BackupServerBackupJobExclusionsType0
     from ..models.backup_server_backup_job_vmware_object_size import BackupServerBackupJobVmwareObjectSize
 
 
@@ -23,22 +23,28 @@ class BackupServerBackupJobVirtualMachines:
     Attributes:
         includes (list[BackupServerBackupJobVmwareObjectSize]): Array of VMs and VM containers processed by a backup
             job.
-        excludes (BackupServerBackupJobExclusions | Unset): Array of objects excluded from a backup job.
+        excludes (BackupServerBackupJobExclusionsType0 | None | Unset): Array of objects excluded from a backup job.
     """
 
     includes: list[BackupServerBackupJobVmwareObjectSize]
-    excludes: BackupServerBackupJobExclusions | Unset = UNSET
+    excludes: BackupServerBackupJobExclusionsType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.backup_server_backup_job_exclusions_type_0 import BackupServerBackupJobExclusionsType0
+
         includes = []
         for includes_item_data in self.includes:
             includes_item = includes_item_data.to_dict()
             includes.append(includes_item)
 
-        excludes: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.excludes, Unset):
+        excludes: dict[str, Any] | None | Unset
+        if isinstance(self.excludes, Unset):
+            excludes = UNSET
+        elif isinstance(self.excludes, BackupServerBackupJobExclusionsType0):
             excludes = self.excludes.to_dict()
+        else:
+            excludes = self.excludes
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -54,7 +60,7 @@ class BackupServerBackupJobVirtualMachines:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.backup_server_backup_job_exclusions import BackupServerBackupJobExclusions
+        from ..models.backup_server_backup_job_exclusions_type_0 import BackupServerBackupJobExclusionsType0
         from ..models.backup_server_backup_job_vmware_object_size import BackupServerBackupJobVmwareObjectSize
 
         d = dict(src_dict)
@@ -65,12 +71,24 @@ class BackupServerBackupJobVirtualMachines:
 
             includes.append(includes_item)
 
-        _excludes = d.pop("excludes", UNSET)
-        excludes: BackupServerBackupJobExclusions | Unset
-        if isinstance(_excludes, Unset):
-            excludes = UNSET
-        else:
-            excludes = BackupServerBackupJobExclusions.from_dict(_excludes)
+        def _parse_excludes(data: object) -> BackupServerBackupJobExclusionsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_exclusions_type_0 = (
+                    BackupServerBackupJobExclusionsType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_exclusions_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobExclusionsType0 | None | Unset, data)
+
+        excludes = _parse_excludes(d.pop("excludes", UNSET))
 
         backup_server_backup_job_virtual_machines = cls(
             includes=includes,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -31,9 +31,9 @@ class WindowsActiveDirectoryBasedDiscoveryRuleInput:
         master_agent_uid (UUID): UID assigned to a master agent.
         ad_method (WindowsActiveDirectoryBasedDiscoveryRuleInputAdMethod): Microsoft Entra ID discovery method.
         access_account (DiscoveryRuleCredentials):
-        skip_offline_computers_days (int | Unset): Number of days for which offline computers are skipped from
+        skip_offline_computers_days (int | None | Unset): Number of days for which offline computers are skipped from
             discovery.
-        custom_query (str | Unset): LDAP query that returns a list of computers to scan.
+        custom_query (None | str | Unset): LDAP query that returns a list of computers to scan.
         use_master_management_agent_credentials (bool | Unset): Indicates whether credentials specified in the master
             management agent configuration must be used. Default: True.
         filter_ (DiscoveryRuleFilter | Unset):
@@ -48,8 +48,8 @@ class WindowsActiveDirectoryBasedDiscoveryRuleInput:
     master_agent_uid: UUID
     ad_method: WindowsActiveDirectoryBasedDiscoveryRuleInputAdMethod
     access_account: DiscoveryRuleCredentials
-    skip_offline_computers_days: int | Unset = UNSET
-    custom_query: str | Unset = UNSET
+    skip_offline_computers_days: int | None | Unset = UNSET
+    custom_query: None | str | Unset = UNSET
     use_master_management_agent_credentials: bool | Unset = True
     filter_: DiscoveryRuleFilter | Unset = UNSET
     notification_settings: DiscoveryRuleNotificationSettings | Unset = UNSET
@@ -66,9 +66,17 @@ class WindowsActiveDirectoryBasedDiscoveryRuleInput:
 
         access_account = self.access_account.to_dict()
 
-        skip_offline_computers_days = self.skip_offline_computers_days
+        skip_offline_computers_days: int | None | Unset
+        if isinstance(self.skip_offline_computers_days, Unset):
+            skip_offline_computers_days = UNSET
+        else:
+            skip_offline_computers_days = self.skip_offline_computers_days
 
-        custom_query = self.custom_query
+        custom_query: None | str | Unset
+        if isinstance(self.custom_query, Unset):
+            custom_query = UNSET
+        else:
+            custom_query = self.custom_query
 
         use_master_management_agent_credentials = self.use_master_management_agent_credentials
 
@@ -132,9 +140,23 @@ class WindowsActiveDirectoryBasedDiscoveryRuleInput:
 
         access_account = DiscoveryRuleCredentials.from_dict(d.pop("accessAccount"))
 
-        skip_offline_computers_days = d.pop("skipOfflineComputersDays", UNSET)
+        def _parse_skip_offline_computers_days(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        custom_query = d.pop("customQuery", UNSET)
+        skip_offline_computers_days = _parse_skip_offline_computers_days(d.pop("skipOfflineComputersDays", UNSET))
+
+        def _parse_custom_query(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        custom_query = _parse_custom_query(d.pop("customQuery", UNSET))
 
         use_master_management_agent_credentials = d.pop("useMasterManagementAgentCredentials", UNSET)
 

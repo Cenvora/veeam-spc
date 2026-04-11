@@ -15,9 +15,9 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     backup_server_uid: UUID,
     *,
-    write_cache_folder_filter: str | Unset = UNSET,
+    write_cache_folder_filter: None | str | Unset = UNSET,
     type_filter: BackupServerMountServerType | Unset = UNSET,
-    is_default_filter: bool | Unset = UNSET,
+    is_default_filter: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -30,7 +30,12 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    params["writeCacheFolderFilter"] = write_cache_folder_filter
+    json_write_cache_folder_filter: None | str | Unset
+    if isinstance(write_cache_folder_filter, Unset):
+        json_write_cache_folder_filter = UNSET
+    else:
+        json_write_cache_folder_filter = write_cache_folder_filter
+    params["writeCacheFolderFilter"] = json_write_cache_folder_filter
 
     json_type_filter: str | Unset = UNSET
     if not isinstance(type_filter, Unset):
@@ -38,7 +43,12 @@ def _get_kwargs(
 
     params["typeFilter"] = json_type_filter
 
-    params["isDefaultFilter"] = is_default_filter
+    json_is_default_filter: bool | None | Unset
+    if isinstance(is_default_filter, Unset):
+        json_is_default_filter = UNSET
+    else:
+        json_is_default_filter = is_default_filter
+    params["isDefaultFilter"] = json_is_default_filter
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -86,9 +96,9 @@ def sync_detailed(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    write_cache_folder_filter: str | Unset = UNSET,
+    write_cache_folder_filter: None | str | Unset = UNSET,
     type_filter: BackupServerMountServerType | Unset = UNSET,
-    is_default_filter: bool | Unset = UNSET,
+    is_default_filter: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | ErrorResponse | GetMountServersResponse200]:
@@ -99,9 +109,9 @@ def sync_detailed(
 
     Args:
         backup_server_uid (UUID):
-        write_cache_folder_filter (str | Unset):
+        write_cache_folder_filter (None | str | Unset):
         type_filter (BackupServerMountServerType | Unset): Mount server type.
-        is_default_filter (bool | Unset):
+        is_default_filter (bool | None | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -133,9 +143,9 @@ def sync(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    write_cache_folder_filter: str | Unset = UNSET,
+    write_cache_folder_filter: None | str | Unset = UNSET,
     type_filter: BackupServerMountServerType | Unset = UNSET,
-    is_default_filter: bool | Unset = UNSET,
+    is_default_filter: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | ErrorResponse | GetMountServersResponse200 | None:
@@ -146,9 +156,9 @@ def sync(
 
     Args:
         backup_server_uid (UUID):
-        write_cache_folder_filter (str | Unset):
+        write_cache_folder_filter (None | str | Unset):
         type_filter (BackupServerMountServerType | Unset): Mount server type.
-        is_default_filter (bool | Unset):
+        is_default_filter (bool | None | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -175,9 +185,9 @@ async def asyncio_detailed(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    write_cache_folder_filter: str | Unset = UNSET,
+    write_cache_folder_filter: None | str | Unset = UNSET,
     type_filter: BackupServerMountServerType | Unset = UNSET,
-    is_default_filter: bool | Unset = UNSET,
+    is_default_filter: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | ErrorResponse | GetMountServersResponse200]:
@@ -188,9 +198,9 @@ async def asyncio_detailed(
 
     Args:
         backup_server_uid (UUID):
-        write_cache_folder_filter (str | Unset):
+        write_cache_folder_filter (None | str | Unset):
         type_filter (BackupServerMountServerType | Unset): Mount server type.
-        is_default_filter (bool | Unset):
+        is_default_filter (bool | None | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -220,9 +230,9 @@ async def asyncio(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    write_cache_folder_filter: str | Unset = UNSET,
+    write_cache_folder_filter: None | str | Unset = UNSET,
     type_filter: BackupServerMountServerType | Unset = UNSET,
-    is_default_filter: bool | Unset = UNSET,
+    is_default_filter: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | ErrorResponse | GetMountServersResponse200 | None:
@@ -233,9 +243,9 @@ async def asyncio(
 
     Args:
         backup_server_uid (UUID):
-        write_cache_folder_filter (str | Unset):
+        write_cache_folder_filter (None | str | Unset):
         type_filter (BackupServerMountServerType | Unset): Mount server type.
-        is_default_filter (bool | Unset):
+        is_default_filter (bool | None | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 

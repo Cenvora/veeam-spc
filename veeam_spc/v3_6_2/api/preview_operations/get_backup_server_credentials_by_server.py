@@ -15,9 +15,9 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     backup_server_uid: UUID,
     *,
-    mapped_organization_uid_filter: UUID | Unset = UNSET,
+    mapped_organization_uid_filter: None | Unset | UUID = UNSET,
     order_column: GetBackupServerCredentialsByServerOrderColumn | Unset = UNSET,
-    order_asc: bool | Unset = UNSET,
+    order_asc: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -32,9 +32,13 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_mapped_organization_uid_filter: str | Unset = UNSET
-    if not isinstance(mapped_organization_uid_filter, Unset):
+    json_mapped_organization_uid_filter: None | str | Unset
+    if isinstance(mapped_organization_uid_filter, Unset):
+        json_mapped_organization_uid_filter = UNSET
+    elif isinstance(mapped_organization_uid_filter, UUID):
         json_mapped_organization_uid_filter = str(mapped_organization_uid_filter)
+    else:
+        json_mapped_organization_uid_filter = mapped_organization_uid_filter
     params["mappedOrganizationUidFilter"] = json_mapped_organization_uid_filter
 
     json_order_column: str | Unset = UNSET
@@ -43,7 +47,12 @@ def _get_kwargs(
 
     params["orderColumn"] = json_order_column
 
-    params["orderAsc"] = order_asc
+    json_order_asc: bool | None | Unset
+    if isinstance(order_asc, Unset):
+        json_order_asc = UNSET
+    else:
+        json_order_asc = order_asc
+    params["orderAsc"] = json_order_asc
 
     params["limit"] = limit
 
@@ -95,9 +104,9 @@ def sync_detailed(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    mapped_organization_uid_filter: UUID | Unset = UNSET,
+    mapped_organization_uid_filter: None | Unset | UUID = UNSET,
     order_column: GetBackupServerCredentialsByServerOrderColumn | Unset = UNSET,
-    order_asc: bool | Unset = UNSET,
+    order_asc: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -110,9 +119,9 @@ def sync_detailed(
 
     Args:
         backup_server_uid (UUID):
-        mapped_organization_uid_filter (UUID | Unset):
+        mapped_organization_uid_filter (None | Unset | UUID):
         order_column (GetBackupServerCredentialsByServerOrderColumn | Unset):
-        order_asc (bool | Unset):
+        order_asc (bool | None | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):
@@ -148,9 +157,9 @@ def sync(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    mapped_organization_uid_filter: UUID | Unset = UNSET,
+    mapped_organization_uid_filter: None | Unset | UUID = UNSET,
     order_column: GetBackupServerCredentialsByServerOrderColumn | Unset = UNSET,
-    order_asc: bool | Unset = UNSET,
+    order_asc: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -163,9 +172,9 @@ def sync(
 
     Args:
         backup_server_uid (UUID):
-        mapped_organization_uid_filter (UUID | Unset):
+        mapped_organization_uid_filter (None | Unset | UUID):
         order_column (GetBackupServerCredentialsByServerOrderColumn | Unset):
-        order_asc (bool | Unset):
+        order_asc (bool | None | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):
@@ -196,9 +205,9 @@ async def asyncio_detailed(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    mapped_organization_uid_filter: UUID | Unset = UNSET,
+    mapped_organization_uid_filter: None | Unset | UUID = UNSET,
     order_column: GetBackupServerCredentialsByServerOrderColumn | Unset = UNSET,
-    order_asc: bool | Unset = UNSET,
+    order_asc: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -211,9 +220,9 @@ async def asyncio_detailed(
 
     Args:
         backup_server_uid (UUID):
-        mapped_organization_uid_filter (UUID | Unset):
+        mapped_organization_uid_filter (None | Unset | UUID):
         order_column (GetBackupServerCredentialsByServerOrderColumn | Unset):
-        order_asc (bool | Unset):
+        order_asc (bool | None | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):
@@ -247,9 +256,9 @@ async def asyncio(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    mapped_organization_uid_filter: UUID | Unset = UNSET,
+    mapped_organization_uid_filter: None | Unset | UUID = UNSET,
     order_column: GetBackupServerCredentialsByServerOrderColumn | Unset = UNSET,
-    order_asc: bool | Unset = UNSET,
+    order_asc: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -262,9 +271,9 @@ async def asyncio(
 
     Args:
         backup_server_uid (UUID):
-        mapped_organization_uid_filter (UUID | Unset):
+        mapped_organization_uid_filter (None | Unset | UUID):
         order_column (GetBackupServerCredentialsByServerOrderColumn | Unset):
-        order_asc (bool | Unset):
+        order_asc (bool | None | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):

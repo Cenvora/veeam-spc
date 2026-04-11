@@ -14,18 +14,18 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    order_by: str | Unset = UNSET,
+    order_by: None | str | Unset = UNSET,
     order_direction: GetVb365ProtectedObjectsOrderDirection | Unset = GetVb365ProtectedObjectsOrderDirection.ASCENDING,
-    object_name_filter: str | Unset = UNSET,
-    object_type_filter: list[Vb365ProtectedObjectType] | Unset = UNSET,
-    educational_filter: bool | Unset = UNSET,
-    licensed_filter: bool | Unset = UNSET,
-    skip_cache: bool | Unset = UNSET,
+    object_name_filter: None | str | Unset = UNSET,
+    object_type_filter: list[Vb365ProtectedObjectType] | None | Unset = UNSET,
+    educational_filter: bool | None | Unset = UNSET,
+    licensed_filter: bool | None | Unset = UNSET,
+    skip_cache: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -38,7 +38,12 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    params["orderBy"] = order_by
+    json_order_by: None | str | Unset
+    if isinstance(order_by, Unset):
+        json_order_by = UNSET
+    else:
+        json_order_by = order_by
+    params["orderBy"] = json_order_by
 
     json_order_direction: str | Unset = UNSET
     if not isinstance(order_direction, Unset):
@@ -46,44 +51,80 @@ def _get_kwargs(
 
     params["orderDirection"] = json_order_direction
 
-    params["objectNameFilter"] = object_name_filter
+    json_object_name_filter: None | str | Unset
+    if isinstance(object_name_filter, Unset):
+        json_object_name_filter = UNSET
+    else:
+        json_object_name_filter = object_name_filter
+    params["objectNameFilter"] = json_object_name_filter
 
-    json_object_type_filter: list[str] | Unset = UNSET
-    if not isinstance(object_type_filter, Unset):
+    json_object_type_filter: list[str] | None | Unset
+    if isinstance(object_type_filter, Unset):
+        json_object_type_filter = UNSET
+    elif isinstance(object_type_filter, list):
         json_object_type_filter = []
-        for object_type_filter_item_data in object_type_filter:
-            object_type_filter_item = object_type_filter_item_data.value
-            json_object_type_filter.append(object_type_filter_item)
+        for object_type_filter_type_0_item_data in object_type_filter:
+            object_type_filter_type_0_item = object_type_filter_type_0_item_data.value
+            json_object_type_filter.append(object_type_filter_type_0_item)
 
+    else:
+        json_object_type_filter = object_type_filter
     params["objectTypeFilter"] = json_object_type_filter
 
-    params["educationalFilter"] = educational_filter
+    json_educational_filter: bool | None | Unset
+    if isinstance(educational_filter, Unset):
+        json_educational_filter = UNSET
+    else:
+        json_educational_filter = educational_filter
+    params["educationalFilter"] = json_educational_filter
 
-    params["licensedFilter"] = licensed_filter
+    json_licensed_filter: bool | None | Unset
+    if isinstance(licensed_filter, Unset):
+        json_licensed_filter = UNSET
+    else:
+        json_licensed_filter = licensed_filter
+    params["licensedFilter"] = json_licensed_filter
 
-    params["skipCache"] = skip_cache
+    json_skip_cache: bool | None | Unset
+    if isinstance(skip_cache, Unset):
+        json_skip_cache = UNSET
+    else:
+        json_skip_cache = skip_cache
+    params["skipCache"] = json_skip_cache
 
     params["limit"] = limit
 
     params["offset"] = offset
 
-    json_site_filter: list[str] | Unset = UNSET
-    if not isinstance(site_filter, Unset):
+    json_site_filter: list[str] | None | Unset
+    if isinstance(site_filter, Unset):
+        json_site_filter = UNSET
+    elif isinstance(site_filter, list):
         json_site_filter = []
-        for site_filter_item_data in site_filter:
-            site_filter_item = str(site_filter_item_data)
-            json_site_filter.append(site_filter_item)
+        for site_filter_type_0_item_data in site_filter:
+            site_filter_type_0_item = str(site_filter_type_0_item_data)
+            json_site_filter.append(site_filter_type_0_item)
 
+    else:
+        json_site_filter = site_filter
     params["siteFilter"] = json_site_filter
 
-    json_organization_filter: str | Unset = UNSET
-    if not isinstance(organization_filter, Unset):
+    json_organization_filter: None | str | Unset
+    if isinstance(organization_filter, Unset):
+        json_organization_filter = UNSET
+    elif isinstance(organization_filter, UUID):
         json_organization_filter = str(organization_filter)
+    else:
+        json_organization_filter = organization_filter
     params["organizationFilter"] = json_organization_filter
 
-    json_location_filter: str | Unset = UNSET
-    if not isinstance(location_filter, Unset):
+    json_location_filter: None | str | Unset
+    if isinstance(location_filter, Unset):
+        json_location_filter = UNSET
+    elif isinstance(location_filter, UUID):
         json_location_filter = str(location_filter)
+    else:
+        json_location_filter = location_filter
     params["locationFilter"] = json_location_filter
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
@@ -129,18 +170,18 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    order_by: str | Unset = UNSET,
+    order_by: None | str | Unset = UNSET,
     order_direction: GetVb365ProtectedObjectsOrderDirection | Unset = GetVb365ProtectedObjectsOrderDirection.ASCENDING,
-    object_name_filter: str | Unset = UNSET,
-    object_type_filter: list[Vb365ProtectedObjectType] | Unset = UNSET,
-    educational_filter: bool | Unset = UNSET,
-    licensed_filter: bool | Unset = UNSET,
-    skip_cache: bool | Unset = UNSET,
+    object_name_filter: None | str | Unset = UNSET,
+    object_type_filter: list[Vb365ProtectedObjectType] | None | Unset = UNSET,
+    educational_filter: bool | None | Unset = UNSET,
+    licensed_filter: bool | None | Unset = UNSET,
+    skip_cache: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | ErrorResponse | GetVb365ProtectedObjectsResponse200]:
@@ -150,19 +191,19 @@ def sync_detailed(
     365.
 
     Args:
-        order_by (str | Unset):
+        order_by (None | str | Unset):
         order_direction (GetVb365ProtectedObjectsOrderDirection | Unset):  Default:
             GetVb365ProtectedObjectsOrderDirection.ASCENDING.
-        object_name_filter (str | Unset):
-        object_type_filter (list[Vb365ProtectedObjectType] | Unset):
-        educational_filter (bool | Unset):
-        licensed_filter (bool | Unset):
-        skip_cache (bool | Unset):
+        object_name_filter (None | str | Unset):
+        object_type_filter (list[Vb365ProtectedObjectType] | None | Unset):
+        educational_filter (bool | None | Unset):
+        licensed_filter (bool | None | Unset):
+        skip_cache (bool | None | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
-        site_filter (list[UUID] | Unset):
-        organization_filter (UUID | Unset):
-        location_filter (UUID | Unset):
+        site_filter (list[UUID] | None | Unset):
+        organization_filter (None | Unset | UUID):
+        location_filter (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -201,18 +242,18 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    order_by: str | Unset = UNSET,
+    order_by: None | str | Unset = UNSET,
     order_direction: GetVb365ProtectedObjectsOrderDirection | Unset = GetVb365ProtectedObjectsOrderDirection.ASCENDING,
-    object_name_filter: str | Unset = UNSET,
-    object_type_filter: list[Vb365ProtectedObjectType] | Unset = UNSET,
-    educational_filter: bool | Unset = UNSET,
-    licensed_filter: bool | Unset = UNSET,
-    skip_cache: bool | Unset = UNSET,
+    object_name_filter: None | str | Unset = UNSET,
+    object_type_filter: list[Vb365ProtectedObjectType] | None | Unset = UNSET,
+    educational_filter: bool | None | Unset = UNSET,
+    licensed_filter: bool | None | Unset = UNSET,
+    skip_cache: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | ErrorResponse | GetVb365ProtectedObjectsResponse200 | None:
@@ -222,19 +263,19 @@ def sync(
     365.
 
     Args:
-        order_by (str | Unset):
+        order_by (None | str | Unset):
         order_direction (GetVb365ProtectedObjectsOrderDirection | Unset):  Default:
             GetVb365ProtectedObjectsOrderDirection.ASCENDING.
-        object_name_filter (str | Unset):
-        object_type_filter (list[Vb365ProtectedObjectType] | Unset):
-        educational_filter (bool | Unset):
-        licensed_filter (bool | Unset):
-        skip_cache (bool | Unset):
+        object_name_filter (None | str | Unset):
+        object_type_filter (list[Vb365ProtectedObjectType] | None | Unset):
+        educational_filter (bool | None | Unset):
+        licensed_filter (bool | None | Unset):
+        skip_cache (bool | None | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
-        site_filter (list[UUID] | Unset):
-        organization_filter (UUID | Unset):
-        location_filter (UUID | Unset):
+        site_filter (list[UUID] | None | Unset):
+        organization_filter (None | Unset | UUID):
+        location_filter (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -268,18 +309,18 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    order_by: str | Unset = UNSET,
+    order_by: None | str | Unset = UNSET,
     order_direction: GetVb365ProtectedObjectsOrderDirection | Unset = GetVb365ProtectedObjectsOrderDirection.ASCENDING,
-    object_name_filter: str | Unset = UNSET,
-    object_type_filter: list[Vb365ProtectedObjectType] | Unset = UNSET,
-    educational_filter: bool | Unset = UNSET,
-    licensed_filter: bool | Unset = UNSET,
-    skip_cache: bool | Unset = UNSET,
+    object_name_filter: None | str | Unset = UNSET,
+    object_type_filter: list[Vb365ProtectedObjectType] | None | Unset = UNSET,
+    educational_filter: bool | None | Unset = UNSET,
+    licensed_filter: bool | None | Unset = UNSET,
+    skip_cache: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | ErrorResponse | GetVb365ProtectedObjectsResponse200]:
@@ -289,19 +330,19 @@ async def asyncio_detailed(
     365.
 
     Args:
-        order_by (str | Unset):
+        order_by (None | str | Unset):
         order_direction (GetVb365ProtectedObjectsOrderDirection | Unset):  Default:
             GetVb365ProtectedObjectsOrderDirection.ASCENDING.
-        object_name_filter (str | Unset):
-        object_type_filter (list[Vb365ProtectedObjectType] | Unset):
-        educational_filter (bool | Unset):
-        licensed_filter (bool | Unset):
-        skip_cache (bool | Unset):
+        object_name_filter (None | str | Unset):
+        object_type_filter (list[Vb365ProtectedObjectType] | None | Unset):
+        educational_filter (bool | None | Unset):
+        licensed_filter (bool | None | Unset):
+        skip_cache (bool | None | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
-        site_filter (list[UUID] | Unset):
-        organization_filter (UUID | Unset):
-        location_filter (UUID | Unset):
+        site_filter (list[UUID] | None | Unset):
+        organization_filter (None | Unset | UUID):
+        location_filter (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -338,18 +379,18 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    order_by: str | Unset = UNSET,
+    order_by: None | str | Unset = UNSET,
     order_direction: GetVb365ProtectedObjectsOrderDirection | Unset = GetVb365ProtectedObjectsOrderDirection.ASCENDING,
-    object_name_filter: str | Unset = UNSET,
-    object_type_filter: list[Vb365ProtectedObjectType] | Unset = UNSET,
-    educational_filter: bool | Unset = UNSET,
-    licensed_filter: bool | Unset = UNSET,
-    skip_cache: bool | Unset = UNSET,
+    object_name_filter: None | str | Unset = UNSET,
+    object_type_filter: list[Vb365ProtectedObjectType] | None | Unset = UNSET,
+    educational_filter: bool | None | Unset = UNSET,
+    licensed_filter: bool | None | Unset = UNSET,
+    skip_cache: bool | None | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
-    site_filter: list[UUID] | Unset = UNSET,
-    organization_filter: UUID | Unset = UNSET,
-    location_filter: UUID | Unset = UNSET,
+    site_filter: list[UUID] | None | Unset = UNSET,
+    organization_filter: None | Unset | UUID = UNSET,
+    location_filter: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | ErrorResponse | GetVb365ProtectedObjectsResponse200 | None:
@@ -359,19 +400,19 @@ async def asyncio(
     365.
 
     Args:
-        order_by (str | Unset):
+        order_by (None | str | Unset):
         order_direction (GetVb365ProtectedObjectsOrderDirection | Unset):  Default:
             GetVb365ProtectedObjectsOrderDirection.ASCENDING.
-        object_name_filter (str | Unset):
-        object_type_filter (list[Vb365ProtectedObjectType] | Unset):
-        educational_filter (bool | Unset):
-        licensed_filter (bool | Unset):
-        skip_cache (bool | Unset):
+        object_name_filter (None | str | Unset):
+        object_type_filter (list[Vb365ProtectedObjectType] | None | Unset):
+        educational_filter (bool | None | Unset):
+        licensed_filter (bool | None | Unset):
+        skip_cache (bool | None | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
-        site_filter (list[UUID] | Unset):
-        organization_filter (UUID | Unset):
-        location_filter (UUID | Unset):
+        site_filter (list[UUID] | None | Unset):
+        organization_filter (None | Unset | UUID):
+        location_filter (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 

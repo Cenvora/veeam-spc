@@ -22,7 +22,7 @@ class OrganizationUsageOfLicensesWithSameSupportId:
     Attributes:
         organization_name (str | Unset): Organization name.
         organization_uid (UUID | Unset): UID assigned to an organization.
-        support_id (str | Unset): License support ID.
+        support_id (None | str | Unset): License support ID.
         not_collected_client_servers (list[str] | Unset): Array of client servers from which Veeam Service Provider
             Console could not collect the license usage data.
         cloned_client_servers (list[str] | Unset): Array of cloned client servers.
@@ -32,7 +32,7 @@ class OrganizationUsageOfLicensesWithSameSupportId:
 
     organization_name: str | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
-    support_id: str | Unset = UNSET
+    support_id: None | str | Unset = UNSET
     not_collected_client_servers: list[str] | Unset = UNSET
     cloned_client_servers: list[str] | Unset = UNSET
     unsupported_client_servers: list[str] | Unset = UNSET
@@ -46,7 +46,11 @@ class OrganizationUsageOfLicensesWithSameSupportId:
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        support_id = self.support_id
+        support_id: None | str | Unset
+        if isinstance(self.support_id, Unset):
+            support_id = UNSET
+        else:
+            support_id = self.support_id
 
         not_collected_client_servers: list[str] | Unset = UNSET
         if not isinstance(self.not_collected_client_servers, Unset):
@@ -101,7 +105,14 @@ class OrganizationUsageOfLicensesWithSameSupportId:
         else:
             organization_uid = UUID(_organization_uid)
 
-        support_id = d.pop("supportId", UNSET)
+        def _parse_support_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        support_id = _parse_support_id(d.pop("supportId", UNSET))
 
         not_collected_client_servers = cast(list[str], d.pop("notCollectedClientServers", UNSET))
 

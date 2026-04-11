@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -27,7 +27,7 @@ class AsyncActionInfo:
         status (AsyncActionStatus):
         query_parameters (AsyncActionInfoQueryParameters): Key-value map containing query parameters of the operation
             that initiated an async action.
-        request_body (str | Unset): Content of a request body of the operation that initiated an async action.
+        request_body (None | str | Unset): Content of a request body of the operation that initiated an async action.
     """
 
     id: UUID
@@ -35,7 +35,7 @@ class AsyncActionInfo:
     action_name: str
     status: AsyncActionStatus
     query_parameters: AsyncActionInfoQueryParameters
-    request_body: str | Unset = UNSET
+    request_body: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -49,7 +49,11 @@ class AsyncActionInfo:
 
         query_parameters = self.query_parameters.to_dict()
 
-        request_body = self.request_body
+        request_body: None | str | Unset
+        if isinstance(self.request_body, Unset):
+            request_body = UNSET
+        else:
+            request_body = self.request_body
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -82,7 +86,14 @@ class AsyncActionInfo:
 
         query_parameters = AsyncActionInfoQueryParameters.from_dict(d.pop("queryParameters"))
 
-        request_body = d.pop("requestBody", UNSET)
+        def _parse_request_body(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        request_body = _parse_request_body(d.pop("requestBody", UNSET))
 
         async_action_info = cls(
             id=id,

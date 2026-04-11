@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -55,8 +55,8 @@ class SubscriptionPlanPublicCloud:
         remote_backup_used_space_units (SubscriptionPlanPublicCloudRemoteBackupUsedSpaceUnits | Unset): Measurement
             units of consumed space on remote public cloud repository. Default:
             SubscriptionPlanPublicCloudRemoteBackupUsedSpaceUnits.GB.
-        remote_free_backup_used_space (int | Unset): Amount of consumed space on remote public cloud repository that is
-            processed for free.
+        remote_free_backup_used_space (int | None | Unset): Amount of consumed space on remote public cloud repository
+            that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         remote_free_backup_used_space_units (SubscriptionPlanPublicCloudRemoteFreeBackupUsedSpaceUnits | Unset):
             Measurement units of consumed space on remote public cloud repository that is processed for free. Default:
@@ -66,8 +66,8 @@ class SubscriptionPlanPublicCloud:
         remote_archive_used_space_units (SubscriptionPlanPublicCloudRemoteArchiveUsedSpaceUnits | Unset): Measurement
             units of consumed space on remote archive public cloud repository. Default:
             SubscriptionPlanPublicCloudRemoteArchiveUsedSpaceUnits.GB.
-        remote_free_archive_used_space (int | Unset): Amount of consumed space on remote archive public cloud repository
-            that is processed for free.
+        remote_free_archive_used_space (int | None | Unset): Amount of consumed space on remote archive public cloud
+            repository that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         remote_free_archive_used_space_units (SubscriptionPlanPublicCloudRemoteFreeArchiveUsedSpaceUnits | Unset):
             Measurement units of consumed space on remote archive public cloud repository that is processed for free.
@@ -88,8 +88,8 @@ class SubscriptionPlanPublicCloud:
         hosted_backup_used_space_units (SubscriptionPlanPublicCloudHostedBackupUsedSpaceUnits | Unset): Measurement
             units of consumed space on a hosted public cloud repository. Default:
             SubscriptionPlanPublicCloudHostedBackupUsedSpaceUnits.GB.
-        hosted_free_backup_used_space (int | Unset): Amount of consumed space on a hosted public cloud repository that
-            is processed for free.
+        hosted_free_backup_used_space (int | None | Unset): Amount of consumed space on a hosted public cloud repository
+            that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         hosted_free_backup_used_space_units (SubscriptionPlanPublicCloudHostedFreeBackupUsedSpaceUnits | Unset):
             Measurement units of consumed space on hosted public cloud repository that is processed for free. Default:
@@ -99,7 +99,7 @@ class SubscriptionPlanPublicCloud:
         hosted_archive_used_space_units (SubscriptionPlanPublicCloudHostedArchiveUsedSpaceUnits | Unset): Measurement
             units of consumed space on a hosted public cloud archive repository. Default:
             SubscriptionPlanPublicCloudHostedArchiveUsedSpaceUnits.GB.
-        hosted_free_archive_used_space (int | Unset): Amount of consumed space on a hosted public cloud archive
+        hosted_free_archive_used_space (int | None | Unset): Amount of consumed space on a hosted public cloud archive
             repository that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         hosted_free_archive_used_space_units (SubscriptionPlanPublicCloudHostedFreeArchiveUsedSpaceUnits | Unset):
@@ -118,7 +118,7 @@ class SubscriptionPlanPublicCloud:
     remote_backup_used_space_units: SubscriptionPlanPublicCloudRemoteBackupUsedSpaceUnits | Unset = (
         SubscriptionPlanPublicCloudRemoteBackupUsedSpaceUnits.GB
     )
-    remote_free_backup_used_space: int | Unset = UNSET
+    remote_free_backup_used_space: int | None | Unset = UNSET
     remote_free_backup_used_space_units: SubscriptionPlanPublicCloudRemoteFreeBackupUsedSpaceUnits | Unset = (
         SubscriptionPlanPublicCloudRemoteFreeBackupUsedSpaceUnits.GB
     )
@@ -126,7 +126,7 @@ class SubscriptionPlanPublicCloud:
     remote_archive_used_space_units: SubscriptionPlanPublicCloudRemoteArchiveUsedSpaceUnits | Unset = (
         SubscriptionPlanPublicCloudRemoteArchiveUsedSpaceUnits.GB
     )
-    remote_free_archive_used_space: int | Unset = UNSET
+    remote_free_archive_used_space: int | None | Unset = UNSET
     remote_free_archive_used_space_units: SubscriptionPlanPublicCloudRemoteFreeArchiveUsedSpaceUnits | Unset = (
         SubscriptionPlanPublicCloudRemoteFreeArchiveUsedSpaceUnits.GB
     )
@@ -141,7 +141,7 @@ class SubscriptionPlanPublicCloud:
     hosted_backup_used_space_units: SubscriptionPlanPublicCloudHostedBackupUsedSpaceUnits | Unset = (
         SubscriptionPlanPublicCloudHostedBackupUsedSpaceUnits.GB
     )
-    hosted_free_backup_used_space: int | Unset = UNSET
+    hosted_free_backup_used_space: int | None | Unset = UNSET
     hosted_free_backup_used_space_units: SubscriptionPlanPublicCloudHostedFreeBackupUsedSpaceUnits | Unset = (
         SubscriptionPlanPublicCloudHostedFreeBackupUsedSpaceUnits.GB
     )
@@ -149,7 +149,7 @@ class SubscriptionPlanPublicCloud:
     hosted_archive_used_space_units: SubscriptionPlanPublicCloudHostedArchiveUsedSpaceUnits | Unset = (
         SubscriptionPlanPublicCloudHostedArchiveUsedSpaceUnits.GB
     )
-    hosted_free_archive_used_space: int | Unset = UNSET
+    hosted_free_archive_used_space: int | None | Unset = UNSET
     hosted_free_archive_used_space_units: SubscriptionPlanPublicCloudHostedFreeArchiveUsedSpaceUnits | Unset = (
         SubscriptionPlanPublicCloudHostedFreeArchiveUsedSpaceUnits.GB
     )
@@ -176,7 +176,11 @@ class SubscriptionPlanPublicCloud:
         if not isinstance(self.remote_backup_used_space_units, Unset):
             remote_backup_used_space_units = self.remote_backup_used_space_units.value
 
-        remote_free_backup_used_space = self.remote_free_backup_used_space
+        remote_free_backup_used_space: int | None | Unset
+        if isinstance(self.remote_free_backup_used_space, Unset):
+            remote_free_backup_used_space = UNSET
+        else:
+            remote_free_backup_used_space = self.remote_free_backup_used_space
 
         remote_free_backup_used_space_units: str | Unset = UNSET
         if not isinstance(self.remote_free_backup_used_space_units, Unset):
@@ -188,7 +192,11 @@ class SubscriptionPlanPublicCloud:
         if not isinstance(self.remote_archive_used_space_units, Unset):
             remote_archive_used_space_units = self.remote_archive_used_space_units.value
 
-        remote_free_archive_used_space = self.remote_free_archive_used_space
+        remote_free_archive_used_space: int | None | Unset
+        if isinstance(self.remote_free_archive_used_space, Unset):
+            remote_free_archive_used_space = UNSET
+        else:
+            remote_free_archive_used_space = self.remote_free_archive_used_space
 
         remote_free_archive_used_space_units: str | Unset = UNSET
         if not isinstance(self.remote_free_archive_used_space_units, Unset):
@@ -214,7 +222,11 @@ class SubscriptionPlanPublicCloud:
         if not isinstance(self.hosted_backup_used_space_units, Unset):
             hosted_backup_used_space_units = self.hosted_backup_used_space_units.value
 
-        hosted_free_backup_used_space = self.hosted_free_backup_used_space
+        hosted_free_backup_used_space: int | None | Unset
+        if isinstance(self.hosted_free_backup_used_space, Unset):
+            hosted_free_backup_used_space = UNSET
+        else:
+            hosted_free_backup_used_space = self.hosted_free_backup_used_space
 
         hosted_free_backup_used_space_units: str | Unset = UNSET
         if not isinstance(self.hosted_free_backup_used_space_units, Unset):
@@ -226,7 +238,11 @@ class SubscriptionPlanPublicCloud:
         if not isinstance(self.hosted_archive_used_space_units, Unset):
             hosted_archive_used_space_units = self.hosted_archive_used_space_units.value
 
-        hosted_free_archive_used_space = self.hosted_free_archive_used_space
+        hosted_free_archive_used_space: int | None | Unset
+        if isinstance(self.hosted_free_archive_used_space, Unset):
+            hosted_free_archive_used_space = UNSET
+        else:
+            hosted_free_archive_used_space = self.hosted_free_archive_used_space
 
         hosted_free_archive_used_space_units: str | Unset = UNSET
         if not isinstance(self.hosted_free_archive_used_space_units, Unset):
@@ -326,7 +342,14 @@ class SubscriptionPlanPublicCloud:
                 _remote_backup_used_space_units
             )
 
-        remote_free_backup_used_space = d.pop("remoteFreeBackupUsedSpace", UNSET)
+        def _parse_remote_free_backup_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        remote_free_backup_used_space = _parse_remote_free_backup_used_space(d.pop("remoteFreeBackupUsedSpace", UNSET))
 
         _remote_free_backup_used_space_units = d.pop("remoteFreeBackupUsedSpaceUnits", UNSET)
         remote_free_backup_used_space_units: SubscriptionPlanPublicCloudRemoteFreeBackupUsedSpaceUnits | Unset
@@ -348,7 +371,16 @@ class SubscriptionPlanPublicCloud:
                 _remote_archive_used_space_units
             )
 
-        remote_free_archive_used_space = d.pop("remoteFreeArchiveUsedSpace", UNSET)
+        def _parse_remote_free_archive_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        remote_free_archive_used_space = _parse_remote_free_archive_used_space(
+            d.pop("remoteFreeArchiveUsedSpace", UNSET)
+        )
 
         _remote_free_archive_used_space_units = d.pop("remoteFreeArchiveUsedSpaceUnits", UNSET)
         remote_free_archive_used_space_units: SubscriptionPlanPublicCloudRemoteFreeArchiveUsedSpaceUnits | Unset
@@ -384,7 +416,14 @@ class SubscriptionPlanPublicCloud:
                 _hosted_backup_used_space_units
             )
 
-        hosted_free_backup_used_space = d.pop("hostedFreeBackupUsedSpace", UNSET)
+        def _parse_hosted_free_backup_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        hosted_free_backup_used_space = _parse_hosted_free_backup_used_space(d.pop("hostedFreeBackupUsedSpace", UNSET))
 
         _hosted_free_backup_used_space_units = d.pop("hostedFreeBackupUsedSpaceUnits", UNSET)
         hosted_free_backup_used_space_units: SubscriptionPlanPublicCloudHostedFreeBackupUsedSpaceUnits | Unset
@@ -406,7 +445,16 @@ class SubscriptionPlanPublicCloud:
                 _hosted_archive_used_space_units
             )
 
-        hosted_free_archive_used_space = d.pop("hostedFreeArchiveUsedSpace", UNSET)
+        def _parse_hosted_free_archive_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        hosted_free_archive_used_space = _parse_hosted_free_archive_used_space(
+            d.pop("hostedFreeArchiveUsedSpace", UNSET)
+        )
 
         _hosted_free_archive_used_space_units = d.pop("hostedFreeArchiveUsedSpaceUnits", UNSET)
         hosted_free_archive_used_space_units: SubscriptionPlanPublicCloudHostedFreeArchiveUsedSpaceUnits | Unset

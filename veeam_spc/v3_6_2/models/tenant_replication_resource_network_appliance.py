@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -23,8 +23,8 @@ class TenantReplicationResourceNetworkAppliance:
         name (str): Name of a network extension appliance.
         instance_uid (UUID | Unset): UID assigned to a network extension appliance.
         hardware_plan_uid (UUID | Unset): UID assigned to a hardware plan.
-        host_name (str | Unset): Name of a host on which network extension appliance is deployed.
-        root_host_name (str | Unset): Name of a root host on which network extension appliance is deployed.
+        host_name (None | str | Unset): Name of a host on which network extension appliance is deployed.
+        root_host_name (None | str | Unset): Name of a root host on which network extension appliance is deployed.
         external_network_name (str | Unset): Name of an external production network.
         tcp_ip_settings (NetworkApplianceTcpIpSettings | Unset):
     """
@@ -32,8 +32,8 @@ class TenantReplicationResourceNetworkAppliance:
     name: str
     instance_uid: UUID | Unset = UNSET
     hardware_plan_uid: UUID | Unset = UNSET
-    host_name: str | Unset = UNSET
-    root_host_name: str | Unset = UNSET
+    host_name: None | str | Unset = UNSET
+    root_host_name: None | str | Unset = UNSET
     external_network_name: str | Unset = UNSET
     tcp_ip_settings: NetworkApplianceTcpIpSettings | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -49,9 +49,17 @@ class TenantReplicationResourceNetworkAppliance:
         if not isinstance(self.hardware_plan_uid, Unset):
             hardware_plan_uid = str(self.hardware_plan_uid)
 
-        host_name = self.host_name
+        host_name: None | str | Unset
+        if isinstance(self.host_name, Unset):
+            host_name = UNSET
+        else:
+            host_name = self.host_name
 
-        root_host_name = self.root_host_name
+        root_host_name: None | str | Unset
+        if isinstance(self.root_host_name, Unset):
+            root_host_name = UNSET
+        else:
+            root_host_name = self.root_host_name
 
         external_network_name = self.external_network_name
 
@@ -102,9 +110,23 @@ class TenantReplicationResourceNetworkAppliance:
         else:
             hardware_plan_uid = UUID(_hardware_plan_uid)
 
-        host_name = d.pop("hostName", UNSET)
+        def _parse_host_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        root_host_name = d.pop("rootHostName", UNSET)
+        host_name = _parse_host_name(d.pop("hostName", UNSET))
+
+        def _parse_root_host_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        root_host_name = _parse_root_host_name(d.pop("rootHostName", UNSET))
 
         external_network_name = d.pop("externalNetworkName", UNSET)
 

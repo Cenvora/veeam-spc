@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -33,7 +33,7 @@ class DiscoveryRule:
         company_uid (UUID | Unset): UID assigned to a company for which a discovery rule is configured.
         system_type (DiscoveryRuleSystemType | Unset): Type of guest OS.
         status (DiscoveryRuleStatus | Unset): Current status of a discovery rule.
-        last_run (datetime.datetime | Unset): Date and time of the latest discovery session.
+        last_run (datetime.datetime | None | Unset): Date and time of the latest discovery session.
         filter_ (DiscoveryRuleFilter | Unset):
         notification_settings (DiscoveryRuleNotificationSettings | Unset):  Example: {'isEnabled': True, 'scheduleType':
             'Days', 'scheduleTime': '12:30', 'scheduleDay': 'Sunday', 'to': 'administrator@vac.com', 'subject': 'VSPC
@@ -51,7 +51,7 @@ class DiscoveryRule:
     company_uid: UUID | Unset = UNSET
     system_type: DiscoveryRuleSystemType | Unset = UNSET
     status: DiscoveryRuleStatus | Unset = UNSET
-    last_run: datetime.datetime | Unset = UNSET
+    last_run: datetime.datetime | None | Unset = UNSET
     filter_: DiscoveryRuleFilter | Unset = UNSET
     notification_settings: DiscoveryRuleNotificationSettings | Unset = UNSET
     schedule_settings: DiscoveryRuleScheduleSettings | Unset = UNSET
@@ -85,9 +85,13 @@ class DiscoveryRule:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        last_run: str | Unset = UNSET
-        if not isinstance(self.last_run, Unset):
+        last_run: None | str | Unset
+        if isinstance(self.last_run, Unset):
+            last_run = UNSET
+        elif isinstance(self.last_run, datetime.datetime):
             last_run = self.last_run.isoformat()
+        else:
+            last_run = self.last_run
 
         filter_: dict[str, Any] | Unset = UNSET
         if not isinstance(self.filter_, Unset):
@@ -188,12 +192,22 @@ class DiscoveryRule:
         else:
             status = DiscoveryRuleStatus(_status)
 
-        _last_run = d.pop("lastRun", UNSET)
-        last_run: datetime.datetime | Unset
-        if isinstance(_last_run, Unset):
-            last_run = UNSET
-        else:
-            last_run = isoparse(_last_run)
+        def _parse_last_run(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_run_type_0 = isoparse(data)
+
+                return last_run_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        last_run = _parse_last_run(d.pop("lastRun", UNSET))
 
         _filter_ = d.pop("filter", UNSET)
         filter_: DiscoveryRuleFilter | Unset

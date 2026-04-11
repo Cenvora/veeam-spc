@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,7 +19,7 @@ class CloudTenantProductVersionInfo:
     Attributes:
         instance_uid (UUID | Unset): UID assigned to a Veeam product.
         product_type (CloudTenantProductVersionInfoProductType | Unset): Veeam product type.
-        version (str | Unset): Version of a Veeam product.
+        version (None | str | Unset): Version of a Veeam product.
         site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site managing a tenant that uses a Veeam product.
         company_uid (UUID | Unset): UID assigned to a company associated with a tenant that uses a Veeam product.
         tenant_uid (UUID | Unset): UID assigned to a tenant that uses a Veeam product.
@@ -28,7 +28,7 @@ class CloudTenantProductVersionInfo:
 
     instance_uid: UUID | Unset = UNSET
     product_type: CloudTenantProductVersionInfoProductType | Unset = UNSET
-    version: str | Unset = UNSET
+    version: None | str | Unset = UNSET
     site_uid: UUID | Unset = UNSET
     company_uid: UUID | Unset = UNSET
     tenant_uid: UUID | Unset = UNSET
@@ -44,7 +44,11 @@ class CloudTenantProductVersionInfo:
         if not isinstance(self.product_type, Unset):
             product_type = self.product_type.value
 
-        version = self.version
+        version: None | str | Unset
+        if isinstance(self.version, Unset):
+            version = UNSET
+        else:
+            version = self.version
 
         site_uid: str | Unset = UNSET
         if not isinstance(self.site_uid, Unset):
@@ -97,7 +101,14 @@ class CloudTenantProductVersionInfo:
         else:
             product_type = CloudTenantProductVersionInfoProductType(_product_type)
 
-        version = d.pop("version", UNSET)
+        def _parse_version(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        version = _parse_version(d.pop("version", UNSET))
 
         _site_uid = d.pop("siteUid", UNSET)
         site_uid: UUID | Unset

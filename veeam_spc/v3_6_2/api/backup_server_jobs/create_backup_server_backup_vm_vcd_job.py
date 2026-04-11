@@ -18,7 +18,7 @@ def _get_kwargs(
     backup_server_uid: UUID,
     *,
     body: BackupServerCloudDirectorBackupJobConfiguration,
-    mapped_organization_uid: UUID | Unset = UNSET,
+    mapped_organization_uid: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -31,9 +31,13 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_mapped_organization_uid: str | Unset = UNSET
-    if not isinstance(mapped_organization_uid, Unset):
+    json_mapped_organization_uid: None | str | Unset
+    if isinstance(mapped_organization_uid, Unset):
+        json_mapped_organization_uid = UNSET
+    elif isinstance(mapped_organization_uid, UUID):
         json_mapped_organization_uid = str(mapped_organization_uid)
+    else:
+        json_mapped_organization_uid = mapped_organization_uid
     params["mappedOrganizationUid"] = json_mapped_organization_uid
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
@@ -87,7 +91,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: BackupServerCloudDirectorBackupJobConfiguration,
-    mapped_organization_uid: UUID | Unset = UNSET,
+    mapped_organization_uid: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | CreateBackupServerBackupVmVcdJobResponse200 | ErrorResponse]:
@@ -98,7 +102,7 @@ def sync_detailed(
 
     Args:
         backup_server_uid (UUID):
-        mapped_organization_uid (UUID | Unset):
+        mapped_organization_uid (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerCloudDirectorBackupJobConfiguration): VMware Cloud Director backup job
@@ -132,7 +136,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: BackupServerCloudDirectorBackupJobConfiguration,
-    mapped_organization_uid: UUID | Unset = UNSET,
+    mapped_organization_uid: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | CreateBackupServerBackupVmVcdJobResponse200 | ErrorResponse | None:
@@ -143,7 +147,7 @@ def sync(
 
     Args:
         backup_server_uid (UUID):
-        mapped_organization_uid (UUID | Unset):
+        mapped_organization_uid (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerCloudDirectorBackupJobConfiguration): VMware Cloud Director backup job
@@ -172,7 +176,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: BackupServerCloudDirectorBackupJobConfiguration,
-    mapped_organization_uid: UUID | Unset = UNSET,
+    mapped_organization_uid: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | CreateBackupServerBackupVmVcdJobResponse200 | ErrorResponse]:
@@ -183,7 +187,7 @@ async def asyncio_detailed(
 
     Args:
         backup_server_uid (UUID):
-        mapped_organization_uid (UUID | Unset):
+        mapped_organization_uid (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerCloudDirectorBackupJobConfiguration): VMware Cloud Director backup job
@@ -215,7 +219,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: BackupServerCloudDirectorBackupJobConfiguration,
-    mapped_organization_uid: UUID | Unset = UNSET,
+    mapped_organization_uid: None | Unset | UUID = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | CreateBackupServerBackupVmVcdJobResponse200 | ErrorResponse | None:
@@ -226,7 +230,7 @@ async def asyncio(
 
     Args:
         backup_server_uid (UUID):
-        mapped_organization_uid (UUID | Unset):
+        mapped_organization_uid (None | Unset | UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerCloudDirectorBackupJobConfiguration): VMware Cloud Director backup job

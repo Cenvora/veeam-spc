@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -25,14 +25,14 @@ class VOneServerLicense:
         v_one_server_uid (UUID | Unset): UID assigned to a Veeam ONE server.
         company (str | Unset): Name of an organization to which a license is issued.
         email (str | Unset): Email address of an organization to which a license is issued.
-        expiration_date (datetime.datetime | Unset): License expiration date and time.
-        support_expiration_date (datetime.datetime | Unset): Support expiration date and time.
-        license_id (UUID | Unset): License ID.
+        expiration_date (datetime.datetime | None | Unset): License expiration date and time.
+        support_expiration_date (datetime.datetime | None | Unset): Support expiration date and time.
+        license_id (None | Unset | UUID): License ID.
         support_id (str | Unset): License ID required to contact Veeam Support.
         status (VOneServerLicenseStatus | Unset): Current status of the license.
         status_message (str | Unset): Status message.
-        units (float | Unset): Number of available license units.
-        used_units (float | Unset): Number of used license units.
+        units (float | None | Unset): Number of available license units.
+        used_units (float | None | Unset): Number of used license units.
         unit_type (VOneServerLicenseUnitType | Unset): Type of license units.
         type_ (VOneServerLicenseType | Unset): Type of the license.
     """
@@ -41,14 +41,14 @@ class VOneServerLicense:
     v_one_server_uid: UUID | Unset = UNSET
     company: str | Unset = UNSET
     email: str | Unset = UNSET
-    expiration_date: datetime.datetime | Unset = UNSET
-    support_expiration_date: datetime.datetime | Unset = UNSET
-    license_id: UUID | Unset = UNSET
+    expiration_date: datetime.datetime | None | Unset = UNSET
+    support_expiration_date: datetime.datetime | None | Unset = UNSET
+    license_id: None | Unset | UUID = UNSET
     support_id: str | Unset = UNSET
     status: VOneServerLicenseStatus | Unset = UNSET
     status_message: str | Unset = UNSET
-    units: float | Unset = UNSET
-    used_units: float | Unset = UNSET
+    units: float | None | Unset = UNSET
+    used_units: float | None | Unset = UNSET
     unit_type: VOneServerLicenseUnitType | Unset = UNSET
     type_: VOneServerLicenseType | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -64,17 +64,29 @@ class VOneServerLicense:
 
         email = self.email
 
-        expiration_date: str | Unset = UNSET
-        if not isinstance(self.expiration_date, Unset):
+        expiration_date: None | str | Unset
+        if isinstance(self.expiration_date, Unset):
+            expiration_date = UNSET
+        elif isinstance(self.expiration_date, datetime.datetime):
             expiration_date = self.expiration_date.isoformat()
+        else:
+            expiration_date = self.expiration_date
 
-        support_expiration_date: str | Unset = UNSET
-        if not isinstance(self.support_expiration_date, Unset):
+        support_expiration_date: None | str | Unset
+        if isinstance(self.support_expiration_date, Unset):
+            support_expiration_date = UNSET
+        elif isinstance(self.support_expiration_date, datetime.datetime):
             support_expiration_date = self.support_expiration_date.isoformat()
+        else:
+            support_expiration_date = self.support_expiration_date
 
-        license_id: str | Unset = UNSET
-        if not isinstance(self.license_id, Unset):
+        license_id: None | str | Unset
+        if isinstance(self.license_id, Unset):
+            license_id = UNSET
+        elif isinstance(self.license_id, UUID):
             license_id = str(self.license_id)
+        else:
+            license_id = self.license_id
 
         support_id = self.support_id
 
@@ -84,9 +96,17 @@ class VOneServerLicense:
 
         status_message = self.status_message
 
-        units = self.units
+        units: float | None | Unset
+        if isinstance(self.units, Unset):
+            units = UNSET
+        else:
+            units = self.units
 
-        used_units = self.used_units
+        used_units: float | None | Unset
+        if isinstance(self.used_units, Unset):
+            used_units = UNSET
+        else:
+            used_units = self.used_units
 
         unit_type: str | Unset = UNSET
         if not isinstance(self.unit_type, Unset):
@@ -148,26 +168,56 @@ class VOneServerLicense:
 
         email = d.pop("email", UNSET)
 
-        _expiration_date = d.pop("expirationDate", UNSET)
-        expiration_date: datetime.datetime | Unset
-        if isinstance(_expiration_date, Unset):
-            expiration_date = UNSET
-        else:
-            expiration_date = isoparse(_expiration_date)
+        def _parse_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                expiration_date_type_0 = isoparse(data)
 
-        _support_expiration_date = d.pop("supportExpirationDate", UNSET)
-        support_expiration_date: datetime.datetime | Unset
-        if isinstance(_support_expiration_date, Unset):
-            support_expiration_date = UNSET
-        else:
-            support_expiration_date = isoparse(_support_expiration_date)
+                return expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
 
-        _license_id = d.pop("licenseId", UNSET)
-        license_id: UUID | Unset
-        if isinstance(_license_id, Unset):
-            license_id = UNSET
-        else:
-            license_id = UUID(_license_id)
+        expiration_date = _parse_expiration_date(d.pop("expirationDate", UNSET))
+
+        def _parse_support_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                support_expiration_date_type_0 = isoparse(data)
+
+                return support_expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        support_expiration_date = _parse_support_expiration_date(d.pop("supportExpirationDate", UNSET))
+
+        def _parse_license_id(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                license_id_type_0 = UUID(data)
+
+                return license_id_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        license_id = _parse_license_id(d.pop("licenseId", UNSET))
 
         support_id = d.pop("supportId", UNSET)
 
@@ -180,9 +230,23 @@ class VOneServerLicense:
 
         status_message = d.pop("statusMessage", UNSET)
 
-        units = d.pop("units", UNSET)
+        def _parse_units(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
 
-        used_units = d.pop("usedUnits", UNSET)
+        units = _parse_units(d.pop("units", UNSET))
+
+        def _parse_used_units(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        used_units = _parse_used_units(d.pop("usedUnits", UNSET))
 
         _unit_type = d.pop("unitType", UNSET)
         unit_type: VOneServerLicenseUnitType | Unset

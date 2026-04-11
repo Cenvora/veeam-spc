@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,7 +20,7 @@ class CompanyHostedVbrBackupResource:
         instance_uid (UUID | Unset): UID assigned to a company hosted repository resource.
         company_uid (UUID | Unset): UID assigned to a company.
         hosted_resource_uid (UUID | Unset): UID assigned to a company hosted resource.
-        storage_quota (int | Unset): Amount of space allocated to a company on a repository, in GB.
+        storage_quota (int | None | Unset): Amount of space allocated to a company on a repository, in GB.
         is_storage_quota_unlimited (bool | Unset): Indicates whether a storage quota is unlimited. Default: True.
     """
 
@@ -28,7 +28,7 @@ class CompanyHostedVbrBackupResource:
     instance_uid: UUID | Unset = UNSET
     company_uid: UUID | Unset = UNSET
     hosted_resource_uid: UUID | Unset = UNSET
-    storage_quota: int | Unset = UNSET
+    storage_quota: int | None | Unset = UNSET
     is_storage_quota_unlimited: bool | Unset = True
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -47,7 +47,11 @@ class CompanyHostedVbrBackupResource:
         if not isinstance(self.hosted_resource_uid, Unset):
             hosted_resource_uid = str(self.hosted_resource_uid)
 
-        storage_quota = self.storage_quota
+        storage_quota: int | None | Unset
+        if isinstance(self.storage_quota, Unset):
+            storage_quota = UNSET
+        else:
+            storage_quota = self.storage_quota
 
         is_storage_quota_unlimited = self.is_storage_quota_unlimited
 
@@ -97,7 +101,14 @@ class CompanyHostedVbrBackupResource:
         else:
             hosted_resource_uid = UUID(_hosted_resource_uid)
 
-        storage_quota = d.pop("storageQuota", UNSET)
+        def _parse_storage_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        storage_quota = _parse_storage_quota(d.pop("storageQuota", UNSET))
 
         is_storage_quota_unlimited = d.pop("isStorageQuotaUnlimited", UNSET)
 

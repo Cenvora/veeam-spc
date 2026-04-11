@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,7 +21,7 @@ class Vb365JobItemUser:
         user_type (Vb365JobItemUserUserType): Type of a user.
         name (str): Name of a user.
         display_name (str): Display name of a user.
-        on_premises_sid (str | Unset): SID assigned to a user of an on-premises organization.
+        on_premises_sid (None | str | Unset): SID assigned to a user of an on-premises organization.
         office_name (str | Unset): Microsoft 365 Online name of an organization to which a user belongs.
         location_type (Vb365JobItemUserLocationType | Unset): Type of a user location.
     """
@@ -30,7 +30,7 @@ class Vb365JobItemUser:
     user_type: Vb365JobItemUserUserType
     name: str
     display_name: str
-    on_premises_sid: str | Unset = UNSET
+    on_premises_sid: None | str | Unset = UNSET
     office_name: str | Unset = UNSET
     location_type: Vb365JobItemUserLocationType | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -44,7 +44,11 @@ class Vb365JobItemUser:
 
         display_name = self.display_name
 
-        on_premises_sid = self.on_premises_sid
+        on_premises_sid: None | str | Unset
+        if isinstance(self.on_premises_sid, Unset):
+            on_premises_sid = UNSET
+        else:
+            on_premises_sid = self.on_premises_sid
 
         office_name = self.office_name
 
@@ -82,7 +86,14 @@ class Vb365JobItemUser:
 
         display_name = d.pop("displayName")
 
-        on_premises_sid = d.pop("onPremisesSid", UNSET)
+        def _parse_on_premises_sid(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        on_premises_sid = _parse_on_premises_sid(d.pop("onPremisesSid", UNSET))
 
         office_name = d.pop("officeName", UNSET)
 

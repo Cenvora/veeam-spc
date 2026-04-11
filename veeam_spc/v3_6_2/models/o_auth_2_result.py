@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,32 +15,52 @@ T = TypeVar("T", bound="OAuth2Result")
 class OAuth2Result:
     """
     Attributes:
-        access_token (str | Unset): Access token.
-        token_type (str | Unset): Token type.
-        refresh_token (str | Unset): Refresh token.
-        mfa_token (str | Unset): MFA token.
-        encrypted_code (str | Unset): Encrypted authorization code.
+        access_token (None | str | Unset): Access token.
+        token_type (None | str | Unset): Token type.
+        refresh_token (None | str | Unset): Refresh token.
+        mfa_token (None | str | Unset): MFA token.
+        encrypted_code (None | str | Unset): Encrypted authorization code.
         expires_in (int | Unset): Date and time when an access token will expire.
     """
 
-    access_token: str | Unset = UNSET
-    token_type: str | Unset = UNSET
-    refresh_token: str | Unset = UNSET
-    mfa_token: str | Unset = UNSET
-    encrypted_code: str | Unset = UNSET
+    access_token: None | str | Unset = UNSET
+    token_type: None | str | Unset = UNSET
+    refresh_token: None | str | Unset = UNSET
+    mfa_token: None | str | Unset = UNSET
+    encrypted_code: None | str | Unset = UNSET
     expires_in: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        access_token = self.access_token
+        access_token: None | str | Unset
+        if isinstance(self.access_token, Unset):
+            access_token = UNSET
+        else:
+            access_token = self.access_token
 
-        token_type = self.token_type
+        token_type: None | str | Unset
+        if isinstance(self.token_type, Unset):
+            token_type = UNSET
+        else:
+            token_type = self.token_type
 
-        refresh_token = self.refresh_token
+        refresh_token: None | str | Unset
+        if isinstance(self.refresh_token, Unset):
+            refresh_token = UNSET
+        else:
+            refresh_token = self.refresh_token
 
-        mfa_token = self.mfa_token
+        mfa_token: None | str | Unset
+        if isinstance(self.mfa_token, Unset):
+            mfa_token = UNSET
+        else:
+            mfa_token = self.mfa_token
 
-        encrypted_code = self.encrypted_code
+        encrypted_code: None | str | Unset
+        if isinstance(self.encrypted_code, Unset):
+            encrypted_code = UNSET
+        else:
+            encrypted_code = self.encrypted_code
 
         expires_in = self.expires_in
 
@@ -65,15 +85,51 @@ class OAuth2Result:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        access_token = d.pop("access_token", UNSET)
 
-        token_type = d.pop("token_type", UNSET)
+        def _parse_access_token(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        refresh_token = d.pop("refresh_token", UNSET)
+        access_token = _parse_access_token(d.pop("access_token", UNSET))
 
-        mfa_token = d.pop("mfa_token", UNSET)
+        def _parse_token_type(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        encrypted_code = d.pop("encrypted_code", UNSET)
+        token_type = _parse_token_type(d.pop("token_type", UNSET))
+
+        def _parse_refresh_token(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        refresh_token = _parse_refresh_token(d.pop("refresh_token", UNSET))
+
+        def _parse_mfa_token(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        mfa_token = _parse_mfa_token(d.pop("mfa_token", UNSET))
+
+        def _parse_encrypted_code(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        encrypted_code = _parse_encrypted_code(d.pop("encrypted_code", UNSET))
 
         expires_in = d.pop("expires_in", UNSET)
 

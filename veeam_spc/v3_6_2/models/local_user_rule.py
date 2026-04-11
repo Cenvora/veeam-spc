@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -32,9 +32,9 @@ class LocalUserRule:
         mfa_policy_status (LocalUserRuleMfaPolicyStatus): Status of MFA configuration requirement for a user or group.
         instance_uid (UUID | Unset): UID assigned to a user or group.
         sid (str | Unset): SID assigned to a user or group.
-        description (str | Unset): Description of a user or group.
+        description (None | str | Unset): Description of a user or group.
         enabled (bool | Unset): Indicates whether a user or group is enabled. Default: True.
-        has_access_to_provider (bool | Unset):
+        has_access_to_provider (bool | None | Unset):
     """
 
     name: str
@@ -45,9 +45,9 @@ class LocalUserRule:
     mfa_policy_status: LocalUserRuleMfaPolicyStatus
     instance_uid: UUID | Unset = UNSET
     sid: str | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     enabled: bool | Unset = True
-    has_access_to_provider: bool | Unset = UNSET
+    has_access_to_provider: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -72,11 +72,19 @@ class LocalUserRule:
 
         sid = self.sid
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         enabled = self.enabled
 
-        has_access_to_provider = self.has_access_to_provider
+        has_access_to_provider: bool | None | Unset
+        if isinstance(self.has_access_to_provider, Unset):
+            has_access_to_provider = UNSET
+        else:
+            has_access_to_provider = self.has_access_to_provider
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -134,11 +142,25 @@ class LocalUserRule:
 
         sid = d.pop("sid", UNSET)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         enabled = d.pop("enabled", UNSET)
 
-        has_access_to_provider = d.pop("hasAccessToProvider", UNSET)
+        def _parse_has_access_to_provider(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        has_access_to_provider = _parse_has_access_to_provider(d.pop("hasAccessToProvider", UNSET))
 
         local_user_rule = cls(
             name=name,

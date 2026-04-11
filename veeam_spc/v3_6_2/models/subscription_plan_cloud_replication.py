@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -37,7 +37,7 @@ class SubscriptionPlanCloudReplication:
         cloud_storage_consumed_space_units (SubscriptionPlanCloudReplicationCloudStorageConsumedSpaceUnits | Unset):
             Measurement units of cloud storage space consumed by VM replica files. Default:
             SubscriptionPlanCloudReplicationCloudStorageConsumedSpaceUnits.TB.
-        free_cloud_storage_consumed_space (int | Unset): Amount of cloud storage space that can be consumed by VM
+        free_cloud_storage_consumed_space (int | None | Unset): Amount of cloud storage space that can be consumed by VM
             replicas for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         free_cloud_storage_consumed_space_units (SubscriptionPlanCloudReplicationFreeCloudStorageConsumedSpaceUnits |
@@ -65,7 +65,7 @@ class SubscriptionPlanCloudReplication:
     cloud_storage_consumed_space_units: SubscriptionPlanCloudReplicationCloudStorageConsumedSpaceUnits | Unset = (
         SubscriptionPlanCloudReplicationCloudStorageConsumedSpaceUnits.TB
     )
-    free_cloud_storage_consumed_space: int | Unset = UNSET
+    free_cloud_storage_consumed_space: int | None | Unset = UNSET
     free_cloud_storage_consumed_space_units: (
         SubscriptionPlanCloudReplicationFreeCloudStorageConsumedSpaceUnits | Unset
     ) = SubscriptionPlanCloudReplicationFreeCloudStorageConsumedSpaceUnits.GB
@@ -92,7 +92,11 @@ class SubscriptionPlanCloudReplication:
         if not isinstance(self.cloud_storage_consumed_space_units, Unset):
             cloud_storage_consumed_space_units = self.cloud_storage_consumed_space_units.value
 
-        free_cloud_storage_consumed_space = self.free_cloud_storage_consumed_space
+        free_cloud_storage_consumed_space: int | None | Unset
+        if isinstance(self.free_cloud_storage_consumed_space, Unset):
+            free_cloud_storage_consumed_space = UNSET
+        else:
+            free_cloud_storage_consumed_space = self.free_cloud_storage_consumed_space
 
         free_cloud_storage_consumed_space_units: str | Unset = UNSET
         if not isinstance(self.free_cloud_storage_consumed_space_units, Unset):
@@ -160,7 +164,16 @@ class SubscriptionPlanCloudReplication:
                 _cloud_storage_consumed_space_units
             )
 
-        free_cloud_storage_consumed_space = d.pop("freeCloudStorageConsumedSpace", UNSET)
+        def _parse_free_cloud_storage_consumed_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        free_cloud_storage_consumed_space = _parse_free_cloud_storage_consumed_space(
+            d.pop("freeCloudStorageConsumedSpace", UNSET)
+        )
 
         _free_cloud_storage_consumed_space_units = d.pop("freeCloudStorageConsumedSpaceUnits", UNSET)
         free_cloud_storage_consumed_space_units: (

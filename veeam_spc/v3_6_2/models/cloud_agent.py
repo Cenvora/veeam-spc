@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,7 +19,7 @@ class CloudAgent:
     Attributes:
         site_name (str): Name of a Veeam Cloud Connect site.
         site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect server on which a management agent is installed.
-        description (str | Unset): Description of a Veeam Cloud Connect site.
+        description (None | str | Unset): Description of a Veeam Cloud Connect site.
         backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server.
         management_agent_uid (UUID | Unset): UID assigned to a management agent.
         maintenance_mode_is_enabled (bool | Unset): Indicates whether the maintenance mode is enabled for a Veeam Cloud
@@ -32,7 +32,7 @@ class CloudAgent:
 
     site_name: str
     site_uid: UUID | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
     management_agent_uid: UUID | Unset = UNSET
     maintenance_mode_is_enabled: bool | Unset = UNSET
@@ -46,7 +46,11 @@ class CloudAgent:
         if not isinstance(self.site_uid, Unset):
             site_uid = str(self.site_uid)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         backup_server_uid: str | Unset = UNSET
         if not isinstance(self.backup_server_uid, Unset):
@@ -94,7 +98,14 @@ class CloudAgent:
         else:
             site_uid = UUID(_site_uid)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         _backup_server_uid = d.pop("backupServerUid", UNSET)
         backup_server_uid: UUID | Unset

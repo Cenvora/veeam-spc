@@ -13,7 +13,7 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    tenant_uid: UUID | Unset = UNSET,
+    tenant_uid: None | Unset | UUID = UNSET,
     expand: list[VdcStorageVaultExpand] | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -27,9 +27,13 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_tenant_uid: str | Unset = UNSET
-    if not isinstance(tenant_uid, Unset):
+    json_tenant_uid: None | str | Unset
+    if isinstance(tenant_uid, Unset):
+        json_tenant_uid = UNSET
+    elif isinstance(tenant_uid, UUID):
         json_tenant_uid = str(tenant_uid)
+    else:
+        json_tenant_uid = tenant_uid
     params["tenantUid"] = json_tenant_uid
 
     json_expand: list[str] | Unset = UNSET
@@ -84,7 +88,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    tenant_uid: UUID | Unset = UNSET,
+    tenant_uid: None | Unset | UUID = UNSET,
     expand: list[VdcStorageVaultExpand] | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -94,7 +98,7 @@ def sync_detailed(
      Returns a collection resource representation of all storage vaults.
 
     Args:
-        tenant_uid (UUID | Unset):
+        tenant_uid (None | Unset | UUID):
         expand (list[VdcStorageVaultExpand] | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
@@ -124,7 +128,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    tenant_uid: UUID | Unset = UNSET,
+    tenant_uid: None | Unset | UUID = UNSET,
     expand: list[VdcStorageVaultExpand] | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -134,7 +138,7 @@ def sync(
      Returns a collection resource representation of all storage vaults.
 
     Args:
-        tenant_uid (UUID | Unset):
+        tenant_uid (None | Unset | UUID):
         expand (list[VdcStorageVaultExpand] | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
@@ -159,7 +163,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    tenant_uid: UUID | Unset = UNSET,
+    tenant_uid: None | Unset | UUID = UNSET,
     expand: list[VdcStorageVaultExpand] | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -169,7 +173,7 @@ async def asyncio_detailed(
      Returns a collection resource representation of all storage vaults.
 
     Args:
-        tenant_uid (UUID | Unset):
+        tenant_uid (None | Unset | UUID):
         expand (list[VdcStorageVaultExpand] | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
@@ -197,7 +201,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    tenant_uid: UUID | Unset = UNSET,
+    tenant_uid: None | Unset | UUID = UNSET,
     expand: list[VdcStorageVaultExpand] | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -207,7 +211,7 @@ async def asyncio(
      Returns a collection resource representation of all storage vaults.
 
     Args:
-        tenant_uid (UUID | Unset):
+        tenant_uid (None | Unset | UUID):
         expand (list[VdcStorageVaultExpand] | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):

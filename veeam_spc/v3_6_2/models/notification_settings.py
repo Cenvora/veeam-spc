@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -30,8 +30,8 @@ class NotificationSettings:
         license_ (NotificationLicenseSettings):
         smtp (SmtpSettings | Unset):
         level (NotificationSettingsLevel | Unset): Level of notifications. Default: NotificationSettingsLevel.DISABLED.
-        default_sender_name (str | Unset): Name of a sender.
-        default_from (str | Unset): Default email address from which notification messages must be sent.
+        default_sender_name (None | str | Unset): Name of a sender.
+        default_from (None | str | Unset): Default email address from which notification messages must be sent.
     """
 
     billing: NotificationBillingSettings
@@ -40,8 +40,8 @@ class NotificationSettings:
     license_: NotificationLicenseSettings
     smtp: SmtpSettings | Unset = UNSET
     level: NotificationSettingsLevel | Unset = NotificationSettingsLevel.DISABLED
-    default_sender_name: str | Unset = UNSET
-    default_from: str | Unset = UNSET
+    default_sender_name: None | str | Unset = UNSET
+    default_from: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -61,9 +61,17 @@ class NotificationSettings:
         if not isinstance(self.level, Unset):
             level = self.level.value
 
-        default_sender_name = self.default_sender_name
+        default_sender_name: None | str | Unset
+        if isinstance(self.default_sender_name, Unset):
+            default_sender_name = UNSET
+        else:
+            default_sender_name = self.default_sender_name
 
-        default_from = self.default_from
+        default_from: None | str | Unset
+        if isinstance(self.default_from, Unset):
+            default_from = UNSET
+        else:
+            default_from = self.default_from
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -117,9 +125,23 @@ class NotificationSettings:
         else:
             level = NotificationSettingsLevel(_level)
 
-        default_sender_name = d.pop("defaultSenderName", UNSET)
+        def _parse_default_sender_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        default_from = d.pop("defaultFrom", UNSET)
+        default_sender_name = _parse_default_sender_name(d.pop("defaultSenderName", UNSET))
+
+        def _parse_default_from(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        default_from = _parse_default_from(d.pop("defaultFrom", UNSET))
 
         notification_settings = cls(
             billing=billing,

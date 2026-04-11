@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -18,12 +18,12 @@ class PublicCloudGoogleNewApplianceInputGuestOsCredentials:
     Attributes:
         guest_os_credentials_uid (UUID): UID assigned to guest OS credentials record.
         time_zone_id (str): ID assigned to a time zone.
-        ssh_public_key (str | Unset): SSH public key.
+        ssh_public_key (None | str | Unset): SSH public key.
     """
 
     guest_os_credentials_uid: UUID
     time_zone_id: str
-    ssh_public_key: str | Unset = UNSET
+    ssh_public_key: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -31,7 +31,11 @@ class PublicCloudGoogleNewApplianceInputGuestOsCredentials:
 
         time_zone_id = self.time_zone_id
 
-        ssh_public_key = self.ssh_public_key
+        ssh_public_key: None | str | Unset
+        if isinstance(self.ssh_public_key, Unset):
+            ssh_public_key = UNSET
+        else:
+            ssh_public_key = self.ssh_public_key
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -53,7 +57,14 @@ class PublicCloudGoogleNewApplianceInputGuestOsCredentials:
 
         time_zone_id = d.pop("timeZoneId")
 
-        ssh_public_key = d.pop("sshPublicKey", UNSET)
+        def _parse_ssh_public_key(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        ssh_public_key = _parse_ssh_public_key(d.pop("sshPublicKey", UNSET))
 
         public_cloud_google_new_appliance_input_guest_os_credentials = cls(
             guest_os_credentials_uid=guest_os_credentials_uid,

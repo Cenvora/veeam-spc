@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,17 +16,21 @@ class DecryptPkcs12ContainerBody:
     """
     Attributes:
         certificate_content (str): Certificate content.
-        password (str | Unset): Certificate password.
+        password (None | str | Unset): Certificate password.
     """
 
     certificate_content: str
-    password: str | Unset = UNSET
+    password: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         certificate_content = self.certificate_content
 
-        password = self.password
+        password: None | str | Unset
+        if isinstance(self.password, Unset):
+            password = UNSET
+        else:
+            password = self.password
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -45,7 +49,14 @@ class DecryptPkcs12ContainerBody:
         d = dict(src_dict)
         certificate_content = d.pop("certificateContent")
 
-        password = d.pop("password", UNSET)
+        def _parse_password(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        password = _parse_password(d.pop("password", UNSET))
 
         decrypt_pkcs_12_container_body = cls(
             certificate_content=certificate_content,

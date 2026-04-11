@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -32,7 +32,7 @@ class WindowsServerJobScheduleSettings:
         periodical_schedule_settings (WindowsPeriodicalScheduleSettings | Unset):
         continuous_schedule_settings (WindowsContinuousScheduleSettings | Unset):
         retry_settings (WindowsServerJobRetrySettings | Unset):
-        backup_window (list[JobScheduleWindowDay] | Unset): Time interval within which a job must complete.
+        backup_window (list[JobScheduleWindowDay] | None | Unset): Time interval within which a job must complete.
             > The `null` value indicates that a job can be run at any time.
     """
 
@@ -44,7 +44,7 @@ class WindowsServerJobScheduleSettings:
     periodical_schedule_settings: WindowsPeriodicalScheduleSettings | Unset = UNSET
     continuous_schedule_settings: WindowsContinuousScheduleSettings | Unset = UNSET
     retry_settings: WindowsServerJobRetrySettings | Unset = UNSET
-    backup_window: list[JobScheduleWindowDay] | Unset = UNSET
+    backup_window: list[JobScheduleWindowDay] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -72,12 +72,17 @@ class WindowsServerJobScheduleSettings:
         if not isinstance(self.retry_settings, Unset):
             retry_settings = self.retry_settings.to_dict()
 
-        backup_window: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.backup_window, Unset):
+        backup_window: list[dict[str, Any]] | None | Unset
+        if isinstance(self.backup_window, Unset):
+            backup_window = UNSET
+        elif isinstance(self.backup_window, list):
             backup_window = []
-            for backup_window_item_data in self.backup_window:
-                backup_window_item = backup_window_item_data.to_dict()
-                backup_window.append(backup_window_item)
+            for backup_window_type_0_item_data in self.backup_window:
+                backup_window_type_0_item = backup_window_type_0_item_data.to_dict()
+                backup_window.append(backup_window_type_0_item)
+
+        else:
+            backup_window = self.backup_window
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -151,14 +156,27 @@ class WindowsServerJobScheduleSettings:
         else:
             retry_settings = WindowsServerJobRetrySettings.from_dict(_retry_settings)
 
-        _backup_window = d.pop("backupWindow", UNSET)
-        backup_window: list[JobScheduleWindowDay] | Unset = UNSET
-        if _backup_window is not UNSET:
-            backup_window = []
-            for backup_window_item_data in _backup_window:
-                backup_window_item = JobScheduleWindowDay.from_dict(backup_window_item_data)
+        def _parse_backup_window(data: object) -> list[JobScheduleWindowDay] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                backup_window_type_0 = []
+                _backup_window_type_0 = data
+                for backup_window_type_0_item_data in _backup_window_type_0:
+                    backup_window_type_0_item = JobScheduleWindowDay.from_dict(backup_window_type_0_item_data)
 
-                backup_window.append(backup_window_item)
+                    backup_window_type_0.append(backup_window_type_0_item)
+
+                return backup_window_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[JobScheduleWindowDay] | None | Unset, data)
+
+        backup_window = _parse_backup_window(d.pop("backupWindow", UNSET))
 
         windows_server_job_schedule_settings = cls(
             schedule_type=schedule_type,

@@ -15,7 +15,7 @@ def _get_kwargs(
     vb_365_protected_object_id: str,
     *,
     vb_365_server_uid: UUID,
-    vb_365_backup_repository_uid: UUID | Unset = UNSET,
+    vb_365_backup_repository_uid: None | Unset | UUID = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -33,9 +33,13 @@ def _get_kwargs(
     json_vb_365_server_uid = str(vb_365_server_uid)
     params["vb365ServerUid"] = json_vb_365_server_uid
 
-    json_vb_365_backup_repository_uid: str | Unset = UNSET
-    if not isinstance(vb_365_backup_repository_uid, Unset):
+    json_vb_365_backup_repository_uid: None | str | Unset
+    if isinstance(vb_365_backup_repository_uid, Unset):
+        json_vb_365_backup_repository_uid = UNSET
+    elif isinstance(vb_365_backup_repository_uid, UUID):
         json_vb_365_backup_repository_uid = str(vb_365_backup_repository_uid)
+    else:
+        json_vb_365_backup_repository_uid = vb_365_backup_repository_uid
     params["vb365BackupRepositoryUid"] = json_vb_365_backup_repository_uid
 
     params["limit"] = limit
@@ -89,7 +93,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     vb_365_server_uid: UUID,
-    vb_365_backup_repository_uid: UUID | Unset = UNSET,
+    vb_365_backup_repository_uid: None | Unset | UUID = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -103,7 +107,7 @@ def sync_detailed(
     Args:
         vb_365_protected_object_id (str):
         vb_365_server_uid (UUID):
-        vb_365_backup_repository_uid (UUID | Unset):
+        vb_365_backup_repository_uid (None | Unset | UUID):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):
@@ -139,7 +143,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     vb_365_server_uid: UUID,
-    vb_365_backup_repository_uid: UUID | Unset = UNSET,
+    vb_365_backup_repository_uid: None | Unset | UUID = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -153,7 +157,7 @@ def sync(
     Args:
         vb_365_protected_object_id (str):
         vb_365_server_uid (UUID):
-        vb_365_backup_repository_uid (UUID | Unset):
+        vb_365_backup_repository_uid (None | Unset | UUID):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):
@@ -184,7 +188,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     vb_365_server_uid: UUID,
-    vb_365_backup_repository_uid: UUID | Unset = UNSET,
+    vb_365_backup_repository_uid: None | Unset | UUID = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -198,7 +202,7 @@ async def asyncio_detailed(
     Args:
         vb_365_protected_object_id (str):
         vb_365_server_uid (UUID):
-        vb_365_backup_repository_uid (UUID | Unset):
+        vb_365_backup_repository_uid (None | Unset | UUID):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):
@@ -232,7 +236,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     vb_365_server_uid: UUID,
-    vb_365_backup_repository_uid: UUID | Unset = UNSET,
+    vb_365_backup_repository_uid: None | Unset | UUID = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -246,7 +250,7 @@ async def asyncio(
     Args:
         vb_365_protected_object_id (str):
         vb_365_server_uid (UUID):
-        vb_365_backup_repository_uid (UUID | Unset):
+        vb_365_backup_repository_uid (None | Unset | UUID):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):

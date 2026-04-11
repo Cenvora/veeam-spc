@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -11,7 +11,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.discovery_rule_network import DiscoveryRuleNetwork
-    from ..models.embedded_for_linux_discovery_rule_children import EmbeddedForLinuxDiscoveryRuleChildren
+    from ..models.embedded_for_linux_discovery_rule_children_type_0 import EmbeddedForLinuxDiscoveryRuleChildrenType0
 
 
 T = TypeVar("T", bound="LinuxNetworkBasedDiscoveryRule")
@@ -23,16 +23,20 @@ class LinuxNetworkBasedDiscoveryRule:
     Attributes:
         networks (list[DiscoveryRuleNetwork]): Network settings.
         instance_uid (UUID | Unset): UID assigned to a network-based discovery rule.
-        field_embedded (EmbeddedForLinuxDiscoveryRuleChildren | Unset): Resource representation of the related Linux
-            discovery rule entity.
+        field_embedded (EmbeddedForLinuxDiscoveryRuleChildrenType0 | None | Unset): Resource representation of the
+            related Linux discovery rule entity.
     """
 
     networks: list[DiscoveryRuleNetwork]
     instance_uid: UUID | Unset = UNSET
-    field_embedded: EmbeddedForLinuxDiscoveryRuleChildren | Unset = UNSET
+    field_embedded: EmbeddedForLinuxDiscoveryRuleChildrenType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_linux_discovery_rule_children_type_0 import (
+            EmbeddedForLinuxDiscoveryRuleChildrenType0,
+        )
+
         networks = []
         for networks_item_data in self.networks:
             networks_item = networks_item_data.to_dict()
@@ -42,9 +46,13 @@ class LinuxNetworkBasedDiscoveryRule:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForLinuxDiscoveryRuleChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -63,7 +71,9 @@ class LinuxNetworkBasedDiscoveryRule:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.discovery_rule_network import DiscoveryRuleNetwork
-        from ..models.embedded_for_linux_discovery_rule_children import EmbeddedForLinuxDiscoveryRuleChildren
+        from ..models.embedded_for_linux_discovery_rule_children_type_0 import (
+            EmbeddedForLinuxDiscoveryRuleChildrenType0,
+        )
 
         d = dict(src_dict)
         networks = []
@@ -80,12 +90,24 @@ class LinuxNetworkBasedDiscoveryRule:
         else:
             instance_uid = UUID(_instance_uid)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForLinuxDiscoveryRuleChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForLinuxDiscoveryRuleChildren.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> EmbeddedForLinuxDiscoveryRuleChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_linux_discovery_rule_children_type_0 = (
+                    EmbeddedForLinuxDiscoveryRuleChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_linux_discovery_rule_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForLinuxDiscoveryRuleChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         linux_network_based_discovery_rule = cls(
             networks=networks,
