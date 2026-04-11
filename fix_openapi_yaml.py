@@ -152,20 +152,48 @@ def fix_response_keys(input_path: str, output_path: str) -> None:
     )
     # Quote version numbers (e.g., version: 3.6, 3.6.1, 3.5.1 to version: "3.6", "3.6.1", "3.5.1")
     fixed = re.sub(r"(version:\s*)([0-9]+(?:\.[0-9]+)+)", r'\1"\2"', fixed)
+
+    def convert_nullable_scalar_type_unions(value: str) -> str:
+        scalar_types = {"string", "integer", "number", "boolean"}
+
+        def replace_inline(match: re.Match[str]) -> str:
+            indent = match.group("indent")
+            first = match.group("first")
+            second = match.group("second")
+            comment = match.group("comment") or ""
+            items = [first, second]
+            primitive = next((item for item in items if item in scalar_types), None)
+            if primitive is None or "null" not in items:
+                return match.group(0)
+            return f"{indent}type: {primitive}{comment}\n{indent}nullable: true"
+
+        inline_pattern = re.compile(
+            r"^(?P<indent>\s*)type:\s*\[\s*(?P<first>string|integer|number|boolean|null)\s*,\s*(?P<second>string|integer|number|boolean|null)\s*\]\s*(?P<comment>#.*)?$",
+            flags=re.MULTILINE,
+        )
+        value = inline_pattern.sub(replace_inline, value)
+
+        def replace_multiline(match: re.Match[str]) -> str:
+            indent = match.group("indent")
+            first = match.group("first")
+            second = match.group("second")
+            items = [first, second]
+            primitive = next((item for item in items if item in scalar_types), None)
+            if primitive is None or "null" not in items:
+                return match.group(0)
+            return f"{indent}type: {primitive}\n{indent}nullable: true"
+
+        multiline_pattern = re.compile(
+            r"^(?P<indent>\s*)type:\s*(?:#.*)?\n"
+            r"(?P<item_indent>\s+)-\s*(?P<first>string|integer|number|boolean|null)\s*(?:#.*)?\n"
+            r"(?P=item_indent)-\s*(?P<second>string|integer|number|boolean|null)\s*(?:#.*)?$",
+            flags=re.MULTILINE,
+        )
+        return multiline_pattern.sub(replace_multiline, value)
+
     # Convert YAML type unions like `type: [string, null]` into OpenAPI style
-    # while preserving nullability semantics.
-    fixed = re.sub(
-        r"^(\s*)type:\s*\[\s*string\s*,\s*null\s*\]\s*$",
-        r"\1type: string\n\1nullable: true",
-        fixed,
-        flags=re.MULTILINE,
-    )
-    fixed = re.sub(
-        r"^(\s*)type:\s*\[\s*null\s*,\s*string\s*\]\s*$",
-        r"\1type: string\n\1nullable: true",
-        fixed,
-        flags=re.MULTILINE,
-    )
+    # while preserving nullability semantics for common scalar unions.
+    fixed = convert_nullable_scalar_type_unions(fixed)
     fixed = redact_secret_text(fixed)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(fixed)
