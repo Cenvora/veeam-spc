@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -9,7 +9,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.reseller_cloud_connect_quota import ResellerCloudConnectQuota
+    from ..models.reseller_cloud_connect_quota_type_0 import ResellerCloudConnectQuotaType0
     from ..models.reseller_hosted_services import ResellerHostedServices
     from ..models.reseller_remote_services import ResellerRemoteServices
 
@@ -23,7 +23,8 @@ class ResellerServices:
     Attributes:
         hosted_services (ResellerHostedServices | Unset):
         remote_services (ResellerRemoteServices | Unset):
-        cloud_connect_quota (ResellerCloudConnectQuota | Unset): Veeam Cloud Connect resources provided to a reseller.
+        cloud_connect_quota (None | ResellerCloudConnectQuotaType0 | Unset): Veeam Cloud Connect resources provided to a
+            reseller.
             > If you do not provide the `null` value for this property during reseller creation, you will not be able to
             change it to `null`.
         cloud_connect_management_enabled (bool | Unset): Indicates whether Veeam Cloud Connect resources are available
@@ -35,12 +36,14 @@ class ResellerServices:
 
     hosted_services: ResellerHostedServices | Unset = UNSET
     remote_services: ResellerRemoteServices | Unset = UNSET
-    cloud_connect_quota: ResellerCloudConnectQuota | Unset = UNSET
+    cloud_connect_quota: None | ResellerCloudConnectQuotaType0 | Unset = UNSET
     cloud_connect_management_enabled: bool | Unset = False
     is_file_level_restore_enabled: bool | Unset = False
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.reseller_cloud_connect_quota_type_0 import ResellerCloudConnectQuotaType0
+
         hosted_services: dict[str, Any] | Unset = UNSET
         if not isinstance(self.hosted_services, Unset):
             hosted_services = self.hosted_services.to_dict()
@@ -49,9 +52,13 @@ class ResellerServices:
         if not isinstance(self.remote_services, Unset):
             remote_services = self.remote_services.to_dict()
 
-        cloud_connect_quota: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.cloud_connect_quota, Unset):
+        cloud_connect_quota: dict[str, Any] | None | Unset
+        if isinstance(self.cloud_connect_quota, Unset):
+            cloud_connect_quota = UNSET
+        elif isinstance(self.cloud_connect_quota, ResellerCloudConnectQuotaType0):
             cloud_connect_quota = self.cloud_connect_quota.to_dict()
+        else:
+            cloud_connect_quota = self.cloud_connect_quota
 
         cloud_connect_management_enabled = self.cloud_connect_management_enabled
 
@@ -75,7 +82,7 @@ class ResellerServices:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.reseller_cloud_connect_quota import ResellerCloudConnectQuota
+        from ..models.reseller_cloud_connect_quota_type_0 import ResellerCloudConnectQuotaType0
         from ..models.reseller_hosted_services import ResellerHostedServices
         from ..models.reseller_remote_services import ResellerRemoteServices
 
@@ -94,12 +101,22 @@ class ResellerServices:
         else:
             remote_services = ResellerRemoteServices.from_dict(_remote_services)
 
-        _cloud_connect_quota = d.pop("cloudConnectQuota", UNSET)
-        cloud_connect_quota: ResellerCloudConnectQuota | Unset
-        if isinstance(_cloud_connect_quota, Unset):
-            cloud_connect_quota = UNSET
-        else:
-            cloud_connect_quota = ResellerCloudConnectQuota.from_dict(_cloud_connect_quota)
+        def _parse_cloud_connect_quota(data: object) -> None | ResellerCloudConnectQuotaType0 | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_reseller_cloud_connect_quota_type_0 = ResellerCloudConnectQuotaType0.from_dict(data)
+
+                return componentsschemas_reseller_cloud_connect_quota_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | ResellerCloudConnectQuotaType0 | Unset, data)
+
+        cloud_connect_quota = _parse_cloud_connect_quota(d.pop("cloudConnectQuota", UNSET))
 
         cloud_connect_management_enabled = d.pop("cloudConnectManagementEnabled", UNSET)
 

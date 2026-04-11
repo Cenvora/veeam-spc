@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,18 +21,18 @@ class Saml2ContactPersonConfiguration:
             > This property is required.
         type_ (Saml2ContactPersonConfigurationType | Unset): Type of contact. Common values include `Technical`,
             `Support`, or `Other`. Default: Saml2ContactPersonConfigurationType.OTHER.
-        company (str | Unset): Name of a contact person company.
-        given_name (str | Unset): First name of a contact person
-        surname (str | Unset): Last name of a contact person.
-        phone_number (str | Unset): Telephone number of a contact person.
+        company (None | str | Unset): Name of a contact person company.
+        given_name (None | str | Unset): First name of a contact person
+        surname (None | str | Unset): Last name of a contact person.
+        phone_number (None | str | Unset): Telephone number of a contact person.
     """
 
     email: str
     type_: Saml2ContactPersonConfigurationType | Unset = Saml2ContactPersonConfigurationType.OTHER
-    company: str | Unset = UNSET
-    given_name: str | Unset = UNSET
-    surname: str | Unset = UNSET
-    phone_number: str | Unset = UNSET
+    company: None | str | Unset = UNSET
+    given_name: None | str | Unset = UNSET
+    surname: None | str | Unset = UNSET
+    phone_number: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -42,13 +42,29 @@ class Saml2ContactPersonConfiguration:
         if not isinstance(self.type_, Unset):
             type_ = self.type_.value
 
-        company = self.company
+        company: None | str | Unset
+        if isinstance(self.company, Unset):
+            company = UNSET
+        else:
+            company = self.company
 
-        given_name = self.given_name
+        given_name: None | str | Unset
+        if isinstance(self.given_name, Unset):
+            given_name = UNSET
+        else:
+            given_name = self.given_name
 
-        surname = self.surname
+        surname: None | str | Unset
+        if isinstance(self.surname, Unset):
+            surname = UNSET
+        else:
+            surname = self.surname
 
-        phone_number = self.phone_number
+        phone_number: None | str | Unset
+        if isinstance(self.phone_number, Unset):
+            phone_number = UNSET
+        else:
+            phone_number = self.phone_number
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -82,13 +98,41 @@ class Saml2ContactPersonConfiguration:
         else:
             type_ = Saml2ContactPersonConfigurationType(_type_)
 
-        company = d.pop("company", UNSET)
+        def _parse_company(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        given_name = d.pop("givenName", UNSET)
+        company = _parse_company(d.pop("company", UNSET))
 
-        surname = d.pop("surname", UNSET)
+        def _parse_given_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        phone_number = d.pop("phoneNumber", UNSET)
+        given_name = _parse_given_name(d.pop("givenName", UNSET))
+
+        def _parse_surname(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        surname = _parse_surname(d.pop("surname", UNSET))
+
+        def _parse_phone_number(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        phone_number = _parse_phone_number(d.pop("phoneNumber", UNSET))
 
         saml_2_contact_person_configuration = cls(
             email=email,

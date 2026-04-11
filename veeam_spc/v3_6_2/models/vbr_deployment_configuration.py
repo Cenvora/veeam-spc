@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -25,25 +25,25 @@ class VbrDeploymentConfiguration:
             answer_xml (str): XML string containing installation parameters.
                 > To obtain a template of XML string, perform the `GetBackupServerDeploymentConfigurationXml` operation.
             distribution (VbrDeploymentDistributionSource | Unset):
-            use_predownloaded_iso (bool | Unset): Indicates whether the predownloaded Veeam Backup & Replication setup file
-                is used for installation.
+            use_predownloaded_iso (bool | None | Unset): Indicates whether the predownloaded Veeam Backup & Replication
+                setup file is used for installation.
                 > Provided value has higher priority than the `distribution` property value.
-            allow_auto_reboot (bool | Unset): Indicates whether a server must be automatically rebooted after the
+            allow_auto_reboot (bool | None | Unset): Indicates whether a server must be automatically rebooted after the
                 installation is complete.
-            stop_all_activities (bool | Unset): Indicates whether all other tasks must be stopped during installation. Can
-                be enabled only for update installation.
-            use_management_agent_credentials (bool | Unset): Indicates whether management agent credentials must be used as
-                service account credentials.
+            stop_all_activities (bool | None | Unset): Indicates whether all other tasks must be stopped during
+                installation. Can be enabled only for update installation.
+            use_management_agent_credentials (bool | None | Unset): Indicates whether management agent credentials must be
+                used as service account credentials.
                 > Provided value has higher priority than the `adminCredentials` property value.
             admin_credentials (ManagementAgentCredentials | Unset):
     """
 
     answer_xml: str
     distribution: VbrDeploymentDistributionSource | Unset = UNSET
-    use_predownloaded_iso: bool | Unset = UNSET
-    allow_auto_reboot: bool | Unset = UNSET
-    stop_all_activities: bool | Unset = UNSET
-    use_management_agent_credentials: bool | Unset = UNSET
+    use_predownloaded_iso: bool | None | Unset = UNSET
+    allow_auto_reboot: bool | None | Unset = UNSET
+    stop_all_activities: bool | None | Unset = UNSET
+    use_management_agent_credentials: bool | None | Unset = UNSET
     admin_credentials: ManagementAgentCredentials | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -54,13 +54,29 @@ class VbrDeploymentConfiguration:
         if not isinstance(self.distribution, Unset):
             distribution = self.distribution.to_dict()
 
-        use_predownloaded_iso = self.use_predownloaded_iso
+        use_predownloaded_iso: bool | None | Unset
+        if isinstance(self.use_predownloaded_iso, Unset):
+            use_predownloaded_iso = UNSET
+        else:
+            use_predownloaded_iso = self.use_predownloaded_iso
 
-        allow_auto_reboot = self.allow_auto_reboot
+        allow_auto_reboot: bool | None | Unset
+        if isinstance(self.allow_auto_reboot, Unset):
+            allow_auto_reboot = UNSET
+        else:
+            allow_auto_reboot = self.allow_auto_reboot
 
-        stop_all_activities = self.stop_all_activities
+        stop_all_activities: bool | None | Unset
+        if isinstance(self.stop_all_activities, Unset):
+            stop_all_activities = UNSET
+        else:
+            stop_all_activities = self.stop_all_activities
 
-        use_management_agent_credentials = self.use_management_agent_credentials
+        use_management_agent_credentials: bool | None | Unset
+        if isinstance(self.use_management_agent_credentials, Unset):
+            use_management_agent_credentials = UNSET
+        else:
+            use_management_agent_credentials = self.use_management_agent_credentials
 
         admin_credentials: dict[str, Any] | Unset = UNSET
         if not isinstance(self.admin_credentials, Unset):
@@ -103,13 +119,43 @@ class VbrDeploymentConfiguration:
         else:
             distribution = VbrDeploymentDistributionSource.from_dict(_distribution)
 
-        use_predownloaded_iso = d.pop("usePredownloadedIso", UNSET)
+        def _parse_use_predownloaded_iso(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        allow_auto_reboot = d.pop("allowAutoReboot", UNSET)
+        use_predownloaded_iso = _parse_use_predownloaded_iso(d.pop("usePredownloadedIso", UNSET))
 
-        stop_all_activities = d.pop("stopAllActivities", UNSET)
+        def _parse_allow_auto_reboot(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        use_management_agent_credentials = d.pop("useManagementAgentCredentials", UNSET)
+        allow_auto_reboot = _parse_allow_auto_reboot(d.pop("allowAutoReboot", UNSET))
+
+        def _parse_stop_all_activities(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        stop_all_activities = _parse_stop_all_activities(d.pop("stopAllActivities", UNSET))
+
+        def _parse_use_management_agent_credentials(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        use_management_agent_credentials = _parse_use_management_agent_credentials(
+            d.pop("useManagementAgentCredentials", UNSET)
+        )
 
         _admin_credentials = d.pop("adminCredentials", UNSET)
         admin_credentials: ManagementAgentCredentials | Unset

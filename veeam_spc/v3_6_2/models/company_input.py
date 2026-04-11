@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,8 +24,8 @@ class CompanyInput:
     Attributes:
         organization_input (OrganizationInput):
         owner_credentials (OwnerCredentials):
-        reseller_uid (UUID | Unset): UID assigned to a reseller that manages the company.
-        subscription_plan_uid (UUID | Unset): UID assigned to a company subscription plan.
+        reseller_uid (None | Unset | UUID): UID assigned to a reseller that manages the company.
+        subscription_plan_uid (None | Unset | UUID): UID assigned to a company subscription plan.
         is_rest_access_enabled (bool | Unset): Defines whether access to REST API is enabled for a reseller. Default:
             False.
         is_alarm_detect_enabled (bool | Unset): Defines whether a company must receive notifications about alarms that
@@ -35,8 +35,8 @@ class CompanyInput:
 
     organization_input: OrganizationInput
     owner_credentials: OwnerCredentials
-    reseller_uid: UUID | Unset = UNSET
-    subscription_plan_uid: UUID | Unset = UNSET
+    reseller_uid: None | Unset | UUID = UNSET
+    subscription_plan_uid: None | Unset | UUID = UNSET
     is_rest_access_enabled: bool | Unset = False
     is_alarm_detect_enabled: bool | Unset = False
     company_services: CompanyServices | Unset = UNSET
@@ -47,13 +47,21 @@ class CompanyInput:
 
         owner_credentials = self.owner_credentials.to_dict()
 
-        reseller_uid: str | Unset = UNSET
-        if not isinstance(self.reseller_uid, Unset):
+        reseller_uid: None | str | Unset
+        if isinstance(self.reseller_uid, Unset):
+            reseller_uid = UNSET
+        elif isinstance(self.reseller_uid, UUID):
             reseller_uid = str(self.reseller_uid)
+        else:
+            reseller_uid = self.reseller_uid
 
-        subscription_plan_uid: str | Unset = UNSET
-        if not isinstance(self.subscription_plan_uid, Unset):
+        subscription_plan_uid: None | str | Unset
+        if isinstance(self.subscription_plan_uid, Unset):
+            subscription_plan_uid = UNSET
+        elif isinstance(self.subscription_plan_uid, UUID):
             subscription_plan_uid = str(self.subscription_plan_uid)
+        else:
+            subscription_plan_uid = self.subscription_plan_uid
 
         is_rest_access_enabled = self.is_rest_access_enabled
 
@@ -95,19 +103,39 @@ class CompanyInput:
 
         owner_credentials = OwnerCredentials.from_dict(d.pop("ownerCredentials"))
 
-        _reseller_uid = d.pop("resellerUid", UNSET)
-        reseller_uid: UUID | Unset
-        if isinstance(_reseller_uid, Unset):
-            reseller_uid = UNSET
-        else:
-            reseller_uid = UUID(_reseller_uid)
+        def _parse_reseller_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                reseller_uid_type_0 = UUID(data)
 
-        _subscription_plan_uid = d.pop("subscriptionPlanUid", UNSET)
-        subscription_plan_uid: UUID | Unset
-        if isinstance(_subscription_plan_uid, Unset):
-            subscription_plan_uid = UNSET
-        else:
-            subscription_plan_uid = UUID(_subscription_plan_uid)
+                return reseller_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        reseller_uid = _parse_reseller_uid(d.pop("resellerUid", UNSET))
+
+        def _parse_subscription_plan_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                subscription_plan_uid_type_0 = UUID(data)
+
+                return subscription_plan_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        subscription_plan_uid = _parse_subscription_plan_uid(d.pop("subscriptionPlanUid", UNSET))
 
         is_rest_access_enabled = d.pop("isRestAccessEnabled", UNSET)
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,23 +19,31 @@ class VdcVaultConfiguration:
     """
     Attributes:
         status (VdcVaultConfigurationStatus): Status of the Veeam Data Cloud Vault configuration.
-        status_message (str | Unset): Status message.
-        last_update (datetime.date | Unset): Date of the latest status update.
+        status_message (None | str | Unset): Status message.
+        last_update (datetime.date | None | Unset): Date of the latest status update.
     """
 
     status: VdcVaultConfigurationStatus
-    status_message: str | Unset = UNSET
-    last_update: datetime.date | Unset = UNSET
+    status_message: None | str | Unset = UNSET
+    last_update: datetime.date | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         status = self.status.value
 
-        status_message = self.status_message
+        status_message: None | str | Unset
+        if isinstance(self.status_message, Unset):
+            status_message = UNSET
+        else:
+            status_message = self.status_message
 
-        last_update: str | Unset = UNSET
-        if not isinstance(self.last_update, Unset):
+        last_update: None | str | Unset
+        if isinstance(self.last_update, Unset):
+            last_update = UNSET
+        elif isinstance(self.last_update, datetime.date):
             last_update = self.last_update.isoformat()
+        else:
+            last_update = self.last_update
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -56,14 +64,31 @@ class VdcVaultConfiguration:
         d = dict(src_dict)
         status = VdcVaultConfigurationStatus(d.pop("status"))
 
-        status_message = d.pop("statusMessage", UNSET)
+        def _parse_status_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _last_update = d.pop("lastUpdate", UNSET)
-        last_update: datetime.date | Unset
-        if isinstance(_last_update, Unset):
-            last_update = UNSET
-        else:
-            last_update = isoparse(_last_update).date()
+        status_message = _parse_status_message(d.pop("statusMessage", UNSET))
+
+        def _parse_last_update(data: object) -> datetime.date | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_update_type_0 = isoparse(data).date()
+
+                return last_update_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.date | None | Unset, data)
+
+        last_update = _parse_last_update(d.pop("lastUpdate", UNSET))
 
         vdc_vault_configuration = cls(
             status=status,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -26,27 +26,27 @@ class Vb365BackupRepository:
         instance_uid (UUID | Unset): UID assigned to a backup repository.
         name (str | Unset): Name of a backup repository
         description (str | Unset): Description of a backup repository
-        proxy_uid (UUID | Unset): UID assigned to a backup proxy.
-        proxy_pool_uid (UUID | Unset): UID assigned to a backup proxy pool.
+        proxy_uid (None | Unset | UUID): UID assigned to a backup proxy.
+        proxy_pool_uid (None | Unset | UUID): UID assigned to a backup proxy pool.
         path (str | Unset): Path to a folder that contains backup files.
         is_archive_repository (bool | Unset): Indicates whether a backup repository is used as an archive repository.
         is_available_for_backup_job (bool | Unset): Indicates whether a backup repository can be used to store backups.
         is_available_for_copy_job (bool | Unset): Indicates whether a backup repository can be used to store backup
             copies.
         is_object_storage_repository (bool | Unset): Indicates whether a backup repository is used as an object storage.
-        object_storage_repository_uid (UUID | Unset): UID assigned to an object storage.
+        object_storage_repository_uid (None | Unset | UUID): UID assigned to an object storage.
         object_storage_repository_cache_path (str | Unset): Path to the directory of the backup repository on a backup
             proxy server.
-        object_storage_repository_encryption_enabled (bool | Unset): Indicates whether the object storage encryption is
-            enabled.
-        encryption_key_id (UUID | Unset): ID assigned to an encryption key.
+        object_storage_repository_encryption_enabled (bool | None | Unset): Indicates whether the object storage
+            encryption is enabled.
+        encryption_key_id (None | Unset | UUID): ID assigned to an encryption key.
         is_out_of_sync (bool | Unset): Indicates whether a backup proxy server must be synchronized with the object
             storage to get the same cache state.
-        capacity_bytes (int | Unset): Storage capacity, in bytes.
-        free_space_bytes (int | Unset): Amount of free disk space on a backup repository, in bytes.
-        used_space_bytes (int | Unset): Amount of used disk space on a backup repository, in bytes.
-        daily_retention_period (int | Unset): Retention period in days.
-        monthly_retention_period (int | Unset): Retention period in months.
+        capacity_bytes (int | None | Unset): Storage capacity, in bytes.
+        free_space_bytes (int | None | Unset): Amount of free disk space on a backup repository, in bytes.
+        used_space_bytes (int | None | Unset): Amount of used disk space on a backup repository, in bytes.
+        daily_retention_period (int | None | Unset): Retention period in days.
+        monthly_retention_period (int | None | Unset): Retention period in months.
         daily_time (str | Unset): Time of the day when the daily clean-up must be performed.
         monthly_time (str | Unset):  Time of the day when the monthly clean-up must be performed.
         retention_type (Vb365BackupRepositoryRetentionType | Unset): Type of the retention policy.
@@ -63,23 +63,23 @@ class Vb365BackupRepository:
     instance_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
     description: str | Unset = UNSET
-    proxy_uid: UUID | Unset = UNSET
-    proxy_pool_uid: UUID | Unset = UNSET
+    proxy_uid: None | Unset | UUID = UNSET
+    proxy_pool_uid: None | Unset | UUID = UNSET
     path: str | Unset = UNSET
     is_archive_repository: bool | Unset = UNSET
     is_available_for_backup_job: bool | Unset = UNSET
     is_available_for_copy_job: bool | Unset = UNSET
     is_object_storage_repository: bool | Unset = UNSET
-    object_storage_repository_uid: UUID | Unset = UNSET
+    object_storage_repository_uid: None | Unset | UUID = UNSET
     object_storage_repository_cache_path: str | Unset = UNSET
-    object_storage_repository_encryption_enabled: bool | Unset = UNSET
-    encryption_key_id: UUID | Unset = UNSET
+    object_storage_repository_encryption_enabled: bool | None | Unset = UNSET
+    encryption_key_id: None | Unset | UUID = UNSET
     is_out_of_sync: bool | Unset = UNSET
-    capacity_bytes: int | Unset = UNSET
-    free_space_bytes: int | Unset = UNSET
-    used_space_bytes: int | Unset = UNSET
-    daily_retention_period: int | Unset = UNSET
-    monthly_retention_period: int | Unset = UNSET
+    capacity_bytes: int | None | Unset = UNSET
+    free_space_bytes: int | None | Unset = UNSET
+    used_space_bytes: int | None | Unset = UNSET
+    daily_retention_period: int | None | Unset = UNSET
+    monthly_retention_period: int | None | Unset = UNSET
     daily_time: str | Unset = UNSET
     monthly_time: str | Unset = UNSET
     retention_type: Vb365BackupRepositoryRetentionType | Unset = UNSET
@@ -100,13 +100,21 @@ class Vb365BackupRepository:
 
         description = self.description
 
-        proxy_uid: str | Unset = UNSET
-        if not isinstance(self.proxy_uid, Unset):
+        proxy_uid: None | str | Unset
+        if isinstance(self.proxy_uid, Unset):
+            proxy_uid = UNSET
+        elif isinstance(self.proxy_uid, UUID):
             proxy_uid = str(self.proxy_uid)
+        else:
+            proxy_uid = self.proxy_uid
 
-        proxy_pool_uid: str | Unset = UNSET
-        if not isinstance(self.proxy_pool_uid, Unset):
+        proxy_pool_uid: None | str | Unset
+        if isinstance(self.proxy_pool_uid, Unset):
+            proxy_pool_uid = UNSET
+        elif isinstance(self.proxy_pool_uid, UUID):
             proxy_pool_uid = str(self.proxy_pool_uid)
+        else:
+            proxy_pool_uid = self.proxy_pool_uid
 
         path = self.path
 
@@ -118,29 +126,61 @@ class Vb365BackupRepository:
 
         is_object_storage_repository = self.is_object_storage_repository
 
-        object_storage_repository_uid: str | Unset = UNSET
-        if not isinstance(self.object_storage_repository_uid, Unset):
+        object_storage_repository_uid: None | str | Unset
+        if isinstance(self.object_storage_repository_uid, Unset):
+            object_storage_repository_uid = UNSET
+        elif isinstance(self.object_storage_repository_uid, UUID):
             object_storage_repository_uid = str(self.object_storage_repository_uid)
+        else:
+            object_storage_repository_uid = self.object_storage_repository_uid
 
         object_storage_repository_cache_path = self.object_storage_repository_cache_path
 
-        object_storage_repository_encryption_enabled = self.object_storage_repository_encryption_enabled
+        object_storage_repository_encryption_enabled: bool | None | Unset
+        if isinstance(self.object_storage_repository_encryption_enabled, Unset):
+            object_storage_repository_encryption_enabled = UNSET
+        else:
+            object_storage_repository_encryption_enabled = self.object_storage_repository_encryption_enabled
 
-        encryption_key_id: str | Unset = UNSET
-        if not isinstance(self.encryption_key_id, Unset):
+        encryption_key_id: None | str | Unset
+        if isinstance(self.encryption_key_id, Unset):
+            encryption_key_id = UNSET
+        elif isinstance(self.encryption_key_id, UUID):
             encryption_key_id = str(self.encryption_key_id)
+        else:
+            encryption_key_id = self.encryption_key_id
 
         is_out_of_sync = self.is_out_of_sync
 
-        capacity_bytes = self.capacity_bytes
+        capacity_bytes: int | None | Unset
+        if isinstance(self.capacity_bytes, Unset):
+            capacity_bytes = UNSET
+        else:
+            capacity_bytes = self.capacity_bytes
 
-        free_space_bytes = self.free_space_bytes
+        free_space_bytes: int | None | Unset
+        if isinstance(self.free_space_bytes, Unset):
+            free_space_bytes = UNSET
+        else:
+            free_space_bytes = self.free_space_bytes
 
-        used_space_bytes = self.used_space_bytes
+        used_space_bytes: int | None | Unset
+        if isinstance(self.used_space_bytes, Unset):
+            used_space_bytes = UNSET
+        else:
+            used_space_bytes = self.used_space_bytes
 
-        daily_retention_period = self.daily_retention_period
+        daily_retention_period: int | None | Unset
+        if isinstance(self.daily_retention_period, Unset):
+            daily_retention_period = UNSET
+        else:
+            daily_retention_period = self.daily_retention_period
 
-        monthly_retention_period = self.monthly_retention_period
+        monthly_retention_period: int | None | Unset
+        if isinstance(self.monthly_retention_period, Unset):
+            monthly_retention_period = UNSET
+        else:
+            monthly_retention_period = self.monthly_retention_period
 
         daily_time = self.daily_time
 
@@ -252,19 +292,39 @@ class Vb365BackupRepository:
 
         description = d.pop("description", UNSET)
 
-        _proxy_uid = d.pop("proxyUid", UNSET)
-        proxy_uid: UUID | Unset
-        if isinstance(_proxy_uid, Unset):
-            proxy_uid = UNSET
-        else:
-            proxy_uid = UUID(_proxy_uid)
+        def _parse_proxy_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                proxy_uid_type_0 = UUID(data)
 
-        _proxy_pool_uid = d.pop("proxyPoolUid", UNSET)
-        proxy_pool_uid: UUID | Unset
-        if isinstance(_proxy_pool_uid, Unset):
-            proxy_pool_uid = UNSET
-        else:
-            proxy_pool_uid = UUID(_proxy_pool_uid)
+                return proxy_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        proxy_uid = _parse_proxy_uid(d.pop("proxyUid", UNSET))
+
+        def _parse_proxy_pool_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                proxy_pool_uid_type_0 = UUID(data)
+
+                return proxy_pool_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        proxy_pool_uid = _parse_proxy_pool_uid(d.pop("proxyPoolUid", UNSET))
 
         path = d.pop("path", UNSET)
 
@@ -276,35 +336,99 @@ class Vb365BackupRepository:
 
         is_object_storage_repository = d.pop("isObjectStorageRepository", UNSET)
 
-        _object_storage_repository_uid = d.pop("objectStorageRepositoryUid", UNSET)
-        object_storage_repository_uid: UUID | Unset
-        if isinstance(_object_storage_repository_uid, Unset):
-            object_storage_repository_uid = UNSET
-        else:
-            object_storage_repository_uid = UUID(_object_storage_repository_uid)
+        def _parse_object_storage_repository_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                object_storage_repository_uid_type_0 = UUID(data)
+
+                return object_storage_repository_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        object_storage_repository_uid = _parse_object_storage_repository_uid(d.pop("objectStorageRepositoryUid", UNSET))
 
         object_storage_repository_cache_path = d.pop("objectStorageRepositoryCachePath", UNSET)
 
-        object_storage_repository_encryption_enabled = d.pop("objectStorageRepositoryEncryptionEnabled", UNSET)
+        def _parse_object_storage_repository_encryption_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        _encryption_key_id = d.pop("encryptionKeyId", UNSET)
-        encryption_key_id: UUID | Unset
-        if isinstance(_encryption_key_id, Unset):
-            encryption_key_id = UNSET
-        else:
-            encryption_key_id = UUID(_encryption_key_id)
+        object_storage_repository_encryption_enabled = _parse_object_storage_repository_encryption_enabled(
+            d.pop("objectStorageRepositoryEncryptionEnabled", UNSET)
+        )
+
+        def _parse_encryption_key_id(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                encryption_key_id_type_0 = UUID(data)
+
+                return encryption_key_id_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        encryption_key_id = _parse_encryption_key_id(d.pop("encryptionKeyId", UNSET))
 
         is_out_of_sync = d.pop("isOutOfSync", UNSET)
 
-        capacity_bytes = d.pop("capacityBytes", UNSET)
+        def _parse_capacity_bytes(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        free_space_bytes = d.pop("freeSpaceBytes", UNSET)
+        capacity_bytes = _parse_capacity_bytes(d.pop("capacityBytes", UNSET))
 
-        used_space_bytes = d.pop("usedSpaceBytes", UNSET)
+        def _parse_free_space_bytes(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        daily_retention_period = d.pop("dailyRetentionPeriod", UNSET)
+        free_space_bytes = _parse_free_space_bytes(d.pop("freeSpaceBytes", UNSET))
 
-        monthly_retention_period = d.pop("monthlyRetentionPeriod", UNSET)
+        def _parse_used_space_bytes(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        used_space_bytes = _parse_used_space_bytes(d.pop("usedSpaceBytes", UNSET))
+
+        def _parse_daily_retention_period(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        daily_retention_period = _parse_daily_retention_period(d.pop("dailyRetentionPeriod", UNSET))
+
+        def _parse_monthly_retention_period(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        monthly_retention_period = _parse_monthly_retention_period(d.pop("monthlyRetentionPeriod", UNSET))
 
         daily_time = d.pop("dailyTime", UNSET)
 

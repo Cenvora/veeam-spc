@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -65,8 +65,8 @@ class SubscriptionPlanCloudBackup:
         cloud_repository_consumed_space_units (SubscriptionPlanCloudBackupCloudRepositoryConsumedSpaceUnits | Unset):
             Measurement units of consumed storage space on a cloud repository. Default:
             SubscriptionPlanCloudBackupCloudRepositoryConsumedSpaceUnits.TB.
-        free_cloud_repository_consumed_space (int | Unset): Amount of storage space that can be consumed by backup files
-            for free.
+        free_cloud_repository_consumed_space (int | None | Unset): Amount of storage space that can be consumed by
+            backup files for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         free_cloud_repository_consumed_space_units (SubscriptionPlanCloudBackupFreeCloudRepositoryConsumedSpaceUnits |
             Unset): Measurement units of storage space that can be consumed by backup files for free. Default:
@@ -116,7 +116,7 @@ class SubscriptionPlanCloudBackup:
     cloud_repository_consumed_space_units: SubscriptionPlanCloudBackupCloudRepositoryConsumedSpaceUnits | Unset = (
         SubscriptionPlanCloudBackupCloudRepositoryConsumedSpaceUnits.TB
     )
-    free_cloud_repository_consumed_space: int | Unset = UNSET
+    free_cloud_repository_consumed_space: int | None | Unset = UNSET
     free_cloud_repository_consumed_space_units: (
         SubscriptionPlanCloudBackupFreeCloudRepositoryConsumedSpaceUnits | Unset
     ) = SubscriptionPlanCloudBackupFreeCloudRepositoryConsumedSpaceUnits.GB
@@ -172,7 +172,11 @@ class SubscriptionPlanCloudBackup:
         if not isinstance(self.cloud_repository_consumed_space_units, Unset):
             cloud_repository_consumed_space_units = self.cloud_repository_consumed_space_units.value
 
-        free_cloud_repository_consumed_space = self.free_cloud_repository_consumed_space
+        free_cloud_repository_consumed_space: int | None | Unset
+        if isinstance(self.free_cloud_repository_consumed_space, Unset):
+            free_cloud_repository_consumed_space = UNSET
+        else:
+            free_cloud_repository_consumed_space = self.free_cloud_repository_consumed_space
 
         free_cloud_repository_consumed_space_units: str | Unset = UNSET
         if not isinstance(self.free_cloud_repository_consumed_space_units, Unset):
@@ -314,7 +318,16 @@ class SubscriptionPlanCloudBackup:
                 _cloud_repository_consumed_space_units
             )
 
-        free_cloud_repository_consumed_space = d.pop("freeCloudRepositoryConsumedSpace", UNSET)
+        def _parse_free_cloud_repository_consumed_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        free_cloud_repository_consumed_space = _parse_free_cloud_repository_consumed_space(
+            d.pop("freeCloudRepositoryConsumedSpace", UNSET)
+        )
 
         _free_cloud_repository_consumed_space_units = d.pop("freeCloudRepositoryConsumedSpaceUnits", UNSET)
         free_cloud_repository_consumed_space_units: (

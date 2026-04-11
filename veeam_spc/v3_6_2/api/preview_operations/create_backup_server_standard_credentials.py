@@ -6,7 +6,7 @@ from uuid import UUID
 import httpx
 
 from ...client import AuthenticatedClient, Client
-from ...models.backup_server_credentials_standard_input import BackupServerCredentialsStandardInput
+from ...models.backup_server_credentials_standard_input_type_0 import BackupServerCredentialsStandardInputType0
 from ...models.create_backup_server_standard_credentials_response_200 import (
     CreateBackupServerStandardCredentialsResponse200,
 )
@@ -17,7 +17,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     backup_server_uid: UUID,
     *,
-    body: BackupServerCredentialsStandardInput,
+    body: BackupServerCredentialsStandardInputType0 | None,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -35,7 +35,10 @@ def _get_kwargs(
         ),
     }
 
-    _kwargs["json"] = body.to_dict()
+    if isinstance(body, BackupServerCredentialsStandardInputType0):
+        _kwargs["json"] = body.to_dict()
+    else:
+        _kwargs["json"] = body
 
     headers["Content-Type"] = "application/json"
 
@@ -75,7 +78,7 @@ def sync_detailed(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    body: BackupServerCredentialsStandardInput,
+    body: BackupServerCredentialsStandardInputType0 | None,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | CreateBackupServerStandardCredentialsResponse200 | ErrorResponse]:
@@ -87,7 +90,7 @@ def sync_detailed(
         backup_server_uid (UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
-        body (BackupServerCredentialsStandardInput):
+        body (BackupServerCredentialsStandardInputType0 | None):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -115,7 +118,7 @@ def sync(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    body: BackupServerCredentialsStandardInput,
+    body: BackupServerCredentialsStandardInputType0 | None,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | CreateBackupServerStandardCredentialsResponse200 | ErrorResponse | None:
@@ -127,7 +130,7 @@ def sync(
         backup_server_uid (UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
-        body (BackupServerCredentialsStandardInput):
+        body (BackupServerCredentialsStandardInputType0 | None):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -150,7 +153,7 @@ async def asyncio_detailed(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    body: BackupServerCredentialsStandardInput,
+    body: BackupServerCredentialsStandardInputType0 | None,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | CreateBackupServerStandardCredentialsResponse200 | ErrorResponse]:
@@ -162,7 +165,7 @@ async def asyncio_detailed(
         backup_server_uid (UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
-        body (BackupServerCredentialsStandardInput):
+        body (BackupServerCredentialsStandardInputType0 | None):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -188,7 +191,7 @@ async def asyncio(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    body: BackupServerCredentialsStandardInput,
+    body: BackupServerCredentialsStandardInputType0 | None,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | CreateBackupServerStandardCredentialsResponse200 | ErrorResponse | None:
@@ -200,7 +203,7 @@ async def asyncio(
         backup_server_uid (UUID):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
-        body (BackupServerCredentialsStandardInput):
+        body (BackupServerCredentialsStandardInputType0 | None):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,8 +19,8 @@ class ResellerSiteResource:
         site_uid (UUID): UID assigned to a Veeam Cloud Connect site.
             > The property value cannot be changed after creation.
         reseller_uid (UUID | Unset): UID assigned to a reseller.
-        tenants_quota (int | Unset): Maximum number of tenants that a reseller can manage on a Veeam Cloud Connect site.
-            Default: 20.
+        tenants_quota (int | None | Unset): Maximum number of tenants that a reseller can manage on a Veeam Cloud
+            Connect site. Default: 20.
         used_tenants_quota (int | Unset): Number of tenants that a reseller manages on a Veeam Cloud Connect site.
         is_tenants_quota_unlimited (bool | Unset): Indicates whether a reseller can manage an unlimited number of
             tenants. Default: False.
@@ -28,7 +28,7 @@ class ResellerSiteResource:
 
     site_uid: UUID
     reseller_uid: UUID | Unset = UNSET
-    tenants_quota: int | Unset = 20
+    tenants_quota: int | None | Unset = 20
     used_tenants_quota: int | Unset = UNSET
     is_tenants_quota_unlimited: bool | Unset = False
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -40,7 +40,11 @@ class ResellerSiteResource:
         if not isinstance(self.reseller_uid, Unset):
             reseller_uid = str(self.reseller_uid)
 
-        tenants_quota = self.tenants_quota
+        tenants_quota: int | None | Unset
+        if isinstance(self.tenants_quota, Unset):
+            tenants_quota = UNSET
+        else:
+            tenants_quota = self.tenants_quota
 
         used_tenants_quota = self.used_tenants_quota
 
@@ -76,7 +80,14 @@ class ResellerSiteResource:
         else:
             reseller_uid = UUID(_reseller_uid)
 
-        tenants_quota = d.pop("tenantsQuota", UNSET)
+        def _parse_tenants_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        tenants_quota = _parse_tenants_quota(d.pop("tenantsQuota", UNSET))
 
         used_tenants_quota = d.pop("usedTenantsQuota", UNSET)
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,12 +17,12 @@ class PublicCloudAwsAccountInput:
     Attributes:
         access_key (str): AWS access key.
         secret_key (str): AWS access secret key.
-        description (str | Unset): Description of an account.
+        description (None | str | Unset): Description of an account.
     """
 
     access_key: str
     secret_key: str
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -30,7 +30,11 @@ class PublicCloudAwsAccountInput:
 
         secret_key = self.secret_key
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,7 +56,14 @@ class PublicCloudAwsAccountInput:
 
         secret_key = d.pop("secretKey")
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         public_cloud_aws_account_input = cls(
             access_key=access_key,

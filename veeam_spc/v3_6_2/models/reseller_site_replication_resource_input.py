@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -17,28 +17,36 @@ class ResellerSiteReplicationResourceInput:
     """
     Attributes:
         hardware_plan_uid (UUID): UID assigned to a hardware plan.
-        tenants_per_plan_quota (int | Unset): Maximum number of companies that a reseller can subscribe to a hardware
-            plan.
+        tenants_per_plan_quota (int | None | Unset): Maximum number of companies that a reseller can subscribe to a
+            hardware plan.
         is_wan_acceleration_enabled (bool | Unset): Indicates whether WAN acceleration is enabled. Default: False.
-        wan_accelerator_uid (UUID | Unset): UID assigned to a WAN accelerator.
+        wan_accelerator_uid (None | Unset | UUID): UID assigned to a WAN accelerator.
     """
 
     hardware_plan_uid: UUID
-    tenants_per_plan_quota: int | Unset = UNSET
+    tenants_per_plan_quota: int | None | Unset = UNSET
     is_wan_acceleration_enabled: bool | Unset = False
-    wan_accelerator_uid: UUID | Unset = UNSET
+    wan_accelerator_uid: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         hardware_plan_uid = str(self.hardware_plan_uid)
 
-        tenants_per_plan_quota = self.tenants_per_plan_quota
+        tenants_per_plan_quota: int | None | Unset
+        if isinstance(self.tenants_per_plan_quota, Unset):
+            tenants_per_plan_quota = UNSET
+        else:
+            tenants_per_plan_quota = self.tenants_per_plan_quota
 
         is_wan_acceleration_enabled = self.is_wan_acceleration_enabled
 
-        wan_accelerator_uid: str | Unset = UNSET
-        if not isinstance(self.wan_accelerator_uid, Unset):
+        wan_accelerator_uid: None | str | Unset
+        if isinstance(self.wan_accelerator_uid, Unset):
+            wan_accelerator_uid = UNSET
+        elif isinstance(self.wan_accelerator_uid, UUID):
             wan_accelerator_uid = str(self.wan_accelerator_uid)
+        else:
+            wan_accelerator_uid = self.wan_accelerator_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -61,16 +69,33 @@ class ResellerSiteReplicationResourceInput:
         d = dict(src_dict)
         hardware_plan_uid = UUID(d.pop("hardwarePlanUid"))
 
-        tenants_per_plan_quota = d.pop("tenantsPerPlanQuota", UNSET)
+        def _parse_tenants_per_plan_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        tenants_per_plan_quota = _parse_tenants_per_plan_quota(d.pop("tenantsPerPlanQuota", UNSET))
 
         is_wan_acceleration_enabled = d.pop("isWanAccelerationEnabled", UNSET)
 
-        _wan_accelerator_uid = d.pop("wanAcceleratorUid", UNSET)
-        wan_accelerator_uid: UUID | Unset
-        if isinstance(_wan_accelerator_uid, Unset):
-            wan_accelerator_uid = UNSET
-        else:
-            wan_accelerator_uid = UUID(_wan_accelerator_uid)
+        def _parse_wan_accelerator_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                wan_accelerator_uid_type_0 = UUID(data)
+
+                return wan_accelerator_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        wan_accelerator_uid = _parse_wan_accelerator_uid(d.pop("wanAcceleratorUid", UNSET))
 
         reseller_site_replication_resource_input = cls(
             hardware_plan_uid=hardware_plan_uid,

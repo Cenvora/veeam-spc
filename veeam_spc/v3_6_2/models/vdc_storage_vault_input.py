@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,14 +20,14 @@ class VdcStorageVaultInput:
         name (str): Name of a storage vault.
         data_center_id (str): ID assigned to a data center.
         quota_enforced (bool): Indicates whether maximum amount of available storage space is a hard quota.
-        storage_quota (int | Unset): Maximum amount of storage space available on storage vault.
+        storage_quota (int | None | Unset): Maximum amount of storage space available on storage vault.
     """
 
     tenant_uid: UUID
     name: str
     data_center_id: str
     quota_enforced: bool
-    storage_quota: int | Unset = UNSET
+    storage_quota: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -39,7 +39,11 @@ class VdcStorageVaultInput:
 
         quota_enforced = self.quota_enforced
 
-        storage_quota = self.storage_quota
+        storage_quota: int | None | Unset
+        if isinstance(self.storage_quota, Unset):
+            storage_quota = UNSET
+        else:
+            storage_quota = self.storage_quota
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -67,7 +71,14 @@ class VdcStorageVaultInput:
 
         quota_enforced = d.pop("quotaEnforced")
 
-        storage_quota = d.pop("storageQuota", UNSET)
+        def _parse_storage_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        storage_quota = _parse_storage_quota(d.pop("storageQuota", UNSET))
 
         vdc_storage_vault_input = cls(
             tenant_uid=tenant_uid,

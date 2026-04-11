@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,13 +22,13 @@ class PrepareSmtpOAuth2SignInBody:
         client_settings (OAuth2ClientSettings):
         redirect_url (str): Redirect URI. For details, see
             [RFC6749](https://datatracker.ietf.org/doc/html/rfc6749#section-3.1.2).
-        state (str | Unset): Request state returned to a client. For details, see
+        state (None | str | Unset): Request state returned to a client. For details, see
             [RFC6749](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1).
     """
 
     client_settings: OAuth2ClientSettings
     redirect_url: str
-    state: str | Unset = UNSET
+    state: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,7 +36,11 @@ class PrepareSmtpOAuth2SignInBody:
 
         redirect_url = self.redirect_url
 
-        state = self.state
+        state: None | str | Unset
+        if isinstance(self.state, Unset):
+            state = UNSET
+        else:
+            state = self.state
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,7 +64,14 @@ class PrepareSmtpOAuth2SignInBody:
 
         redirect_url = d.pop("redirectUrl")
 
-        state = d.pop("state", UNSET)
+        def _parse_state(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        state = _parse_state(d.pop("state", UNSET))
 
         prepare_smtp_o_auth_2_sign_in_body = cls(
             client_settings=client_settings,

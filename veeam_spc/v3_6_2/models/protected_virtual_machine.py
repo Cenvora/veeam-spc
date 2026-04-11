@@ -25,15 +25,15 @@ class ProtectedVirtualMachine:
         name (str | Unset): VM hostname.
         hierarchy_ref (str | Unset): Reference ID of a VM.
         parent_host_ref (str | Unset): Reference ID assigned to a parent hypervisor.
-        object_uid (UUID | Unset): UID assigned to a VM as a job object.
+        object_uid (None | Unset | UUID): UID assigned to a VM as a job object.
         ip_addresses (list[str] | Unset): IP addresses.
         provisioned_source_size (int | Unset): Total size of protected VM disks, in bytes.
-        used_source_size (int | Unset): Used space on protected VM disks, in bytes.
-        total_restore_point_size (int | Unset): Total size of all restore points, in bytes.
-        latest_restore_point_size (int | Unset): Size of the latest restore point, in bytes.
+        used_source_size (int | None | Unset): Used space on protected VM disks, in bytes.
+        total_restore_point_size (int | None | Unset): Total size of all restore points, in bytes.
+        latest_restore_point_size (int | None | Unset): Size of the latest restore point, in bytes.
         restore_points (int | Unset): Number of restore points.
         latest_restore_point_date (datetime.datetime | Unset): Date and time of the latest restore point creation.
-        job_uid (UUID | Unset): UID assigned to a backup job that created the latest restore point.
+        job_uid (None | Unset | UUID): UID assigned to a backup job that created the latest restore point.
         malware_state (MalwareState | Unset): Malware status.
         immutable (bool | Unset): Indicates whether a protected VM has any immutable restore points.
     """
@@ -44,15 +44,15 @@ class ProtectedVirtualMachine:
     name: str | Unset = UNSET
     hierarchy_ref: str | Unset = UNSET
     parent_host_ref: str | Unset = UNSET
-    object_uid: UUID | Unset = UNSET
+    object_uid: None | Unset | UUID = UNSET
     ip_addresses: list[str] | Unset = UNSET
     provisioned_source_size: int | Unset = UNSET
-    used_source_size: int | Unset = UNSET
-    total_restore_point_size: int | Unset = UNSET
-    latest_restore_point_size: int | Unset = UNSET
+    used_source_size: int | None | Unset = UNSET
+    total_restore_point_size: int | None | Unset = UNSET
+    latest_restore_point_size: int | None | Unset = UNSET
     restore_points: int | Unset = UNSET
     latest_restore_point_date: datetime.datetime | Unset = UNSET
-    job_uid: UUID | Unset = UNSET
+    job_uid: None | Unset | UUID = UNSET
     malware_state: MalwareState | Unset = UNSET
     immutable: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -76,9 +76,13 @@ class ProtectedVirtualMachine:
 
         parent_host_ref = self.parent_host_ref
 
-        object_uid: str | Unset = UNSET
-        if not isinstance(self.object_uid, Unset):
+        object_uid: None | str | Unset
+        if isinstance(self.object_uid, Unset):
+            object_uid = UNSET
+        elif isinstance(self.object_uid, UUID):
             object_uid = str(self.object_uid)
+        else:
+            object_uid = self.object_uid
 
         ip_addresses: list[str] | Unset = UNSET
         if not isinstance(self.ip_addresses, Unset):
@@ -86,11 +90,23 @@ class ProtectedVirtualMachine:
 
         provisioned_source_size = self.provisioned_source_size
 
-        used_source_size = self.used_source_size
+        used_source_size: int | None | Unset
+        if isinstance(self.used_source_size, Unset):
+            used_source_size = UNSET
+        else:
+            used_source_size = self.used_source_size
 
-        total_restore_point_size = self.total_restore_point_size
+        total_restore_point_size: int | None | Unset
+        if isinstance(self.total_restore_point_size, Unset):
+            total_restore_point_size = UNSET
+        else:
+            total_restore_point_size = self.total_restore_point_size
 
-        latest_restore_point_size = self.latest_restore_point_size
+        latest_restore_point_size: int | None | Unset
+        if isinstance(self.latest_restore_point_size, Unset):
+            latest_restore_point_size = UNSET
+        else:
+            latest_restore_point_size = self.latest_restore_point_size
 
         restore_points = self.restore_points
 
@@ -98,9 +114,13 @@ class ProtectedVirtualMachine:
         if not isinstance(self.latest_restore_point_date, Unset):
             latest_restore_point_date = self.latest_restore_point_date.isoformat()
 
-        job_uid: str | Unset = UNSET
-        if not isinstance(self.job_uid, Unset):
+        job_uid: None | str | Unset
+        if isinstance(self.job_uid, Unset):
+            job_uid = UNSET
+        elif isinstance(self.job_uid, UUID):
             job_uid = str(self.job_uid)
+        else:
+            job_uid = self.job_uid
 
         malware_state: str | Unset = UNSET
         if not isinstance(self.malware_state, Unset):
@@ -178,22 +198,53 @@ class ProtectedVirtualMachine:
 
         parent_host_ref = d.pop("parentHostRef", UNSET)
 
-        _object_uid = d.pop("objectUid", UNSET)
-        object_uid: UUID | Unset
-        if isinstance(_object_uid, Unset):
-            object_uid = UNSET
-        else:
-            object_uid = UUID(_object_uid)
+        def _parse_object_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                object_uid_type_0 = UUID(data)
+
+                return object_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        object_uid = _parse_object_uid(d.pop("objectUid", UNSET))
 
         ip_addresses = cast(list[str], d.pop("ipAddresses", UNSET))
 
         provisioned_source_size = d.pop("provisionedSourceSize", UNSET)
 
-        used_source_size = d.pop("usedSourceSize", UNSET)
+        def _parse_used_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        total_restore_point_size = d.pop("totalRestorePointSize", UNSET)
+        used_source_size = _parse_used_source_size(d.pop("usedSourceSize", UNSET))
 
-        latest_restore_point_size = d.pop("latestRestorePointSize", UNSET)
+        def _parse_total_restore_point_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        total_restore_point_size = _parse_total_restore_point_size(d.pop("totalRestorePointSize", UNSET))
+
+        def _parse_latest_restore_point_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        latest_restore_point_size = _parse_latest_restore_point_size(d.pop("latestRestorePointSize", UNSET))
 
         restore_points = d.pop("restorePoints", UNSET)
 
@@ -204,12 +255,22 @@ class ProtectedVirtualMachine:
         else:
             latest_restore_point_date = isoparse(_latest_restore_point_date)
 
-        _job_uid = d.pop("jobUid", UNSET)
-        job_uid: UUID | Unset
-        if isinstance(_job_uid, Unset):
-            job_uid = UNSET
-        else:
-            job_uid = UUID(_job_uid)
+        def _parse_job_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                job_uid_type_0 = UUID(data)
+
+                return job_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        job_uid = _parse_job_uid(d.pop("jobUid", UNSET))
 
         _malware_state = d.pop("malwareState", UNSET)
         malware_state: MalwareState | Unset

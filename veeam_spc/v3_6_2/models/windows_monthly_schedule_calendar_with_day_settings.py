@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -37,7 +37,7 @@ class WindowsMonthlyScheduleCalendarWithDaySettings:
         day_of_week (WindowsMonthlyScheduleCalendarWithDaySettingsDayOfWeek | Unset): Name of the week day.
             > Required for the `DaysOfWeek` schedule type.
              Default: WindowsMonthlyScheduleCalendarWithDaySettingsDayOfWeek.SUNDAY.
-        day (int | Unset): Day of the month.
+        day (int | None | Unset): Day of the month.
             > Required for the `Day` schedule type.
              Default: 1.
     """
@@ -52,7 +52,7 @@ class WindowsMonthlyScheduleCalendarWithDaySettings:
     day_of_week: WindowsMonthlyScheduleCalendarWithDaySettingsDayOfWeek | Unset = (
         WindowsMonthlyScheduleCalendarWithDaySettingsDayOfWeek.SUNDAY
     )
-    day: int | Unset = 1
+    day: int | None | Unset = 1
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -71,7 +71,11 @@ class WindowsMonthlyScheduleCalendarWithDaySettings:
         if not isinstance(self.day_of_week, Unset):
             day_of_week = self.day_of_week.value
 
-        day = self.day
+        day: int | None | Unset
+        if isinstance(self.day, Unset):
+            day = UNSET
+        else:
+            day = self.day
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -116,7 +120,14 @@ class WindowsMonthlyScheduleCalendarWithDaySettings:
         else:
             day_of_week = WindowsMonthlyScheduleCalendarWithDaySettingsDayOfWeek(_day_of_week)
 
-        day = d.pop("day", UNSET)
+        def _parse_day(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        day = _parse_day(d.pop("day", UNSET))
 
         windows_monthly_schedule_calendar_with_day_settings = cls(
             monthly_mode=monthly_mode,

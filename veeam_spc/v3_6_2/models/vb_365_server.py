@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,12 +19,12 @@ T = TypeVar("T", bound="Vb365Server")
 class Vb365Server:
     """
     Attributes:
-        instance_uid (UUID | Unset): UID assigned to a Veeam Backup for Microsoft 365 server.
+        instance_uid (None | Unset | UUID): UID assigned to a Veeam Backup for Microsoft 365 server.
         location_uid (UUID | Unset): UID assigned to a Veeam Backup for Microsoft 365 server location.
         organization_uid (UUID | Unset): UID assigned to an organization.
         management_agent_uid (UUID | Unset): UID assigned to a management agent installed on a Veeam Backup for
             Microsoft 365 Server.
-        installation_uid (UUID | Unset): UID assigned to a Veeam Backup for Microsoft 365 server installation.
+        installation_uid (None | Unset | UUID): UID assigned to a Veeam Backup for Microsoft 365 server installation.
         name (str | Unset): Host name of a Veeam Backup for Microsoft 365 server.
         version (str | Unset): Version of Veeam Backup for Microsoft 365 installed on a server.
         major_version (int | Unset): Major version of Veeam Backup for Microsoft 365 installed on a server.
@@ -33,11 +33,11 @@ class Vb365Server:
         management_agent_status (ManagementAgentStatus | Unset): Status of a management agent.
     """
 
-    instance_uid: UUID | Unset = UNSET
+    instance_uid: None | Unset | UUID = UNSET
     location_uid: UUID | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
     management_agent_uid: UUID | Unset = UNSET
-    installation_uid: UUID | Unset = UNSET
+    installation_uid: None | Unset | UUID = UNSET
     name: str | Unset = UNSET
     version: str | Unset = UNSET
     major_version: int | Unset = UNSET
@@ -47,9 +47,13 @@ class Vb365Server:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        instance_uid: str | Unset = UNSET
-        if not isinstance(self.instance_uid, Unset):
+        instance_uid: None | str | Unset
+        if isinstance(self.instance_uid, Unset):
+            instance_uid = UNSET
+        elif isinstance(self.instance_uid, UUID):
             instance_uid = str(self.instance_uid)
+        else:
+            instance_uid = self.instance_uid
 
         location_uid: str | Unset = UNSET
         if not isinstance(self.location_uid, Unset):
@@ -63,9 +67,13 @@ class Vb365Server:
         if not isinstance(self.management_agent_uid, Unset):
             management_agent_uid = str(self.management_agent_uid)
 
-        installation_uid: str | Unset = UNSET
-        if not isinstance(self.installation_uid, Unset):
+        installation_uid: None | str | Unset
+        if isinstance(self.installation_uid, Unset):
+            installation_uid = UNSET
+        elif isinstance(self.installation_uid, UUID):
             installation_uid = str(self.installation_uid)
+        else:
+            installation_uid = self.installation_uid
 
         name = self.name
 
@@ -116,12 +124,23 @@ class Vb365Server:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        _instance_uid = d.pop("instanceUid", UNSET)
-        instance_uid: UUID | Unset
-        if isinstance(_instance_uid, Unset):
-            instance_uid = UNSET
-        else:
-            instance_uid = UUID(_instance_uid)
+
+        def _parse_instance_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                instance_uid_type_0 = UUID(data)
+
+                return instance_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        instance_uid = _parse_instance_uid(d.pop("instanceUid", UNSET))
 
         _location_uid = d.pop("locationUid", UNSET)
         location_uid: UUID | Unset
@@ -144,12 +163,22 @@ class Vb365Server:
         else:
             management_agent_uid = UUID(_management_agent_uid)
 
-        _installation_uid = d.pop("installationUid", UNSET)
-        installation_uid: UUID | Unset
-        if isinstance(_installation_uid, Unset):
-            installation_uid = UNSET
-        else:
-            installation_uid = UUID(_installation_uid)
+        def _parse_installation_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                installation_uid_type_0 = UUID(data)
+
+                return installation_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        installation_uid = _parse_installation_uid(d.pop("installationUid", UNSET))
 
         name = d.pop("name", UNSET)
 

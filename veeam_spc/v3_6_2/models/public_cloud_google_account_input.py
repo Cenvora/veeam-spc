@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,12 +17,12 @@ class PublicCloudGoogleAccountInput:
     Attributes:
         name (str): Name of a Google Cloud account.
         json_configuration (str): Configuration file of a Google Cloud account in the `JSON` format.
-        description (str | Unset): Description of a Google Cloud account.
+        description (None | str | Unset): Description of a Google Cloud account.
     """
 
     name: str
     json_configuration: str
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -30,7 +30,11 @@ class PublicCloudGoogleAccountInput:
 
         json_configuration = self.json_configuration
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,7 +56,14 @@ class PublicCloudGoogleAccountInput:
 
         json_configuration = d.pop("jsonConfiguration")
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         public_cloud_google_account_input = cls(
             name=name,

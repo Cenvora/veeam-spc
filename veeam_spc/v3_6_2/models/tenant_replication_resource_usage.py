@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -17,7 +17,7 @@ class TenantReplicationResourceUsage:
     """
     Attributes:
         hardware_plan_uid (UUID | Unset): UID assigned to a hardware plan.
-        company_uid (UUID | Unset): UID assigned to a company.
+        company_uid (None | Unset | UUID): UID assigned to a company.
         tenant_uid (UUID | Unset): UID assigned to a tenant.
         site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect server on which a management agent is installed.
         v_cp_us_consumed (int | Unset): Number of replicated VMs vCPUs.
@@ -28,7 +28,7 @@ class TenantReplicationResourceUsage:
     """
 
     hardware_plan_uid: UUID | Unset = UNSET
-    company_uid: UUID | Unset = UNSET
+    company_uid: None | Unset | UUID = UNSET
     tenant_uid: UUID | Unset = UNSET
     site_uid: UUID | Unset = UNSET
     v_cp_us_consumed: int | Unset = UNSET
@@ -43,9 +43,13 @@ class TenantReplicationResourceUsage:
         if not isinstance(self.hardware_plan_uid, Unset):
             hardware_plan_uid = str(self.hardware_plan_uid)
 
-        company_uid: str | Unset = UNSET
-        if not isinstance(self.company_uid, Unset):
+        company_uid: None | str | Unset
+        if isinstance(self.company_uid, Unset):
+            company_uid = UNSET
+        elif isinstance(self.company_uid, UUID):
             company_uid = str(self.company_uid)
+        else:
+            company_uid = self.company_uid
 
         tenant_uid: str | Unset = UNSET
         if not isinstance(self.tenant_uid, Unset):
@@ -99,12 +103,22 @@ class TenantReplicationResourceUsage:
         else:
             hardware_plan_uid = UUID(_hardware_plan_uid)
 
-        _company_uid = d.pop("companyUid", UNSET)
-        company_uid: UUID | Unset
-        if isinstance(_company_uid, Unset):
-            company_uid = UNSET
-        else:
-            company_uid = UUID(_company_uid)
+        def _parse_company_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                company_uid_type_0 = UUID(data)
+
+                return company_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        company_uid = _parse_company_uid(d.pop("companyUid", UNSET))
 
         _tenant_uid = d.pop("tenantUid", UNSET)
         tenant_uid: UUID | Unset

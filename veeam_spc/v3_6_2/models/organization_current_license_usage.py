@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -25,14 +25,14 @@ class OrganizationCurrentLicenseUsage:
     Attributes:
         organization_uid (UUID | Unset): UID assigned to an organization.
         organization_type (OrganizationCurrentLicenseUsageOrganizationType | Unset): Type of an organization.
-        provider_uid (UUID | Unset): UID assigned to a provider organization.
+        provider_uid (None | Unset | UUID): UID assigned to a provider organization.
         servers (list[ServerCurrentLicenseUsage] | Unset): License usage by workloads for each server managing these
             workloads.
     """
 
     organization_uid: UUID | Unset = UNSET
     organization_type: OrganizationCurrentLicenseUsageOrganizationType | Unset = UNSET
-    provider_uid: UUID | Unset = UNSET
+    provider_uid: None | Unset | UUID = UNSET
     servers: list[ServerCurrentLicenseUsage] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -45,9 +45,13 @@ class OrganizationCurrentLicenseUsage:
         if not isinstance(self.organization_type, Unset):
             organization_type = self.organization_type.value
 
-        provider_uid: str | Unset = UNSET
-        if not isinstance(self.provider_uid, Unset):
+        provider_uid: None | str | Unset
+        if isinstance(self.provider_uid, Unset):
+            provider_uid = UNSET
+        elif isinstance(self.provider_uid, UUID):
             provider_uid = str(self.provider_uid)
+        else:
+            provider_uid = self.provider_uid
 
         servers: list[dict[str, Any]] | Unset = UNSET
         if not isinstance(self.servers, Unset):
@@ -89,12 +93,22 @@ class OrganizationCurrentLicenseUsage:
         else:
             organization_type = OrganizationCurrentLicenseUsageOrganizationType(_organization_type)
 
-        _provider_uid = d.pop("providerUid", UNSET)
-        provider_uid: UUID | Unset
-        if isinstance(_provider_uid, Unset):
-            provider_uid = UNSET
-        else:
-            provider_uid = UUID(_provider_uid)
+        def _parse_provider_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                provider_uid_type_0 = UUID(data)
+
+                return provider_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        provider_uid = _parse_provider_uid(d.pop("providerUid", UNSET))
 
         _servers = d.pop("servers", UNSET)
         servers: list[ServerCurrentLicenseUsage] | Unset = UNSET

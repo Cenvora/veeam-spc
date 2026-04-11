@@ -18,7 +18,7 @@ def _get_kwargs(
     backup_server_uid: UUID,
     *,
     body: BackupServerWinLocalRepository,
-    overwrite_owner: bool | Unset = UNSET,
+    overwrite_owner: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -31,7 +31,12 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    params["overwriteOwner"] = overwrite_owner
+    json_overwrite_owner: bool | None | Unset
+    if isinstance(overwrite_owner, Unset):
+        json_overwrite_owner = UNSET
+    else:
+        json_overwrite_owner = overwrite_owner
+    params["overwriteOwner"] = json_overwrite_owner
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -84,7 +89,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: BackupServerWinLocalRepository,
-    overwrite_owner: bool | Unset = UNSET,
+    overwrite_owner: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | CreateBackupServerWinLocalRepositoryResponse200 | ErrorResponse]:
@@ -95,7 +100,7 @@ def sync_detailed(
 
     Args:
         backup_server_uid (UUID):
-        overwrite_owner (bool | Unset):
+        overwrite_owner (bool | None | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerWinLocalRepository):
@@ -128,7 +133,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: BackupServerWinLocalRepository,
-    overwrite_owner: bool | Unset = UNSET,
+    overwrite_owner: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | CreateBackupServerWinLocalRepositoryResponse200 | ErrorResponse | None:
@@ -139,7 +144,7 @@ def sync(
 
     Args:
         backup_server_uid (UUID):
-        overwrite_owner (bool | Unset):
+        overwrite_owner (bool | None | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerWinLocalRepository):
@@ -167,7 +172,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: BackupServerWinLocalRepository,
-    overwrite_owner: bool | Unset = UNSET,
+    overwrite_owner: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | CreateBackupServerWinLocalRepositoryResponse200 | ErrorResponse]:
@@ -178,7 +183,7 @@ async def asyncio_detailed(
 
     Args:
         backup_server_uid (UUID):
-        overwrite_owner (bool | Unset):
+        overwrite_owner (bool | None | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerWinLocalRepository):
@@ -209,7 +214,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: BackupServerWinLocalRepository,
-    overwrite_owner: bool | Unset = UNSET,
+    overwrite_owner: bool | None | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | CreateBackupServerWinLocalRepositoryResponse200 | ErrorResponse | None:
@@ -220,7 +225,7 @@ async def asyncio(
 
     Args:
         backup_server_uid (UUID):
-        overwrite_owner (bool | Unset):
+        overwrite_owner (bool | None | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
         body (BackupServerWinLocalRepository):

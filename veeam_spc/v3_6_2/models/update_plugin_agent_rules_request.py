@@ -15,30 +15,44 @@ T = TypeVar("T", bound="UpdatePluginAgentRulesRequest")
 class UpdatePluginAgentRulesRequest:
     """
     Attributes:
-        allow_agemt_ids (list[str] | Unset): Array of IDs assigned to management agents that are permitted to access
-            plugin.
-        deny_agent_ids (list[str] | Unset): Array of IDs assigned to management agents that are not permitted to access
-            plugin.
-        allow_agents_by_default (bool | Unset): Defines whether all other management agents are permitted to access
-            plugin by default.
+        allow_agemt_ids (list[str] | None | Unset): Array of IDs assigned to management agents that are permitted to
+            access plugin.
+        deny_agent_ids (list[str] | None | Unset): Array of IDs assigned to management agents that are not permitted to
+            access plugin.
+        allow_agents_by_default (bool | None | Unset): Defines whether all other management agents are permitted to
+            access plugin by default.
             > Provide the `null` value to keep the current settings.
     """
 
-    allow_agemt_ids: list[str] | Unset = UNSET
-    deny_agent_ids: list[str] | Unset = UNSET
-    allow_agents_by_default: bool | Unset = UNSET
+    allow_agemt_ids: list[str] | None | Unset = UNSET
+    deny_agent_ids: list[str] | None | Unset = UNSET
+    allow_agents_by_default: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        allow_agemt_ids: list[str] | Unset = UNSET
-        if not isinstance(self.allow_agemt_ids, Unset):
+        allow_agemt_ids: list[str] | None | Unset
+        if isinstance(self.allow_agemt_ids, Unset):
+            allow_agemt_ids = UNSET
+        elif isinstance(self.allow_agemt_ids, list):
             allow_agemt_ids = self.allow_agemt_ids
 
-        deny_agent_ids: list[str] | Unset = UNSET
-        if not isinstance(self.deny_agent_ids, Unset):
+        else:
+            allow_agemt_ids = self.allow_agemt_ids
+
+        deny_agent_ids: list[str] | None | Unset
+        if isinstance(self.deny_agent_ids, Unset):
+            deny_agent_ids = UNSET
+        elif isinstance(self.deny_agent_ids, list):
             deny_agent_ids = self.deny_agent_ids
 
-        allow_agents_by_default = self.allow_agents_by_default
+        else:
+            deny_agent_ids = self.deny_agent_ids
+
+        allow_agents_by_default: bool | None | Unset
+        if isinstance(self.allow_agents_by_default, Unset):
+            allow_agents_by_default = UNSET
+        else:
+            allow_agents_by_default = self.allow_agents_by_default
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -55,11 +69,49 @@ class UpdatePluginAgentRulesRequest:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        allow_agemt_ids = cast(list[str], d.pop("allowAgemtIds", UNSET))
 
-        deny_agent_ids = cast(list[str], d.pop("denyAgentIds", UNSET))
+        def _parse_allow_agemt_ids(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                allow_agemt_ids_type_0 = cast(list[str], data)
 
-        allow_agents_by_default = d.pop("allowAgentsByDefault", UNSET)
+                return allow_agemt_ids_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        allow_agemt_ids = _parse_allow_agemt_ids(d.pop("allowAgemtIds", UNSET))
+
+        def _parse_deny_agent_ids(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                deny_agent_ids_type_0 = cast(list[str], data)
+
+                return deny_agent_ids_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        deny_agent_ids = _parse_deny_agent_ids(d.pop("denyAgentIds", UNSET))
+
+        def _parse_allow_agents_by_default(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        allow_agents_by_default = _parse_allow_agents_by_default(d.pop("allowAgentsByDefault", UNSET))
 
         update_plugin_agent_rules_request = cls(
             allow_agemt_ids=allow_agemt_ids,

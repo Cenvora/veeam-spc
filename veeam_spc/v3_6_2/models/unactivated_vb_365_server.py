@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -17,7 +17,8 @@ T = TypeVar("T", bound="UnactivatedVb365Server")
 class UnactivatedVb365Server:
     """
     Attributes:
-        unique_uid (UUID | Unset): Temporary UID assigned to an unactivated Veeam Backup for Microsoft 365 server.
+        unique_uid (None | Unset | UUID): Temporary UID assigned to an unactivated Veeam Backup for Microsoft 365
+            server.
         location_uid (UUID | Unset): UID assigned to a Veeam Backup for Microsoft 365 server location.
         organization_uid (UUID | Unset): UID assigned to an organization.
         management_agent_uid (UUID | Unset): UID assigned to a management agent installed on a Veeam Backup for
@@ -27,7 +28,7 @@ class UnactivatedVb365Server:
         status (UnactivatedVb365ServerStatus | Unset): Veeam Backup for Microsoft 365 server status.
     """
 
-    unique_uid: UUID | Unset = UNSET
+    unique_uid: None | Unset | UUID = UNSET
     location_uid: UUID | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
     management_agent_uid: UUID | Unset = UNSET
@@ -37,9 +38,13 @@ class UnactivatedVb365Server:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        unique_uid: str | Unset = UNSET
-        if not isinstance(self.unique_uid, Unset):
+        unique_uid: None | str | Unset
+        if isinstance(self.unique_uid, Unset):
+            unique_uid = UNSET
+        elif isinstance(self.unique_uid, UUID):
             unique_uid = str(self.unique_uid)
+        else:
+            unique_uid = self.unique_uid
 
         location_uid: str | Unset = UNSET
         if not isinstance(self.location_uid, Unset):
@@ -84,12 +89,23 @@ class UnactivatedVb365Server:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        _unique_uid = d.pop("uniqueUid", UNSET)
-        unique_uid: UUID | Unset
-        if isinstance(_unique_uid, Unset):
-            unique_uid = UNSET
-        else:
-            unique_uid = UUID(_unique_uid)
+
+        def _parse_unique_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                unique_uid_type_0 = UUID(data)
+
+                return unique_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        unique_uid = _parse_unique_uid(d.pop("uniqueUid", UNSET))
 
         _location_uid = d.pop("locationUid", UNSET)
         location_uid: UUID | Unset

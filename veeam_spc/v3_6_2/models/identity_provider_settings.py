@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -32,7 +32,7 @@ class IdentityProviderSettings:
         configuration_validation_succeeded (bool | Unset): Indicates whether an identity provider successfully passed
             validation procedure.
             > If the value is `false`, an identity provider is not functional.
-        error_message (str | Unset): Error message.
+        error_message (None | str | Unset): Error message.
             > If identity provider validation fails, the property value is not `null`.
         rules_count (int | Unset): Number of mapping rules configured for a service provider.
         configuration_completed (bool | Unset): Indicates whether the identity provider configuration is completed.
@@ -51,7 +51,7 @@ class IdentityProviderSettings:
     template: IdentityProviderTemplate | Unset = UNSET
     type_: IdentityProviderType | Unset = UNSET
     configuration_validation_succeeded: bool | Unset = UNSET
-    error_message: str | Unset = UNSET
+    error_message: None | str | Unset = UNSET
     rules_count: int | Unset = UNSET
     configuration_completed: bool | Unset = False
     enabled: bool | Unset = True
@@ -75,7 +75,11 @@ class IdentityProviderSettings:
 
         configuration_validation_succeeded = self.configuration_validation_succeeded
 
-        error_message = self.error_message
+        error_message: None | str | Unset
+        if isinstance(self.error_message, Unset):
+            error_message = UNSET
+        else:
+            error_message = self.error_message
 
         rules_count = self.rules_count
 
@@ -143,7 +147,14 @@ class IdentityProviderSettings:
 
         configuration_validation_succeeded = d.pop("configurationValidationSucceeded", UNSET)
 
-        error_message = d.pop("errorMessage", UNSET)
+        def _parse_error_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        error_message = _parse_error_message(d.pop("errorMessage", UNSET))
 
         rules_count = d.pop("rulesCount", UNSET)
 

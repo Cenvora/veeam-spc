@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,26 +15,34 @@ T = TypeVar("T", bound="OrganizationLoginUrlAndSuggestion")
 class OrganizationLoginUrlAndSuggestion:
     """
     Attributes:
-        login_url (str | Unset): Current portal URL of a company.
+        login_url (None | str | Unset): Current portal URL of a company.
             > Has the `null` value if the URL is not configured.
         login_url_is_inherited (bool | Unset): Indicates whether an portal URL is inherited from the manager
             organization.
-        login_url_suggestion (str | Unset): Suggested portal URL based on the organization alias and the current request
-            URL.
+        login_url_suggestion (None | str | Unset): Suggested portal URL based on the organization alias and the current
+            request URL.
             > Has the `null` value if the URL is already configured.
     """
 
-    login_url: str | Unset = UNSET
+    login_url: None | str | Unset = UNSET
     login_url_is_inherited: bool | Unset = UNSET
-    login_url_suggestion: str | Unset = UNSET
+    login_url_suggestion: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        login_url = self.login_url
+        login_url: None | str | Unset
+        if isinstance(self.login_url, Unset):
+            login_url = UNSET
+        else:
+            login_url = self.login_url
 
         login_url_is_inherited = self.login_url_is_inherited
 
-        login_url_suggestion = self.login_url_suggestion
+        login_url_suggestion: None | str | Unset
+        if isinstance(self.login_url_suggestion, Unset):
+            login_url_suggestion = UNSET
+        else:
+            login_url_suggestion = self.login_url_suggestion
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -51,11 +59,26 @@ class OrganizationLoginUrlAndSuggestion:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        login_url = d.pop("loginUrl", UNSET)
+
+        def _parse_login_url(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        login_url = _parse_login_url(d.pop("loginUrl", UNSET))
 
         login_url_is_inherited = d.pop("loginUrlIsInherited", UNSET)
 
-        login_url_suggestion = d.pop("loginUrlSuggestion", UNSET)
+        def _parse_login_url_suggestion(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        login_url_suggestion = _parse_login_url_suggestion(d.pop("loginUrlSuggestion", UNSET))
 
         organization_login_url_and_suggestion = cls(
             login_url=login_url,

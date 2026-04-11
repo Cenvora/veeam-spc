@@ -14,10 +14,10 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetOrganizationsLicenseUsageOrganizationType | Unset = UNSET,
-    provider_uid: UUID | Unset = UNSET,
-    server_uid: UUID | Unset = UNSET,
+    provider_uid: None | Unset | UUID = UNSET,
+    server_uid: None | Unset | UUID = UNSET,
     server_type: GetOrganizationsLicenseUsageServerType | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -33,9 +33,13 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_organization_uid: str | Unset = UNSET
-    if not isinstance(organization_uid, Unset):
+    json_organization_uid: None | str | Unset
+    if isinstance(organization_uid, Unset):
+        json_organization_uid = UNSET
+    elif isinstance(organization_uid, UUID):
         json_organization_uid = str(organization_uid)
+    else:
+        json_organization_uid = organization_uid
     params["organizationUid"] = json_organization_uid
 
     json_organization_type: str | Unset = UNSET
@@ -44,14 +48,22 @@ def _get_kwargs(
 
     params["organizationType"] = json_organization_type
 
-    json_provider_uid: str | Unset = UNSET
-    if not isinstance(provider_uid, Unset):
+    json_provider_uid: None | str | Unset
+    if isinstance(provider_uid, Unset):
+        json_provider_uid = UNSET
+    elif isinstance(provider_uid, UUID):
         json_provider_uid = str(provider_uid)
+    else:
+        json_provider_uid = provider_uid
     params["providerUid"] = json_provider_uid
 
-    json_server_uid: str | Unset = UNSET
-    if not isinstance(server_uid, Unset):
+    json_server_uid: None | str | Unset
+    if isinstance(server_uid, Unset):
+        json_server_uid = UNSET
+    elif isinstance(server_uid, UUID):
         json_server_uid = str(server_uid)
+    else:
+        json_server_uid = server_uid
     params["serverUid"] = json_server_uid
 
     json_server_type: str | Unset = UNSET
@@ -107,10 +119,10 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetOrganizationsLicenseUsageOrganizationType | Unset = UNSET,
-    provider_uid: UUID | Unset = UNSET,
-    server_uid: UUID | Unset = UNSET,
+    provider_uid: None | Unset | UUID = UNSET,
+    server_uid: None | Unset | UUID = UNSET,
     server_type: GetOrganizationsLicenseUsageServerType | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -122,10 +134,10 @@ def sync_detailed(
      Returns a collection resource representation of license usage by all organizations.
 
     Args:
-        organization_uid (UUID | Unset):
+        organization_uid (None | Unset | UUID):
         organization_type (GetOrganizationsLicenseUsageOrganizationType | Unset):
-        provider_uid (UUID | Unset):
-        server_uid (UUID | Unset):
+        provider_uid (None | Unset | UUID):
+        server_uid (None | Unset | UUID):
         server_type (GetOrganizationsLicenseUsageServerType | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
@@ -162,10 +174,10 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetOrganizationsLicenseUsageOrganizationType | Unset = UNSET,
-    provider_uid: UUID | Unset = UNSET,
-    server_uid: UUID | Unset = UNSET,
+    provider_uid: None | Unset | UUID = UNSET,
+    server_uid: None | Unset | UUID = UNSET,
     server_type: GetOrganizationsLicenseUsageServerType | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -177,10 +189,10 @@ def sync(
      Returns a collection resource representation of license usage by all organizations.
 
     Args:
-        organization_uid (UUID | Unset):
+        organization_uid (None | Unset | UUID):
         organization_type (GetOrganizationsLicenseUsageOrganizationType | Unset):
-        provider_uid (UUID | Unset):
-        server_uid (UUID | Unset):
+        provider_uid (None | Unset | UUID):
+        server_uid (None | Unset | UUID):
         server_type (GetOrganizationsLicenseUsageServerType | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
@@ -212,10 +224,10 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetOrganizationsLicenseUsageOrganizationType | Unset = UNSET,
-    provider_uid: UUID | Unset = UNSET,
-    server_uid: UUID | Unset = UNSET,
+    provider_uid: None | Unset | UUID = UNSET,
+    server_uid: None | Unset | UUID = UNSET,
     server_type: GetOrganizationsLicenseUsageServerType | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -227,10 +239,10 @@ async def asyncio_detailed(
      Returns a collection resource representation of license usage by all organizations.
 
     Args:
-        organization_uid (UUID | Unset):
+        organization_uid (None | Unset | UUID):
         organization_type (GetOrganizationsLicenseUsageOrganizationType | Unset):
-        provider_uid (UUID | Unset):
-        server_uid (UUID | Unset):
+        provider_uid (None | Unset | UUID):
+        server_uid (None | Unset | UUID):
         server_type (GetOrganizationsLicenseUsageServerType | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
@@ -265,10 +277,10 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    organization_uid: UUID | Unset = UNSET,
+    organization_uid: None | Unset | UUID = UNSET,
     organization_type: GetOrganizationsLicenseUsageOrganizationType | Unset = UNSET,
-    provider_uid: UUID | Unset = UNSET,
-    server_uid: UUID | Unset = UNSET,
+    provider_uid: None | Unset | UUID = UNSET,
+    server_uid: None | Unset | UUID = UNSET,
     server_type: GetOrganizationsLicenseUsageServerType | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -280,10 +292,10 @@ async def asyncio(
      Returns a collection resource representation of license usage by all organizations.
 
     Args:
-        organization_uid (UUID | Unset):
+        organization_uid (None | Unset | UUID):
         organization_type (GetOrganizationsLicenseUsageOrganizationType | Unset):
-        provider_uid (UUID | Unset):
-        server_uid (UUID | Unset):
+        provider_uid (None | Unset | UUID):
+        server_uid (None | Unset | UUID):
         server_type (GetOrganizationsLicenseUsageServerType | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.

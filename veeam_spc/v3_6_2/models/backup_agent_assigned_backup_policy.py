@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -28,10 +28,10 @@ class BackupAgentAssignedBackupPolicy:
         is_out_of_date (bool | Unset): Indicates whether a newer revision of a backup policy exists that has not been
             assigned to an agent.
         backup_policy_failure_message (str | Unset): Message that is displayed in case backup policy assignment fails.
-        backup_policy_revision (int | Unset): Revision of a backup policy.
-        assigned_date (datetime.datetime | Unset): Date of the policy assignment.
+        backup_policy_revision (int | None | Unset): Revision of a backup policy.
+        assigned_date (datetime.datetime | None | Unset): Date of the policy assignment.
             > If the backup policy is assigned to a Linux or Mac computer, the value of this property is `null`.
-        assigned_by (str | Unset): Organization or user who assigned a backup policy.
+        assigned_by (None | str | Unset): Organization or user who assigned a backup policy.
             > If the backup policy is assigned to a Linux or Mac computer, the value of this property is `null`.
     """
 
@@ -43,9 +43,9 @@ class BackupAgentAssignedBackupPolicy:
     is_custom: bool | Unset = UNSET
     is_out_of_date: bool | Unset = UNSET
     backup_policy_failure_message: str | Unset = UNSET
-    backup_policy_revision: int | Unset = UNSET
-    assigned_date: datetime.datetime | Unset = UNSET
-    assigned_by: str | Unset = UNSET
+    backup_policy_revision: int | None | Unset = UNSET
+    assigned_date: datetime.datetime | None | Unset = UNSET
+    assigned_by: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -73,13 +73,25 @@ class BackupAgentAssignedBackupPolicy:
 
         backup_policy_failure_message = self.backup_policy_failure_message
 
-        backup_policy_revision = self.backup_policy_revision
+        backup_policy_revision: int | None | Unset
+        if isinstance(self.backup_policy_revision, Unset):
+            backup_policy_revision = UNSET
+        else:
+            backup_policy_revision = self.backup_policy_revision
 
-        assigned_date: str | Unset = UNSET
-        if not isinstance(self.assigned_date, Unset):
+        assigned_date: None | str | Unset
+        if isinstance(self.assigned_date, Unset):
+            assigned_date = UNSET
+        elif isinstance(self.assigned_date, datetime.datetime):
             assigned_date = self.assigned_date.isoformat()
+        else:
+            assigned_date = self.assigned_date
 
-        assigned_by = self.assigned_by
+        assigned_by: None | str | Unset
+        if isinstance(self.assigned_by, Unset):
+            assigned_by = UNSET
+        else:
+            assigned_by = self.assigned_by
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -148,16 +160,40 @@ class BackupAgentAssignedBackupPolicy:
 
         backup_policy_failure_message = d.pop("backupPolicyFailureMessage", UNSET)
 
-        backup_policy_revision = d.pop("backupPolicyRevision", UNSET)
+        def _parse_backup_policy_revision(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        _assigned_date = d.pop("assignedDate", UNSET)
-        assigned_date: datetime.datetime | Unset
-        if isinstance(_assigned_date, Unset):
-            assigned_date = UNSET
-        else:
-            assigned_date = isoparse(_assigned_date)
+        backup_policy_revision = _parse_backup_policy_revision(d.pop("backupPolicyRevision", UNSET))
 
-        assigned_by = d.pop("assignedBy", UNSET)
+        def _parse_assigned_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                assigned_date_type_0 = isoparse(data)
+
+                return assigned_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        assigned_date = _parse_assigned_date(d.pop("assignedDate", UNSET))
+
+        def _parse_assigned_by(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        assigned_by = _parse_assigned_by(d.pop("assignedBy", UNSET))
 
         backup_agent_assigned_backup_policy = cls(
             config_uid=config_uid,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,19 +21,19 @@ class BackupServerCloudDirectorObject:
         host_name (str): Name of a VMware Cloud Director server that manages an object.
         name (str): Name of an object.
         type_ (BackupServerCloudDirectorInventoryType): Type of a VMware Cloud Director object.
-        object_id (str | Unset): URN of an object.
-        size (str | Unset): Size of an object.
-        vcd_organization_name (str | Unset): Name of a VMware Cloud Director organization.
-        vcd_organization_uid (UUID | Unset): UID assigned to a VMware Cloud Director server.
+        object_id (None | str | Unset): URN of an object.
+        size (None | str | Unset): Size of an object.
+        vcd_organization_name (None | str | Unset): Name of a VMware Cloud Director organization.
+        vcd_organization_uid (None | Unset | UUID): UID assigned to a VMware Cloud Director server.
     """
 
     host_name: str
     name: str
     type_: BackupServerCloudDirectorInventoryType
-    object_id: str | Unset = UNSET
-    size: str | Unset = UNSET
-    vcd_organization_name: str | Unset = UNSET
-    vcd_organization_uid: UUID | Unset = UNSET
+    object_id: None | str | Unset = UNSET
+    size: None | str | Unset = UNSET
+    vcd_organization_name: None | str | Unset = UNSET
+    vcd_organization_uid: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -43,15 +43,31 @@ class BackupServerCloudDirectorObject:
 
         type_ = self.type_.value
 
-        object_id = self.object_id
+        object_id: None | str | Unset
+        if isinstance(self.object_id, Unset):
+            object_id = UNSET
+        else:
+            object_id = self.object_id
 
-        size = self.size
+        size: None | str | Unset
+        if isinstance(self.size, Unset):
+            size = UNSET
+        else:
+            size = self.size
 
-        vcd_organization_name = self.vcd_organization_name
+        vcd_organization_name: None | str | Unset
+        if isinstance(self.vcd_organization_name, Unset):
+            vcd_organization_name = UNSET
+        else:
+            vcd_organization_name = self.vcd_organization_name
 
-        vcd_organization_uid: str | Unset = UNSET
-        if not isinstance(self.vcd_organization_uid, Unset):
+        vcd_organization_uid: None | str | Unset
+        if isinstance(self.vcd_organization_uid, Unset):
+            vcd_organization_uid = UNSET
+        elif isinstance(self.vcd_organization_uid, UUID):
             vcd_organization_uid = str(self.vcd_organization_uid)
+        else:
+            vcd_organization_uid = self.vcd_organization_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -82,18 +98,49 @@ class BackupServerCloudDirectorObject:
 
         type_ = BackupServerCloudDirectorInventoryType(d.pop("type"))
 
-        object_id = d.pop("objectId", UNSET)
+        def _parse_object_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        size = d.pop("size", UNSET)
+        object_id = _parse_object_id(d.pop("objectId", UNSET))
 
-        vcd_organization_name = d.pop("vcdOrganizationName", UNSET)
+        def _parse_size(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _vcd_organization_uid = d.pop("vcdOrganizationUid", UNSET)
-        vcd_organization_uid: UUID | Unset
-        if isinstance(_vcd_organization_uid, Unset):
-            vcd_organization_uid = UNSET
-        else:
-            vcd_organization_uid = UUID(_vcd_organization_uid)
+        size = _parse_size(d.pop("size", UNSET))
+
+        def _parse_vcd_organization_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        vcd_organization_name = _parse_vcd_organization_name(d.pop("vcdOrganizationName", UNSET))
+
+        def _parse_vcd_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                vcd_organization_uid_type_0 = UUID(data)
+
+                return vcd_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        vcd_organization_uid = _parse_vcd_organization_uid(d.pop("vcdOrganizationUid", UNSET))
 
         backup_server_cloud_director_object = cls(
             host_name=host_name,

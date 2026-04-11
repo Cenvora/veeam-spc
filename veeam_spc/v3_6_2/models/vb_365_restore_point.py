@@ -2,14 +2,16 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
-from ..models.vb_365_restore_point_processed_object_types_item import Vb365RestorePointProcessedObjectTypesItem
+from ..models.vb_365_restore_point_processed_object_types_type_0_item import (
+    Vb365RestorePointProcessedObjectTypesType0Item,
+)
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="Vb365RestorePoint")
@@ -26,8 +28,8 @@ class Vb365RestorePoint:
         repository_name (str | Unset): Name of a backup repository.
         backup_time (datetime.datetime | Unset): Date and time when a restore point was created.
         is_archive (bool | Unset): Indicates whether restore point is archive.
-        processed_object_types (list[Vb365RestorePointProcessedObjectTypesItem] | Unset): Array of protected object
-            types.
+        processed_object_types (list[Vb365RestorePointProcessedObjectTypesType0Item] | None | Unset): Array of protected
+            object types.
         processed_object_types_str (str | Unset): String representation of protected object type array.
     """
 
@@ -38,7 +40,7 @@ class Vb365RestorePoint:
     repository_name: str | Unset = UNSET
     backup_time: datetime.datetime | Unset = UNSET
     is_archive: bool | Unset = UNSET
-    processed_object_types: list[Vb365RestorePointProcessedObjectTypesItem] | Unset = UNSET
+    processed_object_types: list[Vb365RestorePointProcessedObjectTypesType0Item] | None | Unset = UNSET
     processed_object_types_str: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -67,12 +69,17 @@ class Vb365RestorePoint:
 
         is_archive = self.is_archive
 
-        processed_object_types: list[str] | Unset = UNSET
-        if not isinstance(self.processed_object_types, Unset):
+        processed_object_types: list[str] | None | Unset
+        if isinstance(self.processed_object_types, Unset):
+            processed_object_types = UNSET
+        elif isinstance(self.processed_object_types, list):
             processed_object_types = []
-            for processed_object_types_item_data in self.processed_object_types:
-                processed_object_types_item = processed_object_types_item_data.value
-                processed_object_types.append(processed_object_types_item)
+            for processed_object_types_type_0_item_data in self.processed_object_types:
+                processed_object_types_type_0_item = processed_object_types_type_0_item_data.value
+                processed_object_types.append(processed_object_types_type_0_item)
+
+        else:
+            processed_object_types = self.processed_object_types
 
         processed_object_types_str = self.processed_object_types_str
 
@@ -142,16 +149,31 @@ class Vb365RestorePoint:
 
         is_archive = d.pop("isArchive", UNSET)
 
-        _processed_object_types = d.pop("processedObjectTypes", UNSET)
-        processed_object_types: list[Vb365RestorePointProcessedObjectTypesItem] | Unset = UNSET
-        if _processed_object_types is not UNSET:
-            processed_object_types = []
-            for processed_object_types_item_data in _processed_object_types:
-                processed_object_types_item = Vb365RestorePointProcessedObjectTypesItem(
-                    processed_object_types_item_data
-                )
+        def _parse_processed_object_types(
+            data: object,
+        ) -> list[Vb365RestorePointProcessedObjectTypesType0Item] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                processed_object_types_type_0 = []
+                _processed_object_types_type_0 = data
+                for processed_object_types_type_0_item_data in _processed_object_types_type_0:
+                    processed_object_types_type_0_item = Vb365RestorePointProcessedObjectTypesType0Item(
+                        processed_object_types_type_0_item_data
+                    )
 
-                processed_object_types.append(processed_object_types_item)
+                    processed_object_types_type_0.append(processed_object_types_type_0_item)
+
+                return processed_object_types_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[Vb365RestorePointProcessedObjectTypesType0Item] | None | Unset, data)
+
+        processed_object_types = _parse_processed_object_types(d.pop("processedObjectTypes", UNSET))
 
         processed_object_types_str = d.pop("processedObjectTypesStr", UNSET)
 

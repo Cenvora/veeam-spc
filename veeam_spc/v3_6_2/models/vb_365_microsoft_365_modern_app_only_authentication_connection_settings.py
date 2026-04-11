@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -25,48 +25,73 @@ T = TypeVar("T", bound="Vb365Microsoft365ModernAppOnlyAuthenticationConnectionSe
 class Vb365Microsoft365ModernAppOnlyAuthenticationConnectionSettings:
     """
     Attributes:
-        configure_application (bool | Unset): Indicates whether Veeam Backup for Microsoft 365 can automatically assign
-            the certificate and required permissions to the specified Azure AD application.
+        configure_application (bool | None | Unset): Indicates whether Veeam Backup for Microsoft 365 can automatically
+            assign the certificate and required permissions to the specified Azure AD application.
             > Required only for existing Azure AD application.
              Default: False.
-        user_code (str | Unset): Device code.
-        new_application_name (str | Unset): Name of an Azure AD application.
+        user_code (None | str | Unset): Device code.
+        new_application_name (None | str | Unset): Name of an Azure AD application.
             > Required only when registering a new Azure AD applications.
-        application_id (UUID | Unset): UID assigned to the application in Azure AD.
+        application_id (None | Unset | UUID): UID assigned to the application in Azure AD.
             > Required only for an existing Azure AD application.
-        application_certificate (str | Unset): SSL certificate for Azure AD application access in the Base64 format.
-        application_certificate_password (str | Unset): Password for the SSL certificate.
+        application_certificate (None | str | Unset): SSL certificate for Azure AD application access in the Base64
+            format.
+        application_certificate_password (None | str | Unset): Password for the SSL certificate.
         application_certificate_thumbprint (str | Unset): Application certificate thumbprint for a Microsoft 365
             organization.
         share_point_settings (Vb365Microsoft365ModernAppOnlyAuthenticationSharePointConnectionSettings | Unset):
         exchange_settings (Vb365Microsoft365ModernAppOnlyAuthenticationExchangeConnectionSettings | Unset):
     """
 
-    configure_application: bool | Unset = False
-    user_code: str | Unset = UNSET
-    new_application_name: str | Unset = UNSET
-    application_id: UUID | Unset = UNSET
-    application_certificate: str | Unset = UNSET
-    application_certificate_password: str | Unset = UNSET
+    configure_application: bool | None | Unset = False
+    user_code: None | str | Unset = UNSET
+    new_application_name: None | str | Unset = UNSET
+    application_id: None | Unset | UUID = UNSET
+    application_certificate: None | str | Unset = UNSET
+    application_certificate_password: None | str | Unset = UNSET
     application_certificate_thumbprint: str | Unset = UNSET
     share_point_settings: Vb365Microsoft365ModernAppOnlyAuthenticationSharePointConnectionSettings | Unset = UNSET
     exchange_settings: Vb365Microsoft365ModernAppOnlyAuthenticationExchangeConnectionSettings | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        configure_application = self.configure_application
+        configure_application: bool | None | Unset
+        if isinstance(self.configure_application, Unset):
+            configure_application = UNSET
+        else:
+            configure_application = self.configure_application
 
-        user_code = self.user_code
+        user_code: None | str | Unset
+        if isinstance(self.user_code, Unset):
+            user_code = UNSET
+        else:
+            user_code = self.user_code
 
-        new_application_name = self.new_application_name
+        new_application_name: None | str | Unset
+        if isinstance(self.new_application_name, Unset):
+            new_application_name = UNSET
+        else:
+            new_application_name = self.new_application_name
 
-        application_id: str | Unset = UNSET
-        if not isinstance(self.application_id, Unset):
+        application_id: None | str | Unset
+        if isinstance(self.application_id, Unset):
+            application_id = UNSET
+        elif isinstance(self.application_id, UUID):
             application_id = str(self.application_id)
+        else:
+            application_id = self.application_id
 
-        application_certificate = self.application_certificate
+        application_certificate: None | str | Unset
+        if isinstance(self.application_certificate, Unset):
+            application_certificate = UNSET
+        else:
+            application_certificate = self.application_certificate
 
-        application_certificate_password = self.application_certificate_password
+        application_certificate_password: None | str | Unset
+        if isinstance(self.application_certificate_password, Unset):
+            application_certificate_password = UNSET
+        else:
+            application_certificate_password = self.application_certificate_password
 
         application_certificate_thumbprint = self.application_certificate_thumbprint
 
@@ -112,22 +137,70 @@ class Vb365Microsoft365ModernAppOnlyAuthenticationConnectionSettings:
         )
 
         d = dict(src_dict)
-        configure_application = d.pop("configureApplication", UNSET)
 
-        user_code = d.pop("userCode", UNSET)
+        def _parse_configure_application(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        new_application_name = d.pop("newApplicationName", UNSET)
+        configure_application = _parse_configure_application(d.pop("configureApplication", UNSET))
 
-        _application_id = d.pop("applicationId", UNSET)
-        application_id: UUID | Unset
-        if isinstance(_application_id, Unset):
-            application_id = UNSET
-        else:
-            application_id = UUID(_application_id)
+        def _parse_user_code(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        application_certificate = d.pop("applicationCertificate", UNSET)
+        user_code = _parse_user_code(d.pop("userCode", UNSET))
 
-        application_certificate_password = d.pop("applicationCertificatePassword", UNSET)
+        def _parse_new_application_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        new_application_name = _parse_new_application_name(d.pop("newApplicationName", UNSET))
+
+        def _parse_application_id(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                application_id_type_0 = UUID(data)
+
+                return application_id_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        application_id = _parse_application_id(d.pop("applicationId", UNSET))
+
+        def _parse_application_certificate(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        application_certificate = _parse_application_certificate(d.pop("applicationCertificate", UNSET))
+
+        def _parse_application_certificate_password(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        application_certificate_password = _parse_application_certificate_password(
+            d.pop("applicationCertificatePassword", UNSET)
+        )
 
         application_certificate_thumbprint = d.pop("applicationCertificateThumbprint", UNSET)
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,7 +21,7 @@ class CustomWelcomeEmailTemplate:
         organization_uid (UUID | Unset): UID assigned to an organization.
         organization_type (CustomWelcomeEmailTemplateOrganizationType | Unset): Type of an organization.
         organization_scope (CustomWelcomeEmailTemplateOrganizationScope | Unset): Scope of notified organizations.
-        email_content (str | Unset): Content of an email message.
+        email_content (None | str | Unset): Content of an email message.
         show_self_service_section (bool | Unset): Indicates whether the **Self-service** section is included in the
             email message. Default: True.
         is_default (bool | Unset): Indicates whether an email message template is selected by default. Default: True.
@@ -30,7 +30,7 @@ class CustomWelcomeEmailTemplate:
     organization_uid: UUID | Unset = UNSET
     organization_type: CustomWelcomeEmailTemplateOrganizationType | Unset = UNSET
     organization_scope: CustomWelcomeEmailTemplateOrganizationScope | Unset = UNSET
-    email_content: str | Unset = UNSET
+    email_content: None | str | Unset = UNSET
     show_self_service_section: bool | Unset = True
     is_default: bool | Unset = True
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -48,7 +48,11 @@ class CustomWelcomeEmailTemplate:
         if not isinstance(self.organization_scope, Unset):
             organization_scope = self.organization_scope.value
 
-        email_content = self.email_content
+        email_content: None | str | Unset
+        if isinstance(self.email_content, Unset):
+            email_content = UNSET
+        else:
+            email_content = self.email_content
 
         show_self_service_section = self.show_self_service_section
 
@@ -96,7 +100,14 @@ class CustomWelcomeEmailTemplate:
         else:
             organization_scope = CustomWelcomeEmailTemplateOrganizationScope(_organization_scope)
 
-        email_content = d.pop("emailContent", UNSET)
+        def _parse_email_content(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        email_content = _parse_email_content(d.pop("emailContent", UNSET))
 
         show_self_service_section = d.pop("showSelfServiceSection", UNSET)
 

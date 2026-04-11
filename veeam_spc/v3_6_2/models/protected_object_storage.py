@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,7 +24,8 @@ class ProtectedObjectStorage:
         organization_uid (UUID | Unset): UID assigned to an organization.
         object_storage_name (str | Unset): Name of an object storage.
         bucket_name (str | Unset): Name of an object storage bucket.
-        latest_restore_point_date (datetime.datetime | Unset): Date and time of the latest restore point creation.
+        latest_restore_point_date (datetime.datetime | None | Unset): Date and time of the latest restore point
+            creation.
         total_archive_size (int | Unset): Size of archived file copies, in bytes.
         total_short_term_backup_size (int | Unset): Size of recent file copies, in bytes.
         archive_restore_points (int | Unset): Number of restore points for long-term retention.
@@ -37,7 +38,7 @@ class ProtectedObjectStorage:
     organization_uid: UUID | Unset = UNSET
     object_storage_name: str | Unset = UNSET
     bucket_name: str | Unset = UNSET
-    latest_restore_point_date: datetime.datetime | Unset = UNSET
+    latest_restore_point_date: datetime.datetime | None | Unset = UNSET
     total_archive_size: int | Unset = UNSET
     total_short_term_backup_size: int | Unset = UNSET
     archive_restore_points: int | Unset = UNSET
@@ -65,9 +66,13 @@ class ProtectedObjectStorage:
 
         bucket_name = self.bucket_name
 
-        latest_restore_point_date: str | Unset = UNSET
-        if not isinstance(self.latest_restore_point_date, Unset):
+        latest_restore_point_date: None | str | Unset
+        if isinstance(self.latest_restore_point_date, Unset):
+            latest_restore_point_date = UNSET
+        elif isinstance(self.latest_restore_point_date, datetime.datetime):
             latest_restore_point_date = self.latest_restore_point_date.isoformat()
+        else:
+            latest_restore_point_date = self.latest_restore_point_date
 
         total_archive_size = self.total_archive_size
 
@@ -140,12 +145,22 @@ class ProtectedObjectStorage:
 
         bucket_name = d.pop("bucketName", UNSET)
 
-        _latest_restore_point_date = d.pop("latestRestorePointDate", UNSET)
-        latest_restore_point_date: datetime.datetime | Unset
-        if isinstance(_latest_restore_point_date, Unset):
-            latest_restore_point_date = UNSET
-        else:
-            latest_restore_point_date = isoparse(_latest_restore_point_date)
+        def _parse_latest_restore_point_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                latest_restore_point_date_type_0 = isoparse(data)
+
+                return latest_restore_point_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        latest_restore_point_date = _parse_latest_restore_point_date(d.pop("latestRestorePointDate", UNSET))
 
         total_archive_size = d.pop("totalArchiveSize", UNSET)
 

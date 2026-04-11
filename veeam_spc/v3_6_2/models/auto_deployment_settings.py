@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -23,10 +23,12 @@ class AutoDeploymentSettings:
         organization_uid (UUID | Unset): UID assigned to an organization that manages Veeam backup agent auto
             deployment.
         is_enabled (bool | Unset): Indicates whether auto deployment is enabled. Default: False.
-        windows_backup_policy_uid (UUID | Unset): UID of a backup policy that must be assigned to a Veeam Agent for
-            Microsoft Windows.
-        linux_backup_policy_uid (UUID | Unset): UID of a backup policy that must be assigned to a Veeam Agent for Linux.
-        mac_backup_policy_uid (UUID | Unset): UID of a backup policy that must be assigned to a Veeam Agent for Mac.
+        windows_backup_policy_uid (None | Unset | UUID): UID of a backup policy that must be assigned to a Veeam Agent
+            for Microsoft Windows.
+        linux_backup_policy_uid (None | Unset | UUID): UID of a backup policy that must be assigned to a Veeam Agent for
+            Linux.
+        mac_backup_policy_uid (None | Unset | UUID): UID of a backup policy that must be assigned to a Veeam Agent for
+            Mac.
         is_retry_enabled (bool | Unset): Indicates whether retry is enabled in case deployment session fails. Default:
             False.
         retry_count (int | Unset): Number of allowed retries. Default: 3.
@@ -42,9 +44,9 @@ class AutoDeploymentSettings:
 
     organization_uid: UUID | Unset = UNSET
     is_enabled: bool | Unset = False
-    windows_backup_policy_uid: UUID | Unset = UNSET
-    linux_backup_policy_uid: UUID | Unset = UNSET
-    mac_backup_policy_uid: UUID | Unset = UNSET
+    windows_backup_policy_uid: None | Unset | UUID = UNSET
+    linux_backup_policy_uid: None | Unset | UUID = UNSET
+    mac_backup_policy_uid: None | Unset | UUID = UNSET
     is_retry_enabled: bool | Unset = False
     retry_count: int | Unset = 3
     retry_interval: int | Unset = 7
@@ -61,17 +63,29 @@ class AutoDeploymentSettings:
 
         is_enabled = self.is_enabled
 
-        windows_backup_policy_uid: str | Unset = UNSET
-        if not isinstance(self.windows_backup_policy_uid, Unset):
+        windows_backup_policy_uid: None | str | Unset
+        if isinstance(self.windows_backup_policy_uid, Unset):
+            windows_backup_policy_uid = UNSET
+        elif isinstance(self.windows_backup_policy_uid, UUID):
             windows_backup_policy_uid = str(self.windows_backup_policy_uid)
+        else:
+            windows_backup_policy_uid = self.windows_backup_policy_uid
 
-        linux_backup_policy_uid: str | Unset = UNSET
-        if not isinstance(self.linux_backup_policy_uid, Unset):
+        linux_backup_policy_uid: None | str | Unset
+        if isinstance(self.linux_backup_policy_uid, Unset):
+            linux_backup_policy_uid = UNSET
+        elif isinstance(self.linux_backup_policy_uid, UUID):
             linux_backup_policy_uid = str(self.linux_backup_policy_uid)
+        else:
+            linux_backup_policy_uid = self.linux_backup_policy_uid
 
-        mac_backup_policy_uid: str | Unset = UNSET
-        if not isinstance(self.mac_backup_policy_uid, Unset):
+        mac_backup_policy_uid: None | str | Unset
+        if isinstance(self.mac_backup_policy_uid, Unset):
+            mac_backup_policy_uid = UNSET
+        elif isinstance(self.mac_backup_policy_uid, UUID):
             mac_backup_policy_uid = str(self.mac_backup_policy_uid)
+        else:
+            mac_backup_policy_uid = self.mac_backup_policy_uid
 
         is_retry_enabled = self.is_retry_enabled
 
@@ -133,26 +147,56 @@ class AutoDeploymentSettings:
 
         is_enabled = d.pop("isEnabled", UNSET)
 
-        _windows_backup_policy_uid = d.pop("windowsBackupPolicyUid", UNSET)
-        windows_backup_policy_uid: UUID | Unset
-        if isinstance(_windows_backup_policy_uid, Unset):
-            windows_backup_policy_uid = UNSET
-        else:
-            windows_backup_policy_uid = UUID(_windows_backup_policy_uid)
+        def _parse_windows_backup_policy_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                windows_backup_policy_uid_type_0 = UUID(data)
 
-        _linux_backup_policy_uid = d.pop("linuxBackupPolicyUid", UNSET)
-        linux_backup_policy_uid: UUID | Unset
-        if isinstance(_linux_backup_policy_uid, Unset):
-            linux_backup_policy_uid = UNSET
-        else:
-            linux_backup_policy_uid = UUID(_linux_backup_policy_uid)
+                return windows_backup_policy_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        _mac_backup_policy_uid = d.pop("macBackupPolicyUid", UNSET)
-        mac_backup_policy_uid: UUID | Unset
-        if isinstance(_mac_backup_policy_uid, Unset):
-            mac_backup_policy_uid = UNSET
-        else:
-            mac_backup_policy_uid = UUID(_mac_backup_policy_uid)
+        windows_backup_policy_uid = _parse_windows_backup_policy_uid(d.pop("windowsBackupPolicyUid", UNSET))
+
+        def _parse_linux_backup_policy_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                linux_backup_policy_uid_type_0 = UUID(data)
+
+                return linux_backup_policy_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        linux_backup_policy_uid = _parse_linux_backup_policy_uid(d.pop("linuxBackupPolicyUid", UNSET))
+
+        def _parse_mac_backup_policy_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                mac_backup_policy_uid_type_0 = UUID(data)
+
+                return mac_backup_policy_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        mac_backup_policy_uid = _parse_mac_backup_policy_uid(d.pop("macBackupPolicyUid", UNSET))
 
         is_retry_enabled = d.pop("isRetryEnabled", UNSET)
 

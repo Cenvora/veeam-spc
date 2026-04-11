@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -12,7 +12,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.discovery_rule_credentials import DiscoveryRuleCredentials
-    from ..models.embedded_for_discovery_rule_children import EmbeddedForDiscoveryRuleChildren
+    from ..models.embedded_for_discovery_rule_children_type_0 import EmbeddedForDiscoveryRuleChildrenType0
     from ..models.windows_discovery_rule_deployment_settings import WindowsDiscoveryRuleDeploymentSettings
 
 
@@ -29,8 +29,8 @@ class WindowsDiscoveryRule:
         use_master_management_agent_credentials (bool | Unset): Indicates whether Veeam Service Provider Console must
             use master agent credentials to connect discovered computers. Default: True.
         deployment_settings (WindowsDiscoveryRuleDeploymentSettings | Unset):
-        field_embedded (EmbeddedForDiscoveryRuleChildren | Unset): Resource representation of the related discovery rule
-            entity.
+        field_embedded (EmbeddedForDiscoveryRuleChildrenType0 | None | Unset): Resource representation of the related
+            discovery rule entity.
     """
 
     access_account: DiscoveryRuleCredentials
@@ -38,10 +38,12 @@ class WindowsDiscoveryRule:
     method: WindowsDiscoveryRuleMethod | Unset = WindowsDiscoveryRuleMethod.NETWORKBASED
     use_master_management_agent_credentials: bool | Unset = True
     deployment_settings: WindowsDiscoveryRuleDeploymentSettings | Unset = UNSET
-    field_embedded: EmbeddedForDiscoveryRuleChildren | Unset = UNSET
+    field_embedded: EmbeddedForDiscoveryRuleChildrenType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_discovery_rule_children_type_0 import EmbeddedForDiscoveryRuleChildrenType0
+
         access_account = self.access_account.to_dict()
 
         instance_uid: str | Unset = UNSET
@@ -58,9 +60,13 @@ class WindowsDiscoveryRule:
         if not isinstance(self.deployment_settings, Unset):
             deployment_settings = self.deployment_settings.to_dict()
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForDiscoveryRuleChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -85,7 +91,7 @@ class WindowsDiscoveryRule:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.discovery_rule_credentials import DiscoveryRuleCredentials
-        from ..models.embedded_for_discovery_rule_children import EmbeddedForDiscoveryRuleChildren
+        from ..models.embedded_for_discovery_rule_children_type_0 import EmbeddedForDiscoveryRuleChildrenType0
         from ..models.windows_discovery_rule_deployment_settings import WindowsDiscoveryRuleDeploymentSettings
 
         d = dict(src_dict)
@@ -114,12 +120,24 @@ class WindowsDiscoveryRule:
         else:
             deployment_settings = WindowsDiscoveryRuleDeploymentSettings.from_dict(_deployment_settings)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForDiscoveryRuleChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForDiscoveryRuleChildren.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> EmbeddedForDiscoveryRuleChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_discovery_rule_children_type_0 = (
+                    EmbeddedForDiscoveryRuleChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_discovery_rule_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForDiscoveryRuleChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         windows_discovery_rule = cls(
             access_account=access_account,

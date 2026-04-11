@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.discovery_rule_daily_schedule_settings_specific_days_item import (
-    DiscoveryRuleDailyScheduleSettingsSpecificDaysItem,
+from ..models.discovery_rule_daily_schedule_settings_specific_days_type_0_item import (
+    DiscoveryRuleDailyScheduleSettingsSpecificDaysType0Item,
 )
 from ..types import UNSET, Unset
 
@@ -19,24 +19,29 @@ class DiscoveryRuleDailyScheduleSettings:
     """
     Attributes:
         time (str | Unset): Time of the day when discovery must run, in the `hh:mm` format. Default: '0:30'.
-        specific_days (list[DiscoveryRuleDailyScheduleSettingsSpecificDaysItem] | Unset): Array of week days on which
-            discovery must be performed.
+        specific_days (list[DiscoveryRuleDailyScheduleSettingsSpecificDaysType0Item] | None | Unset): Array of week days
+            on which discovery must be performed.
             > Required for the `SpecificDay` schedule type.
     """
 
     time: str | Unset = "0:30"
-    specific_days: list[DiscoveryRuleDailyScheduleSettingsSpecificDaysItem] | Unset = UNSET
+    specific_days: list[DiscoveryRuleDailyScheduleSettingsSpecificDaysType0Item] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         time = self.time
 
-        specific_days: list[str] | Unset = UNSET
-        if not isinstance(self.specific_days, Unset):
+        specific_days: list[str] | None | Unset
+        if isinstance(self.specific_days, Unset):
+            specific_days = UNSET
+        elif isinstance(self.specific_days, list):
             specific_days = []
-            for specific_days_item_data in self.specific_days:
-                specific_days_item = specific_days_item_data.value
-                specific_days.append(specific_days_item)
+            for specific_days_type_0_item_data in self.specific_days:
+                specific_days_type_0_item = specific_days_type_0_item_data.value
+                specific_days.append(specific_days_type_0_item)
+
+        else:
+            specific_days = self.specific_days
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -53,14 +58,31 @@ class DiscoveryRuleDailyScheduleSettings:
         d = dict(src_dict)
         time = d.pop("time", UNSET)
 
-        _specific_days = d.pop("specificDays", UNSET)
-        specific_days: list[DiscoveryRuleDailyScheduleSettingsSpecificDaysItem] | Unset = UNSET
-        if _specific_days is not UNSET:
-            specific_days = []
-            for specific_days_item_data in _specific_days:
-                specific_days_item = DiscoveryRuleDailyScheduleSettingsSpecificDaysItem(specific_days_item_data)
+        def _parse_specific_days(
+            data: object,
+        ) -> list[DiscoveryRuleDailyScheduleSettingsSpecificDaysType0Item] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                specific_days_type_0 = []
+                _specific_days_type_0 = data
+                for specific_days_type_0_item_data in _specific_days_type_0:
+                    specific_days_type_0_item = DiscoveryRuleDailyScheduleSettingsSpecificDaysType0Item(
+                        specific_days_type_0_item_data
+                    )
 
-                specific_days.append(specific_days_item)
+                    specific_days_type_0.append(specific_days_type_0_item)
+
+                return specific_days_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[DiscoveryRuleDailyScheduleSettingsSpecificDaysType0Item] | None | Unset, data)
+
+        specific_days = _parse_specific_days(d.pop("specificDays", UNSET))
 
         discovery_rule_daily_schedule_settings = cls(
             time=time,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -29,20 +29,21 @@ class ProtectedVirtualMachineBackupRestorePoint:
         file_path (str | Unset): Path to a backup file location.
         gfs_type (list[ProtectedVirtualMachineBackupRestorePointGfsTypeItem] | Unset): Array of enabled GFS retention
             types.
-        job_uid (UUID | Unset): UID assigned to a backup job.
+        job_uid (None | Unset | UUID): UID assigned to a backup job.
         repository_uid (UUID | Unset): UID assigned to a repository on which the restore point resides.
-        size (int | Unset): Size of a restore point, in bytes. Includes all virtual machines protected by the same
-            backup job.
-        provisioned_source_size (int | Unset): Total size of protected virtual machine disks, in bytes.
-        used_source_size (int | Unset): Used space on protected virtual machine disks, in bytes.
-        increment_raw_data_size (int | Unset): Size of backup increment, in bytes.
+        size (int | None | Unset): Size of a restore point, in bytes. Includes all virtual machines protected by the
+            same backup job.
+        provisioned_source_size (int | None | Unset): Total size of protected virtual machine disks, in bytes.
+        used_source_size (int | None | Unset): Used space on protected virtual machine disks, in bytes.
+        increment_raw_data_size (int | None | Unset): Size of backup increment, in bytes.
         cpu_cores (int | Unset): Number of vCPU cores of a cloud virtual machine.
         memory (int | Unset): Protected virtual machine memory, in bytes.
-        backup_creation_time (datetime.datetime | Unset): Date and time when backup was created.
-        file_creation_time (datetime.datetime | Unset): Date and time when a restore point was created.
-        is_consistent (bool | Unset): Indicates whether a retore point has successfully passed a health check.
+        backup_creation_time (datetime.datetime | None | Unset): Date and time when backup was created.
+        file_creation_time (datetime.datetime | None | Unset): Date and time when a restore point was created.
+        is_consistent (bool | None | Unset): Indicates whether a retore point has successfully passed a health check.
         malware_state (MalwareState | Unset): Malware status.
-        immutable_till (datetime.datetime | Unset): Date and time when the latest immutable restore point was created.
+        immutable_till (datetime.datetime | None | Unset): Date and time when the latest immutable restore point was
+            created.
     """
 
     instance_uid: UUID | Unset = UNSET
@@ -51,19 +52,19 @@ class ProtectedVirtualMachineBackupRestorePoint:
     backup_server_uid: UUID | Unset = UNSET
     file_path: str | Unset = UNSET
     gfs_type: list[ProtectedVirtualMachineBackupRestorePointGfsTypeItem] | Unset = UNSET
-    job_uid: UUID | Unset = UNSET
+    job_uid: None | Unset | UUID = UNSET
     repository_uid: UUID | Unset = UNSET
-    size: int | Unset = UNSET
-    provisioned_source_size: int | Unset = UNSET
-    used_source_size: int | Unset = UNSET
-    increment_raw_data_size: int | Unset = UNSET
+    size: int | None | Unset = UNSET
+    provisioned_source_size: int | None | Unset = UNSET
+    used_source_size: int | None | Unset = UNSET
+    increment_raw_data_size: int | None | Unset = UNSET
     cpu_cores: int | Unset = UNSET
     memory: int | Unset = UNSET
-    backup_creation_time: datetime.datetime | Unset = UNSET
-    file_creation_time: datetime.datetime | Unset = UNSET
-    is_consistent: bool | Unset = UNSET
+    backup_creation_time: datetime.datetime | None | Unset = UNSET
+    file_creation_time: datetime.datetime | None | Unset = UNSET
+    is_consistent: bool | None | Unset = UNSET
     malware_state: MalwareState | Unset = UNSET
-    immutable_till: datetime.datetime | Unset = UNSET
+    immutable_till: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -92,43 +93,79 @@ class ProtectedVirtualMachineBackupRestorePoint:
                 gfs_type_item = gfs_type_item_data.value
                 gfs_type.append(gfs_type_item)
 
-        job_uid: str | Unset = UNSET
-        if not isinstance(self.job_uid, Unset):
+        job_uid: None | str | Unset
+        if isinstance(self.job_uid, Unset):
+            job_uid = UNSET
+        elif isinstance(self.job_uid, UUID):
             job_uid = str(self.job_uid)
+        else:
+            job_uid = self.job_uid
 
         repository_uid: str | Unset = UNSET
         if not isinstance(self.repository_uid, Unset):
             repository_uid = str(self.repository_uid)
 
-        size = self.size
+        size: int | None | Unset
+        if isinstance(self.size, Unset):
+            size = UNSET
+        else:
+            size = self.size
 
-        provisioned_source_size = self.provisioned_source_size
+        provisioned_source_size: int | None | Unset
+        if isinstance(self.provisioned_source_size, Unset):
+            provisioned_source_size = UNSET
+        else:
+            provisioned_source_size = self.provisioned_source_size
 
-        used_source_size = self.used_source_size
+        used_source_size: int | None | Unset
+        if isinstance(self.used_source_size, Unset):
+            used_source_size = UNSET
+        else:
+            used_source_size = self.used_source_size
 
-        increment_raw_data_size = self.increment_raw_data_size
+        increment_raw_data_size: int | None | Unset
+        if isinstance(self.increment_raw_data_size, Unset):
+            increment_raw_data_size = UNSET
+        else:
+            increment_raw_data_size = self.increment_raw_data_size
 
         cpu_cores = self.cpu_cores
 
         memory = self.memory
 
-        backup_creation_time: str | Unset = UNSET
-        if not isinstance(self.backup_creation_time, Unset):
+        backup_creation_time: None | str | Unset
+        if isinstance(self.backup_creation_time, Unset):
+            backup_creation_time = UNSET
+        elif isinstance(self.backup_creation_time, datetime.datetime):
             backup_creation_time = self.backup_creation_time.isoformat()
+        else:
+            backup_creation_time = self.backup_creation_time
 
-        file_creation_time: str | Unset = UNSET
-        if not isinstance(self.file_creation_time, Unset):
+        file_creation_time: None | str | Unset
+        if isinstance(self.file_creation_time, Unset):
+            file_creation_time = UNSET
+        elif isinstance(self.file_creation_time, datetime.datetime):
             file_creation_time = self.file_creation_time.isoformat()
+        else:
+            file_creation_time = self.file_creation_time
 
-        is_consistent = self.is_consistent
+        is_consistent: bool | None | Unset
+        if isinstance(self.is_consistent, Unset):
+            is_consistent = UNSET
+        else:
+            is_consistent = self.is_consistent
 
         malware_state: str | Unset = UNSET
         if not isinstance(self.malware_state, Unset):
             malware_state = self.malware_state.value
 
-        immutable_till: str | Unset = UNSET
-        if not isinstance(self.immutable_till, Unset):
+        immutable_till: None | str | Unset
+        if isinstance(self.immutable_till, Unset):
+            immutable_till = UNSET
+        elif isinstance(self.immutable_till, datetime.datetime):
             immutable_till = self.immutable_till.isoformat()
+        else:
+            immutable_till = self.immutable_till
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -216,12 +253,22 @@ class ProtectedVirtualMachineBackupRestorePoint:
 
                 gfs_type.append(gfs_type_item)
 
-        _job_uid = d.pop("jobUid", UNSET)
-        job_uid: UUID | Unset
-        if isinstance(_job_uid, Unset):
-            job_uid = UNSET
-        else:
-            job_uid = UUID(_job_uid)
+        def _parse_job_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                job_uid_type_0 = UUID(data)
+
+                return job_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        job_uid = _parse_job_uid(d.pop("jobUid", UNSET))
 
         _repository_uid = d.pop("repositoryUid", UNSET)
         repository_uid: UUID | Unset
@@ -230,33 +277,88 @@ class ProtectedVirtualMachineBackupRestorePoint:
         else:
             repository_uid = UUID(_repository_uid)
 
-        size = d.pop("size", UNSET)
+        def _parse_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        provisioned_source_size = d.pop("provisionedSourceSize", UNSET)
+        size = _parse_size(d.pop("size", UNSET))
 
-        used_source_size = d.pop("usedSourceSize", UNSET)
+        def _parse_provisioned_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        increment_raw_data_size = d.pop("incrementRawDataSize", UNSET)
+        provisioned_source_size = _parse_provisioned_source_size(d.pop("provisionedSourceSize", UNSET))
+
+        def _parse_used_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        used_source_size = _parse_used_source_size(d.pop("usedSourceSize", UNSET))
+
+        def _parse_increment_raw_data_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        increment_raw_data_size = _parse_increment_raw_data_size(d.pop("incrementRawDataSize", UNSET))
 
         cpu_cores = d.pop("cpuCores", UNSET)
 
         memory = d.pop("memory", UNSET)
 
-        _backup_creation_time = d.pop("backupCreationTime", UNSET)
-        backup_creation_time: datetime.datetime | Unset
-        if isinstance(_backup_creation_time, Unset):
-            backup_creation_time = UNSET
-        else:
-            backup_creation_time = isoparse(_backup_creation_time)
+        def _parse_backup_creation_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                backup_creation_time_type_0 = isoparse(data)
 
-        _file_creation_time = d.pop("fileCreationTime", UNSET)
-        file_creation_time: datetime.datetime | Unset
-        if isinstance(_file_creation_time, Unset):
-            file_creation_time = UNSET
-        else:
-            file_creation_time = isoparse(_file_creation_time)
+                return backup_creation_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
 
-        is_consistent = d.pop("isConsistent", UNSET)
+        backup_creation_time = _parse_backup_creation_time(d.pop("backupCreationTime", UNSET))
+
+        def _parse_file_creation_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                file_creation_time_type_0 = isoparse(data)
+
+                return file_creation_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        file_creation_time = _parse_file_creation_time(d.pop("fileCreationTime", UNSET))
+
+        def _parse_is_consistent(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        is_consistent = _parse_is_consistent(d.pop("isConsistent", UNSET))
 
         _malware_state = d.pop("malwareState", UNSET)
         malware_state: MalwareState | Unset
@@ -265,12 +367,22 @@ class ProtectedVirtualMachineBackupRestorePoint:
         else:
             malware_state = MalwareState(_malware_state)
 
-        _immutable_till = d.pop("immutableTill", UNSET)
-        immutable_till: datetime.datetime | Unset
-        if isinstance(_immutable_till, Unset):
-            immutable_till = UNSET
-        else:
-            immutable_till = isoparse(_immutable_till)
+        def _parse_immutable_till(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                immutable_till_type_0 = isoparse(data)
+
+                return immutable_till_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        immutable_till = _parse_immutable_till(d.pop("immutableTill", UNSET))
 
         protected_virtual_machine_backup_restore_point = cls(
             instance_uid=instance_uid,

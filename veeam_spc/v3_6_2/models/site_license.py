@@ -33,14 +33,14 @@ class SiteLicense:
     Attributes:
         auto_update_enabled (bool): Indicates whether a license updates automatically.
         site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site.
-        edition (str | Unset): License edition.
-        monitoring (bool | Unset): Indicates if monitoring is enabled for a Veeam Cloud Connect server.
+        edition (None | str | Unset): License edition.
+        monitoring (bool | None | Unset): Indicates if monitoring is enabled for a Veeam Cloud Connect server.
         packages (list[SiteLicensePackagesItem] | Unset): Product packages.
         company (str | Unset): Name of an organization to which a license is issued.
         email (str | Unset): Email address of an organization to which a license is issued.
         contact_person (str | Unset): [Legacy] Name of a contact person in an organization to which a license is issued.
-        expiration_date (datetime.datetime | Unset): License expiration date and time.
-        support_expiration_date (datetime.datetime | Unset): Support expiration date and time.
+        expiration_date (datetime.datetime | None | Unset): License expiration date and time.
+        support_expiration_date (datetime.datetime | None | Unset): Support expiration date and time.
         license_ids (list[UUID] | Unset): License IDs.
         support_ids (list[str] | Unset): License IDs required to contact Veeam Support.
         section_types (list[SiteLicenseSectionTypesItem] | Unset): Types of licensed units.
@@ -54,14 +54,14 @@ class SiteLicense:
 
     auto_update_enabled: bool
     site_uid: UUID | Unset = UNSET
-    edition: str | Unset = UNSET
-    monitoring: bool | Unset = UNSET
+    edition: None | str | Unset = UNSET
+    monitoring: bool | None | Unset = UNSET
     packages: list[SiteLicensePackagesItem] | Unset = UNSET
     company: str | Unset = UNSET
     email: str | Unset = UNSET
     contact_person: str | Unset = UNSET
-    expiration_date: datetime.datetime | Unset = UNSET
-    support_expiration_date: datetime.datetime | Unset = UNSET
+    expiration_date: datetime.datetime | None | Unset = UNSET
+    support_expiration_date: datetime.datetime | None | Unset = UNSET
     license_ids: list[UUID] | Unset = UNSET
     support_ids: list[str] | Unset = UNSET
     section_types: list[SiteLicenseSectionTypesItem] | Unset = UNSET
@@ -80,9 +80,17 @@ class SiteLicense:
         if not isinstance(self.site_uid, Unset):
             site_uid = str(self.site_uid)
 
-        edition = self.edition
+        edition: None | str | Unset
+        if isinstance(self.edition, Unset):
+            edition = UNSET
+        else:
+            edition = self.edition
 
-        monitoring = self.monitoring
+        monitoring: bool | None | Unset
+        if isinstance(self.monitoring, Unset):
+            monitoring = UNSET
+        else:
+            monitoring = self.monitoring
 
         packages: list[str] | Unset = UNSET
         if not isinstance(self.packages, Unset):
@@ -97,13 +105,21 @@ class SiteLicense:
 
         contact_person = self.contact_person
 
-        expiration_date: str | Unset = UNSET
-        if not isinstance(self.expiration_date, Unset):
+        expiration_date: None | str | Unset
+        if isinstance(self.expiration_date, Unset):
+            expiration_date = UNSET
+        elif isinstance(self.expiration_date, datetime.datetime):
             expiration_date = self.expiration_date.isoformat()
+        else:
+            expiration_date = self.expiration_date
 
-        support_expiration_date: str | Unset = UNSET
-        if not isinstance(self.support_expiration_date, Unset):
+        support_expiration_date: None | str | Unset
+        if isinstance(self.support_expiration_date, Unset):
+            support_expiration_date = UNSET
+        elif isinstance(self.support_expiration_date, datetime.datetime):
             support_expiration_date = self.support_expiration_date.isoformat()
+        else:
+            support_expiration_date = self.support_expiration_date
 
         license_ids: list[str] | Unset = UNSET
         if not isinstance(self.license_ids, Unset):
@@ -201,9 +217,23 @@ class SiteLicense:
         else:
             site_uid = UUID(_site_uid)
 
-        edition = d.pop("edition", UNSET)
+        def _parse_edition(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        monitoring = d.pop("monitoring", UNSET)
+        edition = _parse_edition(d.pop("edition", UNSET))
+
+        def _parse_monitoring(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        monitoring = _parse_monitoring(d.pop("monitoring", UNSET))
 
         _packages = d.pop("packages", UNSET)
         packages: list[SiteLicensePackagesItem] | Unset = UNSET
@@ -220,19 +250,39 @@ class SiteLicense:
 
         contact_person = d.pop("contactPerson", UNSET)
 
-        _expiration_date = d.pop("expirationDate", UNSET)
-        expiration_date: datetime.datetime | Unset
-        if isinstance(_expiration_date, Unset):
-            expiration_date = UNSET
-        else:
-            expiration_date = isoparse(_expiration_date)
+        def _parse_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                expiration_date_type_0 = isoparse(data)
 
-        _support_expiration_date = d.pop("supportExpirationDate", UNSET)
-        support_expiration_date: datetime.datetime | Unset
-        if isinstance(_support_expiration_date, Unset):
-            support_expiration_date = UNSET
-        else:
-            support_expiration_date = isoparse(_support_expiration_date)
+                return expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        expiration_date = _parse_expiration_date(d.pop("expirationDate", UNSET))
+
+        def _parse_support_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                support_expiration_date_type_0 = isoparse(data)
+
+                return support_expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        support_expiration_date = _parse_support_expiration_date(d.pop("supportExpirationDate", UNSET))
 
         _license_ids = d.pop("licenseIds", UNSET)
         license_ids: list[UUID] | Unset = UNSET

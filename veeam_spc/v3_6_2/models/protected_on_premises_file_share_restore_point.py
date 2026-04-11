@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,20 +21,20 @@ class ProtectedOnPremisesFileShareRestorePoint:
         instance_uid (UUID | Unset): UID assigned to a restore point.
         file_share_uid (UUID | Unset): UID assigned to a file share.
         backup_server_uid (UUID | Unset): UID assigned to a backup server.
-        backup_uid (UUID | Unset): UID assigned to a restore point.
-        job_uid (UUID | Unset): UID assigned to a job.
+        backup_uid (None | Unset | UUID): UID assigned to a restore point.
+        job_uid (None | Unset | UUID): UID assigned to a job.
         restore_point_date (datetime.datetime | Unset): Date and time of the restore point creation.
-        size (int | Unset): Size of a restore point.
+        size (int | None | Unset): Size of a restore point.
         is_archive (bool | Unset): Indicates whether an restore point is stored in an archive repository. Default: True.
     """
 
     instance_uid: UUID | Unset = UNSET
     file_share_uid: UUID | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
-    backup_uid: UUID | Unset = UNSET
-    job_uid: UUID | Unset = UNSET
+    backup_uid: None | Unset | UUID = UNSET
+    job_uid: None | Unset | UUID = UNSET
     restore_point_date: datetime.datetime | Unset = UNSET
-    size: int | Unset = UNSET
+    size: int | None | Unset = UNSET
     is_archive: bool | Unset = True
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -51,19 +51,31 @@ class ProtectedOnPremisesFileShareRestorePoint:
         if not isinstance(self.backup_server_uid, Unset):
             backup_server_uid = str(self.backup_server_uid)
 
-        backup_uid: str | Unset = UNSET
-        if not isinstance(self.backup_uid, Unset):
+        backup_uid: None | str | Unset
+        if isinstance(self.backup_uid, Unset):
+            backup_uid = UNSET
+        elif isinstance(self.backup_uid, UUID):
             backup_uid = str(self.backup_uid)
+        else:
+            backup_uid = self.backup_uid
 
-        job_uid: str | Unset = UNSET
-        if not isinstance(self.job_uid, Unset):
+        job_uid: None | str | Unset
+        if isinstance(self.job_uid, Unset):
+            job_uid = UNSET
+        elif isinstance(self.job_uid, UUID):
             job_uid = str(self.job_uid)
+        else:
+            job_uid = self.job_uid
 
         restore_point_date: str | Unset = UNSET
         if not isinstance(self.restore_point_date, Unset):
             restore_point_date = self.restore_point_date.isoformat()
 
-        size = self.size
+        size: int | None | Unset
+        if isinstance(self.size, Unset):
+            size = UNSET
+        else:
+            size = self.size
 
         is_archive = self.is_archive
 
@@ -113,19 +125,39 @@ class ProtectedOnPremisesFileShareRestorePoint:
         else:
             backup_server_uid = UUID(_backup_server_uid)
 
-        _backup_uid = d.pop("backupUid", UNSET)
-        backup_uid: UUID | Unset
-        if isinstance(_backup_uid, Unset):
-            backup_uid = UNSET
-        else:
-            backup_uid = UUID(_backup_uid)
+        def _parse_backup_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                backup_uid_type_0 = UUID(data)
 
-        _job_uid = d.pop("jobUid", UNSET)
-        job_uid: UUID | Unset
-        if isinstance(_job_uid, Unset):
-            job_uid = UNSET
-        else:
-            job_uid = UUID(_job_uid)
+                return backup_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        backup_uid = _parse_backup_uid(d.pop("backupUid", UNSET))
+
+        def _parse_job_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                job_uid_type_0 = UUID(data)
+
+                return job_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        job_uid = _parse_job_uid(d.pop("jobUid", UNSET))
 
         _restore_point_date = d.pop("restorePointDate", UNSET)
         restore_point_date: datetime.datetime | Unset
@@ -134,7 +166,14 @@ class ProtectedOnPremisesFileShareRestorePoint:
         else:
             restore_point_date = isoparse(_restore_point_date)
 
-        size = d.pop("size", UNSET)
+        def _parse_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        size = _parse_size(d.pop("size", UNSET))
 
         is_archive = d.pop("isArchive", UNSET)
 

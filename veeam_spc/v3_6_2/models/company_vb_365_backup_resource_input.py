@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -17,41 +17,57 @@ class CompanyVb365BackupResourceInput:
     """
     Attributes:
         repository_uid (UUID): UID assigned to a backup repository.
-        proxy_uid (UUID | Unset): UID assigned to a backup proxy.
-        proxy_pool_uid (UUID | Unset): UID assigned to a backup proxy pool.
-        users_quota (int | Unset): Maximum number of protected user accounts.
+        proxy_uid (None | Unset | UUID): UID assigned to a backup proxy.
+        proxy_pool_uid (None | Unset | UUID): UID assigned to a backup proxy pool.
+        users_quota (int | None | Unset): Maximum number of protected user accounts.
         is_users_quota_unlimited (bool | Unset): Indicates whether a number of protected user accounts is unlimited.
             Default: True.
-        storage_quota (int | Unset): Maximum amount of Veeam Backup for Microsoft 365 repository storage space that a
-            company is allowed to use, in GB.
+        storage_quota (int | None | Unset): Maximum amount of Veeam Backup for Microsoft 365 repository storage space
+            that a company is allowed to use, in GB.
         is_storage_quota_unlimited (bool | Unset): Indicates whether a storage quota is unlimited. Default: True.
     """
 
     repository_uid: UUID
-    proxy_uid: UUID | Unset = UNSET
-    proxy_pool_uid: UUID | Unset = UNSET
-    users_quota: int | Unset = UNSET
+    proxy_uid: None | Unset | UUID = UNSET
+    proxy_pool_uid: None | Unset | UUID = UNSET
+    users_quota: int | None | Unset = UNSET
     is_users_quota_unlimited: bool | Unset = True
-    storage_quota: int | Unset = UNSET
+    storage_quota: int | None | Unset = UNSET
     is_storage_quota_unlimited: bool | Unset = True
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         repository_uid = str(self.repository_uid)
 
-        proxy_uid: str | Unset = UNSET
-        if not isinstance(self.proxy_uid, Unset):
+        proxy_uid: None | str | Unset
+        if isinstance(self.proxy_uid, Unset):
+            proxy_uid = UNSET
+        elif isinstance(self.proxy_uid, UUID):
             proxy_uid = str(self.proxy_uid)
+        else:
+            proxy_uid = self.proxy_uid
 
-        proxy_pool_uid: str | Unset = UNSET
-        if not isinstance(self.proxy_pool_uid, Unset):
+        proxy_pool_uid: None | str | Unset
+        if isinstance(self.proxy_pool_uid, Unset):
+            proxy_pool_uid = UNSET
+        elif isinstance(self.proxy_pool_uid, UUID):
             proxy_pool_uid = str(self.proxy_pool_uid)
+        else:
+            proxy_pool_uid = self.proxy_pool_uid
 
-        users_quota = self.users_quota
+        users_quota: int | None | Unset
+        if isinstance(self.users_quota, Unset):
+            users_quota = UNSET
+        else:
+            users_quota = self.users_quota
 
         is_users_quota_unlimited = self.is_users_quota_unlimited
 
-        storage_quota = self.storage_quota
+        storage_quota: int | None | Unset
+        if isinstance(self.storage_quota, Unset):
+            storage_quota = UNSET
+        else:
+            storage_quota = self.storage_quota
 
         is_storage_quota_unlimited = self.is_storage_quota_unlimited
 
@@ -82,25 +98,59 @@ class CompanyVb365BackupResourceInput:
         d = dict(src_dict)
         repository_uid = UUID(d.pop("repositoryUid"))
 
-        _proxy_uid = d.pop("proxyUid", UNSET)
-        proxy_uid: UUID | Unset
-        if isinstance(_proxy_uid, Unset):
-            proxy_uid = UNSET
-        else:
-            proxy_uid = UUID(_proxy_uid)
+        def _parse_proxy_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                proxy_uid_type_0 = UUID(data)
 
-        _proxy_pool_uid = d.pop("proxyPoolUid", UNSET)
-        proxy_pool_uid: UUID | Unset
-        if isinstance(_proxy_pool_uid, Unset):
-            proxy_pool_uid = UNSET
-        else:
-            proxy_pool_uid = UUID(_proxy_pool_uid)
+                return proxy_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        users_quota = d.pop("usersQuota", UNSET)
+        proxy_uid = _parse_proxy_uid(d.pop("proxyUid", UNSET))
+
+        def _parse_proxy_pool_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                proxy_pool_uid_type_0 = UUID(data)
+
+                return proxy_pool_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        proxy_pool_uid = _parse_proxy_pool_uid(d.pop("proxyPoolUid", UNSET))
+
+        def _parse_users_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        users_quota = _parse_users_quota(d.pop("usersQuota", UNSET))
 
         is_users_quota_unlimited = d.pop("isUsersQuotaUnlimited", UNSET)
 
-        storage_quota = d.pop("storageQuota", UNSET)
+        def _parse_storage_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        storage_quota = _parse_storage_quota(d.pop("storageQuota", UNSET))
 
         is_storage_quota_unlimited = d.pop("isStorageQuotaUnlimited", UNSET)
 

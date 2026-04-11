@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
         PublicCloudAwsNewApplianceInputGuestOsCredentials,
     )
     from ..models.public_cloud_aws_new_appliance_input_ip_address import PublicCloudAwsNewApplianceInputIpAddress
-    from ..models.public_cloud_aws_new_appliance_input_network import PublicCloudAwsNewApplianceInputNetwork
+    from ..models.public_cloud_aws_new_appliance_input_network_type_0 import PublicCloudAwsNewApplianceInputNetworkType0
     from ..models.public_cloud_aws_new_appliance_input_virtual_machine import (
         PublicCloudAwsNewApplianceInputVirtualMachine,
     )
@@ -31,8 +31,8 @@ class PublicCloudAwsNewApplianceInput:
         virtual_machine (PublicCloudAwsNewApplianceInputVirtualMachine):
         ip_address (PublicCloudAwsNewApplianceInputIpAddress):
         guest_os_credentials (PublicCloudAwsNewApplianceInputGuestOsCredentials):
-        network (PublicCloudAwsNewApplianceInputNetwork | Unset): Veeam Backup for Public Clouds appliance network
-            resources.
+        network (None | PublicCloudAwsNewApplianceInputNetworkType0 | Unset): Veeam Backup for Public Clouds appliance
+            network resources.
             >If you send the `null` value, all required resources will be created automatically.'
     """
 
@@ -40,10 +40,14 @@ class PublicCloudAwsNewApplianceInput:
     virtual_machine: PublicCloudAwsNewApplianceInputVirtualMachine
     ip_address: PublicCloudAwsNewApplianceInputIpAddress
     guest_os_credentials: PublicCloudAwsNewApplianceInputGuestOsCredentials
-    network: PublicCloudAwsNewApplianceInputNetwork | Unset = UNSET
+    network: None | PublicCloudAwsNewApplianceInputNetworkType0 | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.public_cloud_aws_new_appliance_input_network_type_0 import (
+            PublicCloudAwsNewApplianceInputNetworkType0,
+        )
+
         account = self.account.to_dict()
 
         virtual_machine = self.virtual_machine.to_dict()
@@ -52,9 +56,13 @@ class PublicCloudAwsNewApplianceInput:
 
         guest_os_credentials = self.guest_os_credentials.to_dict()
 
-        network: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.network, Unset):
+        network: dict[str, Any] | None | Unset
+        if isinstance(self.network, Unset):
+            network = UNSET
+        elif isinstance(self.network, PublicCloudAwsNewApplianceInputNetworkType0):
             network = self.network.to_dict()
+        else:
+            network = self.network
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -78,7 +86,9 @@ class PublicCloudAwsNewApplianceInput:
             PublicCloudAwsNewApplianceInputGuestOsCredentials,
         )
         from ..models.public_cloud_aws_new_appliance_input_ip_address import PublicCloudAwsNewApplianceInputIpAddress
-        from ..models.public_cloud_aws_new_appliance_input_network import PublicCloudAwsNewApplianceInputNetwork
+        from ..models.public_cloud_aws_new_appliance_input_network_type_0 import (
+            PublicCloudAwsNewApplianceInputNetworkType0,
+        )
         from ..models.public_cloud_aws_new_appliance_input_virtual_machine import (
             PublicCloudAwsNewApplianceInputVirtualMachine,
         )
@@ -92,12 +102,22 @@ class PublicCloudAwsNewApplianceInput:
 
         guest_os_credentials = PublicCloudAwsNewApplianceInputGuestOsCredentials.from_dict(d.pop("guestOsCredentials"))
 
-        _network = d.pop("network", UNSET)
-        network: PublicCloudAwsNewApplianceInputNetwork | Unset
-        if isinstance(_network, Unset):
-            network = UNSET
-        else:
-            network = PublicCloudAwsNewApplianceInputNetwork.from_dict(_network)
+        def _parse_network(data: object) -> None | PublicCloudAwsNewApplianceInputNetworkType0 | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                network_type_0 = PublicCloudAwsNewApplianceInputNetworkType0.from_dict(data)
+
+                return network_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | PublicCloudAwsNewApplianceInputNetworkType0 | Unset, data)
+
+        network = _parse_network(d.pop("network", UNSET))
 
         public_cloud_aws_new_appliance_input = cls(
             account=account,

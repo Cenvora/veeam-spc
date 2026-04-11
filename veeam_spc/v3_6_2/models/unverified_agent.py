@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -22,26 +22,26 @@ class UnverifiedAgent:
     """
     Attributes:
         instance_uid (UUID | Unset): UID assigned to a management agent.
-        organization_uid (UUID | Unset): UID assigned to an organization to which a management agent belongs.
-        host_name (str | Unset): Name of a computer on which a management agent is deployed.
+        organization_uid (None | Unset | UUID): UID assigned to an organization to which a management agent belongs.
+        host_name (None | str | Unset): Name of a computer on which a management agent is deployed.
         registration_time (datetime.datetime | Unset): Time when a management agent was registered.
-        tag (str | Unset): Additional information.
-        reject_reason (str | Unset): Reason for management agent being unverified.
+        tag (None | str | Unset): Additional information.
+        reject_reason (None | str | Unset): Reason for management agent being unverified.
         type_ (UnverifiedAgentType | Unset): Role of a management agent.
         status (UnverifiedAgentStatus | Unset): Status of a management agent.
-        status_message (str | Unset): Management agent status message.
+        status_message (None | str | Unset): Management agent status message.
         platform_type (UnverifiedAgentPlatformType | Unset): Platform type of an agent.
     """
 
     instance_uid: UUID | Unset = UNSET
-    organization_uid: UUID | Unset = UNSET
-    host_name: str | Unset = UNSET
+    organization_uid: None | Unset | UUID = UNSET
+    host_name: None | str | Unset = UNSET
     registration_time: datetime.datetime | Unset = UNSET
-    tag: str | Unset = UNSET
-    reject_reason: str | Unset = UNSET
+    tag: None | str | Unset = UNSET
+    reject_reason: None | str | Unset = UNSET
     type_: UnverifiedAgentType | Unset = UNSET
     status: UnverifiedAgentStatus | Unset = UNSET
-    status_message: str | Unset = UNSET
+    status_message: None | str | Unset = UNSET
     platform_type: UnverifiedAgentPlatformType | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -50,19 +50,35 @@ class UnverifiedAgent:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        organization_uid: str | Unset = UNSET
-        if not isinstance(self.organization_uid, Unset):
+        organization_uid: None | str | Unset
+        if isinstance(self.organization_uid, Unset):
+            organization_uid = UNSET
+        elif isinstance(self.organization_uid, UUID):
             organization_uid = str(self.organization_uid)
+        else:
+            organization_uid = self.organization_uid
 
-        host_name = self.host_name
+        host_name: None | str | Unset
+        if isinstance(self.host_name, Unset):
+            host_name = UNSET
+        else:
+            host_name = self.host_name
 
         registration_time: str | Unset = UNSET
         if not isinstance(self.registration_time, Unset):
             registration_time = self.registration_time.isoformat()
 
-        tag = self.tag
+        tag: None | str | Unset
+        if isinstance(self.tag, Unset):
+            tag = UNSET
+        else:
+            tag = self.tag
 
-        reject_reason = self.reject_reason
+        reject_reason: None | str | Unset
+        if isinstance(self.reject_reason, Unset):
+            reject_reason = UNSET
+        else:
+            reject_reason = self.reject_reason
 
         type_: str | Unset = UNSET
         if not isinstance(self.type_, Unset):
@@ -72,7 +88,11 @@ class UnverifiedAgent:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        status_message = self.status_message
+        status_message: None | str | Unset
+        if isinstance(self.status_message, Unset):
+            status_message = UNSET
+        else:
+            status_message = self.status_message
 
         platform_type: str | Unset = UNSET
         if not isinstance(self.platform_type, Unset):
@@ -114,14 +134,31 @@ class UnverifiedAgent:
         else:
             instance_uid = UUID(_instance_uid)
 
-        _organization_uid = d.pop("organizationUid", UNSET)
-        organization_uid: UUID | Unset
-        if isinstance(_organization_uid, Unset):
-            organization_uid = UNSET
-        else:
-            organization_uid = UUID(_organization_uid)
+        def _parse_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                organization_uid_type_0 = UUID(data)
 
-        host_name = d.pop("hostName", UNSET)
+                return organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        organization_uid = _parse_organization_uid(d.pop("organizationUid", UNSET))
+
+        def _parse_host_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        host_name = _parse_host_name(d.pop("hostName", UNSET))
 
         _registration_time = d.pop("registrationTime", UNSET)
         registration_time: datetime.datetime | Unset
@@ -130,9 +167,23 @@ class UnverifiedAgent:
         else:
             registration_time = isoparse(_registration_time)
 
-        tag = d.pop("tag", UNSET)
+        def _parse_tag(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        reject_reason = d.pop("rejectReason", UNSET)
+        tag = _parse_tag(d.pop("tag", UNSET))
+
+        def _parse_reject_reason(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        reject_reason = _parse_reject_reason(d.pop("rejectReason", UNSET))
 
         _type_ = d.pop("type", UNSET)
         type_: UnverifiedAgentType | Unset
@@ -148,7 +199,14 @@ class UnverifiedAgent:
         else:
             status = UnverifiedAgentStatus(_status)
 
-        status_message = d.pop("statusMessage", UNSET)
+        def _parse_status_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        status_message = _parse_status_message(d.pop("statusMessage", UNSET))
 
         _platform_type = d.pop("platformType", UNSET)
         platform_type: UnverifiedAgentPlatformType | Unset

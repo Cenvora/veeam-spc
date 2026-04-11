@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,18 +20,22 @@ T = TypeVar("T", bound="DiscoverActiveDirectoryTreeInput")
 class DiscoverActiveDirectoryTreeInput:
     """
     Attributes:
-        discovery_rule_uid (UUID | Unset): UID assigned to a discovery rule.
+        discovery_rule_uid (None | Unset | UUID): UID assigned to a discovery rule.
         service_account (DiscoveryRuleCredentials | Unset):
     """
 
-    discovery_rule_uid: UUID | Unset = UNSET
+    discovery_rule_uid: None | Unset | UUID = UNSET
     service_account: DiscoveryRuleCredentials | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        discovery_rule_uid: str | Unset = UNSET
-        if not isinstance(self.discovery_rule_uid, Unset):
+        discovery_rule_uid: None | str | Unset
+        if isinstance(self.discovery_rule_uid, Unset):
+            discovery_rule_uid = UNSET
+        elif isinstance(self.discovery_rule_uid, UUID):
             discovery_rule_uid = str(self.discovery_rule_uid)
+        else:
+            discovery_rule_uid = self.discovery_rule_uid
 
         service_account: dict[str, Any] | Unset = UNSET
         if not isinstance(self.service_account, Unset):
@@ -52,12 +56,23 @@ class DiscoverActiveDirectoryTreeInput:
         from ..models.discovery_rule_credentials import DiscoveryRuleCredentials
 
         d = dict(src_dict)
-        _discovery_rule_uid = d.pop("discoveryRuleUid", UNSET)
-        discovery_rule_uid: UUID | Unset
-        if isinstance(_discovery_rule_uid, Unset):
-            discovery_rule_uid = UNSET
-        else:
-            discovery_rule_uid = UUID(_discovery_rule_uid)
+
+        def _parse_discovery_rule_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                discovery_rule_uid_type_0 = UUID(data)
+
+                return discovery_rule_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        discovery_rule_uid = _parse_discovery_rule_uid(d.pop("discoveryRuleUid", UNSET))
 
         _service_account = d.pop("serviceAccount", UNSET)
         service_account: DiscoveryRuleCredentials | Unset

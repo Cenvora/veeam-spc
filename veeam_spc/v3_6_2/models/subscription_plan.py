@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -35,9 +35,9 @@ class SubscriptionPlan:
         tax_percent (float): Tax amount, in percent.
         discount_percent (float): Discount amount, in percent.
         instance_uid (UUID | Unset): UID assigned to a subscription plan.
-        organization_uid (UUID | Unset): Name of an organization whose user created a subscription plan.
+        organization_uid (None | Unset | UUID): Name of an organization whose user created a subscription plan.
         type_ (SubscriptionPlanType | Unset): Type of subscription plan.
-        description (str | Unset): Description of a subscription plan.
+        description (None | str | Unset): Description of a subscription plan.
         managed_backup (SubscriptionPlanManagedBackup | Unset):
         public_cloud (SubscriptionPlanPublicCloud | Unset):
         vb365 (SubscriptionPlanVb365 | Unset):
@@ -55,9 +55,9 @@ class SubscriptionPlan:
     tax_percent: float
     discount_percent: float
     instance_uid: UUID | Unset = UNSET
-    organization_uid: UUID | Unset = UNSET
+    organization_uid: None | Unset | UUID = UNSET
     type_: SubscriptionPlanType | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     managed_backup: SubscriptionPlanManagedBackup | Unset = UNSET
     public_cloud: SubscriptionPlanPublicCloud | Unset = UNSET
     vb365: SubscriptionPlanVb365 | Unset = UNSET
@@ -83,15 +83,23 @@ class SubscriptionPlan:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        organization_uid: str | Unset = UNSET
-        if not isinstance(self.organization_uid, Unset):
+        organization_uid: None | str | Unset
+        if isinstance(self.organization_uid, Unset):
+            organization_uid = UNSET
+        elif isinstance(self.organization_uid, UUID):
             organization_uid = str(self.organization_uid)
+        else:
+            organization_uid = self.organization_uid
 
         type_: str | Unset = UNSET
         if not isinstance(self.type_, Unset):
             type_ = self.type_.value
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         managed_backup: dict[str, Any] | Unset = UNSET
         if not isinstance(self.managed_backup, Unset):
@@ -195,12 +203,22 @@ class SubscriptionPlan:
         else:
             instance_uid = UUID(_instance_uid)
 
-        _organization_uid = d.pop("organizationUid", UNSET)
-        organization_uid: UUID | Unset
-        if isinstance(_organization_uid, Unset):
-            organization_uid = UNSET
-        else:
-            organization_uid = UUID(_organization_uid)
+        def _parse_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                organization_uid_type_0 = UUID(data)
+
+                return organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        organization_uid = _parse_organization_uid(d.pop("organizationUid", UNSET))
 
         _type_ = d.pop("type", UNSET)
         type_: SubscriptionPlanType | Unset
@@ -209,7 +227,14 @@ class SubscriptionPlan:
         else:
             type_ = SubscriptionPlanType(_type_)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         _managed_backup = d.pop("managedBackup", UNSET)
         managed_backup: SubscriptionPlanManagedBackup | Unset

@@ -18,9 +18,9 @@ def _get_kwargs(
     backup_server_uid: UUID,
     vcd_server_uid: UUID,
     *,
-    company_uid: UUID | Unset = UNSET,
-    name_filter: str | Unset = UNSET,
-    vcd_organization_uid_filter: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
+    name_filter: None | str | Unset = UNSET,
+    vcd_organization_uid_filter: None | Unset | UUID = UNSET,
     name_sorting_direction: GetVcdOrganizationVAppsByVcdNameSortingDirection
     | Unset = GetVcdOrganizationVAppsByVcdNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -37,16 +37,29 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_company_uid: str | Unset = UNSET
-    if not isinstance(company_uid, Unset):
+    json_company_uid: None | str | Unset
+    if isinstance(company_uid, Unset):
+        json_company_uid = UNSET
+    elif isinstance(company_uid, UUID):
         json_company_uid = str(company_uid)
+    else:
+        json_company_uid = company_uid
     params["companyUid"] = json_company_uid
 
-    params["nameFilter"] = name_filter
+    json_name_filter: None | str | Unset
+    if isinstance(name_filter, Unset):
+        json_name_filter = UNSET
+    else:
+        json_name_filter = name_filter
+    params["nameFilter"] = json_name_filter
 
-    json_vcd_organization_uid_filter: str | Unset = UNSET
-    if not isinstance(vcd_organization_uid_filter, Unset):
+    json_vcd_organization_uid_filter: None | str | Unset
+    if isinstance(vcd_organization_uid_filter, Unset):
+        json_vcd_organization_uid_filter = UNSET
+    elif isinstance(vcd_organization_uid_filter, UUID):
         json_vcd_organization_uid_filter = str(vcd_organization_uid_filter)
+    else:
+        json_vcd_organization_uid_filter = vcd_organization_uid_filter
     params["vcdOrganizationUidFilter"] = json_vcd_organization_uid_filter
 
     json_name_sorting_direction: str | Unset = UNSET
@@ -107,9 +120,9 @@ def sync_detailed(
     vcd_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID | Unset = UNSET,
-    name_filter: str | Unset = UNSET,
-    vcd_organization_uid_filter: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
+    name_filter: None | str | Unset = UNSET,
+    vcd_organization_uid_filter: None | Unset | UUID = UNSET,
     name_sorting_direction: GetVcdOrganizationVAppsByVcdNameSortingDirection
     | Unset = GetVcdOrganizationVAppsByVcdNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -125,9 +138,9 @@ def sync_detailed(
     Args:
         backup_server_uid (UUID):
         vcd_server_uid (UUID):
-        company_uid (UUID | Unset):
-        name_filter (str | Unset):
-        vcd_organization_uid_filter (UUID | Unset):
+        company_uid (None | Unset | UUID):
+        name_filter (None | str | Unset):
+        vcd_organization_uid_filter (None | Unset | UUID):
         name_sorting_direction (GetVcdOrganizationVAppsByVcdNameSortingDirection | Unset):
             Default: GetVcdOrganizationVAppsByVcdNameSortingDirection.ASCENDING.
         limit (int | Unset):  Default: 100.
@@ -168,9 +181,9 @@ def sync(
     vcd_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID | Unset = UNSET,
-    name_filter: str | Unset = UNSET,
-    vcd_organization_uid_filter: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
+    name_filter: None | str | Unset = UNSET,
+    vcd_organization_uid_filter: None | Unset | UUID = UNSET,
     name_sorting_direction: GetVcdOrganizationVAppsByVcdNameSortingDirection
     | Unset = GetVcdOrganizationVAppsByVcdNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -186,9 +199,9 @@ def sync(
     Args:
         backup_server_uid (UUID):
         vcd_server_uid (UUID):
-        company_uid (UUID | Unset):
-        name_filter (str | Unset):
-        vcd_organization_uid_filter (UUID | Unset):
+        company_uid (None | Unset | UUID):
+        name_filter (None | str | Unset):
+        vcd_organization_uid_filter (None | Unset | UUID):
         name_sorting_direction (GetVcdOrganizationVAppsByVcdNameSortingDirection | Unset):
             Default: GetVcdOrganizationVAppsByVcdNameSortingDirection.ASCENDING.
         limit (int | Unset):  Default: 100.
@@ -224,9 +237,9 @@ async def asyncio_detailed(
     vcd_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID | Unset = UNSET,
-    name_filter: str | Unset = UNSET,
-    vcd_organization_uid_filter: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
+    name_filter: None | str | Unset = UNSET,
+    vcd_organization_uid_filter: None | Unset | UUID = UNSET,
     name_sorting_direction: GetVcdOrganizationVAppsByVcdNameSortingDirection
     | Unset = GetVcdOrganizationVAppsByVcdNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -242,9 +255,9 @@ async def asyncio_detailed(
     Args:
         backup_server_uid (UUID):
         vcd_server_uid (UUID):
-        company_uid (UUID | Unset):
-        name_filter (str | Unset):
-        vcd_organization_uid_filter (UUID | Unset):
+        company_uid (None | Unset | UUID):
+        name_filter (None | str | Unset):
+        vcd_organization_uid_filter (None | Unset | UUID):
         name_sorting_direction (GetVcdOrganizationVAppsByVcdNameSortingDirection | Unset):
             Default: GetVcdOrganizationVAppsByVcdNameSortingDirection.ASCENDING.
         limit (int | Unset):  Default: 100.
@@ -283,9 +296,9 @@ async def asyncio(
     vcd_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID | Unset = UNSET,
-    name_filter: str | Unset = UNSET,
-    vcd_organization_uid_filter: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
+    name_filter: None | str | Unset = UNSET,
+    vcd_organization_uid_filter: None | Unset | UUID = UNSET,
     name_sorting_direction: GetVcdOrganizationVAppsByVcdNameSortingDirection
     | Unset = GetVcdOrganizationVAppsByVcdNameSortingDirection.ASCENDING,
     limit: int | Unset = 100,
@@ -301,9 +314,9 @@ async def asyncio(
     Args:
         backup_server_uid (UUID):
         vcd_server_uid (UUID):
-        company_uid (UUID | Unset):
-        name_filter (str | Unset):
-        vcd_organization_uid_filter (UUID | Unset):
+        company_uid (None | Unset | UUID):
+        name_filter (None | str | Unset):
+        vcd_organization_uid_filter (None | Unset | UUID):
         name_sorting_direction (GetVcdOrganizationVAppsByVcdNameSortingDirection | Unset):
             Default: GetVcdOrganizationVAppsByVcdNameSortingDirection.ASCENDING.
         limit (int | Unset):  Default: 100.

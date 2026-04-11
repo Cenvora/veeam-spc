@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -66,8 +66,8 @@ class SubscriptionPlanManagedBackup:
         remote_backup_used_space_units (SubscriptionPlanManagedBackupRemoteBackupUsedSpaceUnits | Unset): Measurement
             units of backup repository space consumed by all remote non-cloud backups. Default:
             SubscriptionPlanManagedBackupRemoteBackupUsedSpaceUnits.GB.
-        remote_free_backup_used_space (int | Unset): Amount of backup repository space that can be consumed by all
-            remote non-cloud backups for free.
+        remote_free_backup_used_space (int | None | Unset): Amount of backup repository space that can be consumed by
+            all remote non-cloud backups for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         remote_free_backup_used_space_units (SubscriptionPlanManagedBackupRemoteFreeBackupUsedSpaceUnits | Unset):
             Measurement units of backup repository space that can be consumed by all remote non-cloud backups for free.
@@ -108,8 +108,8 @@ class SubscriptionPlanManagedBackup:
         hosted_backup_used_space_units (SubscriptionPlanManagedBackupHostedBackupUsedSpaceUnits | Unset): Measurement
             units of backup repository space consumed by all hosted non-cloud backups. Default:
             SubscriptionPlanManagedBackupHostedBackupUsedSpaceUnits.GB.
-        hosted_free_backup_used_space (int | Unset): Amount of backup repository space that can be consumed by all non-
-            cloud backups for free.
+        hosted_free_backup_used_space (int | None | Unset): Amount of backup repository space that can be consumed by
+            all non-cloud backups for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         hosted_free_backup_used_space_units (SubscriptionPlanManagedBackupHostedFreeBackupUsedSpaceUnits | Unset):
             Measurement units of backup repository space that can be consumed by all hosted non-cloud backups for free.
@@ -147,7 +147,7 @@ class SubscriptionPlanManagedBackup:
     remote_backup_used_space_units: SubscriptionPlanManagedBackupRemoteBackupUsedSpaceUnits | Unset = (
         SubscriptionPlanManagedBackupRemoteBackupUsedSpaceUnits.GB
     )
-    remote_free_backup_used_space: int | Unset = UNSET
+    remote_free_backup_used_space: int | None | Unset = UNSET
     remote_free_backup_used_space_units: SubscriptionPlanManagedBackupRemoteFreeBackupUsedSpaceUnits | Unset = (
         SubscriptionPlanManagedBackupRemoteFreeBackupUsedSpaceUnits.GB
     )
@@ -176,7 +176,7 @@ class SubscriptionPlanManagedBackup:
     hosted_backup_used_space_units: SubscriptionPlanManagedBackupHostedBackupUsedSpaceUnits | Unset = (
         SubscriptionPlanManagedBackupHostedBackupUsedSpaceUnits.GB
     )
-    hosted_free_backup_used_space: int | Unset = UNSET
+    hosted_free_backup_used_space: int | None | Unset = UNSET
     hosted_free_backup_used_space_units: SubscriptionPlanManagedBackupHostedFreeBackupUsedSpaceUnits | Unset = (
         SubscriptionPlanManagedBackupHostedFreeBackupUsedSpaceUnits.GB
     )
@@ -226,7 +226,11 @@ class SubscriptionPlanManagedBackup:
         if not isinstance(self.remote_backup_used_space_units, Unset):
             remote_backup_used_space_units = self.remote_backup_used_space_units.value
 
-        remote_free_backup_used_space = self.remote_free_backup_used_space
+        remote_free_backup_used_space: int | None | Unset
+        if isinstance(self.remote_free_backup_used_space, Unset):
+            remote_free_backup_used_space = UNSET
+        else:
+            remote_free_backup_used_space = self.remote_free_backup_used_space
 
         remote_free_backup_used_space_units: str | Unset = UNSET
         if not isinstance(self.remote_free_backup_used_space_units, Unset):
@@ -276,7 +280,11 @@ class SubscriptionPlanManagedBackup:
         if not isinstance(self.hosted_backup_used_space_units, Unset):
             hosted_backup_used_space_units = self.hosted_backup_used_space_units.value
 
-        hosted_free_backup_used_space = self.hosted_free_backup_used_space
+        hosted_free_backup_used_space: int | None | Unset
+        if isinstance(self.hosted_free_backup_used_space, Unset):
+            hosted_free_backup_used_space = UNSET
+        else:
+            hosted_free_backup_used_space = self.hosted_free_backup_used_space
 
         hosted_free_backup_used_space_units: str | Unset = UNSET
         if not isinstance(self.hosted_free_backup_used_space_units, Unset):
@@ -432,7 +440,14 @@ class SubscriptionPlanManagedBackup:
                 _remote_backup_used_space_units
             )
 
-        remote_free_backup_used_space = d.pop("remoteFreeBackupUsedSpace", UNSET)
+        def _parse_remote_free_backup_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        remote_free_backup_used_space = _parse_remote_free_backup_used_space(d.pop("remoteFreeBackupUsedSpace", UNSET))
 
         _remote_free_backup_used_space_units = d.pop("remoteFreeBackupUsedSpaceUnits", UNSET)
         remote_free_backup_used_space_units: SubscriptionPlanManagedBackupRemoteFreeBackupUsedSpaceUnits | Unset
@@ -506,7 +521,14 @@ class SubscriptionPlanManagedBackup:
                 _hosted_backup_used_space_units
             )
 
-        hosted_free_backup_used_space = d.pop("hostedFreeBackupUsedSpace", UNSET)
+        def _parse_hosted_free_backup_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        hosted_free_backup_used_space = _parse_hosted_free_backup_used_space(d.pop("hostedFreeBackupUsedSpace", UNSET))
 
         _hosted_free_backup_used_space_units = d.pop("hostedFreeBackupUsedSpaceUnits", UNSET)
         hosted_free_backup_used_space_units: SubscriptionPlanManagedBackupHostedFreeBackupUsedSpaceUnits | Unset

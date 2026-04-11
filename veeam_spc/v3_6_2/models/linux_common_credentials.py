@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,21 +16,29 @@ class LinuxCommonCredentials:
     """
     Attributes:
         username (str): User name.
-        password (str | Unset): Password.
-        domain (str | Unset): Domain.
+        password (None | str | Unset): Password.
+        domain (None | str | Unset): Domain.
     """
 
     username: str
-    password: str | Unset = UNSET
-    domain: str | Unset = UNSET
+    password: None | str | Unset = UNSET
+    domain: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         username = self.username
 
-        password = self.password
+        password: None | str | Unset
+        if isinstance(self.password, Unset):
+            password = UNSET
+        else:
+            password = self.password
 
-        domain = self.domain
+        domain: None | str | Unset
+        if isinstance(self.domain, Unset):
+            domain = UNSET
+        else:
+            domain = self.domain
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -51,9 +59,23 @@ class LinuxCommonCredentials:
         d = dict(src_dict)
         username = d.pop("username")
 
-        password = d.pop("password", UNSET)
+        def _parse_password(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        domain = d.pop("domain", UNSET)
+        password = _parse_password(d.pop("password", UNSET))
+
+        def _parse_domain(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        domain = _parse_domain(d.pop("domain", UNSET))
 
         linux_common_credentials = cls(
             username=username,

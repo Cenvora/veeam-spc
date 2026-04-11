@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,7 +21,7 @@ class PublicCloudExistingAzureAccountInput:
         application_id (str): ID assigned to a Microsoft Azure application.
         tenant_id (str): ID assigned to a tenant available to a Microsoft Azure account.
         secret (str): Client secret.
-        description (str | Unset): Description of a Microsoft Azure account.
+        description (None | str | Unset): Description of a Microsoft Azure account.
     """
 
     account_name: str
@@ -29,7 +29,7 @@ class PublicCloudExistingAzureAccountInput:
     application_id: str
     tenant_id: str
     secret: str
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -43,7 +43,11 @@ class PublicCloudExistingAzureAccountInput:
 
         secret = self.secret
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -74,7 +78,14 @@ class PublicCloudExistingAzureAccountInput:
 
         secret = d.pop("secret")
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         public_cloud_existing_azure_account_input = cls(
             account_name=account_name,

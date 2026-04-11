@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -30,12 +30,12 @@ class Vb365CopyJob:
         name (str | Unset): Name of a Veeam Backup for Microsoft 365 backup copy job.
         repository_name (str | Unset): Name of a backup repository.
         vb_365_organization_uid (UUID | Unset): UID assigned to a Microsoft organization.
-        vspc_organization_uid (UUID | Unset): UID assigned to a Veeam Service Provider Console organization.
-        vspc_organization_name (str | Unset): Name of a Veeam Service Provider Console organization.
+        vspc_organization_uid (None | Unset | UUID): UID assigned to a Veeam Service Provider Console organization.
+        vspc_organization_name (None | str | Unset): Name of a Veeam Service Provider Console organization.
         vb_365_server_uid (UUID | Unset): UID assigned to a Veeam Backup for Microsoft 365 server.
         vb_365_server_name (str | Unset): Name of a Veeam Backup for Microsoft 365 server.
-        last_run (datetime.datetime | Unset): Date and time of the latest job run.
-        next_run (datetime.datetime | Unset): Date and time of the next scheduled job run.
+        last_run (datetime.datetime | None | Unset): Date and time of the latest job run.
+        next_run (datetime.datetime | None | Unset): Date and time of the next scheduled job run.
         is_enabled (bool | Unset): Indicates whether a Veeam Backup for Microsoft 365 backup copy job is enabled.
             Default: True.
         last_status (Vb365CopyJobLastStatus | Unset): Status of the latest job run.
@@ -50,12 +50,12 @@ class Vb365CopyJob:
     name: str | Unset = UNSET
     repository_name: str | Unset = UNSET
     vb_365_organization_uid: UUID | Unset = UNSET
-    vspc_organization_uid: UUID | Unset = UNSET
-    vspc_organization_name: str | Unset = UNSET
+    vspc_organization_uid: None | Unset | UUID = UNSET
+    vspc_organization_name: None | str | Unset = UNSET
     vb_365_server_uid: UUID | Unset = UNSET
     vb_365_server_name: str | Unset = UNSET
-    last_run: datetime.datetime | Unset = UNSET
-    next_run: datetime.datetime | Unset = UNSET
+    last_run: datetime.datetime | None | Unset = UNSET
+    next_run: datetime.datetime | None | Unset = UNSET
     is_enabled: bool | Unset = True
     last_status: Vb365CopyJobLastStatus | Unset = UNSET
     last_status_details: str | Unset = UNSET
@@ -80,11 +80,19 @@ class Vb365CopyJob:
         if not isinstance(self.vb_365_organization_uid, Unset):
             vb_365_organization_uid = str(self.vb_365_organization_uid)
 
-        vspc_organization_uid: str | Unset = UNSET
-        if not isinstance(self.vspc_organization_uid, Unset):
+        vspc_organization_uid: None | str | Unset
+        if isinstance(self.vspc_organization_uid, Unset):
+            vspc_organization_uid = UNSET
+        elif isinstance(self.vspc_organization_uid, UUID):
             vspc_organization_uid = str(self.vspc_organization_uid)
+        else:
+            vspc_organization_uid = self.vspc_organization_uid
 
-        vspc_organization_name = self.vspc_organization_name
+        vspc_organization_name: None | str | Unset
+        if isinstance(self.vspc_organization_name, Unset):
+            vspc_organization_name = UNSET
+        else:
+            vspc_organization_name = self.vspc_organization_name
 
         vb_365_server_uid: str | Unset = UNSET
         if not isinstance(self.vb_365_server_uid, Unset):
@@ -92,13 +100,21 @@ class Vb365CopyJob:
 
         vb_365_server_name = self.vb_365_server_name
 
-        last_run: str | Unset = UNSET
-        if not isinstance(self.last_run, Unset):
+        last_run: None | str | Unset
+        if isinstance(self.last_run, Unset):
+            last_run = UNSET
+        elif isinstance(self.last_run, datetime.datetime):
             last_run = self.last_run.isoformat()
+        else:
+            last_run = self.last_run
 
-        next_run: str | Unset = UNSET
-        if not isinstance(self.next_run, Unset):
+        next_run: None | str | Unset
+        if isinstance(self.next_run, Unset):
+            next_run = UNSET
+        elif isinstance(self.next_run, datetime.datetime):
             next_run = self.next_run.isoformat()
+        else:
+            next_run = self.next_run
 
         is_enabled = self.is_enabled
 
@@ -188,14 +204,31 @@ class Vb365CopyJob:
         else:
             vb_365_organization_uid = UUID(_vb_365_organization_uid)
 
-        _vspc_organization_uid = d.pop("vspcOrganizationUid", UNSET)
-        vspc_organization_uid: UUID | Unset
-        if isinstance(_vspc_organization_uid, Unset):
-            vspc_organization_uid = UNSET
-        else:
-            vspc_organization_uid = UUID(_vspc_organization_uid)
+        def _parse_vspc_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                vspc_organization_uid_type_0 = UUID(data)
 
-        vspc_organization_name = d.pop("vspcOrganizationName", UNSET)
+                return vspc_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        vspc_organization_uid = _parse_vspc_organization_uid(d.pop("vspcOrganizationUid", UNSET))
+
+        def _parse_vspc_organization_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        vspc_organization_name = _parse_vspc_organization_name(d.pop("vspcOrganizationName", UNSET))
 
         _vb_365_server_uid = d.pop("vb365ServerUid", UNSET)
         vb_365_server_uid: UUID | Unset
@@ -206,19 +239,39 @@ class Vb365CopyJob:
 
         vb_365_server_name = d.pop("vb365ServerName", UNSET)
 
-        _last_run = d.pop("lastRun", UNSET)
-        last_run: datetime.datetime | Unset
-        if isinstance(_last_run, Unset):
-            last_run = UNSET
-        else:
-            last_run = isoparse(_last_run)
+        def _parse_last_run(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_run_type_0 = isoparse(data)
 
-        _next_run = d.pop("nextRun", UNSET)
-        next_run: datetime.datetime | Unset
-        if isinstance(_next_run, Unset):
-            next_run = UNSET
-        else:
-            next_run = isoparse(_next_run)
+                return last_run_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        last_run = _parse_last_run(d.pop("lastRun", UNSET))
+
+        def _parse_next_run(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                next_run_type_0 = isoparse(data)
+
+                return next_run_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        next_run = _parse_next_run(d.pop("nextRun", UNSET))
 
         is_enabled = d.pop("isEnabled", UNSET)
 

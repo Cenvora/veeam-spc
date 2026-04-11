@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,13 +20,13 @@ class IdentityProviderAttributeMapping:
         attribute (IdentityProviderAttributeMappingAttribute): User parameter to which a claim type is mapped.
         allow_aliases (bool | Unset): Indicates whether mapping claim name can be identified automatically. Default:
             True.
-        default_value (str | Unset): Default attribute value.
+        default_value (None | str | Unset): Default attribute value.
     """
 
     claim_type: str
     attribute: IdentityProviderAttributeMappingAttribute
     allow_aliases: bool | Unset = True
-    default_value: str | Unset = UNSET
+    default_value: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,7 +36,11 @@ class IdentityProviderAttributeMapping:
 
         allow_aliases = self.allow_aliases
 
-        default_value = self.default_value
+        default_value: None | str | Unset
+        if isinstance(self.default_value, Unset):
+            default_value = UNSET
+        else:
+            default_value = self.default_value
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -62,7 +66,14 @@ class IdentityProviderAttributeMapping:
 
         allow_aliases = d.pop("allowAliases", UNSET)
 
-        default_value = d.pop("defaultValue", UNSET)
+        def _parse_default_value(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        default_value = _parse_default_value(d.pop("defaultValue", UNSET))
 
         identity_provider_attribute_mapping = cls(
             claim_type=claim_type,

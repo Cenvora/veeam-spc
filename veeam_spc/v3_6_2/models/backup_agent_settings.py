@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -30,7 +30,7 @@ class BackupAgentSettings:
         backup_agent_uid (UUID | Unset): UID assigned to a Veeam backup agent.
         limit_bandwidth_consumption (bool | Unset): Indicates whether bandwidth consumption for backup jobs is limited.
             Default: False.
-        bandwidth_speed_limit (int | Unset): Value of maximum speed for transferring backed-up data.
+        bandwidth_speed_limit (int | None | Unset): Value of maximum speed for transferring backed-up data.
         bandwidth_speed_limit_unit (BackupAgentSettingsBandwidthSpeedLimitUnit | Unset): Measurement units of maximum
             speed for transferring backed-up data.
     """
@@ -44,7 +44,7 @@ class BackupAgentSettings:
     throttle_backup_activity: bool = True
     backup_agent_uid: UUID | Unset = UNSET
     limit_bandwidth_consumption: bool | Unset = False
-    bandwidth_speed_limit: int | Unset = UNSET
+    bandwidth_speed_limit: int | None | Unset = UNSET
     bandwidth_speed_limit_unit: BackupAgentSettingsBandwidthSpeedLimitUnit | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -69,7 +69,11 @@ class BackupAgentSettings:
 
         limit_bandwidth_consumption = self.limit_bandwidth_consumption
 
-        bandwidth_speed_limit = self.bandwidth_speed_limit
+        bandwidth_speed_limit: int | None | Unset
+        if isinstance(self.bandwidth_speed_limit, Unset):
+            bandwidth_speed_limit = UNSET
+        else:
+            bandwidth_speed_limit = self.bandwidth_speed_limit
 
         bandwidth_speed_limit_unit: str | Unset = UNSET
         if not isinstance(self.bandwidth_speed_limit_unit, Unset):
@@ -125,7 +129,14 @@ class BackupAgentSettings:
 
         limit_bandwidth_consumption = d.pop("limitBandwidthConsumption", UNSET)
 
-        bandwidth_speed_limit = d.pop("bandwidthSpeedLimit", UNSET)
+        def _parse_bandwidth_speed_limit(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        bandwidth_speed_limit = _parse_bandwidth_speed_limit(d.pop("bandwidthSpeedLimit", UNSET))
 
         _bandwidth_speed_limit_unit = d.pop("bandwidthSpeedLimitUnit", UNSET)
         bandwidth_speed_limit_unit: BackupAgentSettingsBandwidthSpeedLimitUnit | Unset

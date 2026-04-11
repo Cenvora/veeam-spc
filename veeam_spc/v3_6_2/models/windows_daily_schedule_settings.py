@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.windows_daily_schedule_settings_daily_mode import WindowsDailyScheduleSettingsDailyMode
-from ..models.windows_daily_schedule_settings_specific_days_item import WindowsDailyScheduleSettingsSpecificDaysItem
+from ..models.windows_daily_schedule_settings_specific_days_type_0_item import (
+    WindowsDailyScheduleSettingsSpecificDaysType0Item,
+)
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="WindowsDailyScheduleSettings")
@@ -20,14 +22,14 @@ class WindowsDailyScheduleSettings:
         time (str | Unset): Time when a job must start, in the `hh:mm` format. Default: '0:30'.
         daily_mode (WindowsDailyScheduleSettingsDailyMode | Unset): Type of daily schedule. Default:
             WindowsDailyScheduleSettingsDailyMode.EVERYDAY.
-        specific_days (list[WindowsDailyScheduleSettingsSpecificDaysItem] | Unset): Array of the week days on which a
-            job must start.
+        specific_days (list[WindowsDailyScheduleSettingsSpecificDaysType0Item] | None | Unset): Array of the week days
+            on which a job must start.
             > Required for the `SpecificDays` type of daily schedule.
     """
 
     time: str | Unset = "0:30"
     daily_mode: WindowsDailyScheduleSettingsDailyMode | Unset = WindowsDailyScheduleSettingsDailyMode.EVERYDAY
-    specific_days: list[WindowsDailyScheduleSettingsSpecificDaysItem] | Unset = UNSET
+    specific_days: list[WindowsDailyScheduleSettingsSpecificDaysType0Item] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -37,12 +39,17 @@ class WindowsDailyScheduleSettings:
         if not isinstance(self.daily_mode, Unset):
             daily_mode = self.daily_mode.value
 
-        specific_days: list[str] | Unset = UNSET
-        if not isinstance(self.specific_days, Unset):
+        specific_days: list[str] | None | Unset
+        if isinstance(self.specific_days, Unset):
+            specific_days = UNSET
+        elif isinstance(self.specific_days, list):
             specific_days = []
-            for specific_days_item_data in self.specific_days:
-                specific_days_item = specific_days_item_data.value
-                specific_days.append(specific_days_item)
+            for specific_days_type_0_item_data in self.specific_days:
+                specific_days_type_0_item = specific_days_type_0_item_data.value
+                specific_days.append(specific_days_type_0_item)
+
+        else:
+            specific_days = self.specific_days
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -68,14 +75,31 @@ class WindowsDailyScheduleSettings:
         else:
             daily_mode = WindowsDailyScheduleSettingsDailyMode(_daily_mode)
 
-        _specific_days = d.pop("specificDays", UNSET)
-        specific_days: list[WindowsDailyScheduleSettingsSpecificDaysItem] | Unset = UNSET
-        if _specific_days is not UNSET:
-            specific_days = []
-            for specific_days_item_data in _specific_days:
-                specific_days_item = WindowsDailyScheduleSettingsSpecificDaysItem(specific_days_item_data)
+        def _parse_specific_days(
+            data: object,
+        ) -> list[WindowsDailyScheduleSettingsSpecificDaysType0Item] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                specific_days_type_0 = []
+                _specific_days_type_0 = data
+                for specific_days_type_0_item_data in _specific_days_type_0:
+                    specific_days_type_0_item = WindowsDailyScheduleSettingsSpecificDaysType0Item(
+                        specific_days_type_0_item_data
+                    )
 
-                specific_days.append(specific_days_item)
+                    specific_days_type_0.append(specific_days_type_0_item)
+
+                return specific_days_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[WindowsDailyScheduleSettingsSpecificDaysType0Item] | None | Unset, data)
+
+        specific_days = _parse_specific_days(d.pop("specificDays", UNSET))
 
         windows_daily_schedule_settings = cls(
             time=time,

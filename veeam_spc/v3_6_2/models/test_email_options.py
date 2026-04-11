@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,12 +17,12 @@ class TestEmailOptions:
     Attributes:
         from_ (str): Email address from which test notification message is sent.
         to (str): Email address to which test notification message is sent.
-        sender_name (str | Unset): Name of a sender.
+        sender_name (None | str | Unset): Name of a sender.
     """
 
     from_: str
     to: str
-    sender_name: str | Unset = UNSET
+    sender_name: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -30,7 +30,11 @@ class TestEmailOptions:
 
         to = self.to
 
-        sender_name = self.sender_name
+        sender_name: None | str | Unset
+        if isinstance(self.sender_name, Unset):
+            sender_name = UNSET
+        else:
+            sender_name = self.sender_name
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,7 +56,14 @@ class TestEmailOptions:
 
         to = d.pop("to")
 
-        sender_name = d.pop("senderName", UNSET)
+        def _parse_sender_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        sender_name = _parse_sender_name(d.pop("senderName", UNSET))
 
         test_email_options = cls(
             from_=from_,

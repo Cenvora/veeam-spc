@@ -15,7 +15,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     backup_server_uid: UUID,
     *,
-    company_uid: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
     expand: list[BackupRepositoryExpand] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -31,9 +31,13 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_company_uid: str | Unset = UNSET
-    if not isinstance(company_uid, Unset):
+    json_company_uid: None | str | Unset
+    if isinstance(company_uid, Unset):
+        json_company_uid = UNSET
+    elif isinstance(company_uid, UUID):
         json_company_uid = str(company_uid)
+    else:
+        json_company_uid = company_uid
     params["companyUid"] = json_company_uid
 
     json_expand: list[str] | Unset = UNSET
@@ -95,7 +99,7 @@ def sync_detailed(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
     expand: list[BackupRepositoryExpand] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -109,7 +113,7 @@ def sync_detailed(
 
     Args:
         backup_server_uid (UUID):
-        company_uid (UUID | Unset):
+        company_uid (None | Unset | UUID):
         expand (list[BackupRepositoryExpand] | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
@@ -145,7 +149,7 @@ def sync(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
     expand: list[BackupRepositoryExpand] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -159,7 +163,7 @@ def sync(
 
     Args:
         backup_server_uid (UUID):
-        company_uid (UUID | Unset):
+        company_uid (None | Unset | UUID):
         expand (list[BackupRepositoryExpand] | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
@@ -190,7 +194,7 @@ async def asyncio_detailed(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
     expand: list[BackupRepositoryExpand] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -204,7 +208,7 @@ async def asyncio_detailed(
 
     Args:
         backup_server_uid (UUID):
-        company_uid (UUID | Unset):
+        company_uid (None | Unset | UUID):
         expand (list[BackupRepositoryExpand] | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
@@ -238,7 +242,7 @@ async def asyncio(
     backup_server_uid: UUID,
     *,
     client: AuthenticatedClient,
-    company_uid: UUID | Unset = UNSET,
+    company_uid: None | Unset | UUID = UNSET,
     expand: list[BackupRepositoryExpand] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
@@ -252,7 +256,7 @@ async def asyncio(
 
     Args:
         backup_server_uid (UUID):
-        company_uid (UUID | Unset):
+        company_uid (None | Unset | UUID):
         expand (list[BackupRepositoryExpand] | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.

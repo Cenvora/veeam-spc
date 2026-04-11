@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -9,7 +9,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.async_action_request_data_query_parameters import AsyncActionRequestDataQueryParameters
+    from ..models.async_action_request_data_query_parameters_type_0 import AsyncActionRequestDataQueryParametersType0
 
 
 T = TypeVar("T", bound="AsyncActionRequestData")
@@ -19,21 +19,33 @@ T = TypeVar("T", bound="AsyncActionRequestData")
 class AsyncActionRequestData:
     """
     Attributes:
-        request_body (str | Unset): Content of a request body of the operation that initiated an async action.
-        query_parameters (AsyncActionRequestDataQueryParameters | Unset): Key-value map containing query parameters of
-            the operation that initiated an async action.
+        request_body (None | str | Unset): Content of a request body of the operation that initiated an async action.
+        query_parameters (AsyncActionRequestDataQueryParametersType0 | None | Unset): Key-value map containing query
+            parameters of the operation that initiated an async action.
     """
 
-    request_body: str | Unset = UNSET
-    query_parameters: AsyncActionRequestDataQueryParameters | Unset = UNSET
+    request_body: None | str | Unset = UNSET
+    query_parameters: AsyncActionRequestDataQueryParametersType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        request_body = self.request_body
+        from ..models.async_action_request_data_query_parameters_type_0 import (
+            AsyncActionRequestDataQueryParametersType0,
+        )
 
-        query_parameters: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.query_parameters, Unset):
+        request_body: None | str | Unset
+        if isinstance(self.request_body, Unset):
+            request_body = UNSET
+        else:
+            request_body = self.request_body
+
+        query_parameters: dict[str, Any] | None | Unset
+        if isinstance(self.query_parameters, Unset):
+            query_parameters = UNSET
+        elif isinstance(self.query_parameters, AsyncActionRequestDataQueryParametersType0):
             query_parameters = self.query_parameters.to_dict()
+        else:
+            query_parameters = self.query_parameters
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -47,17 +59,37 @@ class AsyncActionRequestData:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.async_action_request_data_query_parameters import AsyncActionRequestDataQueryParameters
+        from ..models.async_action_request_data_query_parameters_type_0 import (
+            AsyncActionRequestDataQueryParametersType0,
+        )
 
         d = dict(src_dict)
-        request_body = d.pop("requestBody", UNSET)
 
-        _query_parameters = d.pop("queryParameters", UNSET)
-        query_parameters: AsyncActionRequestDataQueryParameters | Unset
-        if isinstance(_query_parameters, Unset):
-            query_parameters = UNSET
-        else:
-            query_parameters = AsyncActionRequestDataQueryParameters.from_dict(_query_parameters)
+        def _parse_request_body(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        request_body = _parse_request_body(d.pop("requestBody", UNSET))
+
+        def _parse_query_parameters(data: object) -> AsyncActionRequestDataQueryParametersType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                query_parameters_type_0 = AsyncActionRequestDataQueryParametersType0.from_dict(data)
+
+                return query_parameters_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(AsyncActionRequestDataQueryParametersType0 | None | Unset, data)
+
+        query_parameters = _parse_query_parameters(d.pop("queryParameters", UNSET))
 
         async_action_request_data = cls(
             request_body=request_body,

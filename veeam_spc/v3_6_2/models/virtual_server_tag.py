@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,12 +17,12 @@ class VirtualServerTag:
     Attributes:
         urn (str): Tag URN.
         name (str): Name of a tag.
-        size (str | Unset): Size used by a tag.
+        size (None | str | Unset): Size used by a tag.
     """
 
     urn: str
     name: str
-    size: str | Unset = UNSET
+    size: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -30,7 +30,11 @@ class VirtualServerTag:
 
         name = self.name
 
-        size = self.size
+        size: None | str | Unset
+        if isinstance(self.size, Unset):
+            size = UNSET
+        else:
+            size = self.size
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,7 +56,14 @@ class VirtualServerTag:
 
         name = d.pop("name")
 
-        size = d.pop("size", UNSET)
+        def _parse_size(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        size = _parse_size(d.pop("size", UNSET))
 
         virtual_server_tag = cls(
             urn=urn,

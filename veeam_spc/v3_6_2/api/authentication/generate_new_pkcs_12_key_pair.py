@@ -14,7 +14,7 @@ def _get_kwargs(
     *,
     key_size: int | Unset = UNSET,
     subject: str,
-    password: str | Unset = UNSET,
+    password: None | str | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -31,7 +31,12 @@ def _get_kwargs(
 
     params["subject"] = subject
 
-    params["password"] = password
+    json_password: None | str | Unset
+    if isinstance(password, Unset):
+        json_password = UNSET
+    else:
+        json_password = password
+    params["password"] = json_password
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -78,7 +83,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     key_size: int | Unset = UNSET,
     subject: str,
-    password: str | Unset = UNSET,
+    password: None | str | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | ErrorResponse | GenerateNewPkcs12KeyPairResponse200]:
@@ -87,7 +92,7 @@ def sync_detailed(
     Args:
         key_size (int | Unset):
         subject (str):
-        password (str | Unset):
+        password (None | str | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -119,7 +124,7 @@ def sync(
     client: AuthenticatedClient,
     key_size: int | Unset = UNSET,
     subject: str,
-    password: str | Unset = UNSET,
+    password: None | str | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | ErrorResponse | GenerateNewPkcs12KeyPairResponse200 | None:
@@ -128,7 +133,7 @@ def sync(
     Args:
         key_size (int | Unset):
         subject (str):
-        password (str | Unset):
+        password (None | str | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -155,7 +160,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     key_size: int | Unset = UNSET,
     subject: str,
-    password: str | Unset = UNSET,
+    password: None | str | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Response[Any | ErrorResponse | GenerateNewPkcs12KeyPairResponse200]:
@@ -164,7 +169,7 @@ async def asyncio_detailed(
     Args:
         key_size (int | Unset):
         subject (str):
-        password (str | Unset):
+        password (None | str | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 
@@ -194,7 +199,7 @@ async def asyncio(
     client: AuthenticatedClient,
     key_size: int | Unset = UNSET,
     subject: str,
-    password: str | Unset = UNSET,
+    password: None | str | Unset = UNSET,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
 ) -> Any | ErrorResponse | GenerateNewPkcs12KeyPairResponse200 | None:
@@ -203,7 +208,7 @@ async def asyncio(
     Args:
         key_size (int | Unset):
         subject (str):
-        password (str | Unset):
+        password (None | str | Unset):
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
 

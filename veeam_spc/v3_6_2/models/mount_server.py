@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,13 +24,13 @@ class MountServer:
         id (UUID | Unset):
         type_ (BackupServerMountServerType | Unset): Mount server type.
         settings (BackupServerMountServerOptions | Unset):
-        is_default (bool | Unset):
+        is_default (bool | None | Unset):
     """
 
     id: UUID | Unset = UNSET
     type_: BackupServerMountServerType | Unset = UNSET
     settings: BackupServerMountServerOptions | Unset = UNSET
-    is_default: bool | Unset = UNSET
+    is_default: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -46,7 +46,11 @@ class MountServer:
         if not isinstance(self.settings, Unset):
             settings = self.settings.to_dict()
 
-        is_default = self.is_default
+        is_default: bool | None | Unset
+        if isinstance(self.is_default, Unset):
+            is_default = UNSET
+        else:
+            is_default = self.is_default
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -88,7 +92,14 @@ class MountServer:
         else:
             settings = BackupServerMountServerOptions.from_dict(_settings)
 
-        is_default = d.pop("isDefault", UNSET)
+        def _parse_is_default(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        is_default = _parse_is_default(d.pop("isDefault", UNSET))
 
         mount_server = cls(
             id=id,

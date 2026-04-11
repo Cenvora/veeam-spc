@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -18,23 +18,31 @@ class VOneDeploymentLicenseSettings:
     """
     Attributes:
         license_source (VOneDeploymentLicenseSettingsLicenseSource): Source of a license file.
-        license_file_content (str | Unset): License file content in the Base64 format.
-        license_uid (UUID | Unset): UID assigned to a license.
+        license_file_content (None | str | Unset): License file content in the Base64 format.
+        license_uid (None | Unset | UUID): UID assigned to a license.
     """
 
     license_source: VOneDeploymentLicenseSettingsLicenseSource
-    license_file_content: str | Unset = UNSET
-    license_uid: UUID | Unset = UNSET
+    license_file_content: None | str | Unset = UNSET
+    license_uid: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         license_source = self.license_source.value
 
-        license_file_content = self.license_file_content
+        license_file_content: None | str | Unset
+        if isinstance(self.license_file_content, Unset):
+            license_file_content = UNSET
+        else:
+            license_file_content = self.license_file_content
 
-        license_uid: str | Unset = UNSET
-        if not isinstance(self.license_uid, Unset):
+        license_uid: None | str | Unset
+        if isinstance(self.license_uid, Unset):
+            license_uid = UNSET
+        elif isinstance(self.license_uid, UUID):
             license_uid = str(self.license_uid)
+        else:
+            license_uid = self.license_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -55,14 +63,31 @@ class VOneDeploymentLicenseSettings:
         d = dict(src_dict)
         license_source = VOneDeploymentLicenseSettingsLicenseSource(d.pop("licenseSource"))
 
-        license_file_content = d.pop("licenseFileContent", UNSET)
+        def _parse_license_file_content(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _license_uid = d.pop("licenseUid", UNSET)
-        license_uid: UUID | Unset
-        if isinstance(_license_uid, Unset):
-            license_uid = UNSET
-        else:
-            license_uid = UUID(_license_uid)
+        license_file_content = _parse_license_file_content(d.pop("licenseFileContent", UNSET))
+
+        def _parse_license_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                license_uid_type_0 = UUID(data)
+
+                return license_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        license_uid = _parse_license_uid(d.pop("licenseUid", UNSET))
 
         v_one_deployment_license_settings = cls(
             license_source=license_source,

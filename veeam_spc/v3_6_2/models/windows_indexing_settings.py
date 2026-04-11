@@ -17,26 +17,37 @@ class WindowsIndexingSettings:
     """
     Attributes:
         indexing_type (WindowsIndexingSettingsIndexingType): Indexing mode.
-        included_folders (list[str] | Unset): Array of paths to the indexed folders.
+        included_folders (list[str] | None | Unset): Array of paths to the indexed folders.
             > Required for the `SpecifiedFolders` indexing mode.
-        excluded_folders (list[str] | Unset): Array of paths to folders that are excluded from the indexing scope.
+        excluded_folders (list[str] | None | Unset): Array of paths to folders that are excluded from the indexing
+            scope.
             > Required for the `ExceptSpecifiedFolders` indexing mode.
     """
 
     indexing_type: WindowsIndexingSettingsIndexingType
-    included_folders: list[str] | Unset = UNSET
-    excluded_folders: list[str] | Unset = UNSET
+    included_folders: list[str] | None | Unset = UNSET
+    excluded_folders: list[str] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         indexing_type = self.indexing_type.value
 
-        included_folders: list[str] | Unset = UNSET
-        if not isinstance(self.included_folders, Unset):
+        included_folders: list[str] | None | Unset
+        if isinstance(self.included_folders, Unset):
+            included_folders = UNSET
+        elif isinstance(self.included_folders, list):
             included_folders = self.included_folders
 
-        excluded_folders: list[str] | Unset = UNSET
-        if not isinstance(self.excluded_folders, Unset):
+        else:
+            included_folders = self.included_folders
+
+        excluded_folders: list[str] | None | Unset
+        if isinstance(self.excluded_folders, Unset):
+            excluded_folders = UNSET
+        elif isinstance(self.excluded_folders, list):
+            excluded_folders = self.excluded_folders
+
+        else:
             excluded_folders = self.excluded_folders
 
         field_dict: dict[str, Any] = {}
@@ -58,9 +69,39 @@ class WindowsIndexingSettings:
         d = dict(src_dict)
         indexing_type = WindowsIndexingSettingsIndexingType(d.pop("indexingType"))
 
-        included_folders = cast(list[str], d.pop("includedFolders", UNSET))
+        def _parse_included_folders(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                included_folders_type_0 = cast(list[str], data)
 
-        excluded_folders = cast(list[str], d.pop("excludedFolders", UNSET))
+                return included_folders_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        included_folders = _parse_included_folders(d.pop("includedFolders", UNSET))
+
+        def _parse_excluded_folders(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                excluded_folders_type_0 = cast(list[str], data)
+
+                return excluded_folders_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        excluded_folders = _parse_excluded_folders(d.pop("excludedFolders", UNSET))
 
         windows_indexing_settings = cls(
             indexing_type=indexing_type,

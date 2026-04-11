@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,17 +16,21 @@ class BackupServerScriptCommand:
     """
     Attributes:
         is_enabled (bool): Indicates whether script execution is enabled.
-        command (str | Unset): Path to a script.
+        command (None | str | Unset): Path to a script.
     """
 
     is_enabled: bool
-    command: str | Unset = UNSET
+    command: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         is_enabled = self.is_enabled
 
-        command = self.command
+        command: None | str | Unset
+        if isinstance(self.command, Unset):
+            command = UNSET
+        else:
+            command = self.command
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -45,7 +49,14 @@ class BackupServerScriptCommand:
         d = dict(src_dict)
         is_enabled = d.pop("isEnabled")
 
-        command = d.pop("command", UNSET)
+        def _parse_command(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        command = _parse_command(d.pop("command", UNSET))
 
         backup_server_script_command = cls(
             is_enabled=is_enabled,

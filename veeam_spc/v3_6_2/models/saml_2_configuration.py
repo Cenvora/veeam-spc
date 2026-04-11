@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,7 +17,9 @@ if TYPE_CHECKING:
     from ..models.saml_2_compatibility_configuration import Saml2CompatibilityConfiguration
     from ..models.saml_2_identity_provider_configuration import Saml2IdentityProviderConfiguration
     from ..models.saml_2_metadata_configuration import Saml2MetadataConfiguration
-    from ..models.saml_2_requested_authn_context_configuration import Saml2RequestedAuthnContextConfiguration
+    from ..models.saml_2_requested_authn_context_configuration_type_0 import (
+        Saml2RequestedAuthnContextConfigurationType0,
+    )
     from ..models.saml_2_service_certificate_configuration import Saml2ServiceCertificateConfiguration
 
 
@@ -47,9 +49,9 @@ class Saml2Configuration:
             authenticate_request_signing_behavior (Saml2ConfigurationAuthenticateRequestSigningBehavior | Unset): Type of
                 AuthnRequest signing behavior.
                  Default: Saml2ConfigurationAuthenticateRequestSigningBehavior.IFIDPWANTAUTHNREQUESTSSIGNED.
-            validate_certificates (bool | Unset): Indicates whether the certificate validation is enabled.
-            public_origin (str | Unset): Base URL of the SAML2 endpoints for external addresses.
-            requested_authn_context (Saml2RequestedAuthnContextConfiguration | Unset): Configuration of the
+            validate_certificates (bool | None | Unset): Indicates whether the certificate validation is enabled.
+            public_origin (None | str | Unset): Base URL of the SAML2 endpoints for external addresses.
+            requested_authn_context (None | Saml2RequestedAuthnContextConfigurationType0 | Unset): Configuration of the
                 `<requestedAuthnContext>` element.
             compatibility (Saml2CompatibilityConfiguration | Unset): Configuration for processing of identity provider with
                 non-standard behavior.
@@ -66,13 +68,17 @@ class Saml2Configuration:
     authenticate_request_signing_behavior: Saml2ConfigurationAuthenticateRequestSigningBehavior | Unset = (
         Saml2ConfigurationAuthenticateRequestSigningBehavior.IFIDPWANTAUTHNREQUESTSSIGNED
     )
-    validate_certificates: bool | Unset = UNSET
-    public_origin: str | Unset = UNSET
-    requested_authn_context: Saml2RequestedAuthnContextConfiguration | Unset = UNSET
+    validate_certificates: bool | None | Unset = UNSET
+    public_origin: None | str | Unset = UNSET
+    requested_authn_context: None | Saml2RequestedAuthnContextConfigurationType0 | Unset = UNSET
     compatibility: Saml2CompatibilityConfiguration | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.saml_2_requested_authn_context_configuration_type_0 import (
+            Saml2RequestedAuthnContextConfigurationType0,
+        )
+
         entity_id = self.entity_id
 
         return_url = self.return_url
@@ -99,13 +105,25 @@ class Saml2Configuration:
         if not isinstance(self.authenticate_request_signing_behavior, Unset):
             authenticate_request_signing_behavior = self.authenticate_request_signing_behavior.value
 
-        validate_certificates = self.validate_certificates
+        validate_certificates: bool | None | Unset
+        if isinstance(self.validate_certificates, Unset):
+            validate_certificates = UNSET
+        else:
+            validate_certificates = self.validate_certificates
 
-        public_origin = self.public_origin
+        public_origin: None | str | Unset
+        if isinstance(self.public_origin, Unset):
+            public_origin = UNSET
+        else:
+            public_origin = self.public_origin
 
-        requested_authn_context: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.requested_authn_context, Unset):
+        requested_authn_context: dict[str, Any] | None | Unset
+        if isinstance(self.requested_authn_context, Unset):
+            requested_authn_context = UNSET
+        elif isinstance(self.requested_authn_context, Saml2RequestedAuthnContextConfigurationType0):
             requested_authn_context = self.requested_authn_context.to_dict()
+        else:
+            requested_authn_context = self.requested_authn_context
 
         compatibility: dict[str, Any] | Unset = UNSET
         if not isinstance(self.compatibility, Unset):
@@ -144,7 +162,9 @@ class Saml2Configuration:
         from ..models.saml_2_compatibility_configuration import Saml2CompatibilityConfiguration
         from ..models.saml_2_identity_provider_configuration import Saml2IdentityProviderConfiguration
         from ..models.saml_2_metadata_configuration import Saml2MetadataConfiguration
-        from ..models.saml_2_requested_authn_context_configuration import Saml2RequestedAuthnContextConfiguration
+        from ..models.saml_2_requested_authn_context_configuration_type_0 import (
+            Saml2RequestedAuthnContextConfigurationType0,
+        )
         from ..models.saml_2_service_certificate_configuration import Saml2ServiceCertificateConfiguration
 
         d = dict(src_dict)
@@ -185,16 +205,42 @@ class Saml2Configuration:
                 _authenticate_request_signing_behavior
             )
 
-        validate_certificates = d.pop("validateCertificates", UNSET)
+        def _parse_validate_certificates(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        public_origin = d.pop("publicOrigin", UNSET)
+        validate_certificates = _parse_validate_certificates(d.pop("validateCertificates", UNSET))
 
-        _requested_authn_context = d.pop("requestedAuthnContext", UNSET)
-        requested_authn_context: Saml2RequestedAuthnContextConfiguration | Unset
-        if isinstance(_requested_authn_context, Unset):
-            requested_authn_context = UNSET
-        else:
-            requested_authn_context = Saml2RequestedAuthnContextConfiguration.from_dict(_requested_authn_context)
+        def _parse_public_origin(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        public_origin = _parse_public_origin(d.pop("publicOrigin", UNSET))
+
+        def _parse_requested_authn_context(data: object) -> None | Saml2RequestedAuthnContextConfigurationType0 | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_saml_2_requested_authn_context_configuration_type_0 = (
+                    Saml2RequestedAuthnContextConfigurationType0.from_dict(data)
+                )
+
+                return componentsschemas_saml_2_requested_authn_context_configuration_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Saml2RequestedAuthnContextConfigurationType0 | Unset, data)
+
+        requested_authn_context = _parse_requested_authn_context(d.pop("requestedAuthnContext", UNSET))
 
         _compatibility = d.pop("compatibility", UNSET)
         compatibility: Saml2CompatibilityConfiguration | Unset

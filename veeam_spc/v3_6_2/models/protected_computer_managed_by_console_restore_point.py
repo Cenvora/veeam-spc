@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,24 +20,24 @@ class ProtectedComputerManagedByConsoleRestorePoint:
     Attributes:
         instance_uid (UUID | Unset): UID assigned to a restore point.
         backup_agent_uid (UUID | Unset): UID assigned to a Veeam backup agent.
-        job_uid (UUID | Unset): UID assigned to a backup job that created the restore point.
+        job_uid (None | Unset | UUID): UID assigned to a backup job that created the restore point.
         backedup_items (str | Unset): Protected objects.
         destination (str | Unset): Path to the protected object locations.
-        size (int | Unset): Size of the restore point, in bytes.
-        increment_raw_data_size (int | Unset): Size of backup increment, in bytes.
-        source_size (int | Unset): Size of the protected data, in bytes.
-        creation_date (datetime.datetime | Unset): Date of the restore point creation.
+        size (int | None | Unset): Size of the restore point, in bytes.
+        increment_raw_data_size (int | None | Unset): Size of backup increment, in bytes.
+        source_size (int | None | Unset): Size of the protected data, in bytes.
+        creation_date (datetime.datetime | None | Unset): Date of the restore point creation.
     """
 
     instance_uid: UUID | Unset = UNSET
     backup_agent_uid: UUID | Unset = UNSET
-    job_uid: UUID | Unset = UNSET
+    job_uid: None | Unset | UUID = UNSET
     backedup_items: str | Unset = UNSET
     destination: str | Unset = UNSET
-    size: int | Unset = UNSET
-    increment_raw_data_size: int | Unset = UNSET
-    source_size: int | Unset = UNSET
-    creation_date: datetime.datetime | Unset = UNSET
+    size: int | None | Unset = UNSET
+    increment_raw_data_size: int | None | Unset = UNSET
+    source_size: int | None | Unset = UNSET
+    creation_date: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -49,23 +49,43 @@ class ProtectedComputerManagedByConsoleRestorePoint:
         if not isinstance(self.backup_agent_uid, Unset):
             backup_agent_uid = str(self.backup_agent_uid)
 
-        job_uid: str | Unset = UNSET
-        if not isinstance(self.job_uid, Unset):
+        job_uid: None | str | Unset
+        if isinstance(self.job_uid, Unset):
+            job_uid = UNSET
+        elif isinstance(self.job_uid, UUID):
             job_uid = str(self.job_uid)
+        else:
+            job_uid = self.job_uid
 
         backedup_items = self.backedup_items
 
         destination = self.destination
 
-        size = self.size
+        size: int | None | Unset
+        if isinstance(self.size, Unset):
+            size = UNSET
+        else:
+            size = self.size
 
-        increment_raw_data_size = self.increment_raw_data_size
+        increment_raw_data_size: int | None | Unset
+        if isinstance(self.increment_raw_data_size, Unset):
+            increment_raw_data_size = UNSET
+        else:
+            increment_raw_data_size = self.increment_raw_data_size
 
-        source_size = self.source_size
+        source_size: int | None | Unset
+        if isinstance(self.source_size, Unset):
+            source_size = UNSET
+        else:
+            source_size = self.source_size
 
-        creation_date: str | Unset = UNSET
-        if not isinstance(self.creation_date, Unset):
+        creation_date: None | str | Unset
+        if isinstance(self.creation_date, Unset):
+            creation_date = UNSET
+        elif isinstance(self.creation_date, datetime.datetime):
             creation_date = self.creation_date.isoformat()
+        else:
+            creation_date = self.creation_date
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -108,29 +128,70 @@ class ProtectedComputerManagedByConsoleRestorePoint:
         else:
             backup_agent_uid = UUID(_backup_agent_uid)
 
-        _job_uid = d.pop("jobUid", UNSET)
-        job_uid: UUID | Unset
-        if isinstance(_job_uid, Unset):
-            job_uid = UNSET
-        else:
-            job_uid = UUID(_job_uid)
+        def _parse_job_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                job_uid_type_0 = UUID(data)
+
+                return job_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        job_uid = _parse_job_uid(d.pop("jobUid", UNSET))
 
         backedup_items = d.pop("backedupItems", UNSET)
 
         destination = d.pop("destination", UNSET)
 
-        size = d.pop("size", UNSET)
+        def _parse_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        increment_raw_data_size = d.pop("incrementRawDataSize", UNSET)
+        size = _parse_size(d.pop("size", UNSET))
 
-        source_size = d.pop("sourceSize", UNSET)
+        def _parse_increment_raw_data_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        _creation_date = d.pop("creationDate", UNSET)
-        creation_date: datetime.datetime | Unset
-        if isinstance(_creation_date, Unset):
-            creation_date = UNSET
-        else:
-            creation_date = isoparse(_creation_date)
+        increment_raw_data_size = _parse_increment_raw_data_size(d.pop("incrementRawDataSize", UNSET))
+
+        def _parse_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        source_size = _parse_source_size(d.pop("sourceSize", UNSET))
+
+        def _parse_creation_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                creation_date_type_0 = isoparse(data)
+
+                return creation_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        creation_date = _parse_creation_date(d.pop("creationDate", UNSET))
 
         protected_computer_managed_by_console_restore_point = cls(
             instance_uid=instance_uid,

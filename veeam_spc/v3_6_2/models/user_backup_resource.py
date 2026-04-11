@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,11 +20,11 @@ class UserBackupResource:
         tenant_backup_resource_uid (UUID): UID assigned to a tenant backup resource.
         resource_friendly_name (str): Friendly name of a subtenant backup resource.
         user_uid (UUID | Unset): UID assigned to a subtenant user in Veeam Service Provider Console.
-        description (str | Unset): Subtenant user description.
+        description (None | str | Unset): Subtenant user description.
         subtenant_uid (UUID | Unset): UID assigned to a subtenant user in Veeam Cloud Connect.
-        vcd_user_id (str | Unset): UID assigned to a VMware Cloud Director organization user account.
-        storage_quota (int | Unset): Subtenant quota, in bytes.
-        storage_quota_usage (int | Unset): Amount of storage space used by a subtenant, in bytes.
+        vcd_user_id (None | str | Unset): UID assigned to a VMware Cloud Director organization user account.
+        storage_quota (int | None | Unset): Subtenant quota, in bytes.
+        storage_quota_usage (int | None | Unset): Amount of storage space used by a subtenant, in bytes.
         is_storage_quota_unlimited (bool | Unset): Indicates whether a subtenant has unlimited quota. Default: True.
     """
 
@@ -32,11 +32,11 @@ class UserBackupResource:
     tenant_backup_resource_uid: UUID
     resource_friendly_name: str
     user_uid: UUID | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     subtenant_uid: UUID | Unset = UNSET
-    vcd_user_id: str | Unset = UNSET
-    storage_quota: int | Unset = UNSET
-    storage_quota_usage: int | Unset = UNSET
+    vcd_user_id: None | str | Unset = UNSET
+    storage_quota: int | None | Unset = UNSET
+    storage_quota_usage: int | None | Unset = UNSET
     is_storage_quota_unlimited: bool | Unset = True
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -51,17 +51,33 @@ class UserBackupResource:
         if not isinstance(self.user_uid, Unset):
             user_uid = str(self.user_uid)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         subtenant_uid: str | Unset = UNSET
         if not isinstance(self.subtenant_uid, Unset):
             subtenant_uid = str(self.subtenant_uid)
 
-        vcd_user_id = self.vcd_user_id
+        vcd_user_id: None | str | Unset
+        if isinstance(self.vcd_user_id, Unset):
+            vcd_user_id = UNSET
+        else:
+            vcd_user_id = self.vcd_user_id
 
-        storage_quota = self.storage_quota
+        storage_quota: int | None | Unset
+        if isinstance(self.storage_quota, Unset):
+            storage_quota = UNSET
+        else:
+            storage_quota = self.storage_quota
 
-        storage_quota_usage = self.storage_quota_usage
+        storage_quota_usage: int | None | Unset
+        if isinstance(self.storage_quota_usage, Unset):
+            storage_quota_usage = UNSET
+        else:
+            storage_quota_usage = self.storage_quota_usage
 
         is_storage_quota_unlimited = self.is_storage_quota_unlimited
 
@@ -107,7 +123,14 @@ class UserBackupResource:
         else:
             user_uid = UUID(_user_uid)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         _subtenant_uid = d.pop("subtenantUid", UNSET)
         subtenant_uid: UUID | Unset
@@ -116,11 +139,32 @@ class UserBackupResource:
         else:
             subtenant_uid = UUID(_subtenant_uid)
 
-        vcd_user_id = d.pop("vcdUserId", UNSET)
+        def _parse_vcd_user_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        storage_quota = d.pop("storageQuota", UNSET)
+        vcd_user_id = _parse_vcd_user_id(d.pop("vcdUserId", UNSET))
 
-        storage_quota_usage = d.pop("storageQuotaUsage", UNSET)
+        def _parse_storage_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        storage_quota = _parse_storage_quota(d.pop("storageQuota", UNSET))
+
+        def _parse_storage_quota_usage(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        storage_quota_usage = _parse_storage_quota_usage(d.pop("storageQuotaUsage", UNSET))
 
         is_storage_quota_unlimited = d.pop("isStorageQuotaUnlimited", UNSET)
 

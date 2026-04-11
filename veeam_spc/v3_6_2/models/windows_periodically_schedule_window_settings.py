@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,22 +19,27 @@ T = TypeVar("T", bound="WindowsPeriodicallyScheduleWindowSettings")
 class WindowsPeriodicallyScheduleWindowSettings:
     """
     Attributes:
-        schedule_window (list[JobScheduleWindowDay] | Unset): Permitted time window for a job.
+        schedule_window (list[JobScheduleWindowDay] | None | Unset): Permitted time window for a job.
             > By default includes all days and all hours.
         shift_for_minutes (int | Unset): Exact time of the job start within an hour, in minutes. Default: 0.
     """
 
-    schedule_window: list[JobScheduleWindowDay] | Unset = UNSET
+    schedule_window: list[JobScheduleWindowDay] | None | Unset = UNSET
     shift_for_minutes: int | Unset = 0
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        schedule_window: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.schedule_window, Unset):
+        schedule_window: list[dict[str, Any]] | None | Unset
+        if isinstance(self.schedule_window, Unset):
+            schedule_window = UNSET
+        elif isinstance(self.schedule_window, list):
             schedule_window = []
-            for schedule_window_item_data in self.schedule_window:
-                schedule_window_item = schedule_window_item_data.to_dict()
-                schedule_window.append(schedule_window_item)
+            for schedule_window_type_0_item_data in self.schedule_window:
+                schedule_window_type_0_item = schedule_window_type_0_item_data.to_dict()
+                schedule_window.append(schedule_window_type_0_item)
+
+        else:
+            schedule_window = self.schedule_window
 
         shift_for_minutes = self.shift_for_minutes
 
@@ -53,14 +58,28 @@ class WindowsPeriodicallyScheduleWindowSettings:
         from ..models.job_schedule_window_day import JobScheduleWindowDay
 
         d = dict(src_dict)
-        _schedule_window = d.pop("scheduleWindow", UNSET)
-        schedule_window: list[JobScheduleWindowDay] | Unset = UNSET
-        if _schedule_window is not UNSET:
-            schedule_window = []
-            for schedule_window_item_data in _schedule_window:
-                schedule_window_item = JobScheduleWindowDay.from_dict(schedule_window_item_data)
 
-                schedule_window.append(schedule_window_item)
+        def _parse_schedule_window(data: object) -> list[JobScheduleWindowDay] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                schedule_window_type_0 = []
+                _schedule_window_type_0 = data
+                for schedule_window_type_0_item_data in _schedule_window_type_0:
+                    schedule_window_type_0_item = JobScheduleWindowDay.from_dict(schedule_window_type_0_item_data)
+
+                    schedule_window_type_0.append(schedule_window_type_0_item)
+
+                return schedule_window_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[JobScheduleWindowDay] | None | Unset, data)
+
+        schedule_window = _parse_schedule_window(d.pop("scheduleWindow", UNSET))
 
         shift_for_minutes = d.pop("shiftForMinutes", UNSET)
 

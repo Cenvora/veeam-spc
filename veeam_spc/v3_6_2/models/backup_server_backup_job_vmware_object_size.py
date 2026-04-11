@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,17 +21,21 @@ class BackupServerBackupJobVmwareObjectSize:
 
     Attributes:
         inventory_object (BackupServerVmwareObject): VMware vSphere object.
-        size (str | Unset): Storage space used by the VMware vSphere object.
+        size (None | str | Unset): Storage space used by the VMware vSphere object.
     """
 
     inventory_object: BackupServerVmwareObject
-    size: str | Unset = UNSET
+    size: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         inventory_object = self.inventory_object.to_dict()
 
-        size = self.size
+        size: None | str | Unset
+        if isinstance(self.size, Unset):
+            size = UNSET
+        else:
+            size = self.size
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,7 +56,14 @@ class BackupServerBackupJobVmwareObjectSize:
         d = dict(src_dict)
         inventory_object = BackupServerVmwareObject.from_dict(d.pop("inventoryObject"))
 
-        size = d.pop("size", UNSET)
+        def _parse_size(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        size = _parse_size(d.pop("size", UNSET))
 
         backup_server_backup_job_vmware_object_size = cls(
             inventory_object=inventory_object,

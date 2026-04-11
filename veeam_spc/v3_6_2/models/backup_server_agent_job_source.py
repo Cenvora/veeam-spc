@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -10,7 +10,9 @@ from ..models.backup_server_agent_job_source_backup_mode import BackupServerAgen
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.backup_server_agent_job_source_file_system_items import BackupServerAgentJobSourceFileSystemItems
+    from ..models.backup_server_agent_job_source_file_system_items_type_0 import (
+        BackupServerAgentJobSourceFileSystemItemsType0,
+    )
 
 
 T = TypeVar("T", bound="BackupServerAgentJobSource")
@@ -23,17 +25,21 @@ class BackupServerAgentJobSource:
         backup_mode (BackupServerAgentJobSourceBackupMode | Unset): Backup mode.
         backup_user_folders (bool | Unset): Indicates whether a backup job protects individual folders.
         backup_operating_system (bool | Unset): Indicates whether agent operating system is included in a backup scope.
-        file_system_items (BackupServerAgentJobSourceFileSystemItems | Unset): Files and folders of an agent computer
-            are included in a backup scope.
+        file_system_items (BackupServerAgentJobSourceFileSystemItemsType0 | None | Unset): Files and folders of an agent
+            computer are included in a backup scope.
     """
 
     backup_mode: BackupServerAgentJobSourceBackupMode | Unset = UNSET
     backup_user_folders: bool | Unset = UNSET
     backup_operating_system: bool | Unset = UNSET
-    file_system_items: BackupServerAgentJobSourceFileSystemItems | Unset = UNSET
+    file_system_items: BackupServerAgentJobSourceFileSystemItemsType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.backup_server_agent_job_source_file_system_items_type_0 import (
+            BackupServerAgentJobSourceFileSystemItemsType0,
+        )
+
         backup_mode: str | Unset = UNSET
         if not isinstance(self.backup_mode, Unset):
             backup_mode = self.backup_mode.value
@@ -42,9 +48,13 @@ class BackupServerAgentJobSource:
 
         backup_operating_system = self.backup_operating_system
 
-        file_system_items: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.file_system_items, Unset):
+        file_system_items: dict[str, Any] | None | Unset
+        if isinstance(self.file_system_items, Unset):
+            file_system_items = UNSET
+        elif isinstance(self.file_system_items, BackupServerAgentJobSourceFileSystemItemsType0):
             file_system_items = self.file_system_items.to_dict()
+        else:
+            file_system_items = self.file_system_items
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -62,7 +72,9 @@ class BackupServerAgentJobSource:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.backup_server_agent_job_source_file_system_items import BackupServerAgentJobSourceFileSystemItems
+        from ..models.backup_server_agent_job_source_file_system_items_type_0 import (
+            BackupServerAgentJobSourceFileSystemItemsType0,
+        )
 
         d = dict(src_dict)
         _backup_mode = d.pop("backupMode", UNSET)
@@ -76,12 +88,22 @@ class BackupServerAgentJobSource:
 
         backup_operating_system = d.pop("backupOperatingSystem", UNSET)
 
-        _file_system_items = d.pop("fileSystemItems", UNSET)
-        file_system_items: BackupServerAgentJobSourceFileSystemItems | Unset
-        if isinstance(_file_system_items, Unset):
-            file_system_items = UNSET
-        else:
-            file_system_items = BackupServerAgentJobSourceFileSystemItems.from_dict(_file_system_items)
+        def _parse_file_system_items(data: object) -> BackupServerAgentJobSourceFileSystemItemsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                file_system_items_type_0 = BackupServerAgentJobSourceFileSystemItemsType0.from_dict(data)
+
+                return file_system_items_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerAgentJobSourceFileSystemItemsType0 | None | Unset, data)
+
+        file_system_items = _parse_file_system_items(d.pop("fileSystemItems", UNSET))
 
         backup_server_agent_job_source = cls(
             backup_mode=backup_mode,

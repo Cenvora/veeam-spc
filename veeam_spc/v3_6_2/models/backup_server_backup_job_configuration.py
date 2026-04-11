@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -31,10 +31,10 @@ class BackupServerBackupJobConfiguration:
         instance_uid (UUID | Unset): UID assigned to a backup job.
         original_uid (UUID | Unset): UID assigned to a job in Veeam Backup & Replication.
         is_disabled (bool | Unset): Indicates whether a backup job is disabled.
-        mapped_organization_uid (UUID | Unset): UID assigned to an organization that is mapped to a backup job on a
+        mapped_organization_uid (None | Unset | UUID): UID assigned to an organization that is mapped to a backup job on
+            a hosted Veeam Backup & Replication server.
+        mapped_organization_name (None | str | Unset): Name of an organization that is mapped to a backup job on a
             hosted Veeam Backup & Replication server.
-        mapped_organization_name (str | Unset): Name of an organization that is mapped to a backup job on a hosted Veeam
-            Backup & Replication server.
         backup_server_uid (UUID | Unset): UID of a hosted Veeam Backup & Replication server.
         backup_server_name (str | Unset): Name of a hosted Veeam Backup & Replication server.
         guest_processing (BackupServerBackupJobGuestProcessing | Unset): Guest processing settings.
@@ -49,8 +49,8 @@ class BackupServerBackupJobConfiguration:
     instance_uid: UUID | Unset = UNSET
     original_uid: UUID | Unset = UNSET
     is_disabled: bool | Unset = UNSET
-    mapped_organization_uid: UUID | Unset = UNSET
-    mapped_organization_name: str | Unset = UNSET
+    mapped_organization_uid: None | Unset | UUID = UNSET
+    mapped_organization_name: None | str | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
     backup_server_name: str | Unset = UNSET
     guest_processing: BackupServerBackupJobGuestProcessing | Unset = UNSET
@@ -78,11 +78,19 @@ class BackupServerBackupJobConfiguration:
 
         is_disabled = self.is_disabled
 
-        mapped_organization_uid: str | Unset = UNSET
-        if not isinstance(self.mapped_organization_uid, Unset):
+        mapped_organization_uid: None | str | Unset
+        if isinstance(self.mapped_organization_uid, Unset):
+            mapped_organization_uid = UNSET
+        elif isinstance(self.mapped_organization_uid, UUID):
             mapped_organization_uid = str(self.mapped_organization_uid)
+        else:
+            mapped_organization_uid = self.mapped_organization_uid
 
-        mapped_organization_name = self.mapped_organization_name
+        mapped_organization_name: None | str | Unset
+        if isinstance(self.mapped_organization_name, Unset):
+            mapped_organization_name = UNSET
+        else:
+            mapped_organization_name = self.mapped_organization_name
 
         backup_server_uid: str | Unset = UNSET
         if not isinstance(self.backup_server_uid, Unset):
@@ -164,14 +172,31 @@ class BackupServerBackupJobConfiguration:
 
         is_disabled = d.pop("isDisabled", UNSET)
 
-        _mapped_organization_uid = d.pop("mappedOrganizationUid", UNSET)
-        mapped_organization_uid: UUID | Unset
-        if isinstance(_mapped_organization_uid, Unset):
-            mapped_organization_uid = UNSET
-        else:
-            mapped_organization_uid = UUID(_mapped_organization_uid)
+        def _parse_mapped_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                mapped_organization_uid_type_0 = UUID(data)
 
-        mapped_organization_name = d.pop("mappedOrganizationName", UNSET)
+                return mapped_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        mapped_organization_uid = _parse_mapped_organization_uid(d.pop("mappedOrganizationUid", UNSET))
+
+        def _parse_mapped_organization_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        mapped_organization_name = _parse_mapped_organization_name(d.pop("mappedOrganizationName", UNSET))
 
         _backup_server_uid = d.pop("backupServerUid", UNSET)
         backup_server_uid: UUID | Unset

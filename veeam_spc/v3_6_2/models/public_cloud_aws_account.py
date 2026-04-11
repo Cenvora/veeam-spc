@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,23 +19,24 @@ class PublicCloudAwsAccount:
         access_key (str): AWS access key.
         account_uid (UUID | Unset): UID assigned to an AWS account.
         credential_tag (UUID | Unset): UID assigned to an account in AWS.
-        secret_key (str | Unset): AWS access secret key.
-        description (str | Unset): Description of an AWS account.
+        secret_key (None | str | Unset): AWS access secret key.
+        description (None | str | Unset): Description of an AWS account.
         created_by (str | Unset): Name of a user that created an AWS account.
         site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site on which an AWS account is registered.
         organization_uid (UUID | Unset): UID assigned to an organization associated with an AWS account.
-        appliances (list[UUID] | Unset): Array of UIDs assigned to associated Veeam Backup for Public Clouds appliances.
+        appliances (list[UUID] | None | Unset): Array of UIDs assigned to associated Veeam Backup for Public Clouds
+            appliances.
     """
 
     access_key: str
     account_uid: UUID | Unset = UNSET
     credential_tag: UUID | Unset = UNSET
-    secret_key: str | Unset = UNSET
-    description: str | Unset = UNSET
+    secret_key: None | str | Unset = UNSET
+    description: None | str | Unset = UNSET
     created_by: str | Unset = UNSET
     site_uid: UUID | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
-    appliances: list[UUID] | Unset = UNSET
+    appliances: list[UUID] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -49,9 +50,17 @@ class PublicCloudAwsAccount:
         if not isinstance(self.credential_tag, Unset):
             credential_tag = str(self.credential_tag)
 
-        secret_key = self.secret_key
+        secret_key: None | str | Unset
+        if isinstance(self.secret_key, Unset):
+            secret_key = UNSET
+        else:
+            secret_key = self.secret_key
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         created_by = self.created_by
 
@@ -63,12 +72,17 @@ class PublicCloudAwsAccount:
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        appliances: list[str] | Unset = UNSET
-        if not isinstance(self.appliances, Unset):
+        appliances: list[str] | None | Unset
+        if isinstance(self.appliances, Unset):
+            appliances = UNSET
+        elif isinstance(self.appliances, list):
             appliances = []
-            for appliances_item_data in self.appliances:
-                appliances_item = str(appliances_item_data)
-                appliances.append(appliances_item)
+            for appliances_type_0_item_data in self.appliances:
+                appliances_type_0_item = str(appliances_type_0_item_data)
+                appliances.append(appliances_type_0_item)
+
+        else:
+            appliances = self.appliances
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -115,9 +129,23 @@ class PublicCloudAwsAccount:
         else:
             credential_tag = UUID(_credential_tag)
 
-        secret_key = d.pop("secretKey", UNSET)
+        def _parse_secret_key(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        description = d.pop("description", UNSET)
+        secret_key = _parse_secret_key(d.pop("secretKey", UNSET))
+
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         created_by = d.pop("createdBy", UNSET)
 
@@ -135,14 +163,27 @@ class PublicCloudAwsAccount:
         else:
             organization_uid = UUID(_organization_uid)
 
-        _appliances = d.pop("appliances", UNSET)
-        appliances: list[UUID] | Unset = UNSET
-        if _appliances is not UNSET:
-            appliances = []
-            for appliances_item_data in _appliances:
-                appliances_item = UUID(appliances_item_data)
+        def _parse_appliances(data: object) -> list[UUID] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                appliances_type_0 = []
+                _appliances_type_0 = data
+                for appliances_type_0_item_data in _appliances_type_0:
+                    appliances_type_0_item = UUID(appliances_type_0_item_data)
 
-                appliances.append(appliances_item)
+                    appliances_type_0.append(appliances_type_0_item)
+
+                return appliances_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[UUID] | None | Unset, data)
+
+        appliances = _parse_appliances(d.pop("appliances", UNSET))
 
         public_cloud_aws_account = cls(
             access_key=access_key,

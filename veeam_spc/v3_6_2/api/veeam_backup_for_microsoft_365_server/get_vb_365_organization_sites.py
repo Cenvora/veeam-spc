@@ -15,7 +15,7 @@ def _get_kwargs(
     vb_365_server_uid: UUID,
     vb_365_organization_uid: UUID,
     *,
-    multi_filter: str | Unset = UNSET,
+    multi_filter: None | str | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -30,7 +30,12 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    params["multiFilter"] = multi_filter
+    json_multi_filter: None | str | Unset
+    if isinstance(multi_filter, Unset):
+        json_multi_filter = UNSET
+    else:
+        json_multi_filter = multi_filter
+    params["multiFilter"] = json_multi_filter
 
     params["limit"] = limit
 
@@ -84,7 +89,7 @@ def sync_detailed(
     vb_365_organization_uid: UUID,
     *,
     client: AuthenticatedClient,
-    multi_filter: str | Unset = UNSET,
+    multi_filter: None | str | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -99,7 +104,7 @@ def sync_detailed(
     Args:
         vb_365_server_uid (UUID):
         vb_365_organization_uid (UUID):
-        multi_filter (str | Unset):
+        multi_filter (None | str | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):
@@ -135,7 +140,7 @@ def sync(
     vb_365_organization_uid: UUID,
     *,
     client: AuthenticatedClient,
-    multi_filter: str | Unset = UNSET,
+    multi_filter: None | str | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -150,7 +155,7 @@ def sync(
     Args:
         vb_365_server_uid (UUID):
         vb_365_organization_uid (UUID):
-        multi_filter (str | Unset):
+        multi_filter (None | str | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):
@@ -181,7 +186,7 @@ async def asyncio_detailed(
     vb_365_organization_uid: UUID,
     *,
     client: AuthenticatedClient,
-    multi_filter: str | Unset = UNSET,
+    multi_filter: None | str | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -196,7 +201,7 @@ async def asyncio_detailed(
     Args:
         vb_365_server_uid (UUID):
         vb_365_organization_uid (UUID):
-        multi_filter (str | Unset):
+        multi_filter (None | str | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):
@@ -230,7 +235,7 @@ async def asyncio(
     vb_365_organization_uid: UUID,
     *,
     client: AuthenticatedClient,
-    multi_filter: str | Unset = UNSET,
+    multi_filter: None | str | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | Unset = 0,
     x_request_id: UUID | Unset = UNSET,
@@ -245,7 +250,7 @@ async def asyncio(
     Args:
         vb_365_server_uid (UUID):
         vb_365_organization_uid (UUID):
-        multi_filter (str | Unset):
+        multi_filter (None | str | Unset):
         limit (int | Unset):  Default: 100.
         offset (int | Unset):  Default: 0.
         x_request_id (UUID | Unset):

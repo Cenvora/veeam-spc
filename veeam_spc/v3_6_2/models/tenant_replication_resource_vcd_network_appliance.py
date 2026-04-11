@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -23,14 +23,14 @@ class TenantReplicationResourceVcdNetworkAppliance:
         name (str): Name of a network extension appliance.
         instance_uid (UUID | Unset): UID assigned to a network extension appliance.
         data_center_uid (UUID | Unset): UID assigned to an organization VDC.
-        data_center_name (str | Unset): Name of an organization VDC.
+        data_center_name (None | str | Unset): Name of an organization VDC.
         tcp_ip_settings (NetworkApplianceTcpIpSettings | Unset):
     """
 
     name: str
     instance_uid: UUID | Unset = UNSET
     data_center_uid: UUID | Unset = UNSET
-    data_center_name: str | Unset = UNSET
+    data_center_name: None | str | Unset = UNSET
     tcp_ip_settings: NetworkApplianceTcpIpSettings | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -45,7 +45,11 @@ class TenantReplicationResourceVcdNetworkAppliance:
         if not isinstance(self.data_center_uid, Unset):
             data_center_uid = str(self.data_center_uid)
 
-        data_center_name = self.data_center_name
+        data_center_name: None | str | Unset
+        if isinstance(self.data_center_name, Unset):
+            data_center_name = UNSET
+        else:
+            data_center_name = self.data_center_name
 
         tcp_ip_settings: dict[str, Any] | Unset = UNSET
         if not isinstance(self.tcp_ip_settings, Unset):
@@ -90,7 +94,14 @@ class TenantReplicationResourceVcdNetworkAppliance:
         else:
             data_center_uid = UUID(_data_center_uid)
 
-        data_center_name = d.pop("dataCenterName", UNSET)
+        def _parse_data_center_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        data_center_name = _parse_data_center_name(d.pop("dataCenterName", UNSET))
 
         _tcp_ip_settings = d.pop("tcpIpSettings", UNSET)
         tcp_ip_settings: NetworkApplianceTcpIpSettings | Unset

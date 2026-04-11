@@ -18,7 +18,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     vone_server_deployment_type: GetVOneServerDeploymentConfigurationXmlVoneServerDeploymentType,
-    management_agent_uid: UUID | Unset = UNSET,
+    management_agent_uid: None | Unset | UUID = UNSET,
     escape_characters: bool | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -35,9 +35,13 @@ def _get_kwargs(
     json_vone_server_deployment_type = vone_server_deployment_type.value
     params["voneServerDeploymentType"] = json_vone_server_deployment_type
 
-    json_management_agent_uid: str | Unset = UNSET
-    if not isinstance(management_agent_uid, Unset):
+    json_management_agent_uid: None | str | Unset
+    if isinstance(management_agent_uid, Unset):
+        json_management_agent_uid = UNSET
+    elif isinstance(management_agent_uid, UUID):
         json_management_agent_uid = str(management_agent_uid)
+    else:
+        json_management_agent_uid = management_agent_uid
     params["managementAgentUid"] = json_management_agent_uid
 
     params["escapeCharacters"] = escape_characters
@@ -86,7 +90,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     vone_server_deployment_type: GetVOneServerDeploymentConfigurationXmlVoneServerDeploymentType,
-    management_agent_uid: UUID | Unset = UNSET,
+    management_agent_uid: None | Unset | UUID = UNSET,
     escape_characters: bool | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -100,7 +104,7 @@ def sync_detailed(
     Args:
         vone_server_deployment_type
             (GetVOneServerDeploymentConfigurationXmlVoneServerDeploymentType):
-        management_agent_uid (UUID | Unset):
+        management_agent_uid (None | Unset | UUID):
         escape_characters (bool | Unset):  Default: False.
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
@@ -132,7 +136,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     vone_server_deployment_type: GetVOneServerDeploymentConfigurationXmlVoneServerDeploymentType,
-    management_agent_uid: UUID | Unset = UNSET,
+    management_agent_uid: None | Unset | UUID = UNSET,
     escape_characters: bool | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -146,7 +150,7 @@ def sync(
     Args:
         vone_server_deployment_type
             (GetVOneServerDeploymentConfigurationXmlVoneServerDeploymentType):
-        management_agent_uid (UUID | Unset):
+        management_agent_uid (None | Unset | UUID):
         escape_characters (bool | Unset):  Default: False.
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
@@ -173,7 +177,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     vone_server_deployment_type: GetVOneServerDeploymentConfigurationXmlVoneServerDeploymentType,
-    management_agent_uid: UUID | Unset = UNSET,
+    management_agent_uid: None | Unset | UUID = UNSET,
     escape_characters: bool | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -187,7 +191,7 @@ async def asyncio_detailed(
     Args:
         vone_server_deployment_type
             (GetVOneServerDeploymentConfigurationXmlVoneServerDeploymentType):
-        management_agent_uid (UUID | Unset):
+        management_agent_uid (None | Unset | UUID):
         escape_characters (bool | Unset):  Default: False.
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):
@@ -217,7 +221,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     vone_server_deployment_type: GetVOneServerDeploymentConfigurationXmlVoneServerDeploymentType,
-    management_agent_uid: UUID | Unset = UNSET,
+    management_agent_uid: None | Unset | UUID = UNSET,
     escape_characters: bool | Unset = False,
     x_request_id: UUID | Unset = UNSET,
     x_client_version: str | Unset = UNSET,
@@ -231,7 +235,7 @@ async def asyncio(
     Args:
         vone_server_deployment_type
             (GetVOneServerDeploymentConfigurationXmlVoneServerDeploymentType):
-        management_agent_uid (UUID | Unset):
+        management_agent_uid (None | Unset | UUID):
         escape_characters (bool | Unset):  Default: False.
         x_request_id (UUID | Unset):
         x_client_version (str | Unset):

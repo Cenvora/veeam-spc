@@ -34,25 +34,25 @@ class BackupServerLicense:
     Attributes:
         auto_update_enabled (bool): Indicates whether license updates automatically.
         backup_server_uid (UUID | Unset): UID assigned to a backup server.
-        edition (str | Unset): License edition.
-        monitoring (bool | Unset): Monitoring status.
+        edition (None | str | Unset): License edition.
+        monitoring (bool | None | Unset): Monitoring status.
         packages (list[BackupServerLicensePackagesItem] | Unset): Product packages.
         company (str | Unset): Name of an organization to which a license is issued.
         email (str | Unset): Email address of an organization to which a license is issued.
         contact_person (str | Unset): [Legacy] Name of a contact person in an organization to which the license is
             issued.
-        expiration_date (datetime.datetime | Unset): License expiration date and time.
-        support_expiration_date (datetime.datetime | Unset): Support expiration date and time.
+        expiration_date (datetime.datetime | None | Unset): License expiration date and time.
+        support_expiration_date (datetime.datetime | None | Unset): Support expiration date and time.
         license_ids (list[UUID] | Unset): License IDs.
         support_ids (list[str] | Unset): License IDs required to contact Veeam Support.
         section_types (list[BackupServerLicenseSectionTypesItem] | Unset): Type of licensed units.
         status (BackupServerLicenseStatus | Unset): Current status of the license.
         cloud_connect (BackupServerLicenseCloudConnect | Unset): Indicates whether Veeam Cloud Connect is included in a
             license.
-        sockets (float | Unset): Number of licensed sockets.
-        used_sockets (float | Unset): Number of used sockets.
-        capacity (float | Unset): Available protected capacity for NAS backup.
-        used_capacity (float | Unset): Consumed capacity for NAS backup.
+        sockets (float | None | Unset): Number of licensed sockets.
+        used_sockets (float | None | Unset): Number of used sockets.
+        capacity (float | None | Unset): Available protected capacity for NAS backup.
+        used_capacity (float | None | Unset): Consumed capacity for NAS backup.
         units (float | Unset): Number of available license units.
         used_units (float | Unset): Number of used license units.
         unit_type (BackupServerLicenseUnitType | Unset): Type of license units.
@@ -61,23 +61,23 @@ class BackupServerLicense:
 
     auto_update_enabled: bool
     backup_server_uid: UUID | Unset = UNSET
-    edition: str | Unset = UNSET
-    monitoring: bool | Unset = UNSET
+    edition: None | str | Unset = UNSET
+    monitoring: bool | None | Unset = UNSET
     packages: list[BackupServerLicensePackagesItem] | Unset = UNSET
     company: str | Unset = UNSET
     email: str | Unset = UNSET
     contact_person: str | Unset = UNSET
-    expiration_date: datetime.datetime | Unset = UNSET
-    support_expiration_date: datetime.datetime | Unset = UNSET
+    expiration_date: datetime.datetime | None | Unset = UNSET
+    support_expiration_date: datetime.datetime | None | Unset = UNSET
     license_ids: list[UUID] | Unset = UNSET
     support_ids: list[str] | Unset = UNSET
     section_types: list[BackupServerLicenseSectionTypesItem] | Unset = UNSET
     status: BackupServerLicenseStatus | Unset = UNSET
     cloud_connect: BackupServerLicenseCloudConnect | Unset = UNSET
-    sockets: float | Unset = UNSET
-    used_sockets: float | Unset = UNSET
-    capacity: float | Unset = UNSET
-    used_capacity: float | Unset = UNSET
+    sockets: float | None | Unset = UNSET
+    used_sockets: float | None | Unset = UNSET
+    capacity: float | None | Unset = UNSET
+    used_capacity: float | None | Unset = UNSET
     units: float | Unset = UNSET
     used_units: float | Unset = UNSET
     unit_type: BackupServerLicenseUnitType | Unset = UNSET
@@ -91,9 +91,17 @@ class BackupServerLicense:
         if not isinstance(self.backup_server_uid, Unset):
             backup_server_uid = str(self.backup_server_uid)
 
-        edition = self.edition
+        edition: None | str | Unset
+        if isinstance(self.edition, Unset):
+            edition = UNSET
+        else:
+            edition = self.edition
 
-        monitoring = self.monitoring
+        monitoring: bool | None | Unset
+        if isinstance(self.monitoring, Unset):
+            monitoring = UNSET
+        else:
+            monitoring = self.monitoring
 
         packages: list[str] | Unset = UNSET
         if not isinstance(self.packages, Unset):
@@ -108,13 +116,21 @@ class BackupServerLicense:
 
         contact_person = self.contact_person
 
-        expiration_date: str | Unset = UNSET
-        if not isinstance(self.expiration_date, Unset):
+        expiration_date: None | str | Unset
+        if isinstance(self.expiration_date, Unset):
+            expiration_date = UNSET
+        elif isinstance(self.expiration_date, datetime.datetime):
             expiration_date = self.expiration_date.isoformat()
+        else:
+            expiration_date = self.expiration_date
 
-        support_expiration_date: str | Unset = UNSET
-        if not isinstance(self.support_expiration_date, Unset):
+        support_expiration_date: None | str | Unset
+        if isinstance(self.support_expiration_date, Unset):
+            support_expiration_date = UNSET
+        elif isinstance(self.support_expiration_date, datetime.datetime):
             support_expiration_date = self.support_expiration_date.isoformat()
+        else:
+            support_expiration_date = self.support_expiration_date
 
         license_ids: list[str] | Unset = UNSET
         if not isinstance(self.license_ids, Unset):
@@ -142,13 +158,29 @@ class BackupServerLicense:
         if not isinstance(self.cloud_connect, Unset):
             cloud_connect = self.cloud_connect.value
 
-        sockets = self.sockets
+        sockets: float | None | Unset
+        if isinstance(self.sockets, Unset):
+            sockets = UNSET
+        else:
+            sockets = self.sockets
 
-        used_sockets = self.used_sockets
+        used_sockets: float | None | Unset
+        if isinstance(self.used_sockets, Unset):
+            used_sockets = UNSET
+        else:
+            used_sockets = self.used_sockets
 
-        capacity = self.capacity
+        capacity: float | None | Unset
+        if isinstance(self.capacity, Unset):
+            capacity = UNSET
+        else:
+            capacity = self.capacity
 
-        used_capacity = self.used_capacity
+        used_capacity: float | None | Unset
+        if isinstance(self.used_capacity, Unset):
+            used_capacity = UNSET
+        else:
+            used_capacity = self.used_capacity
 
         units = self.units
 
@@ -228,9 +260,23 @@ class BackupServerLicense:
         else:
             backup_server_uid = UUID(_backup_server_uid)
 
-        edition = d.pop("edition", UNSET)
+        def _parse_edition(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        monitoring = d.pop("monitoring", UNSET)
+        edition = _parse_edition(d.pop("edition", UNSET))
+
+        def _parse_monitoring(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        monitoring = _parse_monitoring(d.pop("monitoring", UNSET))
 
         _packages = d.pop("packages", UNSET)
         packages: list[BackupServerLicensePackagesItem] | Unset = UNSET
@@ -247,19 +293,39 @@ class BackupServerLicense:
 
         contact_person = d.pop("contactPerson", UNSET)
 
-        _expiration_date = d.pop("expirationDate", UNSET)
-        expiration_date: datetime.datetime | Unset
-        if isinstance(_expiration_date, Unset):
-            expiration_date = UNSET
-        else:
-            expiration_date = isoparse(_expiration_date)
+        def _parse_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                expiration_date_type_0 = isoparse(data)
 
-        _support_expiration_date = d.pop("supportExpirationDate", UNSET)
-        support_expiration_date: datetime.datetime | Unset
-        if isinstance(_support_expiration_date, Unset):
-            support_expiration_date = UNSET
-        else:
-            support_expiration_date = isoparse(_support_expiration_date)
+                return expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        expiration_date = _parse_expiration_date(d.pop("expirationDate", UNSET))
+
+        def _parse_support_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                support_expiration_date_type_0 = isoparse(data)
+
+                return support_expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        support_expiration_date = _parse_support_expiration_date(d.pop("supportExpirationDate", UNSET))
 
         _license_ids = d.pop("licenseIds", UNSET)
         license_ids: list[UUID] | Unset = UNSET
@@ -295,13 +361,41 @@ class BackupServerLicense:
         else:
             cloud_connect = BackupServerLicenseCloudConnect(_cloud_connect)
 
-        sockets = d.pop("sockets", UNSET)
+        def _parse_sockets(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
 
-        used_sockets = d.pop("usedSockets", UNSET)
+        sockets = _parse_sockets(d.pop("sockets", UNSET))
 
-        capacity = d.pop("capacity", UNSET)
+        def _parse_used_sockets(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
 
-        used_capacity = d.pop("usedCapacity", UNSET)
+        used_sockets = _parse_used_sockets(d.pop("usedSockets", UNSET))
+
+        def _parse_capacity(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        capacity = _parse_capacity(d.pop("capacity", UNSET))
+
+        def _parse_used_capacity(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        used_capacity = _parse_used_capacity(d.pop("usedCapacity", UNSET))
 
         units = d.pop("units", UNSET)
 

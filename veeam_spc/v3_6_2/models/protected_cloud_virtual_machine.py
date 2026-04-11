@@ -23,23 +23,24 @@ class ProtectedCloudVirtualMachine:
         backup_server_uid (UUID | Unset): UID assigned to a backup server.
         organization_uid (UUID | Unset): UID assigned to an organization.
         name (str | Unset): VM hostname.
-        appliance_uid (UUID | Unset): UID assigned to a Veeam Backup for Public Clouds appliance.
+        appliance_uid (None | Unset | UUID): UID assigned to a Veeam Backup for Public Clouds appliance.
         platform_type (BackupServerPublicCloudAppliancePlatform | Unset): Platform of a Veeam Backup for Public Clouds
             appliance.
         resource_id (str | Unset): Resource ID of a cloud VM.
         destinations (list[str] | Unset): Array of locations where backup files for a cloud VM reside.
-        latest_backup_date (datetime.datetime | Unset): Date and time of the latest backup restore point creation.
+        latest_backup_date (datetime.datetime | None | Unset): Date and time of the latest backup restore point
+            creation.
     """
 
     instance_uid: UUID | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
-    appliance_uid: UUID | Unset = UNSET
+    appliance_uid: None | Unset | UUID = UNSET
     platform_type: BackupServerPublicCloudAppliancePlatform | Unset = UNSET
     resource_id: str | Unset = UNSET
     destinations: list[str] | Unset = UNSET
-    latest_backup_date: datetime.datetime | Unset = UNSET
+    latest_backup_date: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,9 +58,13 @@ class ProtectedCloudVirtualMachine:
 
         name = self.name
 
-        appliance_uid: str | Unset = UNSET
-        if not isinstance(self.appliance_uid, Unset):
+        appliance_uid: None | str | Unset
+        if isinstance(self.appliance_uid, Unset):
+            appliance_uid = UNSET
+        elif isinstance(self.appliance_uid, UUID):
             appliance_uid = str(self.appliance_uid)
+        else:
+            appliance_uid = self.appliance_uid
 
         platform_type: str | Unset = UNSET
         if not isinstance(self.platform_type, Unset):
@@ -71,9 +76,13 @@ class ProtectedCloudVirtualMachine:
         if not isinstance(self.destinations, Unset):
             destinations = self.destinations
 
-        latest_backup_date: str | Unset = UNSET
-        if not isinstance(self.latest_backup_date, Unset):
+        latest_backup_date: None | str | Unset
+        if isinstance(self.latest_backup_date, Unset):
+            latest_backup_date = UNSET
+        elif isinstance(self.latest_backup_date, datetime.datetime):
             latest_backup_date = self.latest_backup_date.isoformat()
+        else:
+            latest_backup_date = self.latest_backup_date
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -125,12 +134,22 @@ class ProtectedCloudVirtualMachine:
 
         name = d.pop("name", UNSET)
 
-        _appliance_uid = d.pop("applianceUid", UNSET)
-        appliance_uid: UUID | Unset
-        if isinstance(_appliance_uid, Unset):
-            appliance_uid = UNSET
-        else:
-            appliance_uid = UUID(_appliance_uid)
+        def _parse_appliance_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                appliance_uid_type_0 = UUID(data)
+
+                return appliance_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        appliance_uid = _parse_appliance_uid(d.pop("applianceUid", UNSET))
 
         _platform_type = d.pop("platformType", UNSET)
         platform_type: BackupServerPublicCloudAppliancePlatform | Unset
@@ -143,12 +162,22 @@ class ProtectedCloudVirtualMachine:
 
         destinations = cast(list[str], d.pop("destinations", UNSET))
 
-        _latest_backup_date = d.pop("latestBackupDate", UNSET)
-        latest_backup_date: datetime.datetime | Unset
-        if isinstance(_latest_backup_date, Unset):
-            latest_backup_date = UNSET
-        else:
-            latest_backup_date = isoparse(_latest_backup_date)
+        def _parse_latest_backup_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                latest_backup_date_type_0 = isoparse(data)
+
+                return latest_backup_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        latest_backup_date = _parse_latest_backup_date(d.pop("latestBackupDate", UNSET))
 
         protected_cloud_virtual_machine = cls(
             instance_uid=instance_uid,

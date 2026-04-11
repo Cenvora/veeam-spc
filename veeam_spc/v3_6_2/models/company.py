@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -12,7 +12,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.company_services import CompanyServices
-    from ..models.embedded_for_organization_children import EmbeddedForOrganizationChildren
+    from ..models.embedded_for_organization_children_type_0 import EmbeddedForOrganizationChildrenType0
     from ..models.owner_credentials import OwnerCredentials
 
 
@@ -34,33 +34,35 @@ class Company:
             `SiteResourceUpdateFailed`.
             > Only the `Active` and `Disabled` statuses are valid.
              Default: CompanyStatus.ACTIVE.
-        reseller_uid (UUID | Unset): UID assigned to a reseller that manages the company.
-        subscription_plan_uid (UUID | Unset): UID assigned to a company subscription plan.
+        reseller_uid (None | Unset | UUID): UID assigned to a reseller that manages the company.
+        subscription_plan_uid (None | Unset | UUID): UID assigned to a company subscription plan.
         is_rest_access_enabled (bool | Unset): Indicates whether access to REST API is enabled for a company. Default:
             False.
         is_alarm_detect_enabled (bool | Unset): Indicates whether a company must receive notifications about alarms that
             were triggered for this company. Default: False.
         company_services (CompanyServices | Unset):
-        login_url (str | Unset): Company portal URL.
+        login_url (None | str | Unset): Company portal URL.
             > Can be configured by performing the `ReplaceCompanyLoginUrl` operation.'
-        field_embedded (EmbeddedForOrganizationChildren | Unset): Resource representation of the related organization
-            entity.
+        field_embedded (EmbeddedForOrganizationChildrenType0 | None | Unset): Resource representation of the related
+            organization entity.
     """
 
     owner_credentials: OwnerCredentials
     instance_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
     status: CompanyStatus | Unset = CompanyStatus.ACTIVE
-    reseller_uid: UUID | Unset = UNSET
-    subscription_plan_uid: UUID | Unset = UNSET
+    reseller_uid: None | Unset | UUID = UNSET
+    subscription_plan_uid: None | Unset | UUID = UNSET
     is_rest_access_enabled: bool | Unset = False
     is_alarm_detect_enabled: bool | Unset = False
     company_services: CompanyServices | Unset = UNSET
-    login_url: str | Unset = UNSET
-    field_embedded: EmbeddedForOrganizationChildren | Unset = UNSET
+    login_url: None | str | Unset = UNSET
+    field_embedded: EmbeddedForOrganizationChildrenType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_organization_children_type_0 import EmbeddedForOrganizationChildrenType0
+
         owner_credentials = self.owner_credentials.to_dict()
 
         instance_uid: str | Unset = UNSET
@@ -73,13 +75,21 @@ class Company:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        reseller_uid: str | Unset = UNSET
-        if not isinstance(self.reseller_uid, Unset):
+        reseller_uid: None | str | Unset
+        if isinstance(self.reseller_uid, Unset):
+            reseller_uid = UNSET
+        elif isinstance(self.reseller_uid, UUID):
             reseller_uid = str(self.reseller_uid)
+        else:
+            reseller_uid = self.reseller_uid
 
-        subscription_plan_uid: str | Unset = UNSET
-        if not isinstance(self.subscription_plan_uid, Unset):
+        subscription_plan_uid: None | str | Unset
+        if isinstance(self.subscription_plan_uid, Unset):
+            subscription_plan_uid = UNSET
+        elif isinstance(self.subscription_plan_uid, UUID):
             subscription_plan_uid = str(self.subscription_plan_uid)
+        else:
+            subscription_plan_uid = self.subscription_plan_uid
 
         is_rest_access_enabled = self.is_rest_access_enabled
 
@@ -89,11 +99,19 @@ class Company:
         if not isinstance(self.company_services, Unset):
             company_services = self.company_services.to_dict()
 
-        login_url = self.login_url
+        login_url: None | str | Unset
+        if isinstance(self.login_url, Unset):
+            login_url = UNSET
+        else:
+            login_url = self.login_url
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForOrganizationChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -128,7 +146,7 @@ class Company:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.company_services import CompanyServices
-        from ..models.embedded_for_organization_children import EmbeddedForOrganizationChildren
+        from ..models.embedded_for_organization_children_type_0 import EmbeddedForOrganizationChildrenType0
         from ..models.owner_credentials import OwnerCredentials
 
         d = dict(src_dict)
@@ -150,19 +168,39 @@ class Company:
         else:
             status = CompanyStatus(_status)
 
-        _reseller_uid = d.pop("resellerUid", UNSET)
-        reseller_uid: UUID | Unset
-        if isinstance(_reseller_uid, Unset):
-            reseller_uid = UNSET
-        else:
-            reseller_uid = UUID(_reseller_uid)
+        def _parse_reseller_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                reseller_uid_type_0 = UUID(data)
 
-        _subscription_plan_uid = d.pop("subscriptionPlanUid", UNSET)
-        subscription_plan_uid: UUID | Unset
-        if isinstance(_subscription_plan_uid, Unset):
-            subscription_plan_uid = UNSET
-        else:
-            subscription_plan_uid = UUID(_subscription_plan_uid)
+                return reseller_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        reseller_uid = _parse_reseller_uid(d.pop("resellerUid", UNSET))
+
+        def _parse_subscription_plan_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                subscription_plan_uid_type_0 = UUID(data)
+
+                return subscription_plan_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        subscription_plan_uid = _parse_subscription_plan_uid(d.pop("subscriptionPlanUid", UNSET))
 
         is_rest_access_enabled = d.pop("isRestAccessEnabled", UNSET)
 
@@ -175,14 +213,33 @@ class Company:
         else:
             company_services = CompanyServices.from_dict(_company_services)
 
-        login_url = d.pop("loginUrl", UNSET)
+        def _parse_login_url(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForOrganizationChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForOrganizationChildren.from_dict(_field_embedded)
+        login_url = _parse_login_url(d.pop("loginUrl", UNSET))
+
+        def _parse_field_embedded(data: object) -> EmbeddedForOrganizationChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_organization_children_type_0 = (
+                    EmbeddedForOrganizationChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_organization_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForOrganizationChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         company = cls(
             owner_credentials=owner_credentials,

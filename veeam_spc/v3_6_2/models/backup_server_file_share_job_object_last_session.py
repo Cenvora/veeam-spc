@@ -19,24 +19,24 @@ class BackupServerFileShareJobObjectLastSession:
     """
     Attributes:
         backup_status (BackupServerFileShareJobObjectLastSessionBackupStatus | Unset): Status of a job.
-        source_files_count (int | Unset): Total number of files in all sources.
-        changed_files_count (int | Unset): Number of processed files.
-        skipped_files_count (int | Unset): Number of skipped files.
-        backed_up_files_count (int | Unset): Number of backed up files.
-        transferred_size (int | Unset): Total size of backed up file share data, in bytes.
-        source_size (int | Unset): Total size of all source files, in bytes.
-        duration (int | Unset): Time taken to complete the latest job session, in seconds.
+        source_files_count (int | None | Unset): Total number of files in all sources.
+        changed_files_count (int | None | Unset): Number of processed files.
+        skipped_files_count (int | None | Unset): Number of skipped files.
+        backed_up_files_count (int | None | Unset): Number of backed up files.
+        transferred_size (int | None | Unset): Total size of backed up file share data, in bytes.
+        source_size (int | None | Unset): Total size of all source files, in bytes.
+        duration (int | None | Unset): Time taken to complete the latest job session, in seconds.
         messages (list[str] | Unset): Message that is displayed after a job session finishes.
     """
 
     backup_status: BackupServerFileShareJobObjectLastSessionBackupStatus | Unset = UNSET
-    source_files_count: int | Unset = UNSET
-    changed_files_count: int | Unset = UNSET
-    skipped_files_count: int | Unset = UNSET
-    backed_up_files_count: int | Unset = UNSET
-    transferred_size: int | Unset = UNSET
-    source_size: int | Unset = UNSET
-    duration: int | Unset = UNSET
+    source_files_count: int | None | Unset = UNSET
+    changed_files_count: int | None | Unset = UNSET
+    skipped_files_count: int | None | Unset = UNSET
+    backed_up_files_count: int | None | Unset = UNSET
+    transferred_size: int | None | Unset = UNSET
+    source_size: int | None | Unset = UNSET
+    duration: int | None | Unset = UNSET
     messages: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -45,19 +45,47 @@ class BackupServerFileShareJobObjectLastSession:
         if not isinstance(self.backup_status, Unset):
             backup_status = self.backup_status.value
 
-        source_files_count = self.source_files_count
+        source_files_count: int | None | Unset
+        if isinstance(self.source_files_count, Unset):
+            source_files_count = UNSET
+        else:
+            source_files_count = self.source_files_count
 
-        changed_files_count = self.changed_files_count
+        changed_files_count: int | None | Unset
+        if isinstance(self.changed_files_count, Unset):
+            changed_files_count = UNSET
+        else:
+            changed_files_count = self.changed_files_count
 
-        skipped_files_count = self.skipped_files_count
+        skipped_files_count: int | None | Unset
+        if isinstance(self.skipped_files_count, Unset):
+            skipped_files_count = UNSET
+        else:
+            skipped_files_count = self.skipped_files_count
 
-        backed_up_files_count = self.backed_up_files_count
+        backed_up_files_count: int | None | Unset
+        if isinstance(self.backed_up_files_count, Unset):
+            backed_up_files_count = UNSET
+        else:
+            backed_up_files_count = self.backed_up_files_count
 
-        transferred_size = self.transferred_size
+        transferred_size: int | None | Unset
+        if isinstance(self.transferred_size, Unset):
+            transferred_size = UNSET
+        else:
+            transferred_size = self.transferred_size
 
-        source_size = self.source_size
+        source_size: int | None | Unset
+        if isinstance(self.source_size, Unset):
+            source_size = UNSET
+        else:
+            source_size = self.source_size
 
-        duration = self.duration
+        duration: int | None | Unset
+        if isinstance(self.duration, Unset):
+            duration = UNSET
+        else:
+            duration = self.duration
 
         messages: list[str] | Unset = UNSET
         if not isinstance(self.messages, Unset):
@@ -97,19 +125,68 @@ class BackupServerFileShareJobObjectLastSession:
         else:
             backup_status = BackupServerFileShareJobObjectLastSessionBackupStatus(_backup_status)
 
-        source_files_count = d.pop("sourceFilesCount", UNSET)
+        def _parse_source_files_count(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        changed_files_count = d.pop("changedFilesCount", UNSET)
+        source_files_count = _parse_source_files_count(d.pop("sourceFilesCount", UNSET))
 
-        skipped_files_count = d.pop("skippedFilesCount", UNSET)
+        def _parse_changed_files_count(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        backed_up_files_count = d.pop("backedUpFilesCount", UNSET)
+        changed_files_count = _parse_changed_files_count(d.pop("changedFilesCount", UNSET))
 
-        transferred_size = d.pop("transferredSize", UNSET)
+        def _parse_skipped_files_count(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        source_size = d.pop("sourceSize", UNSET)
+        skipped_files_count = _parse_skipped_files_count(d.pop("skippedFilesCount", UNSET))
 
-        duration = d.pop("duration", UNSET)
+        def _parse_backed_up_files_count(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        backed_up_files_count = _parse_backed_up_files_count(d.pop("backedUpFilesCount", UNSET))
+
+        def _parse_transferred_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        transferred_size = _parse_transferred_size(d.pop("transferredSize", UNSET))
+
+        def _parse_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        source_size = _parse_source_size(d.pop("sourceSize", UNSET))
+
+        def _parse_duration(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        duration = _parse_duration(d.pop("duration", UNSET))
 
         messages = cast(list[str], d.pop("messages", UNSET))
 

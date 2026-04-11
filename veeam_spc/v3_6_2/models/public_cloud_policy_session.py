@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -18,24 +18,33 @@ T = TypeVar("T", bound="PublicCloudPolicySession")
 class PublicCloudPolicySession:
     """
     Attributes:
-        end_time (datetime.datetime | Unset): End date and time of a Veeam Backup for Public Clouds policy session
-        failure_message (str | Unset): Message containing information on failed Veeam Backup for Public Clouds policy
-            session.
+        end_time (datetime.datetime | None | Unset): End date and time of a Veeam Backup for Public Clouds policy
+            session
+        failure_message (None | str | Unset): Message containing information on failed Veeam Backup for Public Clouds
+            policy session.
         status (PublicCloudPolicySessionStatusReadonly | Unset): Status of a Veeam Backup for Public Clouds policy
             session.
     """
 
-    end_time: datetime.datetime | Unset = UNSET
-    failure_message: str | Unset = UNSET
+    end_time: datetime.datetime | None | Unset = UNSET
+    failure_message: None | str | Unset = UNSET
     status: PublicCloudPolicySessionStatusReadonly | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        end_time: str | Unset = UNSET
-        if not isinstance(self.end_time, Unset):
+        end_time: None | str | Unset
+        if isinstance(self.end_time, Unset):
+            end_time = UNSET
+        elif isinstance(self.end_time, datetime.datetime):
             end_time = self.end_time.isoformat()
+        else:
+            end_time = self.end_time
 
-        failure_message = self.failure_message
+        failure_message: None | str | Unset
+        if isinstance(self.failure_message, Unset):
+            failure_message = UNSET
+        else:
+            failure_message = self.failure_message
 
         status: str | Unset = UNSET
         if not isinstance(self.status, Unset):
@@ -56,14 +65,32 @@ class PublicCloudPolicySession:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        _end_time = d.pop("endTime", UNSET)
-        end_time: datetime.datetime | Unset
-        if isinstance(_end_time, Unset):
-            end_time = UNSET
-        else:
-            end_time = isoparse(_end_time)
 
-        failure_message = d.pop("failureMessage", UNSET)
+        def _parse_end_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                end_time_type_0 = isoparse(data)
+
+                return end_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        end_time = _parse_end_time(d.pop("endTime", UNSET))
+
+        def _parse_failure_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        failure_message = _parse_failure_message(d.pop("failureMessage", UNSET))
 
         _status = d.pop("status", UNSET)
         status: PublicCloudPolicySessionStatusReadonly | Unset

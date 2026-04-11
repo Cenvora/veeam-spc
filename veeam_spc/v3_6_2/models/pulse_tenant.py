@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,8 +21,8 @@ class PulseTenant:
         mapping_status (PulseTenantMappingStatus | Unset): Mapping status of a VCSP Pulse tenant.
         mapping_status_message (str | Unset): Message for mapping status of a VCSP Pulse tenant.
         name (str | Unset): Name of a VCSP Pulse tenant.
-        mapped_master_organization_uid (UUID | Unset): UID assigned to a master organization mapped to a VCSP Pulse
-            tenant.
+        mapped_master_organization_uid (None | Unset | UUID): UID assigned to a master organization mapped to a VCSP
+            Pulse tenant.
         merged_organization_uids (list[UUID] | Unset): Array of UIDs assigned to organizations merged with a master
             organization.
     """
@@ -31,7 +31,7 @@ class PulseTenant:
     mapping_status: PulseTenantMappingStatus | Unset = UNSET
     mapping_status_message: str | Unset = UNSET
     name: str | Unset = UNSET
-    mapped_master_organization_uid: UUID | Unset = UNSET
+    mapped_master_organization_uid: None | Unset | UUID = UNSET
     merged_organization_uids: list[UUID] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -46,9 +46,13 @@ class PulseTenant:
 
         name = self.name
 
-        mapped_master_organization_uid: str | Unset = UNSET
-        if not isinstance(self.mapped_master_organization_uid, Unset):
+        mapped_master_organization_uid: None | str | Unset
+        if isinstance(self.mapped_master_organization_uid, Unset):
+            mapped_master_organization_uid = UNSET
+        elif isinstance(self.mapped_master_organization_uid, UUID):
             mapped_master_organization_uid = str(self.mapped_master_organization_uid)
+        else:
+            mapped_master_organization_uid = self.mapped_master_organization_uid
 
         merged_organization_uids: list[str] | Unset = UNSET
         if not isinstance(self.merged_organization_uids, Unset):
@@ -91,12 +95,24 @@ class PulseTenant:
 
         name = d.pop("name", UNSET)
 
-        _mapped_master_organization_uid = d.pop("mappedMasterOrganizationUid", UNSET)
-        mapped_master_organization_uid: UUID | Unset
-        if isinstance(_mapped_master_organization_uid, Unset):
-            mapped_master_organization_uid = UNSET
-        else:
-            mapped_master_organization_uid = UUID(_mapped_master_organization_uid)
+        def _parse_mapped_master_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                mapped_master_organization_uid_type_0 = UUID(data)
+
+                return mapped_master_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        mapped_master_organization_uid = _parse_mapped_master_organization_uid(
+            d.pop("mappedMasterOrganizationUid", UNSET)
+        )
 
         _merged_organization_uids = d.pop("mergedOrganizationUids", UNSET)
         merged_organization_uids: list[UUID] | Unset = UNSET

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -18,62 +18,98 @@ class OAuth2IssueTokenBody:
     """
     Attributes:
         grant_type (OAuth2IssueTokenBodyGrantType): Grant type according to RFC 6749. Example: password.
-        username (str | Unset): User name.
+        username (None | str | Unset): User name.
             > Used with the `password` grant type.
              Example: restv3vacadministrator.
-        password (str | Unset): Password.
+        password (None | str | Unset): Password.
             > Used with the `password` grant type.
              Example: secretPassword.
-        refresh_token (str | Unset): Refresh token.
+        refresh_token (None | str | Unset): Refresh token.
             > Used with the `refresh_token` and `as` grant type.
-        mfa_token (str | Unset): Multi-factor authentication token.
+        mfa_token (None | str | Unset): Multi-factor authentication token.
             > Used with the `mfa` grant type.
-        mfa_code (str | Unset): Multi-factor authentication code.
+        mfa_code (None | str | Unset): Multi-factor authentication code.
             > Used with the `mfa` grant type.
-        code (str | Unset): Authorization code.
+        code (None | str | Unset): Authorization code.
             > Used with the `authorization_code` grant type.
-        public_key (str | Unset): Public key encoded in the Base64 format.
+        public_key (None | str | Unset): Public key encoded in the Base64 format.
             > Used with the `public_key` grant type.
-        user_uid (UUID | Unset): UID assigned to a user whose account must be used for authentication.
+        user_uid (None | Unset | UUID): UID assigned to a user whose account must be used for authentication.
             > Used with the `as` grant type.
-        read_only (bool | Unset): Defines whether a read-only access token must be issued.
+        read_only (bool | None | Unset): Defines whether a read-only access token must be issued.
             > Used with any grant type.
     """
 
     grant_type: OAuth2IssueTokenBodyGrantType
-    username: str | Unset = UNSET
-    password: str | Unset = UNSET
-    refresh_token: str | Unset = UNSET
-    mfa_token: str | Unset = UNSET
-    mfa_code: str | Unset = UNSET
-    code: str | Unset = UNSET
-    public_key: str | Unset = UNSET
-    user_uid: UUID | Unset = UNSET
-    read_only: bool | Unset = UNSET
+    username: None | str | Unset = UNSET
+    password: None | str | Unset = UNSET
+    refresh_token: None | str | Unset = UNSET
+    mfa_token: None | str | Unset = UNSET
+    mfa_code: None | str | Unset = UNSET
+    code: None | str | Unset = UNSET
+    public_key: None | str | Unset = UNSET
+    user_uid: None | Unset | UUID = UNSET
+    read_only: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         grant_type = self.grant_type.value
 
-        username = self.username
+        username: None | str | Unset
+        if isinstance(self.username, Unset):
+            username = UNSET
+        else:
+            username = self.username
 
-        password = self.password
+        password: None | str | Unset
+        if isinstance(self.password, Unset):
+            password = UNSET
+        else:
+            password = self.password
 
-        refresh_token = self.refresh_token
+        refresh_token: None | str | Unset
+        if isinstance(self.refresh_token, Unset):
+            refresh_token = UNSET
+        else:
+            refresh_token = self.refresh_token
 
-        mfa_token = self.mfa_token
+        mfa_token: None | str | Unset
+        if isinstance(self.mfa_token, Unset):
+            mfa_token = UNSET
+        else:
+            mfa_token = self.mfa_token
 
-        mfa_code = self.mfa_code
+        mfa_code: None | str | Unset
+        if isinstance(self.mfa_code, Unset):
+            mfa_code = UNSET
+        else:
+            mfa_code = self.mfa_code
 
-        code = self.code
+        code: None | str | Unset
+        if isinstance(self.code, Unset):
+            code = UNSET
+        else:
+            code = self.code
 
-        public_key = self.public_key
+        public_key: None | str | Unset
+        if isinstance(self.public_key, Unset):
+            public_key = UNSET
+        else:
+            public_key = self.public_key
 
-        user_uid: str | Unset = UNSET
-        if not isinstance(self.user_uid, Unset):
+        user_uid: None | str | Unset
+        if isinstance(self.user_uid, Unset):
+            user_uid = UNSET
+        elif isinstance(self.user_uid, UUID):
             user_uid = str(self.user_uid)
+        else:
+            user_uid = self.user_uid
 
-        read_only = self.read_only
+        read_only: bool | None | Unset
+        if isinstance(self.read_only, Unset):
+            read_only = UNSET
+        else:
+            read_only = self.read_only
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -108,28 +144,94 @@ class OAuth2IssueTokenBody:
         d = dict(src_dict)
         grant_type = OAuth2IssueTokenBodyGrantType(d.pop("grant_type"))
 
-        username = d.pop("username", UNSET)
+        def _parse_username(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        password = d.pop("password", UNSET)
+        username = _parse_username(d.pop("username", UNSET))
 
-        refresh_token = d.pop("refresh_token", UNSET)
+        def _parse_password(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        mfa_token = d.pop("mfa_token", UNSET)
+        password = _parse_password(d.pop("password", UNSET))
 
-        mfa_code = d.pop("mfa_code", UNSET)
+        def _parse_refresh_token(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        code = d.pop("code", UNSET)
+        refresh_token = _parse_refresh_token(d.pop("refresh_token", UNSET))
 
-        public_key = d.pop("public_key", UNSET)
+        def _parse_mfa_token(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _user_uid = d.pop("userUid", UNSET)
-        user_uid: UUID | Unset
-        if isinstance(_user_uid, Unset):
-            user_uid = UNSET
-        else:
-            user_uid = UUID(_user_uid)
+        mfa_token = _parse_mfa_token(d.pop("mfa_token", UNSET))
 
-        read_only = d.pop("readOnly", UNSET)
+        def _parse_mfa_code(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        mfa_code = _parse_mfa_code(d.pop("mfa_code", UNSET))
+
+        def _parse_code(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        code = _parse_code(d.pop("code", UNSET))
+
+        def _parse_public_key(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        public_key = _parse_public_key(d.pop("public_key", UNSET))
+
+        def _parse_user_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                user_uid_type_0 = UUID(data)
+
+                return user_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        user_uid = _parse_user_uid(d.pop("userUid", UNSET))
+
+        def _parse_read_only(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        read_only = _parse_read_only(d.pop("readOnly", UNSET))
 
         o_auth_2_issue_token_body = cls(
             grant_type=grant_type,

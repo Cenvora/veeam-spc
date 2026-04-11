@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,31 +24,31 @@ class ProtectedObjectStorageBackup:
     Attributes:
         object_storage_uid (UUID | Unset): UID assigned to an object storage.
         bucket_uid (UUID | Unset): UID assigned to an object storage bucket.
-        job_uid (UUID | Unset): UID assigned to a backup job that protects an object storage.
-        backup_uid (UUID | Unset): UID assigned to a backup.
+        job_uid (None | Unset | UUID): UID assigned to a backup job that protects an object storage.
+        backup_uid (None | Unset | UUID): UID assigned to a backup.
         repository_uid (UUID | Unset): UID assigned to a backup repository.
-        archive_repository_uid (UUID | Unset): UID assigned to an archive repository.
+        archive_repository_uid (None | Unset | UUID): UID assigned to an archive repository.
         archive_size (int | Unset): Size of archived file copies, in bytes.
         short_term_backup_size (int | Unset): Size of recent file copies, in bytes.
         archive_restore_points (int | Unset): Number of restore points for long-term retention.
         restore_points (int | Unset): Number of restore points.
         latest_restore_point_date (datetime.datetime | Unset): Date and time of the latest restore point creation.
-        source_size (int | Unset): Size of the protected data, in bytes.
+        source_size (int | None | Unset): Size of the protected data, in bytes.
         sources (list[ProtectedObjectStorageSource] | Unset): Object storage backup scope.
     """
 
     object_storage_uid: UUID | Unset = UNSET
     bucket_uid: UUID | Unset = UNSET
-    job_uid: UUID | Unset = UNSET
-    backup_uid: UUID | Unset = UNSET
+    job_uid: None | Unset | UUID = UNSET
+    backup_uid: None | Unset | UUID = UNSET
     repository_uid: UUID | Unset = UNSET
-    archive_repository_uid: UUID | Unset = UNSET
+    archive_repository_uid: None | Unset | UUID = UNSET
     archive_size: int | Unset = UNSET
     short_term_backup_size: int | Unset = UNSET
     archive_restore_points: int | Unset = UNSET
     restore_points: int | Unset = UNSET
     latest_restore_point_date: datetime.datetime | Unset = UNSET
-    source_size: int | Unset = UNSET
+    source_size: int | None | Unset = UNSET
     sources: list[ProtectedObjectStorageSource] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -61,21 +61,33 @@ class ProtectedObjectStorageBackup:
         if not isinstance(self.bucket_uid, Unset):
             bucket_uid = str(self.bucket_uid)
 
-        job_uid: str | Unset = UNSET
-        if not isinstance(self.job_uid, Unset):
+        job_uid: None | str | Unset
+        if isinstance(self.job_uid, Unset):
+            job_uid = UNSET
+        elif isinstance(self.job_uid, UUID):
             job_uid = str(self.job_uid)
+        else:
+            job_uid = self.job_uid
 
-        backup_uid: str | Unset = UNSET
-        if not isinstance(self.backup_uid, Unset):
+        backup_uid: None | str | Unset
+        if isinstance(self.backup_uid, Unset):
+            backup_uid = UNSET
+        elif isinstance(self.backup_uid, UUID):
             backup_uid = str(self.backup_uid)
+        else:
+            backup_uid = self.backup_uid
 
         repository_uid: str | Unset = UNSET
         if not isinstance(self.repository_uid, Unset):
             repository_uid = str(self.repository_uid)
 
-        archive_repository_uid: str | Unset = UNSET
-        if not isinstance(self.archive_repository_uid, Unset):
+        archive_repository_uid: None | str | Unset
+        if isinstance(self.archive_repository_uid, Unset):
+            archive_repository_uid = UNSET
+        elif isinstance(self.archive_repository_uid, UUID):
             archive_repository_uid = str(self.archive_repository_uid)
+        else:
+            archive_repository_uid = self.archive_repository_uid
 
         archive_size = self.archive_size
 
@@ -89,7 +101,11 @@ class ProtectedObjectStorageBackup:
         if not isinstance(self.latest_restore_point_date, Unset):
             latest_restore_point_date = self.latest_restore_point_date.isoformat()
 
-        source_size = self.source_size
+        source_size: int | None | Unset
+        if isinstance(self.source_size, Unset):
+            source_size = UNSET
+        else:
+            source_size = self.source_size
 
         sources: list[dict[str, Any]] | Unset = UNSET
         if not isinstance(self.sources, Unset):
@@ -149,19 +165,39 @@ class ProtectedObjectStorageBackup:
         else:
             bucket_uid = UUID(_bucket_uid)
 
-        _job_uid = d.pop("jobUid", UNSET)
-        job_uid: UUID | Unset
-        if isinstance(_job_uid, Unset):
-            job_uid = UNSET
-        else:
-            job_uid = UUID(_job_uid)
+        def _parse_job_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                job_uid_type_0 = UUID(data)
 
-        _backup_uid = d.pop("backupUid", UNSET)
-        backup_uid: UUID | Unset
-        if isinstance(_backup_uid, Unset):
-            backup_uid = UNSET
-        else:
-            backup_uid = UUID(_backup_uid)
+                return job_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        job_uid = _parse_job_uid(d.pop("jobUid", UNSET))
+
+        def _parse_backup_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                backup_uid_type_0 = UUID(data)
+
+                return backup_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        backup_uid = _parse_backup_uid(d.pop("backupUid", UNSET))
 
         _repository_uid = d.pop("repositoryUid", UNSET)
         repository_uid: UUID | Unset
@@ -170,12 +206,22 @@ class ProtectedObjectStorageBackup:
         else:
             repository_uid = UUID(_repository_uid)
 
-        _archive_repository_uid = d.pop("archiveRepositoryUid", UNSET)
-        archive_repository_uid: UUID | Unset
-        if isinstance(_archive_repository_uid, Unset):
-            archive_repository_uid = UNSET
-        else:
-            archive_repository_uid = UUID(_archive_repository_uid)
+        def _parse_archive_repository_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                archive_repository_uid_type_0 = UUID(data)
+
+                return archive_repository_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        archive_repository_uid = _parse_archive_repository_uid(d.pop("archiveRepositoryUid", UNSET))
 
         archive_size = d.pop("archiveSize", UNSET)
 
@@ -192,7 +238,14 @@ class ProtectedObjectStorageBackup:
         else:
             latest_restore_point_date = isoparse(_latest_restore_point_date)
 
-        source_size = d.pop("sourceSize", UNSET)
+        def _parse_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        source_size = _parse_source_size(d.pop("sourceSize", UNSET))
 
         _sources = d.pop("sources", UNSET)
         sources: list[ProtectedObjectStorageSource] | Unset = UNSET

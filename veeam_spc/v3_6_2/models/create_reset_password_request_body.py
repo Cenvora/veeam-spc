@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,13 +17,13 @@ class CreateResetPasswordRequestBody:
     Attributes:
         email (str): User email address.
         user_name (str): User name.
-        return_url (str | Unset): Relative URL that contains the password reset code in query parameters. The URL is
-            send to the user email address provided in the `email` property.
+        return_url (None | str | Unset): Relative URL that contains the password reset code in query parameters. The URL
+            is send to the user email address provided in the `email` property.
     """
 
     email: str
     user_name: str
-    return_url: str | Unset = UNSET
+    return_url: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -31,7 +31,11 @@ class CreateResetPasswordRequestBody:
 
         user_name = self.user_name
 
-        return_url = self.return_url
+        return_url: None | str | Unset
+        if isinstance(self.return_url, Unset):
+            return_url = UNSET
+        else:
+            return_url = self.return_url
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -53,7 +57,14 @@ class CreateResetPasswordRequestBody:
 
         user_name = d.pop("userName")
 
-        return_url = d.pop("returnUrl", UNSET)
+        def _parse_return_url(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        return_url = _parse_return_url(d.pop("returnUrl", UNSET))
 
         create_reset_password_request_body = cls(
             email=email,

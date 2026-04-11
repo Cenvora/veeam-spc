@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,9 +19,9 @@ class PublicCloudSqlAccount:
     Attributes:
         account_name (str): Name of a public cloud SQL account.
         account_id (str | Unset): ID assigned to a public cloud SQL account.
-        user_name (str | Unset): User name.
-        password (str | Unset): Password.
-        description (str | Unset): Description of a public cloud SQL account.
+        user_name (None | str | Unset): User name.
+        password (None | str | Unset): Password.
+        description (None | str | Unset): Description of a public cloud SQL account.
         status (PublicCloudSqlAccountStatus | Unset): Status of a public cloud SQL account.
         appliance_uid (UUID | Unset): UID assigned to a Veeam Backup for Public Clouds appliance.
         site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site.
@@ -31,9 +31,9 @@ class PublicCloudSqlAccount:
 
     account_name: str
     account_id: str | Unset = UNSET
-    user_name: str | Unset = UNSET
-    password: str | Unset = UNSET
-    description: str | Unset = UNSET
+    user_name: None | str | Unset = UNSET
+    password: None | str | Unset = UNSET
+    description: None | str | Unset = UNSET
     status: PublicCloudSqlAccountStatus | Unset = UNSET
     appliance_uid: UUID | Unset = UNSET
     site_uid: UUID | Unset = UNSET
@@ -45,11 +45,23 @@ class PublicCloudSqlAccount:
 
         account_id = self.account_id
 
-        user_name = self.user_name
+        user_name: None | str | Unset
+        if isinstance(self.user_name, Unset):
+            user_name = UNSET
+        else:
+            user_name = self.user_name
 
-        password = self.password
+        password: None | str | Unset
+        if isinstance(self.password, Unset):
+            password = UNSET
+        else:
+            password = self.password
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         status: str | Unset = UNSET
         if not isinstance(self.status, Unset):
@@ -100,11 +112,32 @@ class PublicCloudSqlAccount:
 
         account_id = d.pop("accountId", UNSET)
 
-        user_name = d.pop("userName", UNSET)
+        def _parse_user_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        password = d.pop("password", UNSET)
+        user_name = _parse_user_name(d.pop("userName", UNSET))
 
-        description = d.pop("description", UNSET)
+        def _parse_password(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        password = _parse_password(d.pop("password", UNSET))
+
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         _status = d.pop("status", UNSET)
         status: PublicCloudSqlAccountStatus | Unset

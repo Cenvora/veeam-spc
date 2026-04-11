@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -30,20 +30,20 @@ class ManagementAgent:
         location_uid (UUID): UID assigned to a location to which a management agent belongs.
         instance_uid (UUID | Unset): UID assigned to a management agent.
         organization_uid (UUID | Unset): UID assigned to an organization to which a management agent belongs.
-        host_name (str | Unset): Name of a computer on which a management agent is deployed.
-        friendly_name (str | Unset): Friendly name of a management agent.
+        host_name (None | str | Unset): Name of a computer on which a management agent is deployed.
+        friendly_name (None | str | Unset): Friendly name of a management agent.
         last_heartbeat_time (datetime.datetime | Unset): Date and time when a management agent on a computer sent the
             latest heartbeat.
         version (str | Unset): Version of a management agent deployed on a computer.
         discovery_time (datetime.datetime | Unset): Date and time when a computer was discovered.
-        tag (str | Unset): Additional information.
+        tag (None | str | Unset): Additional information.
         status (ManagementAgentStatus | Unset): Status of a management agent.
         type_ (ManagementAgentType | Unset): Role of a management agent.
         computer_info (ComputerInfo | Unset): Information about a computer on which a management agent is deployed.
         connection_status (ManagementAgentConnectionStatus | Unset): Connection status of a management agent.
         is_reboot_required (bool | Unset): Indicates whether computer reboot is required.
-        connection_account (UUID | Unset): Company owner user name that is used to connect a management agent to a cloud
-            gateway.
+        connection_account (None | Unset | UUID): Company owner user name that is used to connect a management agent to
+            a cloud gateway.
         version_status (ManagementAgentVersionStatus | Unset): Status of a management agent version.
         role (ManagementAgentRole | Unset): Role of a management agent.
     """
@@ -51,18 +51,18 @@ class ManagementAgent:
     location_uid: UUID
     instance_uid: UUID | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
-    host_name: str | Unset = UNSET
-    friendly_name: str | Unset = UNSET
+    host_name: None | str | Unset = UNSET
+    friendly_name: None | str | Unset = UNSET
     last_heartbeat_time: datetime.datetime | Unset = UNSET
     version: str | Unset = UNSET
     discovery_time: datetime.datetime | Unset = UNSET
-    tag: str | Unset = UNSET
+    tag: None | str | Unset = UNSET
     status: ManagementAgentStatus | Unset = UNSET
     type_: ManagementAgentType | Unset = UNSET
     computer_info: ComputerInfo | Unset = UNSET
     connection_status: ManagementAgentConnectionStatus | Unset = UNSET
     is_reboot_required: bool | Unset = UNSET
-    connection_account: UUID | Unset = UNSET
+    connection_account: None | Unset | UUID = UNSET
     version_status: ManagementAgentVersionStatus | Unset = UNSET
     role: ManagementAgentRole | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -78,9 +78,17 @@ class ManagementAgent:
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        host_name = self.host_name
+        host_name: None | str | Unset
+        if isinstance(self.host_name, Unset):
+            host_name = UNSET
+        else:
+            host_name = self.host_name
 
-        friendly_name = self.friendly_name
+        friendly_name: None | str | Unset
+        if isinstance(self.friendly_name, Unset):
+            friendly_name = UNSET
+        else:
+            friendly_name = self.friendly_name
 
         last_heartbeat_time: str | Unset = UNSET
         if not isinstance(self.last_heartbeat_time, Unset):
@@ -92,7 +100,11 @@ class ManagementAgent:
         if not isinstance(self.discovery_time, Unset):
             discovery_time = self.discovery_time.isoformat()
 
-        tag = self.tag
+        tag: None | str | Unset
+        if isinstance(self.tag, Unset):
+            tag = UNSET
+        else:
+            tag = self.tag
 
         status: str | Unset = UNSET
         if not isinstance(self.status, Unset):
@@ -112,9 +124,13 @@ class ManagementAgent:
 
         is_reboot_required = self.is_reboot_required
 
-        connection_account: str | Unset = UNSET
-        if not isinstance(self.connection_account, Unset):
+        connection_account: None | str | Unset
+        if isinstance(self.connection_account, Unset):
+            connection_account = UNSET
+        elif isinstance(self.connection_account, UUID):
             connection_account = str(self.connection_account)
+        else:
+            connection_account = self.connection_account
 
         version_status: str | Unset = UNSET
         if not isinstance(self.version_status, Unset):
@@ -187,9 +203,23 @@ class ManagementAgent:
         else:
             organization_uid = UUID(_organization_uid)
 
-        host_name = d.pop("hostName", UNSET)
+        def _parse_host_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        friendly_name = d.pop("friendlyName", UNSET)
+        host_name = _parse_host_name(d.pop("hostName", UNSET))
+
+        def _parse_friendly_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        friendly_name = _parse_friendly_name(d.pop("friendlyName", UNSET))
 
         _last_heartbeat_time = d.pop("lastHeartbeatTime", UNSET)
         last_heartbeat_time: datetime.datetime | Unset
@@ -207,7 +237,14 @@ class ManagementAgent:
         else:
             discovery_time = isoparse(_discovery_time)
 
-        tag = d.pop("tag", UNSET)
+        def _parse_tag(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        tag = _parse_tag(d.pop("tag", UNSET))
 
         _status = d.pop("status", UNSET)
         status: ManagementAgentStatus | Unset
@@ -239,12 +276,22 @@ class ManagementAgent:
 
         is_reboot_required = d.pop("isRebootRequired", UNSET)
 
-        _connection_account = d.pop("connectionAccount", UNSET)
-        connection_account: UUID | Unset
-        if isinstance(_connection_account, Unset):
-            connection_account = UNSET
-        else:
-            connection_account = UUID(_connection_account)
+        def _parse_connection_account(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                connection_account_type_0 = UUID(data)
+
+                return connection_account_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        connection_account = _parse_connection_account(d.pop("connectionAccount", UNSET))
 
         _version_status = d.pop("versionStatus", UNSET)
         version_status: ManagementAgentVersionStatus | Unset

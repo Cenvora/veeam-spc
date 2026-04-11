@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,14 +24,15 @@ class ProtectedVirtualMachineBackup:
     Attributes:
         instance_uid (UUID | Unset): UID assigned to a backup chain.
         virtual_machine_uid (UUID | Unset): UID assigned to a VM.
-        job_uid (UUID | Unset): UID assigned to a backup job in Veeam Backup & Replication.
+        job_uid (None | Unset | UUID): UID assigned to a backup job in Veeam Backup & Replication.
         backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server.
         backup_type (ProtectedVirtualMachineBackupBackupType | Unset): Backup job type.
         repository_uid (UUID | Unset): UID assigned to a repository on which the restore point resides.
-        total_restore_point_size (int | Unset): Total size of all restore points, in bytes.
-        latest_restore_point_size (int | Unset): Size of the latest restore point, in bytes.
+        total_restore_point_size (int | None | Unset): Total size of all restore points, in bytes.
+        latest_restore_point_size (int | None | Unset): Size of the latest restore point, in bytes.
         restore_points (int | Unset): Number of restore points.
-        latest_restore_point_date (datetime.datetime | Unset): Date and time of the latest restore point creation.
+        latest_restore_point_date (datetime.datetime | None | Unset): Date and time of the latest restore point
+            creation.
         target_type (ProtectedVirtualMachineBackupTargetType | Unset): Type of a target repository.
         malware_state (MalwareState | Unset): Malware status.
         target_location_tier (SobrRepositoryTier | Unset): Tier of a target repository in case it is an extent of a
@@ -42,14 +43,14 @@ class ProtectedVirtualMachineBackup:
 
     instance_uid: UUID | Unset = UNSET
     virtual_machine_uid: UUID | Unset = UNSET
-    job_uid: UUID | Unset = UNSET
+    job_uid: None | Unset | UUID = UNSET
     backup_server_uid: UUID | Unset = UNSET
     backup_type: ProtectedVirtualMachineBackupBackupType | Unset = UNSET
     repository_uid: UUID | Unset = UNSET
-    total_restore_point_size: int | Unset = UNSET
-    latest_restore_point_size: int | Unset = UNSET
+    total_restore_point_size: int | None | Unset = UNSET
+    latest_restore_point_size: int | None | Unset = UNSET
     restore_points: int | Unset = UNSET
-    latest_restore_point_date: datetime.datetime | Unset = UNSET
+    latest_restore_point_date: datetime.datetime | None | Unset = UNSET
     target_type: ProtectedVirtualMachineBackupTargetType | Unset = UNSET
     malware_state: MalwareState | Unset = UNSET
     target_location_tier: SobrRepositoryTier | Unset = UNSET
@@ -65,9 +66,13 @@ class ProtectedVirtualMachineBackup:
         if not isinstance(self.virtual_machine_uid, Unset):
             virtual_machine_uid = str(self.virtual_machine_uid)
 
-        job_uid: str | Unset = UNSET
-        if not isinstance(self.job_uid, Unset):
+        job_uid: None | str | Unset
+        if isinstance(self.job_uid, Unset):
+            job_uid = UNSET
+        elif isinstance(self.job_uid, UUID):
             job_uid = str(self.job_uid)
+        else:
+            job_uid = self.job_uid
 
         backup_server_uid: str | Unset = UNSET
         if not isinstance(self.backup_server_uid, Unset):
@@ -81,15 +86,27 @@ class ProtectedVirtualMachineBackup:
         if not isinstance(self.repository_uid, Unset):
             repository_uid = str(self.repository_uid)
 
-        total_restore_point_size = self.total_restore_point_size
+        total_restore_point_size: int | None | Unset
+        if isinstance(self.total_restore_point_size, Unset):
+            total_restore_point_size = UNSET
+        else:
+            total_restore_point_size = self.total_restore_point_size
 
-        latest_restore_point_size = self.latest_restore_point_size
+        latest_restore_point_size: int | None | Unset
+        if isinstance(self.latest_restore_point_size, Unset):
+            latest_restore_point_size = UNSET
+        else:
+            latest_restore_point_size = self.latest_restore_point_size
 
         restore_points = self.restore_points
 
-        latest_restore_point_date: str | Unset = UNSET
-        if not isinstance(self.latest_restore_point_date, Unset):
+        latest_restore_point_date: None | str | Unset
+        if isinstance(self.latest_restore_point_date, Unset):
+            latest_restore_point_date = UNSET
+        elif isinstance(self.latest_restore_point_date, datetime.datetime):
             latest_restore_point_date = self.latest_restore_point_date.isoformat()
+        else:
+            latest_restore_point_date = self.latest_restore_point_date
 
         target_type: str | Unset = UNSET
         if not isinstance(self.target_type, Unset):
@@ -156,12 +173,22 @@ class ProtectedVirtualMachineBackup:
         else:
             virtual_machine_uid = UUID(_virtual_machine_uid)
 
-        _job_uid = d.pop("jobUid", UNSET)
-        job_uid: UUID | Unset
-        if isinstance(_job_uid, Unset):
-            job_uid = UNSET
-        else:
-            job_uid = UUID(_job_uid)
+        def _parse_job_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                job_uid_type_0 = UUID(data)
+
+                return job_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        job_uid = _parse_job_uid(d.pop("jobUid", UNSET))
 
         _backup_server_uid = d.pop("backupServerUid", UNSET)
         backup_server_uid: UUID | Unset
@@ -184,18 +211,42 @@ class ProtectedVirtualMachineBackup:
         else:
             repository_uid = UUID(_repository_uid)
 
-        total_restore_point_size = d.pop("totalRestorePointSize", UNSET)
+        def _parse_total_restore_point_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        latest_restore_point_size = d.pop("latestRestorePointSize", UNSET)
+        total_restore_point_size = _parse_total_restore_point_size(d.pop("totalRestorePointSize", UNSET))
+
+        def _parse_latest_restore_point_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        latest_restore_point_size = _parse_latest_restore_point_size(d.pop("latestRestorePointSize", UNSET))
 
         restore_points = d.pop("restorePoints", UNSET)
 
-        _latest_restore_point_date = d.pop("latestRestorePointDate", UNSET)
-        latest_restore_point_date: datetime.datetime | Unset
-        if isinstance(_latest_restore_point_date, Unset):
-            latest_restore_point_date = UNSET
-        else:
-            latest_restore_point_date = isoparse(_latest_restore_point_date)
+        def _parse_latest_restore_point_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                latest_restore_point_date_type_0 = isoparse(data)
+
+                return latest_restore_point_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        latest_restore_point_date = _parse_latest_restore_point_date(d.pop("latestRestorePointDate", UNSET))
 
         _target_type = d.pop("targetType", UNSET)
         target_type: ProtectedVirtualMachineBackupTargetType | Unset

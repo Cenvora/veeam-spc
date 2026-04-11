@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -29,7 +29,7 @@ class PublicCloudDatabasePolicyObject:
         backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server.
         database_type (PublicCloudDatabaseType | Unset): Type of a cloud database included in a policy.
         engine_type (ProtectedCloudDatabaseEngineType | Unset): Database platform.
-        resource_id (str | Unset): Resource ID of a cloud database policy.
+        resource_id (None | str | Unset): Resource ID of a cloud database policy.
         last_backup (PublicCloudPolicySession | Unset):
         last_snapshot (PublicCloudPolicySession | Unset):
         last_replica_snapshot (PublicCloudPolicySession | Unset):
@@ -43,7 +43,7 @@ class PublicCloudDatabasePolicyObject:
     backup_server_uid: UUID | Unset = UNSET
     database_type: PublicCloudDatabaseType | Unset = UNSET
     engine_type: ProtectedCloudDatabaseEngineType | Unset = UNSET
-    resource_id: str | Unset = UNSET
+    resource_id: None | str | Unset = UNSET
     last_backup: PublicCloudPolicySession | Unset = UNSET
     last_snapshot: PublicCloudPolicySession | Unset = UNSET
     last_replica_snapshot: PublicCloudPolicySession | Unset = UNSET
@@ -75,7 +75,11 @@ class PublicCloudDatabasePolicyObject:
         if not isinstance(self.engine_type, Unset):
             engine_type = self.engine_type.value
 
-        resource_id = self.resource_id
+        resource_id: None | str | Unset
+        if isinstance(self.resource_id, Unset):
+            resource_id = UNSET
+        else:
+            resource_id = self.resource_id
 
         last_backup: dict[str, Any] | Unset = UNSET
         if not isinstance(self.last_backup, Unset):
@@ -167,7 +171,14 @@ class PublicCloudDatabasePolicyObject:
         else:
             engine_type = ProtectedCloudDatabaseEngineType(_engine_type)
 
-        resource_id = d.pop("resourceId", UNSET)
+        def _parse_resource_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        resource_id = _parse_resource_id(d.pop("resourceId", UNSET))
 
         _last_backup = d.pop("lastBackup", UNSET)
         last_backup: PublicCloudPolicySession | Unset

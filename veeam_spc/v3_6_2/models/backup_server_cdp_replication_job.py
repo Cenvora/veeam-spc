@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,7 +19,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.backup_server_cdp_replication_job_last_day import BackupServerCdpReplicationJobLastDay
     from ..models.backup_server_cdp_replication_job_last_period import BackupServerCdpReplicationJobLastPeriod
-    from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+    from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
 
 T = TypeVar("T", bound="BackupServerCdpReplicationJob")
@@ -39,8 +39,8 @@ class BackupServerCdpReplicationJob:
         long_term_retention (int | Unset): Long-term retention value.
         long_term_retention_unit (BackupServerCdpReplicationJobLongTermRetentionUnit | Unset): Long-term retention
             measurement units.
-        field_embedded (EmbeddedForBackupServerJobChildren | Unset): Resource representation of the related Veeam Backup
-            & Replication server job entity.
+        field_embedded (EmbeddedForBackupServerJobChildrenType0 | None | Unset): Resource representation of the related
+            Veeam Backup & Replication server job entity.
         keep_restore_points_in_days (int | Unset): Number of days for which long-term retention points must be retained.
         source_proxy_auto_detect (bool | Unset): Indicates whether Veeam Backup & Replication must select a source proxy
             automatically.
@@ -59,7 +59,7 @@ class BackupServerCdpReplicationJob:
     short_term_retention_unit: BackupServerCdpReplicationJobShortTermRetentionUnit | Unset = UNSET
     long_term_retention: int | Unset = UNSET
     long_term_retention_unit: BackupServerCdpReplicationJobLongTermRetentionUnit | Unset = UNSET
-    field_embedded: EmbeddedForBackupServerJobChildren | Unset = UNSET
+    field_embedded: EmbeddedForBackupServerJobChildrenType0 | None | Unset = UNSET
     keep_restore_points_in_days: int | Unset = UNSET
     source_proxy_auto_detect: bool | Unset = UNSET
     target_proxy_auto_detect: bool | Unset = UNSET
@@ -69,6 +69,8 @@ class BackupServerCdpReplicationJob:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
+
         instance_uid: str | Unset = UNSET
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
@@ -95,9 +97,13 @@ class BackupServerCdpReplicationJob:
         if not isinstance(self.long_term_retention_unit, Unset):
             long_term_retention_unit = self.long_term_retention_unit.value
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForBackupServerJobChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         keep_restore_points_in_days = self.keep_restore_points_in_days
 
@@ -155,7 +161,7 @@ class BackupServerCdpReplicationJob:
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.backup_server_cdp_replication_job_last_day import BackupServerCdpReplicationJobLastDay
         from ..models.backup_server_cdp_replication_job_last_period import BackupServerCdpReplicationJobLastPeriod
-        from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
         d = dict(src_dict)
         _instance_uid = d.pop("instanceUid", UNSET)
@@ -199,12 +205,24 @@ class BackupServerCdpReplicationJob:
         else:
             long_term_retention_unit = BackupServerCdpReplicationJobLongTermRetentionUnit(_long_term_retention_unit)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForBackupServerJobChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForBackupServerJobChildren.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> EmbeddedForBackupServerJobChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_backup_server_job_children_type_0 = (
+                    EmbeddedForBackupServerJobChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_backup_server_job_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForBackupServerJobChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         keep_restore_points_in_days = d.pop("keepRestorePointsInDays", UNSET)
 

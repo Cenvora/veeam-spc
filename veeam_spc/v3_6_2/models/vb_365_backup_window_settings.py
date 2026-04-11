@@ -20,17 +20,21 @@ class Vb365BackupWindowSettings:
             These elements can be logically divided into 7 groups by 24. Each group represents a day of the week starting
             from Sunday.
             Each element represents a backup hours: `true` — backup is allowed, `false` — backup is not allowed.
-        minute_offset (int | Unset): Number of minutes that must be skipped after specified job starting time.
+        minute_offset (int | None | Unset): Number of minutes that must be skipped after specified job starting time.
     """
 
     backup_window: list[bool]
-    minute_offset: int | Unset = UNSET
+    minute_offset: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         backup_window = self.backup_window
 
-        minute_offset = self.minute_offset
+        minute_offset: int | None | Unset
+        if isinstance(self.minute_offset, Unset):
+            minute_offset = UNSET
+        else:
+            minute_offset = self.minute_offset
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -49,7 +53,14 @@ class Vb365BackupWindowSettings:
         d = dict(src_dict)
         backup_window = cast(list[bool], d.pop("backupWindow"))
 
-        minute_offset = d.pop("minuteOffset", UNSET)
+        def _parse_minute_offset(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        minute_offset = _parse_minute_offset(d.pop("minuteOffset", UNSET))
 
         vb_365_backup_window_settings = cls(
             backup_window=backup_window,

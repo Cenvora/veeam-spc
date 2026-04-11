@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,19 +15,28 @@ T = TypeVar("T", bound="BackupServerVPowerNFSPortSettings")
 class BackupServerVPowerNFSPortSettings:
     """
     Attributes:
-        mount_port (int | Unset): Port that the Veeam vPower NFS Service must use to mount the vPower NFS datastore.
-        v_power_nfs_port (int | Unset): Port that the Veeam vPower NFS Service must use to connect to the target NFS
-            share.
+        mount_port (int | None | Unset): Port that the Veeam vPower NFS Service must use to mount the vPower NFS
+            datastore.
+        v_power_nfs_port (int | None | Unset): Port that the Veeam vPower NFS Service must use to connect to the target
+            NFS share.
     """
 
-    mount_port: int | Unset = UNSET
-    v_power_nfs_port: int | Unset = UNSET
+    mount_port: int | None | Unset = UNSET
+    v_power_nfs_port: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        mount_port = self.mount_port
+        mount_port: int | None | Unset
+        if isinstance(self.mount_port, Unset):
+            mount_port = UNSET
+        else:
+            mount_port = self.mount_port
 
-        v_power_nfs_port = self.v_power_nfs_port
+        v_power_nfs_port: int | None | Unset
+        if isinstance(self.v_power_nfs_port, Unset):
+            v_power_nfs_port = UNSET
+        else:
+            v_power_nfs_port = self.v_power_nfs_port
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -42,9 +51,24 @@ class BackupServerVPowerNFSPortSettings:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        mount_port = d.pop("mountPort", UNSET)
 
-        v_power_nfs_port = d.pop("vPowerNFSPort", UNSET)
+        def _parse_mount_port(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        mount_port = _parse_mount_port(d.pop("mountPort", UNSET))
+
+        def _parse_v_power_nfs_port(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        v_power_nfs_port = _parse_v_power_nfs_port(d.pop("vPowerNFSPort", UNSET))
 
         backup_server_v_power_nfs_port_settings = cls(
             mount_port=mount_port,
