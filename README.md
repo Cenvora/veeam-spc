@@ -180,8 +180,10 @@ async def main():
         verify_ssl=False,
     )
     if api_version is None:
-        # Unreachable, refused, or a console older than this library supports
-        api_version = "3.6"
+        # Unreachable, refused, or a console older than this library supports. Unlike the
+        # other Veeam products there is no safe default to fall back on: every version
+        # answers on /api/v3, so a wrong guess connects and then misparses responses
+        raise RuntimeError("Could not determine the API version; set one explicitly")
 
     vc = VeeamClient(
         host=host,
