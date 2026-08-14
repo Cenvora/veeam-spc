@@ -56,5 +56,12 @@ tag_regex = "^(?:v)?(?P<version>.*)$"
 
 [tool.setuptools.packages.find]
 include = ["veeam_spc*"]
-exclude = ["media*", "openapi_schemas*"]
+exclude = ["media*", "openapi_schemas*", "tests*"]
+
+# Confined to tests/: the generated packages contain modules named test_* that are API
+# operations, not tests, and collecting them fails
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
 

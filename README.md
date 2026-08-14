@@ -157,6 +157,60 @@ async def main():
 asyncio.run(main())
 ```
 
+#### Detect the API version a console serves
+
+Unlike the other Veeam products, VSPC does not version its URLs: every release since 8.1
+answers on `/api/v3`, and the client declares what it understands with an `X-Client-Version`
+header. So there is nothing to probe — what the console reports instead is its own build,
+from `/api/v3/about`, and each console release corresponds to exactly one API version.
+`detect_api_version` reads that and maps it:
+
+```python
+import asyncio
+from veeam_spc.client import VeeamClient
+from veeam_spc.discovery import detect_api_version
+
+async def main():
+    host = "https://vspc.example.com:1280"
+
+    api_version = await detect_api_version(
+        host,
+        username="administrator",
+        password="SuperSecretPassword",
+        verify_ssl=False,
+    )
+    if api_version is None:
+        # Unreachable, refused, or a console older than this library supports. Unlike the
+        # other Veeam products there is no safe default to fall back on: every version
+        # answers on /api/v3, so a wrong guess connects and then misparses responses
+        raise RuntimeError("Could not determine the API version; set one explicitly")
+
+    vc = VeeamClient(
+        host=host,
+        username="administrator",
+        password="SuperSecretPassword",
+        api_version=api_version,
+        verify_ssl=False,
+    )
+    await vc.connect()
+
+asyncio.run(main())
+```
+
+Because `/about` needs a bearer token, this is the one Veeam product where detection cannot
+run before credentials exist. Detection logs in declaring the oldest version this library
+ships, since an older `X-Client-Version` is the one an older console will accept; pass a
+`client=` you have already connected to skip the extra login.
+
+A console newer than anything packaged here maps to the newest version this library speaks —
+VSPC keeps older `X-Client-Version` values working. A console older than 8.1 returns `None`
+rather than a guess. The mapping itself is `SERVER_TO_API_VERSION`, and
+`api_version_for_server("9.2.0.32907")` applies it to a version string you already have.
+
+Resolve it once and store the result rather than detecting on every start: a console upgrade
+would otherwise silently move you onto a newer version, and versions rename enum values and
+add required fields.
+
 #### Call an API endpoint (async)
 
 ```python
