@@ -1,0 +1,347 @@
+from http import HTTPStatus
+from typing import Any, cast
+from urllib.parse import quote
+from uuid import UUID
+
+import httpx
+
+from ...client import AuthenticatedClient, Client
+from ...models.error_response import ErrorResponse
+from ...models.schedule_upgrade_v_one_server_response_200 import ScheduleUpgradeVOneServerResponse200
+from ...models.v_one_scheduled_deployment_configuration import VOneScheduledDeploymentConfiguration
+from ...types import UNSET, Response, Unset
+
+
+def _get_kwargs(
+    v_one_server_uid: UUID,
+    *,
+    body: VOneScheduledDeploymentConfiguration,
+    select: str | Unset = UNSET,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
+    if not isinstance(x_request_id, Unset):
+        headers["X-Request-id"] = x_request_id
+
+    if not isinstance(x_client_version, Unset):
+        headers["X-Client-Version"] = x_client_version
+
+    params: dict[str, Any] = {}
+
+    params["select"] = select
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
+
+    _kwargs: dict[str, Any] = {
+        "method": "post",
+        "url": "/infrastructure/voneServers/{v_one_server_uid}/scheduledTasks/upgrade".format(
+            v_one_server_uid=quote(str(v_one_server_uid), safe=""),
+        ),
+        "params": params,
+    }
+
+    _kwargs["json"] = body.to_dict()
+
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
+    return _kwargs
+
+
+def _parse_response(
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200:
+    if response.status_code == 200:
+        response_200 = ScheduleUpgradeVOneServerResponse200.from_dict(response.json())
+
+        return response_200
+
+    if response.status_code == 202:
+        response_202 = cast(Any, None)
+        return response_202
+
+    response_default = ErrorResponse.from_dict(response.json())
+
+    return response_default
+
+
+def _build_response(
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200]:
+    return Response(
+        status_code=HTTPStatus(response.status_code),
+        content=response.content,
+        headers=response.headers,
+        parsed=_parse_response(client=client, response=response),
+    )
+
+
+def sync_detailed(
+    v_one_server_uid: UUID,
+    *,
+    client: AuthenticatedClient,
+    body: VOneScheduledDeploymentConfiguration,
+    select: str | Unset = UNSET,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> Response[Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200]:
+    r"""Schedule Veeam ONE Update
+
+     Creates a scheduled task that installs the latest Veeam ONE update on a server with the specified
+    UID.
+
+    Args:
+        v_one_server_uid (UUID):
+        select (str | Unset):
+        x_request_id (UUID | Unset):
+        x_client_version (str | Unset):
+        body (VOneScheduledDeploymentConfiguration):  Example: {'configuration': {'distribution':
+            {'filePath':
+            '\\\\tech.local\\tech\\VSPC\\VBR\\13\\Butler\\VeeamONE_13.0.0.5457_20250723.iso',
+            'userName': 'vspc\\admin', 'password': 'Password1'}, 'usePredownloadedIso': None,
+            'answerXml': '<?xml version="1.0"
+            encoding="utf-8"?>\r\n<unattendedInstallationConfiguration bundle="Vo" mode="upgrade"
+            version="1.0">\r\n  <properties>\r\n\r\n    <!--License agreements-->\r\n    <property
+            name="ACCEPT_EULA" value="1" />\r\n    <property name="ACCEPT_LICENSING_POLICY" value="1"
+            />\r\n    <property name="ACCEPT_THIRDPARTY_LICENSES" value="1" />\r\n    <property
+            name="ACCEPT_REQUIRED_SOFTWARE" value="1" />\r\n\r\n    <!--License file-->\r\n
+            <property name="VO_LICENSE_FILE" value="" />\r\n    <property name="VO_LICENSE_AUTOUPDATE"
+            value="1" />\r\n\r\n    <!--Service account-->\r\n    <property name="VO_SERVICE_USER"
+            value="vspc\\administrator" />\r\n    <property name="VO_SERVICE_PASSWORD"
+            value="Password1" hidden="1" />\r\n\r\n    <!--Database configuration-->\r\n    <property
+            name="VO_SQLSERVER_USERNAME" value="" />\r\n    <property name="VO_SQLSERVER_PASSWORD"
+            value="" hidden="1"/>\r\n\r\n    <!--Ports configuration-->\r\n    <property
+            name="VO_MONITORING_SERVICE_PORT" value="2714" />\r\n    <property
+            name="VO_REPORTING_SERVICE_PORT" value="2742" />\r\n    <property
+            name="VO_INTERNAL_WEB_API_PORT" value="2741"  />\r\n    <!--Certificate
+            configuration-->\r\n    <property name="VO_CERTIFICATE_THUMBPRINT" value="" />\r\n\r\n
+            <!--Server connection-->\r\n    <property name="VO_CONNECTION_SERVER_NAME" value="" />\r\n
+            <property name="VO_CONNECTION_WEB_API_PORT" value="" />\r\n    <property
+            name="VO_CONNECTION_USER" value="" />\r\n    <property name="VO_CONNECTION_PASSWORD"
+            value="" hidden="1" />\r\n\r\n', 'allowAutoReboot': True, 'stopAllActivities': None,
+            'useManagementAgentCredentials': None, 'adminCredentials': {'username':
+            'vspc\\administrator', 'password': 'Password1'}}, 'schedule': {'dateTime':
+            '2025-08-03T11:52:23.637Z'}}.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Response[Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200]
+    """
+
+    kwargs = _get_kwargs(
+        v_one_server_uid=v_one_server_uid,
+        body=body,
+        select=select,
+        x_request_id=x_request_id,
+        x_client_version=x_client_version,
+    )
+
+    response = client.get_httpx_client().request(
+        **kwargs,
+    )
+
+    return _build_response(client=client, response=response)
+
+
+def sync(
+    v_one_server_uid: UUID,
+    *,
+    client: AuthenticatedClient,
+    body: VOneScheduledDeploymentConfiguration,
+    select: str | Unset = UNSET,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200 | None:
+    r"""Schedule Veeam ONE Update
+
+     Creates a scheduled task that installs the latest Veeam ONE update on a server with the specified
+    UID.
+
+    Args:
+        v_one_server_uid (UUID):
+        select (str | Unset):
+        x_request_id (UUID | Unset):
+        x_client_version (str | Unset):
+        body (VOneScheduledDeploymentConfiguration):  Example: {'configuration': {'distribution':
+            {'filePath':
+            '\\\\tech.local\\tech\\VSPC\\VBR\\13\\Butler\\VeeamONE_13.0.0.5457_20250723.iso',
+            'userName': 'vspc\\admin', 'password': 'Password1'}, 'usePredownloadedIso': None,
+            'answerXml': '<?xml version="1.0"
+            encoding="utf-8"?>\r\n<unattendedInstallationConfiguration bundle="Vo" mode="upgrade"
+            version="1.0">\r\n  <properties>\r\n\r\n    <!--License agreements-->\r\n    <property
+            name="ACCEPT_EULA" value="1" />\r\n    <property name="ACCEPT_LICENSING_POLICY" value="1"
+            />\r\n    <property name="ACCEPT_THIRDPARTY_LICENSES" value="1" />\r\n    <property
+            name="ACCEPT_REQUIRED_SOFTWARE" value="1" />\r\n\r\n    <!--License file-->\r\n
+            <property name="VO_LICENSE_FILE" value="" />\r\n    <property name="VO_LICENSE_AUTOUPDATE"
+            value="1" />\r\n\r\n    <!--Service account-->\r\n    <property name="VO_SERVICE_USER"
+            value="vspc\\administrator" />\r\n    <property name="VO_SERVICE_PASSWORD"
+            value="Password1" hidden="1" />\r\n\r\n    <!--Database configuration-->\r\n    <property
+            name="VO_SQLSERVER_USERNAME" value="" />\r\n    <property name="VO_SQLSERVER_PASSWORD"
+            value="" hidden="1"/>\r\n\r\n    <!--Ports configuration-->\r\n    <property
+            name="VO_MONITORING_SERVICE_PORT" value="2714" />\r\n    <property
+            name="VO_REPORTING_SERVICE_PORT" value="2742" />\r\n    <property
+            name="VO_INTERNAL_WEB_API_PORT" value="2741"  />\r\n    <!--Certificate
+            configuration-->\r\n    <property name="VO_CERTIFICATE_THUMBPRINT" value="" />\r\n\r\n
+            <!--Server connection-->\r\n    <property name="VO_CONNECTION_SERVER_NAME" value="" />\r\n
+            <property name="VO_CONNECTION_WEB_API_PORT" value="" />\r\n    <property
+            name="VO_CONNECTION_USER" value="" />\r\n    <property name="VO_CONNECTION_PASSWORD"
+            value="" hidden="1" />\r\n\r\n', 'allowAutoReboot': True, 'stopAllActivities': None,
+            'useManagementAgentCredentials': None, 'adminCredentials': {'username':
+            'vspc\\administrator', 'password': 'Password1'}}, 'schedule': {'dateTime':
+            '2025-08-03T11:52:23.637Z'}}.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200
+    """
+
+    return sync_detailed(
+        v_one_server_uid=v_one_server_uid,
+        client=client,
+        body=body,
+        select=select,
+        x_request_id=x_request_id,
+        x_client_version=x_client_version,
+    ).parsed
+
+
+async def asyncio_detailed(
+    v_one_server_uid: UUID,
+    *,
+    client: AuthenticatedClient,
+    body: VOneScheduledDeploymentConfiguration,
+    select: str | Unset = UNSET,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> Response[Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200]:
+    r"""Schedule Veeam ONE Update
+
+     Creates a scheduled task that installs the latest Veeam ONE update on a server with the specified
+    UID.
+
+    Args:
+        v_one_server_uid (UUID):
+        select (str | Unset):
+        x_request_id (UUID | Unset):
+        x_client_version (str | Unset):
+        body (VOneScheduledDeploymentConfiguration):  Example: {'configuration': {'distribution':
+            {'filePath':
+            '\\\\tech.local\\tech\\VSPC\\VBR\\13\\Butler\\VeeamONE_13.0.0.5457_20250723.iso',
+            'userName': 'vspc\\admin', 'password': 'Password1'}, 'usePredownloadedIso': None,
+            'answerXml': '<?xml version="1.0"
+            encoding="utf-8"?>\r\n<unattendedInstallationConfiguration bundle="Vo" mode="upgrade"
+            version="1.0">\r\n  <properties>\r\n\r\n    <!--License agreements-->\r\n    <property
+            name="ACCEPT_EULA" value="1" />\r\n    <property name="ACCEPT_LICENSING_POLICY" value="1"
+            />\r\n    <property name="ACCEPT_THIRDPARTY_LICENSES" value="1" />\r\n    <property
+            name="ACCEPT_REQUIRED_SOFTWARE" value="1" />\r\n\r\n    <!--License file-->\r\n
+            <property name="VO_LICENSE_FILE" value="" />\r\n    <property name="VO_LICENSE_AUTOUPDATE"
+            value="1" />\r\n\r\n    <!--Service account-->\r\n    <property name="VO_SERVICE_USER"
+            value="vspc\\administrator" />\r\n    <property name="VO_SERVICE_PASSWORD"
+            value="Password1" hidden="1" />\r\n\r\n    <!--Database configuration-->\r\n    <property
+            name="VO_SQLSERVER_USERNAME" value="" />\r\n    <property name="VO_SQLSERVER_PASSWORD"
+            value="" hidden="1"/>\r\n\r\n    <!--Ports configuration-->\r\n    <property
+            name="VO_MONITORING_SERVICE_PORT" value="2714" />\r\n    <property
+            name="VO_REPORTING_SERVICE_PORT" value="2742" />\r\n    <property
+            name="VO_INTERNAL_WEB_API_PORT" value="2741"  />\r\n    <!--Certificate
+            configuration-->\r\n    <property name="VO_CERTIFICATE_THUMBPRINT" value="" />\r\n\r\n
+            <!--Server connection-->\r\n    <property name="VO_CONNECTION_SERVER_NAME" value="" />\r\n
+            <property name="VO_CONNECTION_WEB_API_PORT" value="" />\r\n    <property
+            name="VO_CONNECTION_USER" value="" />\r\n    <property name="VO_CONNECTION_PASSWORD"
+            value="" hidden="1" />\r\n\r\n', 'allowAutoReboot': True, 'stopAllActivities': None,
+            'useManagementAgentCredentials': None, 'adminCredentials': {'username':
+            'vspc\\administrator', 'password': 'Password1'}}, 'schedule': {'dateTime':
+            '2025-08-03T11:52:23.637Z'}}.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Response[Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200]
+    """
+
+    kwargs = _get_kwargs(
+        v_one_server_uid=v_one_server_uid,
+        body=body,
+        select=select,
+        x_request_id=x_request_id,
+        x_client_version=x_client_version,
+    )
+
+    response = await client.get_async_httpx_client().request(**kwargs)
+
+    return _build_response(client=client, response=response)
+
+
+async def asyncio(
+    v_one_server_uid: UUID,
+    *,
+    client: AuthenticatedClient,
+    body: VOneScheduledDeploymentConfiguration,
+    select: str | Unset = UNSET,
+    x_request_id: UUID | Unset = UNSET,
+    x_client_version: str | Unset = UNSET,
+) -> Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200 | None:
+    r"""Schedule Veeam ONE Update
+
+     Creates a scheduled task that installs the latest Veeam ONE update on a server with the specified
+    UID.
+
+    Args:
+        v_one_server_uid (UUID):
+        select (str | Unset):
+        x_request_id (UUID | Unset):
+        x_client_version (str | Unset):
+        body (VOneScheduledDeploymentConfiguration):  Example: {'configuration': {'distribution':
+            {'filePath':
+            '\\\\tech.local\\tech\\VSPC\\VBR\\13\\Butler\\VeeamONE_13.0.0.5457_20250723.iso',
+            'userName': 'vspc\\admin', 'password': 'Password1'}, 'usePredownloadedIso': None,
+            'answerXml': '<?xml version="1.0"
+            encoding="utf-8"?>\r\n<unattendedInstallationConfiguration bundle="Vo" mode="upgrade"
+            version="1.0">\r\n  <properties>\r\n\r\n    <!--License agreements-->\r\n    <property
+            name="ACCEPT_EULA" value="1" />\r\n    <property name="ACCEPT_LICENSING_POLICY" value="1"
+            />\r\n    <property name="ACCEPT_THIRDPARTY_LICENSES" value="1" />\r\n    <property
+            name="ACCEPT_REQUIRED_SOFTWARE" value="1" />\r\n\r\n    <!--License file-->\r\n
+            <property name="VO_LICENSE_FILE" value="" />\r\n    <property name="VO_LICENSE_AUTOUPDATE"
+            value="1" />\r\n\r\n    <!--Service account-->\r\n    <property name="VO_SERVICE_USER"
+            value="vspc\\administrator" />\r\n    <property name="VO_SERVICE_PASSWORD"
+            value="Password1" hidden="1" />\r\n\r\n    <!--Database configuration-->\r\n    <property
+            name="VO_SQLSERVER_USERNAME" value="" />\r\n    <property name="VO_SQLSERVER_PASSWORD"
+            value="" hidden="1"/>\r\n\r\n    <!--Ports configuration-->\r\n    <property
+            name="VO_MONITORING_SERVICE_PORT" value="2714" />\r\n    <property
+            name="VO_REPORTING_SERVICE_PORT" value="2742" />\r\n    <property
+            name="VO_INTERNAL_WEB_API_PORT" value="2741"  />\r\n    <!--Certificate
+            configuration-->\r\n    <property name="VO_CERTIFICATE_THUMBPRINT" value="" />\r\n\r\n
+            <!--Server connection-->\r\n    <property name="VO_CONNECTION_SERVER_NAME" value="" />\r\n
+            <property name="VO_CONNECTION_WEB_API_PORT" value="" />\r\n    <property
+            name="VO_CONNECTION_USER" value="" />\r\n    <property name="VO_CONNECTION_PASSWORD"
+            value="" hidden="1" />\r\n\r\n', 'allowAutoReboot': True, 'stopAllActivities': None,
+            'useManagementAgentCredentials': None, 'adminCredentials': {'username':
+            'vspc\\administrator', 'password': 'Password1'}}, 'schedule': {'dateTime':
+            '2025-08-03T11:52:23.637Z'}}.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Any | ErrorResponse | ScheduleUpgradeVOneServerResponse200
+    """
+
+    return (
+        await asyncio_detailed(
+            v_one_server_uid=v_one_server_uid,
+            client=client,
+            body=body,
+            select=select,
+            x_request_id=x_request_id,
+            x_client_version=x_client_version,
+        )
+    ).parsed

@@ -1,0 +1,190 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..models.windows_server_job_schedule_settings_schedule_type import WindowsServerJobScheduleSettingsScheduleType
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.job_schedule_window_day import JobScheduleWindowDay
+    from ..models.windows_continuous_schedule_settings import WindowsContinuousScheduleSettings
+    from ..models.windows_daily_schedule_settings import WindowsDailyScheduleSettings
+    from ..models.windows_monthly_schedule_settings import WindowsMonthlyScheduleSettings
+    from ..models.windows_periodical_schedule_settings import WindowsPeriodicalScheduleSettings
+    from ..models.windows_server_job_retry_settings import WindowsServerJobRetrySettings
+
+
+T = TypeVar("T", bound="WindowsServerJobScheduleSettings")
+
+
+@_attrs_define
+class WindowsServerJobScheduleSettings:
+    """
+    Attributes:
+        schedule_type (WindowsServerJobScheduleSettingsScheduleType | Unset): Type of periodicity. Default:
+            WindowsServerJobScheduleSettingsScheduleType.DAILY.
+        daily_schedule_settings (WindowsDailyScheduleSettings | Unset):
+        monthly_schedule_settings (WindowsMonthlyScheduleSettings | Unset):
+        periodical_schedule_settings (WindowsPeriodicalScheduleSettings | Unset):
+        continuous_schedule_settings (WindowsContinuousScheduleSettings | Unset):
+        retry_settings (WindowsServerJobRetrySettings | Unset):
+        backup_window (list[JobScheduleWindowDay] | Unset): Time interval within which a job must complete.
+            > The `null` value indicates that a job can be run at any time.
+    """
+
+    schedule_type: WindowsServerJobScheduleSettingsScheduleType | Unset = (
+        WindowsServerJobScheduleSettingsScheduleType.DAILY
+    )
+    daily_schedule_settings: WindowsDailyScheduleSettings | Unset = UNSET
+    monthly_schedule_settings: WindowsMonthlyScheduleSettings | Unset = UNSET
+    periodical_schedule_settings: WindowsPeriodicalScheduleSettings | Unset = UNSET
+    continuous_schedule_settings: WindowsContinuousScheduleSettings | Unset = UNSET
+    retry_settings: WindowsServerJobRetrySettings | Unset = UNSET
+    backup_window: list[JobScheduleWindowDay] | Unset = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        schedule_type: str | Unset = UNSET
+        if not isinstance(self.schedule_type, Unset):
+            schedule_type = self.schedule_type.value
+
+        daily_schedule_settings: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.daily_schedule_settings, Unset):
+            daily_schedule_settings = self.daily_schedule_settings.to_dict()
+
+        monthly_schedule_settings: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.monthly_schedule_settings, Unset):
+            monthly_schedule_settings = self.monthly_schedule_settings.to_dict()
+
+        periodical_schedule_settings: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.periodical_schedule_settings, Unset):
+            periodical_schedule_settings = self.periodical_schedule_settings.to_dict()
+
+        continuous_schedule_settings: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.continuous_schedule_settings, Unset):
+            continuous_schedule_settings = self.continuous_schedule_settings.to_dict()
+
+        retry_settings: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.retry_settings, Unset):
+            retry_settings = self.retry_settings.to_dict()
+
+        backup_window: list[dict[str, Any]] | Unset = UNSET
+        if not isinstance(self.backup_window, Unset):
+            backup_window = []
+            for backup_window_item_data in self.backup_window:
+                backup_window_item = backup_window_item_data.to_dict()
+                backup_window.append(backup_window_item)
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update({})
+        if schedule_type is not UNSET:
+            field_dict["scheduleType"] = schedule_type
+        if daily_schedule_settings is not UNSET:
+            field_dict["dailyScheduleSettings"] = daily_schedule_settings
+        if monthly_schedule_settings is not UNSET:
+            field_dict["monthlyScheduleSettings"] = monthly_schedule_settings
+        if periodical_schedule_settings is not UNSET:
+            field_dict["periodicalScheduleSettings"] = periodical_schedule_settings
+        if continuous_schedule_settings is not UNSET:
+            field_dict["continuousScheduleSettings"] = continuous_schedule_settings
+        if retry_settings is not UNSET:
+            field_dict["retrySettings"] = retry_settings
+        if backup_window is not UNSET:
+            field_dict["backupWindow"] = backup_window
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.job_schedule_window_day import JobScheduleWindowDay
+        from ..models.windows_continuous_schedule_settings import WindowsContinuousScheduleSettings
+        from ..models.windows_daily_schedule_settings import WindowsDailyScheduleSettings
+        from ..models.windows_monthly_schedule_settings import WindowsMonthlyScheduleSettings
+        from ..models.windows_periodical_schedule_settings import WindowsPeriodicalScheduleSettings
+        from ..models.windows_server_job_retry_settings import WindowsServerJobRetrySettings
+
+        d = dict(src_dict)
+        _schedule_type = d.pop("scheduleType", UNSET)
+        schedule_type: WindowsServerJobScheduleSettingsScheduleType | Unset
+        if isinstance(_schedule_type, Unset):
+            schedule_type = UNSET
+        else:
+            schedule_type = WindowsServerJobScheduleSettingsScheduleType(_schedule_type)
+
+        _daily_schedule_settings = d.pop("dailyScheduleSettings", UNSET)
+        daily_schedule_settings: WindowsDailyScheduleSettings | Unset
+        if isinstance(_daily_schedule_settings, Unset):
+            daily_schedule_settings = UNSET
+        else:
+            daily_schedule_settings = WindowsDailyScheduleSettings.from_dict(_daily_schedule_settings)
+
+        _monthly_schedule_settings = d.pop("monthlyScheduleSettings", UNSET)
+        monthly_schedule_settings: WindowsMonthlyScheduleSettings | Unset
+        if isinstance(_monthly_schedule_settings, Unset):
+            monthly_schedule_settings = UNSET
+        else:
+            monthly_schedule_settings = WindowsMonthlyScheduleSettings.from_dict(_monthly_schedule_settings)
+
+        _periodical_schedule_settings = d.pop("periodicalScheduleSettings", UNSET)
+        periodical_schedule_settings: WindowsPeriodicalScheduleSettings | Unset
+        if isinstance(_periodical_schedule_settings, Unset):
+            periodical_schedule_settings = UNSET
+        else:
+            periodical_schedule_settings = WindowsPeriodicalScheduleSettings.from_dict(_periodical_schedule_settings)
+
+        _continuous_schedule_settings = d.pop("continuousScheduleSettings", UNSET)
+        continuous_schedule_settings: WindowsContinuousScheduleSettings | Unset
+        if isinstance(_continuous_schedule_settings, Unset):
+            continuous_schedule_settings = UNSET
+        else:
+            continuous_schedule_settings = WindowsContinuousScheduleSettings.from_dict(_continuous_schedule_settings)
+
+        _retry_settings = d.pop("retrySettings", UNSET)
+        retry_settings: WindowsServerJobRetrySettings | Unset
+        if isinstance(_retry_settings, Unset):
+            retry_settings = UNSET
+        else:
+            retry_settings = WindowsServerJobRetrySettings.from_dict(_retry_settings)
+
+        _backup_window = d.pop("backupWindow", UNSET)
+        backup_window: list[JobScheduleWindowDay] | Unset = UNSET
+        if _backup_window is not UNSET:
+            backup_window = []
+            for backup_window_item_data in _backup_window:
+                backup_window_item = JobScheduleWindowDay.from_dict(backup_window_item_data)
+
+                backup_window.append(backup_window_item)
+
+        windows_server_job_schedule_settings = cls(
+            schedule_type=schedule_type,
+            daily_schedule_settings=daily_schedule_settings,
+            monthly_schedule_settings=monthly_schedule_settings,
+            periodical_schedule_settings=periodical_schedule_settings,
+            continuous_schedule_settings=continuous_schedule_settings,
+            retry_settings=retry_settings,
+            backup_window=backup_window,
+        )
+
+        windows_server_job_schedule_settings.additional_properties = d
+        return windows_server_job_schedule_settings
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

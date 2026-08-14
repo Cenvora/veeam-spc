@@ -1,0 +1,322 @@
+from __future__ import annotations
+
+import datetime
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
+from uuid import UUID
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+from dateutil.parser import isoparse
+
+from ..models.management_agent_connection_status import ManagementAgentConnectionStatus
+from ..models.management_agent_role import ManagementAgentRole
+from ..models.management_agent_status import ManagementAgentStatus
+from ..models.management_agent_type import ManagementAgentType
+from ..models.management_agent_version_status import ManagementAgentVersionStatus
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.computer_info import ComputerInfo
+
+
+T = TypeVar("T", bound="ManagementAgent")
+
+
+@_attrs_define
+class ManagementAgent:
+    """
+    Attributes:
+        location_uid (UUID): UID assigned to a location to which a management agent belongs.
+        instance_uid (UUID | Unset): UID assigned to a management agent.
+        organization_uid (UUID | Unset): UID assigned to an organization to which a management agent belongs.
+        host_name (str | Unset): Name of a computer on which a management agent is deployed.
+        friendly_name (str | Unset): Friendly name of a management agent.
+        last_heartbeat_time (datetime.datetime | Unset): Date and time when a management agent on a computer sent the
+            latest heartbeat.
+        version (str | Unset): Version of a management agent deployed on a computer.
+        discovery_time (datetime.datetime | Unset): Date and time when a computer was discovered.
+        agent_label (str | Unset): Agent label.
+        status (ManagementAgentStatus | Unset): Status of a management agent.
+        type_ (ManagementAgentType | Unset): Role of a management agent.
+        computer_info (ComputerInfo | Unset): Information about a computer on which a management agent is deployed.
+        connection_status (ManagementAgentConnectionStatus | Unset): Connection status of a management agent.
+        is_reboot_required (bool | Unset): Indicates whether computer reboot is required.
+        connection_account (UUID | Unset): Company owner user name that is used to connect a management agent to a cloud
+            gateway.
+        version_status (ManagementAgentVersionStatus | Unset): Status of a management agent version.
+        role (ManagementAgentRole | Unset): Role of a management agent.
+        clustered_agent_uids (list[UUID] | Unset): Array of UIDs assigned to nodes of a clustered management agent.
+            Empty value indicates that a management agent is not clustered.
+    """
+
+    location_uid: UUID
+    instance_uid: UUID | Unset = UNSET
+    organization_uid: UUID | Unset = UNSET
+    host_name: str | Unset = UNSET
+    friendly_name: str | Unset = UNSET
+    last_heartbeat_time: datetime.datetime | Unset = UNSET
+    version: str | Unset = UNSET
+    discovery_time: datetime.datetime | Unset = UNSET
+    agent_label: str | Unset = UNSET
+    status: ManagementAgentStatus | Unset = UNSET
+    type_: ManagementAgentType | Unset = UNSET
+    computer_info: ComputerInfo | Unset = UNSET
+    connection_status: ManagementAgentConnectionStatus | Unset = UNSET
+    is_reboot_required: bool | Unset = UNSET
+    connection_account: UUID | Unset = UNSET
+    version_status: ManagementAgentVersionStatus | Unset = UNSET
+    role: ManagementAgentRole | Unset = UNSET
+    clustered_agent_uids: list[UUID] | Unset = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        location_uid = str(self.location_uid)
+
+        instance_uid: str | Unset = UNSET
+        if not isinstance(self.instance_uid, Unset):
+            instance_uid = str(self.instance_uid)
+
+        organization_uid: str | Unset = UNSET
+        if not isinstance(self.organization_uid, Unset):
+            organization_uid = str(self.organization_uid)
+
+        host_name = self.host_name
+
+        friendly_name = self.friendly_name
+
+        last_heartbeat_time: str | Unset = UNSET
+        if not isinstance(self.last_heartbeat_time, Unset):
+            last_heartbeat_time = self.last_heartbeat_time.isoformat()
+
+        version = self.version
+
+        discovery_time: str | Unset = UNSET
+        if not isinstance(self.discovery_time, Unset):
+            discovery_time = self.discovery_time.isoformat()
+
+        agent_label = self.agent_label
+
+        status: str | Unset = UNSET
+        if not isinstance(self.status, Unset):
+            status = self.status.value
+
+        type_: str | Unset = UNSET
+        if not isinstance(self.type_, Unset):
+            type_ = self.type_.value
+
+        computer_info: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.computer_info, Unset):
+            computer_info = self.computer_info.to_dict()
+
+        connection_status: str | Unset = UNSET
+        if not isinstance(self.connection_status, Unset):
+            connection_status = self.connection_status.value
+
+        is_reboot_required = self.is_reboot_required
+
+        connection_account: str | Unset = UNSET
+        if not isinstance(self.connection_account, Unset):
+            connection_account = str(self.connection_account)
+
+        version_status: str | Unset = UNSET
+        if not isinstance(self.version_status, Unset):
+            version_status = self.version_status.value
+
+        role: str | Unset = UNSET
+        if not isinstance(self.role, Unset):
+            role = self.role.value
+
+        clustered_agent_uids: list[str] | Unset = UNSET
+        if not isinstance(self.clustered_agent_uids, Unset):
+            clustered_agent_uids = []
+            for clustered_agent_uids_item_data in self.clustered_agent_uids:
+                clustered_agent_uids_item = str(clustered_agent_uids_item_data)
+                clustered_agent_uids.append(clustered_agent_uids_item)
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "locationUid": location_uid,
+            }
+        )
+        if instance_uid is not UNSET:
+            field_dict["instanceUid"] = instance_uid
+        if organization_uid is not UNSET:
+            field_dict["organizationUid"] = organization_uid
+        if host_name is not UNSET:
+            field_dict["hostName"] = host_name
+        if friendly_name is not UNSET:
+            field_dict["friendlyName"] = friendly_name
+        if last_heartbeat_time is not UNSET:
+            field_dict["lastHeartbeatTime"] = last_heartbeat_time
+        if version is not UNSET:
+            field_dict["version"] = version
+        if discovery_time is not UNSET:
+            field_dict["discoveryTime"] = discovery_time
+        if agent_label is not UNSET:
+            field_dict["agentLabel"] = agent_label
+        if status is not UNSET:
+            field_dict["status"] = status
+        if type_ is not UNSET:
+            field_dict["type"] = type_
+        if computer_info is not UNSET:
+            field_dict["computerInfo"] = computer_info
+        if connection_status is not UNSET:
+            field_dict["connectionStatus"] = connection_status
+        if is_reboot_required is not UNSET:
+            field_dict["isRebootRequired"] = is_reboot_required
+        if connection_account is not UNSET:
+            field_dict["connectionAccount"] = connection_account
+        if version_status is not UNSET:
+            field_dict["versionStatus"] = version_status
+        if role is not UNSET:
+            field_dict["role"] = role
+        if clustered_agent_uids is not UNSET:
+            field_dict["clusteredAgentUids"] = clustered_agent_uids
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.computer_info import ComputerInfo
+
+        d = dict(src_dict)
+        location_uid = UUID(d.pop("locationUid"))
+
+        _instance_uid = d.pop("instanceUid", UNSET)
+        instance_uid: UUID | Unset
+        if isinstance(_instance_uid, Unset):
+            instance_uid = UNSET
+        else:
+            instance_uid = UUID(_instance_uid)
+
+        _organization_uid = d.pop("organizationUid", UNSET)
+        organization_uid: UUID | Unset
+        if isinstance(_organization_uid, Unset):
+            organization_uid = UNSET
+        else:
+            organization_uid = UUID(_organization_uid)
+
+        host_name = d.pop("hostName", UNSET)
+
+        friendly_name = d.pop("friendlyName", UNSET)
+
+        _last_heartbeat_time = d.pop("lastHeartbeatTime", UNSET)
+        last_heartbeat_time: datetime.datetime | Unset
+        if isinstance(_last_heartbeat_time, Unset):
+            last_heartbeat_time = UNSET
+        else:
+            last_heartbeat_time = isoparse(_last_heartbeat_time)
+
+        version = d.pop("version", UNSET)
+
+        _discovery_time = d.pop("discoveryTime", UNSET)
+        discovery_time: datetime.datetime | Unset
+        if isinstance(_discovery_time, Unset):
+            discovery_time = UNSET
+        else:
+            discovery_time = isoparse(_discovery_time)
+
+        agent_label = d.pop("agentLabel", UNSET)
+
+        _status = d.pop("status", UNSET)
+        status: ManagementAgentStatus | Unset
+        if isinstance(_status, Unset):
+            status = UNSET
+        else:
+            status = ManagementAgentStatus(_status)
+
+        _type_ = d.pop("type", UNSET)
+        type_: ManagementAgentType | Unset
+        if isinstance(_type_, Unset):
+            type_ = UNSET
+        else:
+            type_ = ManagementAgentType(_type_)
+
+        _computer_info = d.pop("computerInfo", UNSET)
+        computer_info: ComputerInfo | Unset
+        if isinstance(_computer_info, Unset):
+            computer_info = UNSET
+        else:
+            computer_info = ComputerInfo.from_dict(_computer_info)
+
+        _connection_status = d.pop("connectionStatus", UNSET)
+        connection_status: ManagementAgentConnectionStatus | Unset
+        if isinstance(_connection_status, Unset):
+            connection_status = UNSET
+        else:
+            connection_status = ManagementAgentConnectionStatus(_connection_status)
+
+        is_reboot_required = d.pop("isRebootRequired", UNSET)
+
+        _connection_account = d.pop("connectionAccount", UNSET)
+        connection_account: UUID | Unset
+        if isinstance(_connection_account, Unset):
+            connection_account = UNSET
+        else:
+            connection_account = UUID(_connection_account)
+
+        _version_status = d.pop("versionStatus", UNSET)
+        version_status: ManagementAgentVersionStatus | Unset
+        if isinstance(_version_status, Unset):
+            version_status = UNSET
+        else:
+            version_status = ManagementAgentVersionStatus(_version_status)
+
+        _role = d.pop("role", UNSET)
+        role: ManagementAgentRole | Unset
+        if isinstance(_role, Unset):
+            role = UNSET
+        else:
+            role = ManagementAgentRole(_role)
+
+        _clustered_agent_uids = d.pop("clusteredAgentUids", UNSET)
+        clustered_agent_uids: list[UUID] | Unset = UNSET
+        if _clustered_agent_uids is not UNSET:
+            clustered_agent_uids = []
+            for clustered_agent_uids_item_data in _clustered_agent_uids:
+                clustered_agent_uids_item = UUID(clustered_agent_uids_item_data)
+
+                clustered_agent_uids.append(clustered_agent_uids_item)
+
+        management_agent = cls(
+            location_uid=location_uid,
+            instance_uid=instance_uid,
+            organization_uid=organization_uid,
+            host_name=host_name,
+            friendly_name=friendly_name,
+            last_heartbeat_time=last_heartbeat_time,
+            version=version,
+            discovery_time=discovery_time,
+            agent_label=agent_label,
+            status=status,
+            type_=type_,
+            computer_info=computer_info,
+            connection_status=connection_status,
+            is_reboot_required=is_reboot_required,
+            connection_account=connection_account,
+            version_status=version_status,
+            role=role,
+            clustered_agent_uids=clustered_agent_uids,
+        )
+
+        management_agent.additional_properties = d
+        return management_agent
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties
