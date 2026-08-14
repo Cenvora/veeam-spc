@@ -83,17 +83,19 @@ def test_oldest_first_is_the_reverse():
     "server_version,expected",
     [
         # The four-component build strings a console actually reports
+        ("9.3.0.35057", "3.7"),
         ("9.2.0.32907", "3.6.2"),
         ("9.1.0.100", "3.6.1"),
         ("9.0.0.1", "3.6"),
         ("8.1.0.1", "3.5.1"),
         # Two-component forms map the same way
+        ("9.3", "3.7"),
         ("9.2", "3.6.2"),
         ("9", "3.6"),
         # A console newer than anything packaged gets the newest version this package speaks,
         # since VSPC keeps older X-Client-Version values working
-        ("10.0.0.1", "3.6.2"),
-        ("9.3.0.1", "3.6.2"),
+        ("10.0.0.1", "3.7"),
+        ("9.4.0.1", "3.7"),
         # Older than the oldest supported console: say so rather than guess
         ("8.0.0.1", None),
         ("7.9", None),
@@ -110,6 +112,22 @@ def test_api_version_for_server(server_version, expected):
 def test_every_mapped_api_version_is_packaged():
     """A mapping pointing at a version this package cannot speak would be a dead end."""
     assert set(SERVER_TO_API_VERSION.values()) <= set(VERSION_TO_PACKAGE)
+
+
+def test_every_packaged_api_version_is_reachable_by_detection():
+    """The direction that actually goes wrong.
+
+    Packaging a version and forgetting to map the console release that serves it is silent:
+    detection still answers, because a console newer than everything mapped falls back to the
+    newest mapped version. So a 9.3 console kept resolving to 3.6.2 after 3.7 was added, and
+    nothing failed — it just quietly spoke the older API.
+    """
+    unmapped = set(VERSION_TO_PACKAGE) - set(SERVER_TO_API_VERSION.values())
+
+    assert not unmapped, (
+        f"{sorted(unmapped)} can be spoken but no console release maps to it; add the release "
+        "to SERVER_TO_API_VERSION"
+    )
 
 
 def test_candidate_list_can_be_narrowed():
