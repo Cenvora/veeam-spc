@@ -28,6 +28,11 @@ This project is an independent, open source Python client for the Veeam Service 
   </thead>
   <tbody>
     <tr>
+      <td>9.3</td>
+      <td>3.7</td>
+      <td style="text-align:center;">&#9989;</td>
+    </tr>
+    <tr>
       <td>9.2</td>
       <td>3.6.2</td>
       <td style="text-align:center;">&#9989;</td>
@@ -58,6 +63,13 @@ This project is an independent, open source Python client for the Veeam Service 
 ## How to support new API versions
 1. Download the OpenAPI JSON spec into openapi_schemas
 2. Install the openapi-python-client package
+2. If the console gave you a **Swagger 2.0** document rather than an OpenAPI 3 one — check the
+   top-level key, 3.7 shipped this way — convert it first, because openapi-python-client
+   supports OpenAPI 3 only:
+   `npx swagger2openapi@7 --patch --warnOnly --outfile .\openapi_schemas\vspc_rest_{vspc_version}_oas3.json .\openapi_schemas\vspc_rest_{vspc_version}.json`
+   Keep both files: the download is what Veeam published, the `_oas3` file is what the rest of
+   these steps consume. `--warnOnly` lets the conversion finish when the document references a
+   schema it does not define; `fix_openapi_yaml.py` repairs those.
 2. Fix the OpenAPI JSON spec to conform to proper standards: `python fix_openapi_yaml.py .\openapi_schemas\vspc_rest_{vspc_version}.json .\openapi_schemas\vspc_rest_{vspc_version}_fixed.json`
 3. Run `openapi-python-client generate --path ".\openapi_schemas\vspc_rest_{vspc_version}_fixed.json" --output-path ".\veeam_spc" --overwrite`
 4. Fix any warnings/errors (application/binary+base64 can be ignored)

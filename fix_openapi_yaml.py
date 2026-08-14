@@ -7,6 +7,65 @@ from typing import Any, cast
 # Supports both YAML and JSON OpenAPI specs.
 
 
+def add_missing_multi_action_result(data: dict[str, Any]) -> None:
+    """Define MultiActionResult when the spec references it without shipping it.
+
+    Veeam's 3.7 document returns ``MultiActionResult`` from three bulk delete endpoints
+    (RemoveCloudBackup, DeleteProtectedVirtualMachineBackup,
+    DeleteProtectedComputerManagedByBackupServerBackup) but has no such definition, so a
+    generator resolving refs stops there.
+
+    The shape below is not invented: it is the response example the same document carries for
+    those endpoints, typed against the ``Result`` schema it already defines — the example's
+    per-item fields (status, success, message, objectName, objectId) are exactly Result's.
+    Added only when it is genuinely absent, so a later release that ships it wins.
+    """
+    schemas_any = data.get("components", {}).get("schemas")
+    if not isinstance(schemas_any, dict):
+        return
+
+    schemas = cast(dict[str, Any], schemas_any)
+    if "MultiActionResult" in schemas:
+        return
+
+    if "#/components/schemas/MultiActionResult" not in json.dumps(data):
+        return
+
+    item_schema: dict[str, Any] = (
+        {"$ref": "#/components/schemas/Result"}
+        if "Result" in schemas
+        else {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string"},
+                "success": {"type": "boolean"},
+                "message": {"type": "string", "nullable": True},
+                "objectName": {"type": "string"},
+                "objectId": {"type": "string"},
+            },
+        }
+    )
+
+    schemas["MultiActionResult"] = {
+        "type": "object",
+        "description": (
+            "Result of an operation performed on multiple objects. Reconstructed from the "
+            "response example in the source document, which references this schema without "
+            "defining it."
+        ),
+        "properties": {
+            "results": {"type": "array", "items": item_schema},
+            "message": {"type": "string", "nullable": True},
+            "status": (
+                {"$ref": "#/components/schemas/EActionResultStatus"}
+                if "EActionResultStatus" in schemas
+                else {"type": "string"}
+            ),
+            "isMultiActionResult": {"type": "boolean"},
+        },
+    }
+
+
 def fix_response_keys(input_path: str, output_path: str) -> None:
     with open(input_path, "r", encoding="utf-8") as f:
         content = f.read()
@@ -126,6 +185,8 @@ def fix_response_keys(input_path: str, output_path: str) -> None:
                     fix_null_schema_nodes(item)
 
         fix_null_schema_nodes(data)
+
+        add_missing_multi_action_result(data)
 
         # openapi-python-client (0.28.x) can fail on SmtpSettings when the parent
         # object itself is nullable. Keep field-level nullability intact.
