@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -31,8 +31,8 @@ class BackupServerPublicCloudAppliance:
         self_service_portal_url (str | Unset): URL of the Veeam Backup for Public Clouds portal.
         organization_uid (UUID | Unset): UID assigned to an organization that owns a Veeam Backup & Replication server
             on which a Veeam Backup for Public Clouds appliance is registered.
-        mapped_organization_uid (UUID | Unset): UID assigned to an organization to which a Veeam Backup for Public
-            Clouds appliance is assigned.
+        mapped_organization_uid (None | Unset | UUID): UID assigned to an organization to which a Veeam Backup for
+            Public Clouds appliance is assigned.
         location_uid (UUID | Unset): UID assigned to a Veeam Backup for Public Clouds appliance location.
         management_agent_uid (UUID | Unset): UID assigned to a management agent installed on a Veeam Backup for Public
             Clouds appliance server.
@@ -56,7 +56,7 @@ class BackupServerPublicCloudAppliance:
     remote_ui_access_enabled: bool | Unset = UNSET
     self_service_portal_url: str | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
-    mapped_organization_uid: UUID | Unset = UNSET
+    mapped_organization_uid: None | Unset | UUID = UNSET
     location_uid: UUID | Unset = UNSET
     management_agent_uid: UUID | Unset = UNSET
     version: str | Unset = UNSET
@@ -93,9 +93,13 @@ class BackupServerPublicCloudAppliance:
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        mapped_organization_uid: str | Unset = UNSET
-        if not isinstance(self.mapped_organization_uid, Unset):
+        mapped_organization_uid: None | str | Unset
+        if isinstance(self.mapped_organization_uid, Unset):
+            mapped_organization_uid = UNSET
+        elif isinstance(self.mapped_organization_uid, UUID):
             mapped_organization_uid = str(self.mapped_organization_uid)
+        else:
+            mapped_organization_uid = self.mapped_organization_uid
 
         location_uid: str | Unset = UNSET
         if not isinstance(self.location_uid, Unset):
@@ -201,12 +205,22 @@ class BackupServerPublicCloudAppliance:
         else:
             organization_uid = UUID(_organization_uid)
 
-        _mapped_organization_uid = d.pop("mappedOrganizationUid", UNSET)
-        mapped_organization_uid: UUID | Unset
-        if isinstance(_mapped_organization_uid, Unset):
-            mapped_organization_uid = UNSET
-        else:
-            mapped_organization_uid = UUID(_mapped_organization_uid)
+        def _parse_mapped_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                mapped_organization_uid_type_0 = UUID(data)
+
+                return mapped_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        mapped_organization_uid = _parse_mapped_organization_uid(d.pop("mappedOrganizationUid", UNSET))
 
         _location_uid = d.pop("locationUid", UNSET)
         location_uid: UUID | Unset

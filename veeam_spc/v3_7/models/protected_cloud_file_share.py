@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,31 +24,31 @@ class ProtectedCloudFileShare:
         backup_server_uid (UUID | Unset): UID assigned to a backup server.
         organization_uid (UUID | Unset): UID assigned to an organization.
         name (str | Unset): Name of a file share.
-        appliance_uid (UUID | Unset): UID assigned to a Veeam Backup for Public Clouds appliance.
+        appliance_uid (None | Unset | UUID): UID assigned to a Veeam Backup for Public Clouds appliance.
         resource_id (str | Unset): ID assigned to a file share in public cloud infrastructure.
         platform (ProtectedCloudFileSharePlatform | Unset): Public cloud platform.
         file_share_type (PublicCloudFileShareType | Unset): Public cloud fileshare type.
         snapshots_count (int | Unset): Number of snapshots.
         policy_count (int | Unset): Number of backup policies protecting a file share.
         replica_snapshots_count (int | Unset): Number of replica snapshots.
-        latest_snapshot_date (datetime.datetime | Unset): Date and time when the latest snapshot was created.
-        latest_replica_snapshot_date (datetime.datetime | Unset): Date and time when the latest replica snapshot was
-            created.
+        latest_snapshot_date (datetime.datetime | None | Unset): Date and time when the latest snapshot was created.
+        latest_replica_snapshot_date (datetime.datetime | None | Unset): Date and time when the latest replica snapshot
+            was created.
     """
 
     file_share_uid: UUID | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
-    appliance_uid: UUID | Unset = UNSET
+    appliance_uid: None | Unset | UUID = UNSET
     resource_id: str | Unset = UNSET
     platform: ProtectedCloudFileSharePlatform | Unset = UNSET
     file_share_type: PublicCloudFileShareType | Unset = UNSET
     snapshots_count: int | Unset = UNSET
     policy_count: int | Unset = UNSET
     replica_snapshots_count: int | Unset = UNSET
-    latest_snapshot_date: datetime.datetime | Unset = UNSET
-    latest_replica_snapshot_date: datetime.datetime | Unset = UNSET
+    latest_snapshot_date: datetime.datetime | None | Unset = UNSET
+    latest_replica_snapshot_date: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -66,9 +66,13 @@ class ProtectedCloudFileShare:
 
         name = self.name
 
-        appliance_uid: str | Unset = UNSET
-        if not isinstance(self.appliance_uid, Unset):
+        appliance_uid: None | str | Unset
+        if isinstance(self.appliance_uid, Unset):
+            appliance_uid = UNSET
+        elif isinstance(self.appliance_uid, UUID):
             appliance_uid = str(self.appliance_uid)
+        else:
+            appliance_uid = self.appliance_uid
 
         resource_id = self.resource_id
 
@@ -86,13 +90,21 @@ class ProtectedCloudFileShare:
 
         replica_snapshots_count = self.replica_snapshots_count
 
-        latest_snapshot_date: str | Unset = UNSET
-        if not isinstance(self.latest_snapshot_date, Unset):
+        latest_snapshot_date: None | str | Unset
+        if isinstance(self.latest_snapshot_date, Unset):
+            latest_snapshot_date = UNSET
+        elif isinstance(self.latest_snapshot_date, datetime.datetime):
             latest_snapshot_date = self.latest_snapshot_date.isoformat()
+        else:
+            latest_snapshot_date = self.latest_snapshot_date
 
-        latest_replica_snapshot_date: str | Unset = UNSET
-        if not isinstance(self.latest_replica_snapshot_date, Unset):
+        latest_replica_snapshot_date: None | str | Unset
+        if isinstance(self.latest_replica_snapshot_date, Unset):
+            latest_replica_snapshot_date = UNSET
+        elif isinstance(self.latest_replica_snapshot_date, datetime.datetime):
             latest_replica_snapshot_date = self.latest_replica_snapshot_date.isoformat()
+        else:
+            latest_replica_snapshot_date = self.latest_replica_snapshot_date
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -152,12 +164,22 @@ class ProtectedCloudFileShare:
 
         name = d.pop("name", UNSET)
 
-        _appliance_uid = d.pop("applianceUid", UNSET)
-        appliance_uid: UUID | Unset
-        if isinstance(_appliance_uid, Unset):
-            appliance_uid = UNSET
-        else:
-            appliance_uid = UUID(_appliance_uid)
+        def _parse_appliance_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                appliance_uid_type_0 = UUID(data)
+
+                return appliance_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        appliance_uid = _parse_appliance_uid(d.pop("applianceUid", UNSET))
 
         resource_id = d.pop("resourceId", UNSET)
 
@@ -181,19 +203,39 @@ class ProtectedCloudFileShare:
 
         replica_snapshots_count = d.pop("replicaSnapshotsCount", UNSET)
 
-        _latest_snapshot_date = d.pop("latestSnapshotDate", UNSET)
-        latest_snapshot_date: datetime.datetime | Unset
-        if isinstance(_latest_snapshot_date, Unset):
-            latest_snapshot_date = UNSET
-        else:
-            latest_snapshot_date = isoparse(_latest_snapshot_date)
+        def _parse_latest_snapshot_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                latest_snapshot_date_type_0 = isoparse(data)
 
-        _latest_replica_snapshot_date = d.pop("latestReplicaSnapshotDate", UNSET)
-        latest_replica_snapshot_date: datetime.datetime | Unset
-        if isinstance(_latest_replica_snapshot_date, Unset):
-            latest_replica_snapshot_date = UNSET
-        else:
-            latest_replica_snapshot_date = isoparse(_latest_replica_snapshot_date)
+                return latest_snapshot_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        latest_snapshot_date = _parse_latest_snapshot_date(d.pop("latestSnapshotDate", UNSET))
+
+        def _parse_latest_replica_snapshot_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                latest_replica_snapshot_date_type_0 = isoparse(data)
+
+                return latest_replica_snapshot_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        latest_replica_snapshot_date = _parse_latest_replica_snapshot_date(d.pop("latestReplicaSnapshotDate", UNSET))
 
         protected_cloud_file_share = cls(
             file_share_uid=file_share_uid,

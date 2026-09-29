@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,9 +21,9 @@ class PublicCloudAwsAppliance:
         management_agent_uid (UUID | Unset): UID assigned to management agent installed on a server where Veeam Backup
             for Public Clouds appliance is deployed.
         instance_uid (UUID | Unset): UID assigned to a Veeam Backup for Public Clouds appliance.
-        description (str | Unset): Description of a Veeam Backup for Public Clouds appliance.
+        description (None | str | Unset): Description of a Veeam Backup for Public Clouds appliance.
         public_address (str | Unset): URL of a Veeam Backup for Public Clouds appliance.
-        private_network_address (str | Unset): Private IP address or DNS name of a network.
+        private_network_address (None | str | Unset): Private IP address or DNS name of a network.
         certificate_thumbprint (str | Unset): Thumbprint of a security certificate.
         data_center_id (str | Unset): ID assigned to an AWS datacenter.
         region_id (str | Unset): ID assigned to an AWS region.
@@ -34,9 +34,9 @@ class PublicCloudAwsAppliance:
     guest_os_credentials_uid: UUID
     management_agent_uid: UUID | Unset = UNSET
     instance_uid: UUID | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     public_address: str | Unset = UNSET
-    private_network_address: str | Unset = UNSET
+    private_network_address: None | str | Unset = UNSET
     certificate_thumbprint: str | Unset = UNSET
     data_center_id: str | Unset = UNSET
     region_id: str | Unset = UNSET
@@ -56,11 +56,19 @@ class PublicCloudAwsAppliance:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         public_address = self.public_address
 
-        private_network_address = self.private_network_address
+        private_network_address: None | str | Unset
+        if isinstance(self.private_network_address, Unset):
+            private_network_address = UNSET
+        else:
+            private_network_address = self.private_network_address
 
         certificate_thumbprint = self.certificate_thumbprint
 
@@ -120,11 +128,25 @@ class PublicCloudAwsAppliance:
         else:
             instance_uid = UUID(_instance_uid)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         public_address = d.pop("publicAddress", UNSET)
 
-        private_network_address = d.pop("privateNetworkAddress", UNSET)
+        def _parse_private_network_address(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        private_network_address = _parse_private_network_address(d.pop("privateNetworkAddress", UNSET))
 
         certificate_thumbprint = d.pop("certificateThumbprint", UNSET)
 

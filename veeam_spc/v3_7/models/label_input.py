@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,12 +22,12 @@ class LabelInput:
     Attributes:
         key (str): Label key. Must be unique across all labels.
         scope (list[LabelScope]): Array of categories to which a label may be assigned.
-        description (str | Unset): Description of a label.
+        description (None | str | Unset): Description of a label.
     """
 
     key: str
     scope: list[LabelScope]
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -38,7 +38,11 @@ class LabelInput:
             scope_item = scope_item_data.value
             scope.append(scope_item)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -65,7 +69,14 @@ class LabelInput:
 
             scope.append(scope_item)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         label_input = cls(
             key=key,

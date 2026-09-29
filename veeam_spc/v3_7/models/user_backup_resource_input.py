@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -18,21 +18,21 @@ class UserBackupResourceInput:
     Attributes:
         tenant_backup_resource_uid (UUID): UID assigned to a tenant backup resource.
         resource_friendly_name (str): Friendly name of a subtenant backup resource.
-        site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site.
+        site_uid (None | Unset | UUID): UID assigned to a Veeam Cloud Connect site.
             > You can provide the `null` value only if a single tenant is assigned to a company. Otherwise, the server will
             return an error.'
-        description (str | Unset): Subtenant user description.
-        vcd_user_id (str | Unset): UID assigned to a VMware Cloud Director organization user account.
-        storage_quota (int | Unset): Subtenant quota, in bytes.
+        description (None | str | Unset): Subtenant user description.
+        vcd_user_id (None | str | Unset): UID assigned to a VMware Cloud Director organization user account.
+        storage_quota (int | None | Unset): Subtenant quota, in bytes.
         is_storage_quota_unlimited (bool | Unset): Defines whether a subtenant has unlimited quota. Default: True.
     """
 
     tenant_backup_resource_uid: UUID
     resource_friendly_name: str
-    site_uid: UUID | Unset = UNSET
-    description: str | Unset = UNSET
-    vcd_user_id: str | Unset = UNSET
-    storage_quota: int | Unset = UNSET
+    site_uid: None | Unset | UUID = UNSET
+    description: None | str | Unset = UNSET
+    vcd_user_id: None | str | Unset = UNSET
+    storage_quota: int | None | Unset = UNSET
     is_storage_quota_unlimited: bool | Unset = True
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -41,15 +41,31 @@ class UserBackupResourceInput:
 
         resource_friendly_name = self.resource_friendly_name
 
-        site_uid: str | Unset = UNSET
-        if not isinstance(self.site_uid, Unset):
+        site_uid: None | str | Unset
+        if isinstance(self.site_uid, Unset):
+            site_uid = UNSET
+        elif isinstance(self.site_uid, UUID):
             site_uid = str(self.site_uid)
+        else:
+            site_uid = self.site_uid
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
-        vcd_user_id = self.vcd_user_id
+        vcd_user_id: None | str | Unset
+        if isinstance(self.vcd_user_id, Unset):
+            vcd_user_id = UNSET
+        else:
+            vcd_user_id = self.vcd_user_id
 
-        storage_quota = self.storage_quota
+        storage_quota: int | None | Unset
+        if isinstance(self.storage_quota, Unset):
+            storage_quota = UNSET
+        else:
+            storage_quota = self.storage_quota
 
         is_storage_quota_unlimited = self.is_storage_quota_unlimited
 
@@ -81,18 +97,49 @@ class UserBackupResourceInput:
 
         resource_friendly_name = d.pop("resourceFriendlyName")
 
-        _site_uid = d.pop("siteUid", UNSET)
-        site_uid: UUID | Unset
-        if isinstance(_site_uid, Unset):
-            site_uid = UNSET
-        else:
-            site_uid = UUID(_site_uid)
+        def _parse_site_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                site_uid_type_0 = UUID(data)
 
-        description = d.pop("description", UNSET)
+                return site_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        vcd_user_id = d.pop("vcdUserId", UNSET)
+        site_uid = _parse_site_uid(d.pop("siteUid", UNSET))
 
-        storage_quota = d.pop("storageQuota", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
+
+        def _parse_vcd_user_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        vcd_user_id = _parse_vcd_user_id(d.pop("vcdUserId", UNSET))
+
+        def _parse_storage_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        storage_quota = _parse_storage_quota(d.pop("storageQuota", UNSET))
 
         is_storage_quota_unlimited = d.pop("isStorageQuotaUnlimited", UNSET)
 

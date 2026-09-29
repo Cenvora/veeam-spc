@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,16 +21,17 @@ class ResellerSiteBackupResource:
         site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site.
         reseller_uid (UUID | Unset): UID assigned to a reseller.
         repository_uid (UUID | Unset): UID assigned to a cloud backup repository.
-        storage_quota (int | Unset): Amount of space allocated to a reseller, in bytes.
+        storage_quota (int | None | Unset): Amount of space allocated to a reseller, in bytes.
         is_storage_quota_unlimited (bool | Unset): Indicates whether the amount of space allocated to a reseller is
             unlimited. Default: True.
-        servers_quota (int | Unset): Number of servers that a reseller can store on a cloud backup repository.
+        servers_quota (int | None | Unset): Number of servers that a reseller can store on a cloud backup repository.
         is_servers_quota_unlimited (bool | Unset): Indicates whether the number of servers that a reseller can store on
             a cloud backup repository is unlimited. Default: True.
-        workstations_quota (int | Unset): Number of workstations that a reseller can store on a cloud backup repository.
+        workstations_quota (int | None | Unset): Number of workstations that a reseller can store on a cloud backup
+            repository.
         is_workstations_quota_unlimited (bool | Unset): Indicates whether the number of workstations that a reseller can
             store on a cloud backup repository is unlimited. Default: True.
-        vms_quota (int | Unset): Number of VMs that a reseller can store on a cloud backup repository.
+        vms_quota (int | None | Unset): Number of VMs that a reseller can store on a cloud backup repository.
         is_vms_quota_unlimited (bool | Unset): Indicates whether the number of VMs that a reseller can store on a cloud
             backup repository is unlimited. Default: True.
     """
@@ -40,13 +41,13 @@ class ResellerSiteBackupResource:
     site_uid: UUID | Unset = UNSET
     reseller_uid: UUID | Unset = UNSET
     repository_uid: UUID | Unset = UNSET
-    storage_quota: int | Unset = UNSET
+    storage_quota: int | None | Unset = UNSET
     is_storage_quota_unlimited: bool | Unset = True
-    servers_quota: int | Unset = UNSET
+    servers_quota: int | None | Unset = UNSET
     is_servers_quota_unlimited: bool | Unset = True
-    workstations_quota: int | Unset = UNSET
+    workstations_quota: int | None | Unset = UNSET
     is_workstations_quota_unlimited: bool | Unset = True
-    vms_quota: int | Unset = UNSET
+    vms_quota: int | None | Unset = UNSET
     is_vms_quota_unlimited: bool | Unset = True
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -69,19 +70,35 @@ class ResellerSiteBackupResource:
         if not isinstance(self.repository_uid, Unset):
             repository_uid = str(self.repository_uid)
 
-        storage_quota = self.storage_quota
+        storage_quota: int | None | Unset
+        if isinstance(self.storage_quota, Unset):
+            storage_quota = UNSET
+        else:
+            storage_quota = self.storage_quota
 
         is_storage_quota_unlimited = self.is_storage_quota_unlimited
 
-        servers_quota = self.servers_quota
+        servers_quota: int | None | Unset
+        if isinstance(self.servers_quota, Unset):
+            servers_quota = UNSET
+        else:
+            servers_quota = self.servers_quota
 
         is_servers_quota_unlimited = self.is_servers_quota_unlimited
 
-        workstations_quota = self.workstations_quota
+        workstations_quota: int | None | Unset
+        if isinstance(self.workstations_quota, Unset):
+            workstations_quota = UNSET
+        else:
+            workstations_quota = self.workstations_quota
 
         is_workstations_quota_unlimited = self.is_workstations_quota_unlimited
 
-        vms_quota = self.vms_quota
+        vms_quota: int | None | Unset
+        if isinstance(self.vms_quota, Unset):
+            vms_quota = UNSET
+        else:
+            vms_quota = self.vms_quota
 
         is_vms_quota_unlimited = self.is_vms_quota_unlimited
 
@@ -152,19 +169,47 @@ class ResellerSiteBackupResource:
         else:
             repository_uid = UUID(_repository_uid)
 
-        storage_quota = d.pop("storageQuota", UNSET)
+        def _parse_storage_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        storage_quota = _parse_storage_quota(d.pop("storageQuota", UNSET))
 
         is_storage_quota_unlimited = d.pop("isStorageQuotaUnlimited", UNSET)
 
-        servers_quota = d.pop("serversQuota", UNSET)
+        def _parse_servers_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        servers_quota = _parse_servers_quota(d.pop("serversQuota", UNSET))
 
         is_servers_quota_unlimited = d.pop("isServersQuotaUnlimited", UNSET)
 
-        workstations_quota = d.pop("workstationsQuota", UNSET)
+        def _parse_workstations_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        workstations_quota = _parse_workstations_quota(d.pop("workstationsQuota", UNSET))
 
         is_workstations_quota_unlimited = d.pop("isWorkstationsQuotaUnlimited", UNSET)
 
-        vms_quota = d.pop("vmsQuota", UNSET)
+        def _parse_vms_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        vms_quota = _parse_vms_quota(d.pop("vmsQuota", UNSET))
 
         is_vms_quota_unlimited = d.pop("isVmsQuotaUnlimited", UNSET)
 

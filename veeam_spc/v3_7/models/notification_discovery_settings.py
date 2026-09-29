@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,37 +15,53 @@ T = TypeVar("T", bound="NotificationDiscoverySettings")
 class NotificationDiscoverySettings:
     r"""
     Attributes:
-        sender_name (str | Unset): Name of a sender.
-        from_ (str | Unset): Email address from which notifications are sent.
-        to (str | Unset): Email address at which notifications are sent.
+        sender_name (None | str | Unset): Name of a sender.
+        from_ (None | str | Unset): Email address from which notifications are sent.
+        to (None | str | Unset): Email address at which notifications are sent.
         subject (str | Unset): Text that is displayed as a subject of notification. Default: 'Company: \\"%company%\\",
             Location: \\"%location%\\", Rule: \\"%ruleName%\\", Status: \\"%ruleStatus%\\" '.
         is_daily_notification_enabled (bool | Unset): Indicates whether daily notifications are enabled.
-        daily_time (str | Unset): Time at which daily notifications are sent.
+        daily_time (None | str | Unset): Time at which daily notifications are sent.
     """
 
-    sender_name: str | Unset = UNSET
-    from_: str | Unset = UNSET
-    to: str | Unset = UNSET
+    sender_name: None | str | Unset = UNSET
+    from_: None | str | Unset = UNSET
+    to: None | str | Unset = UNSET
     subject: str | Unset = (
         'Company: \\"%company%\\", Location: \\"%location%\\", Rule: \\"%ruleName%\\", Status: \\"%ruleStatus%\\" '
     )
     is_daily_notification_enabled: bool | Unset = UNSET
-    daily_time: str | Unset = UNSET
+    daily_time: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        sender_name = self.sender_name
+        sender_name: None | str | Unset
+        if isinstance(self.sender_name, Unset):
+            sender_name = UNSET
+        else:
+            sender_name = self.sender_name
 
-        from_ = self.from_
+        from_: None | str | Unset
+        if isinstance(self.from_, Unset):
+            from_ = UNSET
+        else:
+            from_ = self.from_
 
-        to = self.to
+        to: None | str | Unset
+        if isinstance(self.to, Unset):
+            to = UNSET
+        else:
+            to = self.to
 
         subject = self.subject
 
         is_daily_notification_enabled = self.is_daily_notification_enabled
 
-        daily_time = self.daily_time
+        daily_time: None | str | Unset
+        if isinstance(self.daily_time, Unset):
+            daily_time = UNSET
+        else:
+            daily_time = self.daily_time
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -68,17 +84,46 @@ class NotificationDiscoverySettings:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        sender_name = d.pop("senderName", UNSET)
 
-        from_ = d.pop("from", UNSET)
+        def _parse_sender_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        to = d.pop("to", UNSET)
+        sender_name = _parse_sender_name(d.pop("senderName", UNSET))
+
+        def _parse_from_(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        from_ = _parse_from_(d.pop("from", UNSET))
+
+        def _parse_to(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        to = _parse_to(d.pop("to", UNSET))
 
         subject = d.pop("subject", UNSET)
 
         is_daily_notification_enabled = d.pop("isDailyNotificationEnabled", UNSET)
 
-        daily_time = d.pop("dailyTime", UNSET)
+        def _parse_daily_time(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        daily_time = _parse_daily_time(d.pop("dailyTime", UNSET))
 
         notification_discovery_settings = cls(
             sender_name=sender_name,

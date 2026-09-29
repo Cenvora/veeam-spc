@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,15 +21,17 @@ class BackupServerCdpReplicationJobLastPeriod:
         success_count (int | Unset): Number of task sessions completed with the `Success` status.
         warning_count (int | Unset): Number of task sessions completed with the `Warning` status.
         errors_count (int | Unset): Number of task sessions completed with the `Error` status.
-        average_data (int | Unset): Avarage amount of data processed during the synchronization session, in kilobytes.
-        maximum_data (int | Unset): Maximum amount of data processed during the synchronization session, in kilobytes.
-        total_data (int | Unset): Total size of data processed during the synchronization session, in kilobytes.
-        average_duration (int | Unset): Average duration of a syncronization session, in seconds.
-        maximum_duration (int | Unset): Maximum duration of a syncronization session, in seconds.
-        sync_interval (int | Unset): Duration of a synchronization session configured in the policy, in seconds.
-        sla (int | Unset): Percentage of sessions completed within the configured RPO.
-        max_delay (int | Unset): Difference between the configured RPO and time required to transfer and save data, in
-            seconds.
+        average_data (int | None | Unset): Avarage amount of data processed during the synchronization session, in
+            kilobytes.
+        maximum_data (int | None | Unset): Maximum amount of data processed during the synchronization session, in
+            kilobytes.
+        total_data (int | None | Unset): Total size of data processed during the synchronization session, in kilobytes.
+        average_duration (int | None | Unset): Average duration of a syncronization session, in seconds.
+        maximum_duration (int | None | Unset): Maximum duration of a syncronization session, in seconds.
+        sync_interval (int | None | Unset): Duration of a synchronization session configured in the policy, in seconds.
+        sla (int | None | Unset): Percentage of sessions completed within the configured RPO.
+        max_delay (int | None | Unset): Difference between the configured RPO and time required to transfer and save
+            data, in seconds.
         bottleneck (BackupServerCdpReplicationJobLastPeriodBottleneck | Unset): Bottleneck in the data transmission
             process.
     """
@@ -37,14 +39,14 @@ class BackupServerCdpReplicationJobLastPeriod:
     success_count: int | Unset = UNSET
     warning_count: int | Unset = UNSET
     errors_count: int | Unset = UNSET
-    average_data: int | Unset = UNSET
-    maximum_data: int | Unset = UNSET
-    total_data: int | Unset = UNSET
-    average_duration: int | Unset = UNSET
-    maximum_duration: int | Unset = UNSET
-    sync_interval: int | Unset = UNSET
-    sla: int | Unset = UNSET
-    max_delay: int | Unset = UNSET
+    average_data: int | None | Unset = UNSET
+    maximum_data: int | None | Unset = UNSET
+    total_data: int | None | Unset = UNSET
+    average_duration: int | None | Unset = UNSET
+    maximum_duration: int | None | Unset = UNSET
+    sync_interval: int | None | Unset = UNSET
+    sla: int | None | Unset = UNSET
+    max_delay: int | None | Unset = UNSET
     bottleneck: BackupServerCdpReplicationJobLastPeriodBottleneck | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -55,21 +57,53 @@ class BackupServerCdpReplicationJobLastPeriod:
 
         errors_count = self.errors_count
 
-        average_data = self.average_data
+        average_data: int | None | Unset
+        if isinstance(self.average_data, Unset):
+            average_data = UNSET
+        else:
+            average_data = self.average_data
 
-        maximum_data = self.maximum_data
+        maximum_data: int | None | Unset
+        if isinstance(self.maximum_data, Unset):
+            maximum_data = UNSET
+        else:
+            maximum_data = self.maximum_data
 
-        total_data = self.total_data
+        total_data: int | None | Unset
+        if isinstance(self.total_data, Unset):
+            total_data = UNSET
+        else:
+            total_data = self.total_data
 
-        average_duration = self.average_duration
+        average_duration: int | None | Unset
+        if isinstance(self.average_duration, Unset):
+            average_duration = UNSET
+        else:
+            average_duration = self.average_duration
 
-        maximum_duration = self.maximum_duration
+        maximum_duration: int | None | Unset
+        if isinstance(self.maximum_duration, Unset):
+            maximum_duration = UNSET
+        else:
+            maximum_duration = self.maximum_duration
 
-        sync_interval = self.sync_interval
+        sync_interval: int | None | Unset
+        if isinstance(self.sync_interval, Unset):
+            sync_interval = UNSET
+        else:
+            sync_interval = self.sync_interval
 
-        sla = self.sla
+        sla: int | None | Unset
+        if isinstance(self.sla, Unset):
+            sla = UNSET
+        else:
+            sla = self.sla
 
-        max_delay = self.max_delay
+        max_delay: int | None | Unset
+        if isinstance(self.max_delay, Unset):
+            max_delay = UNSET
+        else:
+            max_delay = self.max_delay
 
         bottleneck: str | Unset = UNSET
         if not isinstance(self.bottleneck, Unset):
@@ -114,21 +148,77 @@ class BackupServerCdpReplicationJobLastPeriod:
 
         errors_count = d.pop("errorsCount", UNSET)
 
-        average_data = d.pop("averageData", UNSET)
+        def _parse_average_data(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        maximum_data = d.pop("maximumData", UNSET)
+        average_data = _parse_average_data(d.pop("averageData", UNSET))
 
-        total_data = d.pop("totalData", UNSET)
+        def _parse_maximum_data(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        average_duration = d.pop("averageDuration", UNSET)
+        maximum_data = _parse_maximum_data(d.pop("maximumData", UNSET))
 
-        maximum_duration = d.pop("maximumDuration", UNSET)
+        def _parse_total_data(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        sync_interval = d.pop("syncInterval", UNSET)
+        total_data = _parse_total_data(d.pop("totalData", UNSET))
 
-        sla = d.pop("sla", UNSET)
+        def _parse_average_duration(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        max_delay = d.pop("maxDelay", UNSET)
+        average_duration = _parse_average_duration(d.pop("averageDuration", UNSET))
+
+        def _parse_maximum_duration(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        maximum_duration = _parse_maximum_duration(d.pop("maximumDuration", UNSET))
+
+        def _parse_sync_interval(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        sync_interval = _parse_sync_interval(d.pop("syncInterval", UNSET))
+
+        def _parse_sla(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        sla = _parse_sla(d.pop("sla", UNSET))
+
+        def _parse_max_delay(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        max_delay = _parse_max_delay(d.pop("maxDelay", UNSET))
 
         _bottleneck = d.pop("bottleneck", UNSET)
         bottleneck: BackupServerCdpReplicationJobLastPeriodBottleneck | Unset

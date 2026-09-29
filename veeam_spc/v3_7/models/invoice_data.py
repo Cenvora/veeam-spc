@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -23,38 +23,59 @@ class InvoiceData:
     Attributes:
         period (InvoicePeriod): Period for which information about services consumed by each company is included in an
             invoice.
-        charges (list[InvoiceCharge] | Unset): Detailed information on all consumed services and their costs.
-        total_net (float | Unset): Final cost.
-        total_gross (float | Unset): Total cost before applying discounts and taxes.
-        total_discount (float | Unset): Discounted amount.
-        total_tax (float | Unset): Sales tax amount.
+        charges (list[InvoiceCharge] | None | Unset): Detailed information on all consumed services and their costs.
+        total_net (float | None | Unset): Final cost.
+        total_gross (float | None | Unset): Total cost before applying discounts and taxes.
+        total_discount (float | None | Unset): Discounted amount.
+        total_tax (float | None | Unset): Sales tax amount.
     """
 
     period: InvoicePeriod
-    charges: list[InvoiceCharge] | Unset = UNSET
-    total_net: float | Unset = UNSET
-    total_gross: float | Unset = UNSET
-    total_discount: float | Unset = UNSET
-    total_tax: float | Unset = UNSET
+    charges: list[InvoiceCharge] | None | Unset = UNSET
+    total_net: float | None | Unset = UNSET
+    total_gross: float | None | Unset = UNSET
+    total_discount: float | None | Unset = UNSET
+    total_tax: float | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         period = self.period.to_dict()
 
-        charges: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.charges, Unset):
+        charges: list[dict[str, Any]] | None | Unset
+        if isinstance(self.charges, Unset):
+            charges = UNSET
+        elif isinstance(self.charges, list):
             charges = []
-            for charges_item_data in self.charges:
-                charges_item = charges_item_data.to_dict()
-                charges.append(charges_item)
+            for charges_type_0_item_data in self.charges:
+                charges_type_0_item = charges_type_0_item_data.to_dict()
+                charges.append(charges_type_0_item)
 
-        total_net = self.total_net
+        else:
+            charges = self.charges
 
-        total_gross = self.total_gross
+        total_net: float | None | Unset
+        if isinstance(self.total_net, Unset):
+            total_net = UNSET
+        else:
+            total_net = self.total_net
 
-        total_discount = self.total_discount
+        total_gross: float | None | Unset
+        if isinstance(self.total_gross, Unset):
+            total_gross = UNSET
+        else:
+            total_gross = self.total_gross
 
-        total_tax = self.total_tax
+        total_discount: float | None | Unset
+        if isinstance(self.total_discount, Unset):
+            total_discount = UNSET
+        else:
+            total_discount = self.total_discount
+
+        total_tax: float | None | Unset
+        if isinstance(self.total_tax, Unset):
+            total_tax = UNSET
+        else:
+            total_tax = self.total_tax
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -84,22 +105,63 @@ class InvoiceData:
         d = dict(src_dict)
         period = InvoicePeriod.from_dict(d.pop("period"))
 
-        _charges = d.pop("charges", UNSET)
-        charges: list[InvoiceCharge] | Unset = UNSET
-        if _charges is not UNSET:
-            charges = []
-            for charges_item_data in _charges:
-                charges_item = InvoiceCharge.from_dict(charges_item_data)
+        def _parse_charges(data: object) -> list[InvoiceCharge] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                charges_type_0 = []
+                _charges_type_0 = data
+                for charges_type_0_item_data in _charges_type_0:
+                    charges_type_0_item = InvoiceCharge.from_dict(charges_type_0_item_data)
 
-                charges.append(charges_item)
+                    charges_type_0.append(charges_type_0_item)
 
-        total_net = d.pop("totalNet", UNSET)
+                return charges_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[InvoiceCharge] | None | Unset, data)
 
-        total_gross = d.pop("totalGross", UNSET)
+        charges = _parse_charges(d.pop("charges", UNSET))
 
-        total_discount = d.pop("totalDiscount", UNSET)
+        def _parse_total_net(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
 
-        total_tax = d.pop("totalTax", UNSET)
+        total_net = _parse_total_net(d.pop("totalNet", UNSET))
+
+        def _parse_total_gross(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        total_gross = _parse_total_gross(d.pop("totalGross", UNSET))
+
+        def _parse_total_discount(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        total_discount = _parse_total_discount(d.pop("totalDiscount", UNSET))
+
+        def _parse_total_tax(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        total_tax = _parse_total_tax(d.pop("totalTax", UNSET))
 
         invoice_data = cls(
             period=period,

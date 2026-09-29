@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -11,8 +11,8 @@ from ..models.invoice_charge_measure import InvoiceChargeMeasure
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.invoice_charge_external_charge_info import InvoiceChargeExternalChargeInfo
-    from ..models.invoice_charge_repository_label_info import InvoiceChargeRepositoryLabelInfo
+    from ..models.invoice_charge_external_charge_info_type_0 import InvoiceChargeExternalChargeInfoType0
+    from ..models.invoice_charge_repository_label_info_type_0 import InvoiceChargeRepositoryLabelInfoType0
 
 
 T = TypeVar("T", bound="InvoiceCharge")
@@ -30,35 +30,38 @@ class InvoiceCharge:
             >For repository usage not attributed to a specific label, this property equals
             `RepoUsageByLabelRemoteUnspecified` or `RepoUsageByLabelHostedUnspecified`.
         measure (InvoiceChargeMeasure | Unset): Measurement units of consumed service.
-        quantity (float | Unset): Amount of consumed service units.
-        net (float | Unset): Final cost of consumed service.
-        gross (float | Unset): Cost of consumed service before applying descount and taxes.
-        discount (float | Unset): Discounted amount.
-        tax (float | Unset): Sales tax amount.
-        category_name (str | Unset): Name of a service category.
-        display_name (str | Unset): Name of an invoice line. For repository usage charged per label, includes the label
-            name.
-        repository_label_info (InvoiceChargeRepositoryLabelInfo | Unset): Details of for repository usage charges
-            applied per label. The `null` value indicates that the `category` property has a value other than
+        quantity (float | None | Unset): Amount of consumed service units.
+        net (float | None | Unset): Final cost of consumed service.
+        gross (float | None | Unset): Cost of consumed service before applying descount and taxes.
+        discount (float | None | Unset): Discounted amount.
+        tax (float | None | Unset): Sales tax amount.
+        category_name (None | str | Unset): Name of a service category.
+        display_name (None | str | Unset): Name of an invoice line. For repository usage charged per label, includes the
+            label name.
+        repository_label_info (InvoiceChargeRepositoryLabelInfoType0 | None | Unset): Details of for repository usage
+            charges applied per label. The `null` value indicates that the `category` property has a value other than
             `RepoUsageByLabelRemote` or `RepoUsageByLabelHosted`.
-        external_charge_info (InvoiceChargeExternalChargeInfo | Unset): Details of charges for external plug-in
-            services. The `null` value indicates that the `category` property has the value other than `External`.
+        external_charge_info (InvoiceChargeExternalChargeInfoType0 | None | Unset): Details of charges for external
+            plug-in services. The `null` value indicates that the `category` property has the value other than `External`.
     """
 
     category: InvoiceChargeCategory | Unset = UNSET
     measure: InvoiceChargeMeasure | Unset = UNSET
-    quantity: float | Unset = UNSET
-    net: float | Unset = UNSET
-    gross: float | Unset = UNSET
-    discount: float | Unset = UNSET
-    tax: float | Unset = UNSET
-    category_name: str | Unset = UNSET
-    display_name: str | Unset = UNSET
-    repository_label_info: InvoiceChargeRepositoryLabelInfo | Unset = UNSET
-    external_charge_info: InvoiceChargeExternalChargeInfo | Unset = UNSET
+    quantity: float | None | Unset = UNSET
+    net: float | None | Unset = UNSET
+    gross: float | None | Unset = UNSET
+    discount: float | None | Unset = UNSET
+    tax: float | None | Unset = UNSET
+    category_name: None | str | Unset = UNSET
+    display_name: None | str | Unset = UNSET
+    repository_label_info: InvoiceChargeRepositoryLabelInfoType0 | None | Unset = UNSET
+    external_charge_info: InvoiceChargeExternalChargeInfoType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.invoice_charge_external_charge_info_type_0 import InvoiceChargeExternalChargeInfoType0
+        from ..models.invoice_charge_repository_label_info_type_0 import InvoiceChargeRepositoryLabelInfoType0
+
         category: str | Unset = UNSET
         if not isinstance(self.category, Unset):
             category = self.category.value
@@ -67,27 +70,63 @@ class InvoiceCharge:
         if not isinstance(self.measure, Unset):
             measure = self.measure.value
 
-        quantity = self.quantity
+        quantity: float | None | Unset
+        if isinstance(self.quantity, Unset):
+            quantity = UNSET
+        else:
+            quantity = self.quantity
 
-        net = self.net
+        net: float | None | Unset
+        if isinstance(self.net, Unset):
+            net = UNSET
+        else:
+            net = self.net
 
-        gross = self.gross
+        gross: float | None | Unset
+        if isinstance(self.gross, Unset):
+            gross = UNSET
+        else:
+            gross = self.gross
 
-        discount = self.discount
+        discount: float | None | Unset
+        if isinstance(self.discount, Unset):
+            discount = UNSET
+        else:
+            discount = self.discount
 
-        tax = self.tax
+        tax: float | None | Unset
+        if isinstance(self.tax, Unset):
+            tax = UNSET
+        else:
+            tax = self.tax
 
-        category_name = self.category_name
+        category_name: None | str | Unset
+        if isinstance(self.category_name, Unset):
+            category_name = UNSET
+        else:
+            category_name = self.category_name
 
-        display_name = self.display_name
+        display_name: None | str | Unset
+        if isinstance(self.display_name, Unset):
+            display_name = UNSET
+        else:
+            display_name = self.display_name
 
-        repository_label_info: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.repository_label_info, Unset):
+        repository_label_info: dict[str, Any] | None | Unset
+        if isinstance(self.repository_label_info, Unset):
+            repository_label_info = UNSET
+        elif isinstance(self.repository_label_info, InvoiceChargeRepositoryLabelInfoType0):
             repository_label_info = self.repository_label_info.to_dict()
+        else:
+            repository_label_info = self.repository_label_info
 
-        external_charge_info: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.external_charge_info, Unset):
+        external_charge_info: dict[str, Any] | None | Unset
+        if isinstance(self.external_charge_info, Unset):
+            external_charge_info = UNSET
+        elif isinstance(self.external_charge_info, InvoiceChargeExternalChargeInfoType0):
             external_charge_info = self.external_charge_info.to_dict()
+        else:
+            external_charge_info = self.external_charge_info
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -119,8 +158,8 @@ class InvoiceCharge:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.invoice_charge_external_charge_info import InvoiceChargeExternalChargeInfo
-        from ..models.invoice_charge_repository_label_info import InvoiceChargeRepositoryLabelInfo
+        from ..models.invoice_charge_external_charge_info_type_0 import InvoiceChargeExternalChargeInfoType0
+        from ..models.invoice_charge_repository_label_info_type_0 import InvoiceChargeRepositoryLabelInfoType0
 
         d = dict(src_dict)
         _category = d.pop("category", UNSET)
@@ -137,33 +176,102 @@ class InvoiceCharge:
         else:
             measure = InvoiceChargeMeasure(_measure)
 
-        quantity = d.pop("quantity", UNSET)
+        def _parse_quantity(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
 
-        net = d.pop("net", UNSET)
+        quantity = _parse_quantity(d.pop("quantity", UNSET))
 
-        gross = d.pop("gross", UNSET)
+        def _parse_net(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
 
-        discount = d.pop("discount", UNSET)
+        net = _parse_net(d.pop("net", UNSET))
 
-        tax = d.pop("tax", UNSET)
+        def _parse_gross(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
 
-        category_name = d.pop("categoryName", UNSET)
+        gross = _parse_gross(d.pop("gross", UNSET))
 
-        display_name = d.pop("displayName", UNSET)
+        def _parse_discount(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
 
-        _repository_label_info = d.pop("repositoryLabelInfo", UNSET)
-        repository_label_info: InvoiceChargeRepositoryLabelInfo | Unset
-        if isinstance(_repository_label_info, Unset):
-            repository_label_info = UNSET
-        else:
-            repository_label_info = InvoiceChargeRepositoryLabelInfo.from_dict(_repository_label_info)
+        discount = _parse_discount(d.pop("discount", UNSET))
 
-        _external_charge_info = d.pop("externalChargeInfo", UNSET)
-        external_charge_info: InvoiceChargeExternalChargeInfo | Unset
-        if isinstance(_external_charge_info, Unset):
-            external_charge_info = UNSET
-        else:
-            external_charge_info = InvoiceChargeExternalChargeInfo.from_dict(_external_charge_info)
+        def _parse_tax(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        tax = _parse_tax(d.pop("tax", UNSET))
+
+        def _parse_category_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        category_name = _parse_category_name(d.pop("categoryName", UNSET))
+
+        def _parse_display_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        display_name = _parse_display_name(d.pop("displayName", UNSET))
+
+        def _parse_repository_label_info(data: object) -> InvoiceChargeRepositoryLabelInfoType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                repository_label_info_type_0 = InvoiceChargeRepositoryLabelInfoType0.from_dict(data)
+
+                return repository_label_info_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(InvoiceChargeRepositoryLabelInfoType0 | None | Unset, data)
+
+        repository_label_info = _parse_repository_label_info(d.pop("repositoryLabelInfo", UNSET))
+
+        def _parse_external_charge_info(data: object) -> InvoiceChargeExternalChargeInfoType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                external_charge_info_type_0 = InvoiceChargeExternalChargeInfoType0.from_dict(data)
+
+                return external_charge_info_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(InvoiceChargeExternalChargeInfoType0 | None | Unset, data)
+
+        external_charge_info = _parse_external_charge_info(d.pop("externalChargeInfo", UNSET))
 
         invoice_charge = cls(
             category=category,

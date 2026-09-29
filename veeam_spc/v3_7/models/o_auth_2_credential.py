@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,14 +20,14 @@ class OAuth2Credential:
     """
     Attributes:
         client_settings (OAuth2ClientSettings):
-        user_id (str): User ID required to access the server.
+        user_id (None | str): User ID required to access the server.
         access_token (str): Access token.
         access_token_expiration (datetime.datetime): Date and time of the token expiration.
         refresh_token (str): Resfresh token.
     """
 
     client_settings: OAuth2ClientSettings
-    user_id: str
+    user_id: None | str
     access_token: str
     access_token_expiration: datetime.datetime
     refresh_token: str
@@ -36,6 +36,7 @@ class OAuth2Credential:
     def to_dict(self) -> dict[str, Any]:
         client_settings = self.client_settings.to_dict()
 
+        user_id: None | str
         user_id = self.user_id
 
         access_token = self.access_token
@@ -65,7 +66,12 @@ class OAuth2Credential:
         d = dict(src_dict)
         client_settings = OAuth2ClientSettings.from_dict(d.pop("clientSettings"))
 
-        user_id = d.pop("userId")
+        def _parse_user_id(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        user_id = _parse_user_id(d.pop("userId"))
 
         access_token = d.pop("accessToken")
 

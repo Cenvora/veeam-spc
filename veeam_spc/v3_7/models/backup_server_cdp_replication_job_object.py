@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -26,23 +26,23 @@ class BackupServerCdpReplicationJobObject:
         name (str | Unset): Name of a VM.
         status (BackupServerCdpReplicationJobObjectStatus | Unset): Task session status.
         failure_message (str | Unset): Message that is displayed in case a task session fails.
-        last_session_end_time (datetime.date | Unset): Date and time when the latest session finished.
+        last_session_end_time (datetime.date | None | Unset): Date and time when the latest session finished.
         sla (int | Unset): Percentage of sessions completed within the configured RPO.
         bottleneck (BackupServerCdpReplicationJobObjectBottleneck | Unset): Bottleneck in the data transmission process.
         max_delay_sec (int | Unset): Difference between the configured RPO and time required to transfer and save data,
             in seconds.
-        avg_duration_sec (int | Unset): Average duration of a syncronization session, in seconds.
-        max_duration_sec (int | Unset): Maximum duration of a syncronization session, in seconds.
+        avg_duration_sec (int | None | Unset): Average duration of a syncronization session, in seconds.
+        max_duration_sec (int | None | Unset): Maximum duration of a syncronization session, in seconds.
         interval_sec (int | Unset): Duration of a synchronization session configured in the policy, in seconds.
         successful_sessions_count (int | Unset): Number of task sessions completed with the `Success` status.
         failed_sessions_count (int | Unset): Number of task sessions completed with the `Failed` status.
         warnings_count (int | Unset): Number of task sessions completed with the `Warning` status.
-        avg_transferred_data_kb (int | Unset): Avarage amount of data processed during the synchronization session, in
-            kilobytes.
-        max_transferred_data_kb (int | Unset): Maximum amount of data processed during the synchronization session, in
-            kilobytes.
-        total_transferred_data_kb (int | Unset): Total size of data processed during the synchronization session, in
-            kilobytes.
+        avg_transferred_data_kb (int | None | Unset): Avarage amount of data processed during the synchronization
+            session, in kilobytes.
+        max_transferred_data_kb (int | None | Unset): Maximum amount of data processed during the synchronization
+            session, in kilobytes.
+        total_transferred_data_kb (int | None | Unset): Total size of data processed during the synchronization session,
+            in kilobytes.
     """
 
     job_uid: UUID | Unset = UNSET
@@ -51,19 +51,19 @@ class BackupServerCdpReplicationJobObject:
     name: str | Unset = UNSET
     status: BackupServerCdpReplicationJobObjectStatus | Unset = UNSET
     failure_message: str | Unset = UNSET
-    last_session_end_time: datetime.date | Unset = UNSET
+    last_session_end_time: datetime.date | None | Unset = UNSET
     sla: int | Unset = UNSET
     bottleneck: BackupServerCdpReplicationJobObjectBottleneck | Unset = UNSET
     max_delay_sec: int | Unset = UNSET
-    avg_duration_sec: int | Unset = UNSET
-    max_duration_sec: int | Unset = UNSET
+    avg_duration_sec: int | None | Unset = UNSET
+    max_duration_sec: int | None | Unset = UNSET
     interval_sec: int | Unset = UNSET
     successful_sessions_count: int | Unset = UNSET
     failed_sessions_count: int | Unset = UNSET
     warnings_count: int | Unset = UNSET
-    avg_transferred_data_kb: int | Unset = UNSET
-    max_transferred_data_kb: int | Unset = UNSET
-    total_transferred_data_kb: int | Unset = UNSET
+    avg_transferred_data_kb: int | None | Unset = UNSET
+    max_transferred_data_kb: int | None | Unset = UNSET
+    total_transferred_data_kb: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -87,9 +87,13 @@ class BackupServerCdpReplicationJobObject:
 
         failure_message = self.failure_message
 
-        last_session_end_time: str | Unset = UNSET
-        if not isinstance(self.last_session_end_time, Unset):
+        last_session_end_time: None | str | Unset
+        if isinstance(self.last_session_end_time, Unset):
+            last_session_end_time = UNSET
+        elif isinstance(self.last_session_end_time, datetime.date):
             last_session_end_time = self.last_session_end_time.isoformat()
+        else:
+            last_session_end_time = self.last_session_end_time
 
         sla = self.sla
 
@@ -99,9 +103,17 @@ class BackupServerCdpReplicationJobObject:
 
         max_delay_sec = self.max_delay_sec
 
-        avg_duration_sec = self.avg_duration_sec
+        avg_duration_sec: int | None | Unset
+        if isinstance(self.avg_duration_sec, Unset):
+            avg_duration_sec = UNSET
+        else:
+            avg_duration_sec = self.avg_duration_sec
 
-        max_duration_sec = self.max_duration_sec
+        max_duration_sec: int | None | Unset
+        if isinstance(self.max_duration_sec, Unset):
+            max_duration_sec = UNSET
+        else:
+            max_duration_sec = self.max_duration_sec
 
         interval_sec = self.interval_sec
 
@@ -111,11 +123,23 @@ class BackupServerCdpReplicationJobObject:
 
         warnings_count = self.warnings_count
 
-        avg_transferred_data_kb = self.avg_transferred_data_kb
+        avg_transferred_data_kb: int | None | Unset
+        if isinstance(self.avg_transferred_data_kb, Unset):
+            avg_transferred_data_kb = UNSET
+        else:
+            avg_transferred_data_kb = self.avg_transferred_data_kb
 
-        max_transferred_data_kb = self.max_transferred_data_kb
+        max_transferred_data_kb: int | None | Unset
+        if isinstance(self.max_transferred_data_kb, Unset):
+            max_transferred_data_kb = UNSET
+        else:
+            max_transferred_data_kb = self.max_transferred_data_kb
 
-        total_transferred_data_kb = self.total_transferred_data_kb
+        total_transferred_data_kb: int | None | Unset
+        if isinstance(self.total_transferred_data_kb, Unset):
+            total_transferred_data_kb = UNSET
+        else:
+            total_transferred_data_kb = self.total_transferred_data_kb
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -196,12 +220,22 @@ class BackupServerCdpReplicationJobObject:
 
         failure_message = d.pop("failureMessage", UNSET)
 
-        _last_session_end_time = d.pop("lastSessionEndTime", UNSET)
-        last_session_end_time: datetime.date | Unset
-        if isinstance(_last_session_end_time, Unset):
-            last_session_end_time = UNSET
-        else:
-            last_session_end_time = isoparse(_last_session_end_time).date()
+        def _parse_last_session_end_time(data: object) -> datetime.date | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_session_end_time_type_0 = isoparse(data).date()
+
+                return last_session_end_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.date | None | Unset, data)
+
+        last_session_end_time = _parse_last_session_end_time(d.pop("lastSessionEndTime", UNSET))
 
         sla = d.pop("sla", UNSET)
 
@@ -214,9 +248,23 @@ class BackupServerCdpReplicationJobObject:
 
         max_delay_sec = d.pop("maxDelaySec", UNSET)
 
-        avg_duration_sec = d.pop("avgDurationSec", UNSET)
+        def _parse_avg_duration_sec(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        max_duration_sec = d.pop("maxDurationSec", UNSET)
+        avg_duration_sec = _parse_avg_duration_sec(d.pop("avgDurationSec", UNSET))
+
+        def _parse_max_duration_sec(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        max_duration_sec = _parse_max_duration_sec(d.pop("maxDurationSec", UNSET))
 
         interval_sec = d.pop("intervalSec", UNSET)
 
@@ -226,11 +274,32 @@ class BackupServerCdpReplicationJobObject:
 
         warnings_count = d.pop("warningsCount", UNSET)
 
-        avg_transferred_data_kb = d.pop("avgTransferredDataKb", UNSET)
+        def _parse_avg_transferred_data_kb(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        max_transferred_data_kb = d.pop("maxTransferredDataKb", UNSET)
+        avg_transferred_data_kb = _parse_avg_transferred_data_kb(d.pop("avgTransferredDataKb", UNSET))
 
-        total_transferred_data_kb = d.pop("totalTransferredDataKb", UNSET)
+        def _parse_max_transferred_data_kb(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        max_transferred_data_kb = _parse_max_transferred_data_kb(d.pop("maxTransferredDataKb", UNSET))
+
+        def _parse_total_transferred_data_kb(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        total_transferred_data_kb = _parse_total_transferred_data_kb(d.pop("totalTransferredDataKb", UNSET))
 
         backup_server_cdp_replication_job_object = cls(
             job_uid=job_uid,

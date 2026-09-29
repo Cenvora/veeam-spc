@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,12 +21,12 @@ class PublicCloudGoogleAppliance:
         guest_os_credentials_uid (UUID): UID assigned to guest OS credentials record.
         instance_uid (UUID | Unset): UID assigned to a Veeam Backup for Google Cloud appliance.
         name (str | Unset): Name of a Veeam Backup for Google Cloud appliance.
-        description (str | Unset): Description of a Veeam Backup for Google Cloud appliance.
+        description (None | str | Unset): Description of a Veeam Backup for Google Cloud appliance.
         management_agent_uid (UUID | Unset): UID assigned to management agent installed on a Veeam Backup for Google
             Cloud appliance server.
         certificate_thumbprint (str | Unset): Thumbprint of a security certificate.
         public_address (str | Unset): IP address or DNS name of a Veeam Backup for Google Cloud appliance.
-        private_network_address (str | Unset): Private IP address or DNS name of a Google Cloud network.
+        private_network_address (None | str | Unset): Private IP address or DNS name of a Google Cloud network.
         virtual_machine_id (str | Unset): ID assigned to a VM on which a Veeam Backup for Google Cloud appliance is
             deployed.
         data_center_id (str | Unset): ID assigned to a Google Cloud datacenter.
@@ -37,11 +37,11 @@ class PublicCloudGoogleAppliance:
     guest_os_credentials_uid: UUID
     instance_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     management_agent_uid: UUID | Unset = UNSET
     certificate_thumbprint: str | Unset = UNSET
     public_address: str | Unset = UNSET
-    private_network_address: str | Unset = UNSET
+    private_network_address: None | str | Unset = UNSET
     virtual_machine_id: str | Unset = UNSET
     data_center_id: str | Unset = UNSET
     availability_zone_id: str | Unset = UNSET
@@ -58,7 +58,11 @@ class PublicCloudGoogleAppliance:
 
         name = self.name
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         management_agent_uid: str | Unset = UNSET
         if not isinstance(self.management_agent_uid, Unset):
@@ -68,7 +72,11 @@ class PublicCloudGoogleAppliance:
 
         public_address = self.public_address
 
-        private_network_address = self.private_network_address
+        private_network_address: None | str | Unset
+        if isinstance(self.private_network_address, Unset):
+            private_network_address = UNSET
+        else:
+            private_network_address = self.private_network_address
 
         virtual_machine_id = self.virtual_machine_id
 
@@ -123,7 +131,14 @@ class PublicCloudGoogleAppliance:
 
         name = d.pop("name", UNSET)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         _management_agent_uid = d.pop("managementAgentUid", UNSET)
         management_agent_uid: UUID | Unset
@@ -136,7 +151,14 @@ class PublicCloudGoogleAppliance:
 
         public_address = d.pop("publicAddress", UNSET)
 
-        private_network_address = d.pop("privateNetworkAddress", UNSET)
+        def _parse_private_network_address(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        private_network_address = _parse_private_network_address(d.pop("privateNetworkAddress", UNSET))
 
         virtual_machine_id = d.pop("virtualMachineId", UNSET)
 

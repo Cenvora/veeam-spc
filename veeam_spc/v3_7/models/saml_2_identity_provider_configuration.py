@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,9 +21,9 @@ class Saml2IdentityProviderConfiguration:
 
     Attributes:
         entity_id (str): Issuer name or unique URI that an identity provider uses when sending responses.
-        sign_on_url (str | Unset): URL to which authentication requests are sent if metadata autoloading is not being
-            used.
-        want_authn_requests_signed (bool | Unset): Indicates whether an identity provider requires authentication
+        sign_on_url (None | str | Unset): URL to which authentication requests are sent if metadata autoloading is not
+            being used.
+        want_authn_requests_signed (bool | None | Unset): Indicates whether an identity provider requires authentication
             requests signed.
             > If the property value is `null`, it is treated as the `false` value.
         binding (Saml2IdentityProviderConfigurationBinding | Unset): Type of binding that a services provider should use
@@ -35,26 +35,34 @@ class Saml2IdentityProviderConfiguration:
             override the data in the configuration. Default: True.
         outbound_signing_algorithm (Saml2IdentityProviderConfigurationOutboundSigningAlgorithm | Unset): Overrides the
             default signing algorithm for messages sent to an identity provider.
-        metadata_location (str | Unset): URL or path to a file containing identity provider metadata that is used
+        metadata_location (None | str | Unset): URL or path to a file containing identity provider metadata that is used
             instead of `entityId` value.
     """
 
     entity_id: str
-    sign_on_url: str | Unset = UNSET
-    want_authn_requests_signed: bool | Unset = UNSET
+    sign_on_url: None | str | Unset = UNSET
+    want_authn_requests_signed: bool | None | Unset = UNSET
     binding: Saml2IdentityProviderConfigurationBinding | Unset = UNSET
     allow_unsolicited_authn_response: bool | Unset = False
     load_metadata: bool | Unset = True
     outbound_signing_algorithm: Saml2IdentityProviderConfigurationOutboundSigningAlgorithm | Unset = UNSET
-    metadata_location: str | Unset = UNSET
+    metadata_location: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         entity_id = self.entity_id
 
-        sign_on_url = self.sign_on_url
+        sign_on_url: None | str | Unset
+        if isinstance(self.sign_on_url, Unset):
+            sign_on_url = UNSET
+        else:
+            sign_on_url = self.sign_on_url
 
-        want_authn_requests_signed = self.want_authn_requests_signed
+        want_authn_requests_signed: bool | None | Unset
+        if isinstance(self.want_authn_requests_signed, Unset):
+            want_authn_requests_signed = UNSET
+        else:
+            want_authn_requests_signed = self.want_authn_requests_signed
 
         binding: str | Unset = UNSET
         if not isinstance(self.binding, Unset):
@@ -68,7 +76,11 @@ class Saml2IdentityProviderConfiguration:
         if not isinstance(self.outbound_signing_algorithm, Unset):
             outbound_signing_algorithm = self.outbound_signing_algorithm.value
 
-        metadata_location = self.metadata_location
+        metadata_location: None | str | Unset
+        if isinstance(self.metadata_location, Unset):
+            metadata_location = UNSET
+        else:
+            metadata_location = self.metadata_location
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -99,9 +111,23 @@ class Saml2IdentityProviderConfiguration:
         d = dict(src_dict)
         entity_id = d.pop("entityId")
 
-        sign_on_url = d.pop("signOnUrl", UNSET)
+        def _parse_sign_on_url(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        want_authn_requests_signed = d.pop("wantAuthnRequestsSigned", UNSET)
+        sign_on_url = _parse_sign_on_url(d.pop("signOnUrl", UNSET))
+
+        def _parse_want_authn_requests_signed(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        want_authn_requests_signed = _parse_want_authn_requests_signed(d.pop("wantAuthnRequestsSigned", UNSET))
 
         _binding = d.pop("binding", UNSET)
         binding: Saml2IdentityProviderConfigurationBinding | Unset
@@ -123,7 +149,14 @@ class Saml2IdentityProviderConfiguration:
                 _outbound_signing_algorithm
             )
 
-        metadata_location = d.pop("metadataLocation", UNSET)
+        def _parse_metadata_location(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        metadata_location = _parse_metadata_location(d.pop("metadataLocation", UNSET))
 
         saml_2_identity_provider_configuration = cls(
             entity_id=entity_id,

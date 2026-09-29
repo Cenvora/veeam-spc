@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,13 +19,13 @@ class JsonPatch:
         op (JsonPatchOp): Performed operation.
         value (str): Value that is added, replaced, tested or removed by the PATCH operation.
         path (str): JSON Pointer containing path to a target location where the PATCH operation is performed.
-        from_ (str | Unset): JSON Pointer containing path to a location from which data is moved or copied.
+        from_ (None | str | Unset): JSON Pointer containing path to a location from which data is moved or copied.
     """
 
     op: JsonPatchOp
     value: str
     path: str
-    from_: str | Unset = UNSET
+    from_: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -35,7 +35,11 @@ class JsonPatch:
 
         path = self.path
 
-        from_ = self.from_
+        from_: None | str | Unset
+        if isinstance(self.from_, Unset):
+            from_ = UNSET
+        else:
+            from_ = self.from_
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,7 +64,14 @@ class JsonPatch:
 
         path = d.pop("path")
 
-        from_ = d.pop("from", UNSET)
+        def _parse_from_(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        from_ = _parse_from_(d.pop("from", UNSET))
 
         json_patch = cls(
             op=op,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,12 +17,12 @@ class BackupServerMultipartPatchFileInput:
     Attributes:
         name (str): Name of a file.
         file_size (int): File size, in bytes.
-        target_directory (str | Unset): Path to a target directory under %VBR_ROOT%.
+        target_directory (None | str | Unset): Path to a target directory under %VBR_ROOT%.
     """
 
     name: str
     file_size: int
-    target_directory: str | Unset = UNSET
+    target_directory: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -30,7 +30,11 @@ class BackupServerMultipartPatchFileInput:
 
         file_size = self.file_size
 
-        target_directory = self.target_directory
+        target_directory: None | str | Unset
+        if isinstance(self.target_directory, Unset):
+            target_directory = UNSET
+        else:
+            target_directory = self.target_directory
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,7 +56,14 @@ class BackupServerMultipartPatchFileInput:
 
         file_size = d.pop("fileSize")
 
-        target_directory = d.pop("targetDirectory", UNSET)
+        def _parse_target_directory(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        target_directory = _parse_target_directory(d.pop("targetDirectory", UNSET))
 
         backup_server_multipart_patch_file_input = cls(
             name=name,

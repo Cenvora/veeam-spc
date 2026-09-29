@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -23,16 +23,16 @@ class BackupServerCredentialsRecordLinuxDetails:
             Default: False.
         use_su (bool | Unset): Indicates whether the `su` command is used for Linux distributions where the `sudo`
             command is not available. Default: False.
-        private_key (str | Unset): Private key.
-        passphrase (str | Unset): Passphrase for the private key.
+        private_key (None | str | Unset): Private key.
+        passphrase (None | str | Unset): Passphrase for the private key.
     """
 
     ssh_port: int | Unset = 22
     auto_elevated: bool | Unset = False
     add_to_sudoers: bool | Unset = False
     use_su: bool | Unset = False
-    private_key: str | Unset = UNSET
-    passphrase: str | Unset = UNSET
+    private_key: None | str | Unset = UNSET
+    passphrase: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -44,9 +44,17 @@ class BackupServerCredentialsRecordLinuxDetails:
 
         use_su = self.use_su
 
-        private_key = self.private_key
+        private_key: None | str | Unset
+        if isinstance(self.private_key, Unset):
+            private_key = UNSET
+        else:
+            private_key = self.private_key
 
-        passphrase = self.passphrase
+        passphrase: None | str | Unset
+        if isinstance(self.passphrase, Unset):
+            passphrase = UNSET
+        else:
+            passphrase = self.passphrase
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -77,9 +85,23 @@ class BackupServerCredentialsRecordLinuxDetails:
 
         use_su = d.pop("useSu", UNSET)
 
-        private_key = d.pop("privateKey", UNSET)
+        def _parse_private_key(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        passphrase = d.pop("passphrase", UNSET)
+        private_key = _parse_private_key(d.pop("privateKey", UNSET))
+
+        def _parse_passphrase(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        passphrase = _parse_passphrase(d.pop("passphrase", UNSET))
 
         backup_server_credentials_record_linux_details = cls(
             ssh_port=ssh_port,

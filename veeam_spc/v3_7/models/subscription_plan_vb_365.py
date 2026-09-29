@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -69,8 +69,8 @@ class SubscriptionPlanVb365:
         remote_standard_storage_used_space_units (SubscriptionPlanVb365RemoteStandardStorageUsedSpaceUnits | Unset):
             Measurement units of stored Microsoft 365 backup data block size. Default:
             SubscriptionPlanVb365RemoteStandardStorageUsedSpaceUnits.GB.
-        remote_free_standard_storage_used_space (int | Unset): Amount of disk space consumed by remote Microsoft 365
-            backups that is processed for free.
+        remote_free_standard_storage_used_space (int | None | Unset): Amount of disk space consumed by remote Microsoft
+            365 backups that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         remote_free_standard_storage_used_space_units (SubscriptionPlanVb365RemoteFreeStandardStorageUsedSpaceUnits |
             Unset): Measurement units of disk space consumed by remote Microsoft 365 backups that is processed for free.
@@ -82,8 +82,8 @@ class SubscriptionPlanVb365:
         remote_archive_storage_used_space_units (SubscriptionPlanVb365RemoteArchiveStorageUsedSpaceUnits | Unset):
             Measurement units of Microsoft 365 backup copy data blocks. Default:
             SubscriptionPlanVb365RemoteArchiveStorageUsedSpaceUnits.GB.
-        remote_free_archive_storage_used_space (int | Unset): Amount of remote archive repository disk space consumed by
-            Microsoft 365 backup copies that is processed for free.
+        remote_free_archive_storage_used_space (int | None | Unset): Amount of remote archive repository disk space
+            consumed by Microsoft 365 backup copies that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         remote_free_archive_storage_used_space_units (SubscriptionPlanVb365RemoteFreeArchiveStorageUsedSpaceUnits |
             Unset): Measurement units of remote archive repository disk space consumed by Microsoft 365 backup copies that
@@ -114,8 +114,8 @@ class SubscriptionPlanVb365:
         hosted_standard_storage_used_space_units (SubscriptionPlanVb365HostedStandardStorageUsedSpaceUnits | Unset):
             Measurement units of stored hosted Microsoft 365 backup data block size. Default:
             SubscriptionPlanVb365HostedStandardStorageUsedSpaceUnits.GB.
-        hosted_free_standard_storage_used_space (int | Unset): Amount of disk space consumed by hosted Microsoft 365
-            backups that is processed for free.
+        hosted_free_standard_storage_used_space (int | None | Unset): Amount of disk space consumed by hosted Microsoft
+            365 backups that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         hosted_free_standard_storage_used_space_units (SubscriptionPlanVb365HostedFreeStandardStorageUsedSpaceUnits |
             Unset): Measurement units of disk space consumed by hosted Microsoft 365 backups that is processed for free.
@@ -127,8 +127,8 @@ class SubscriptionPlanVb365:
         hosted_archive_storage_used_space_units (SubscriptionPlanVb365HostedArchiveStorageUsedSpaceUnits | Unset):
             Measurement units of Microsoft 365 backup copy data stored in a hosted archive repository. Default:
             SubscriptionPlanVb365HostedArchiveStorageUsedSpaceUnits.GB.
-        hosted_free_archive_storage_used_space (int | Unset): Amount of hosted archive repository disk space consumed by
-            Microsoft 365 backup copies that is processed for free.
+        hosted_free_archive_storage_used_space (int | None | Unset): Amount of hosted archive repository disk space
+            consumed by Microsoft 365 backup copies that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         hosted_free_archive_storage_used_space_units (SubscriptionPlanVb365HostedFreeArchiveStorageUsedSpaceUnits |
             Unset): Measurement units of hosted archive repository disk space consumed by Microsoft 365 backup copies that
@@ -153,7 +153,7 @@ class SubscriptionPlanVb365:
     remote_standard_storage_used_space_units: SubscriptionPlanVb365RemoteStandardStorageUsedSpaceUnits | Unset = (
         SubscriptionPlanVb365RemoteStandardStorageUsedSpaceUnits.GB
     )
-    remote_free_standard_storage_used_space: int | Unset = UNSET
+    remote_free_standard_storage_used_space: int | None | Unset = UNSET
     remote_free_standard_storage_used_space_units: (
         SubscriptionPlanVb365RemoteFreeStandardStorageUsedSpaceUnits | Unset
     ) = SubscriptionPlanVb365RemoteFreeStandardStorageUsedSpaceUnits.GB
@@ -162,7 +162,7 @@ class SubscriptionPlanVb365:
     remote_archive_storage_used_space_units: SubscriptionPlanVb365RemoteArchiveStorageUsedSpaceUnits | Unset = (
         SubscriptionPlanVb365RemoteArchiveStorageUsedSpaceUnits.GB
     )
-    remote_free_archive_storage_used_space: int | Unset = UNSET
+    remote_free_archive_storage_used_space: int | None | Unset = UNSET
     remote_free_archive_storage_used_space_units: (
         SubscriptionPlanVb365RemoteFreeArchiveStorageUsedSpaceUnits | Unset
     ) = SubscriptionPlanVb365RemoteFreeArchiveStorageUsedSpaceUnits.GB
@@ -183,7 +183,7 @@ class SubscriptionPlanVb365:
     hosted_standard_storage_used_space_units: SubscriptionPlanVb365HostedStandardStorageUsedSpaceUnits | Unset = (
         SubscriptionPlanVb365HostedStandardStorageUsedSpaceUnits.GB
     )
-    hosted_free_standard_storage_used_space: int | Unset = UNSET
+    hosted_free_standard_storage_used_space: int | None | Unset = UNSET
     hosted_free_standard_storage_used_space_units: (
         SubscriptionPlanVb365HostedFreeStandardStorageUsedSpaceUnits | Unset
     ) = SubscriptionPlanVb365HostedFreeStandardStorageUsedSpaceUnits.GB
@@ -192,7 +192,7 @@ class SubscriptionPlanVb365:
     hosted_archive_storage_used_space_units: SubscriptionPlanVb365HostedArchiveStorageUsedSpaceUnits | Unset = (
         SubscriptionPlanVb365HostedArchiveStorageUsedSpaceUnits.GB
     )
-    hosted_free_archive_storage_used_space: int | Unset = UNSET
+    hosted_free_archive_storage_used_space: int | None | Unset = UNSET
     hosted_free_archive_storage_used_space_units: (
         SubscriptionPlanVb365HostedFreeArchiveStorageUsedSpaceUnits | Unset
     ) = SubscriptionPlanVb365HostedFreeArchiveStorageUsedSpaceUnits.GB
@@ -224,7 +224,11 @@ class SubscriptionPlanVb365:
         if not isinstance(self.remote_standard_storage_used_space_units, Unset):
             remote_standard_storage_used_space_units = self.remote_standard_storage_used_space_units.value
 
-        remote_free_standard_storage_used_space = self.remote_free_standard_storage_used_space
+        remote_free_standard_storage_used_space: int | None | Unset
+        if isinstance(self.remote_free_standard_storage_used_space, Unset):
+            remote_free_standard_storage_used_space = UNSET
+        else:
+            remote_free_standard_storage_used_space = self.remote_free_standard_storage_used_space
 
         remote_free_standard_storage_used_space_units: str | Unset = UNSET
         if not isinstance(self.remote_free_standard_storage_used_space_units, Unset):
@@ -238,7 +242,11 @@ class SubscriptionPlanVb365:
         if not isinstance(self.remote_archive_storage_used_space_units, Unset):
             remote_archive_storage_used_space_units = self.remote_archive_storage_used_space_units.value
 
-        remote_free_archive_storage_used_space = self.remote_free_archive_storage_used_space
+        remote_free_archive_storage_used_space: int | None | Unset
+        if isinstance(self.remote_free_archive_storage_used_space, Unset):
+            remote_free_archive_storage_used_space = UNSET
+        else:
+            remote_free_archive_storage_used_space = self.remote_free_archive_storage_used_space
 
         remote_free_archive_storage_used_space_units: str | Unset = UNSET
         if not isinstance(self.remote_free_archive_storage_used_space_units, Unset):
@@ -272,7 +280,11 @@ class SubscriptionPlanVb365:
         if not isinstance(self.hosted_standard_storage_used_space_units, Unset):
             hosted_standard_storage_used_space_units = self.hosted_standard_storage_used_space_units.value
 
-        hosted_free_standard_storage_used_space = self.hosted_free_standard_storage_used_space
+        hosted_free_standard_storage_used_space: int | None | Unset
+        if isinstance(self.hosted_free_standard_storage_used_space, Unset):
+            hosted_free_standard_storage_used_space = UNSET
+        else:
+            hosted_free_standard_storage_used_space = self.hosted_free_standard_storage_used_space
 
         hosted_free_standard_storage_used_space_units: str | Unset = UNSET
         if not isinstance(self.hosted_free_standard_storage_used_space_units, Unset):
@@ -286,7 +298,11 @@ class SubscriptionPlanVb365:
         if not isinstance(self.hosted_archive_storage_used_space_units, Unset):
             hosted_archive_storage_used_space_units = self.hosted_archive_storage_used_space_units.value
 
-        hosted_free_archive_storage_used_space = self.hosted_free_archive_storage_used_space
+        hosted_free_archive_storage_used_space: int | None | Unset
+        if isinstance(self.hosted_free_archive_storage_used_space, Unset):
+            hosted_free_archive_storage_used_space = UNSET
+        else:
+            hosted_free_archive_storage_used_space = self.hosted_free_archive_storage_used_space
 
         hosted_free_archive_storage_used_space_units: str | Unset = UNSET
         if not isinstance(self.hosted_free_archive_storage_used_space_units, Unset):
@@ -406,7 +422,16 @@ class SubscriptionPlanVb365:
                 _remote_standard_storage_used_space_units
             )
 
-        remote_free_standard_storage_used_space = d.pop("remoteFreeStandardStorageUsedSpace", UNSET)
+        def _parse_remote_free_standard_storage_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        remote_free_standard_storage_used_space = _parse_remote_free_standard_storage_used_space(
+            d.pop("remoteFreeStandardStorageUsedSpace", UNSET)
+        )
 
         _remote_free_standard_storage_used_space_units = d.pop("remoteFreeStandardStorageUsedSpaceUnits", UNSET)
         remote_free_standard_storage_used_space_units: (
@@ -434,7 +459,16 @@ class SubscriptionPlanVb365:
                 _remote_archive_storage_used_space_units
             )
 
-        remote_free_archive_storage_used_space = d.pop("remoteFreeArchiveStorageUsedSpace", UNSET)
+        def _parse_remote_free_archive_storage_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        remote_free_archive_storage_used_space = _parse_remote_free_archive_storage_used_space(
+            d.pop("remoteFreeArchiveStorageUsedSpace", UNSET)
+        )
 
         _remote_free_archive_storage_used_space_units = d.pop("remoteFreeArchiveStorageUsedSpaceUnits", UNSET)
         remote_free_archive_storage_used_space_units: (
@@ -490,7 +524,16 @@ class SubscriptionPlanVb365:
                 _hosted_standard_storage_used_space_units
             )
 
-        hosted_free_standard_storage_used_space = d.pop("hostedFreeStandardStorageUsedSpace", UNSET)
+        def _parse_hosted_free_standard_storage_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        hosted_free_standard_storage_used_space = _parse_hosted_free_standard_storage_used_space(
+            d.pop("hostedFreeStandardStorageUsedSpace", UNSET)
+        )
 
         _hosted_free_standard_storage_used_space_units = d.pop("hostedFreeStandardStorageUsedSpaceUnits", UNSET)
         hosted_free_standard_storage_used_space_units: (
@@ -518,7 +561,16 @@ class SubscriptionPlanVb365:
                 _hosted_archive_storage_used_space_units
             )
 
-        hosted_free_archive_storage_used_space = d.pop("hostedFreeArchiveStorageUsedSpace", UNSET)
+        def _parse_hosted_free_archive_storage_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        hosted_free_archive_storage_used_space = _parse_hosted_free_archive_storage_used_space(
+            d.pop("hostedFreeArchiveStorageUsedSpace", UNSET)
+        )
 
         _hosted_free_archive_storage_used_space_units = d.pop("hostedFreeArchiveStorageUsedSpaceUnits", UNSET)
         hosted_free_archive_storage_used_space_units: (

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -9,12 +9,18 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.backup_server_backup_job_schedule_after_this_job import BackupServerBackupJobScheduleAfterThisJob
-    from ..models.backup_server_backup_job_schedule_backup_window import BackupServerBackupJobScheduleBackupWindow
-    from ..models.backup_server_backup_job_schedule_daily import BackupServerBackupJobScheduleDaily
-    from ..models.backup_server_backup_job_schedule_monthly import BackupServerBackupJobScheduleMonthly
-    from ..models.backup_server_backup_job_schedule_periodically import BackupServerBackupJobSchedulePeriodically
-    from ..models.backup_server_backup_job_schedule_retry import BackupServerBackupJobScheduleRetry
+    from ..models.backup_server_backup_job_schedule_after_this_job_type_0 import (
+        BackupServerBackupJobScheduleAfterThisJobType0,
+    )
+    from ..models.backup_server_backup_job_schedule_backup_window_type_0 import (
+        BackupServerBackupJobScheduleBackupWindowType0,
+    )
+    from ..models.backup_server_backup_job_schedule_daily_type_0 import BackupServerBackupJobScheduleDailyType0
+    from ..models.backup_server_backup_job_schedule_monthly_type_0 import BackupServerBackupJobScheduleMonthlyType0
+    from ..models.backup_server_backup_job_schedule_periodically_type_0 import (
+        BackupServerBackupJobSchedulePeriodicallyType0,
+    )
+    from ..models.backup_server_backup_job_schedule_retry_type_0 import BackupServerBackupJobScheduleRetryType0
 
 
 T = TypeVar("T", bound="BackupServerBackupJobSchedule")
@@ -26,55 +32,96 @@ class BackupServerBackupJobSchedule:
 
     Attributes:
         run_automatically (bool | Unset): Indicates whether job scheduling is enabled. Default: False.
-        daily (BackupServerBackupJobScheduleDaily | Unset): Daily job scheduling settings.
-        monthly (BackupServerBackupJobScheduleMonthly | Unset): Monthly job scheduling settings.
-        periodically (BackupServerBackupJobSchedulePeriodically | Unset): Periodic job scheduling options.
-        continuously (BackupServerBackupJobScheduleBackupWindow | Unset): Backup window settings.
-        after_this_job (BackupServerBackupJobScheduleAfterThisJob | Unset): Job chaining settings.
-        retry (BackupServerBackupJobScheduleRetry | Unset): Job retry settings.
-        backup_window (BackupServerBackupJobScheduleBackupWindow | Unset): Backup window settings.
+        daily (BackupServerBackupJobScheduleDailyType0 | None | Unset): Daily job scheduling settings.
+        monthly (BackupServerBackupJobScheduleMonthlyType0 | None | Unset): Monthly job scheduling settings.
+        periodically (BackupServerBackupJobSchedulePeriodicallyType0 | None | Unset): Periodic job scheduling options.
+        continuously (BackupServerBackupJobScheduleBackupWindowType0 | None | Unset): Backup window settings.
+        after_this_job (BackupServerBackupJobScheduleAfterThisJobType0 | None | Unset): Job chaining settings.
+        retry (BackupServerBackupJobScheduleRetryType0 | None | Unset): Job retry settings.
+        backup_window (BackupServerBackupJobScheduleBackupWindowType0 | None | Unset): Backup window settings.
     """
 
     run_automatically: bool | Unset = False
-    daily: BackupServerBackupJobScheduleDaily | Unset = UNSET
-    monthly: BackupServerBackupJobScheduleMonthly | Unset = UNSET
-    periodically: BackupServerBackupJobSchedulePeriodically | Unset = UNSET
-    continuously: BackupServerBackupJobScheduleBackupWindow | Unset = UNSET
-    after_this_job: BackupServerBackupJobScheduleAfterThisJob | Unset = UNSET
-    retry: BackupServerBackupJobScheduleRetry | Unset = UNSET
-    backup_window: BackupServerBackupJobScheduleBackupWindow | Unset = UNSET
+    daily: BackupServerBackupJobScheduleDailyType0 | None | Unset = UNSET
+    monthly: BackupServerBackupJobScheduleMonthlyType0 | None | Unset = UNSET
+    periodically: BackupServerBackupJobSchedulePeriodicallyType0 | None | Unset = UNSET
+    continuously: BackupServerBackupJobScheduleBackupWindowType0 | None | Unset = UNSET
+    after_this_job: BackupServerBackupJobScheduleAfterThisJobType0 | None | Unset = UNSET
+    retry: BackupServerBackupJobScheduleRetryType0 | None | Unset = UNSET
+    backup_window: BackupServerBackupJobScheduleBackupWindowType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.backup_server_backup_job_schedule_after_this_job_type_0 import (
+            BackupServerBackupJobScheduleAfterThisJobType0,
+        )
+        from ..models.backup_server_backup_job_schedule_backup_window_type_0 import (
+            BackupServerBackupJobScheduleBackupWindowType0,
+        )
+        from ..models.backup_server_backup_job_schedule_daily_type_0 import BackupServerBackupJobScheduleDailyType0
+        from ..models.backup_server_backup_job_schedule_monthly_type_0 import BackupServerBackupJobScheduleMonthlyType0
+        from ..models.backup_server_backup_job_schedule_periodically_type_0 import (
+            BackupServerBackupJobSchedulePeriodicallyType0,
+        )
+        from ..models.backup_server_backup_job_schedule_retry_type_0 import BackupServerBackupJobScheduleRetryType0
+
         run_automatically = self.run_automatically
 
-        daily: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.daily, Unset):
+        daily: dict[str, Any] | None | Unset
+        if isinstance(self.daily, Unset):
+            daily = UNSET
+        elif isinstance(self.daily, BackupServerBackupJobScheduleDailyType0):
             daily = self.daily.to_dict()
+        else:
+            daily = self.daily
 
-        monthly: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.monthly, Unset):
+        monthly: dict[str, Any] | None | Unset
+        if isinstance(self.monthly, Unset):
+            monthly = UNSET
+        elif isinstance(self.monthly, BackupServerBackupJobScheduleMonthlyType0):
             monthly = self.monthly.to_dict()
+        else:
+            monthly = self.monthly
 
-        periodically: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.periodically, Unset):
+        periodically: dict[str, Any] | None | Unset
+        if isinstance(self.periodically, Unset):
+            periodically = UNSET
+        elif isinstance(self.periodically, BackupServerBackupJobSchedulePeriodicallyType0):
             periodically = self.periodically.to_dict()
+        else:
+            periodically = self.periodically
 
-        continuously: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.continuously, Unset):
+        continuously: dict[str, Any] | None | Unset
+        if isinstance(self.continuously, Unset):
+            continuously = UNSET
+        elif isinstance(self.continuously, BackupServerBackupJobScheduleBackupWindowType0):
             continuously = self.continuously.to_dict()
+        else:
+            continuously = self.continuously
 
-        after_this_job: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.after_this_job, Unset):
+        after_this_job: dict[str, Any] | None | Unset
+        if isinstance(self.after_this_job, Unset):
+            after_this_job = UNSET
+        elif isinstance(self.after_this_job, BackupServerBackupJobScheduleAfterThisJobType0):
             after_this_job = self.after_this_job.to_dict()
+        else:
+            after_this_job = self.after_this_job
 
-        retry: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.retry, Unset):
+        retry: dict[str, Any] | None | Unset
+        if isinstance(self.retry, Unset):
+            retry = UNSET
+        elif isinstance(self.retry, BackupServerBackupJobScheduleRetryType0):
             retry = self.retry.to_dict()
+        else:
+            retry = self.retry
 
-        backup_window: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.backup_window, Unset):
+        backup_window: dict[str, Any] | None | Unset
+        if isinstance(self.backup_window, Unset):
+            backup_window = UNSET
+        elif isinstance(self.backup_window, BackupServerBackupJobScheduleBackupWindowType0):
             backup_window = self.backup_window.to_dict()
+        else:
+            backup_window = self.backup_window
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -100,64 +147,154 @@ class BackupServerBackupJobSchedule:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.backup_server_backup_job_schedule_after_this_job import BackupServerBackupJobScheduleAfterThisJob
-        from ..models.backup_server_backup_job_schedule_backup_window import BackupServerBackupJobScheduleBackupWindow
-        from ..models.backup_server_backup_job_schedule_daily import BackupServerBackupJobScheduleDaily
-        from ..models.backup_server_backup_job_schedule_monthly import BackupServerBackupJobScheduleMonthly
-        from ..models.backup_server_backup_job_schedule_periodically import BackupServerBackupJobSchedulePeriodically
-        from ..models.backup_server_backup_job_schedule_retry import BackupServerBackupJobScheduleRetry
+        from ..models.backup_server_backup_job_schedule_after_this_job_type_0 import (
+            BackupServerBackupJobScheduleAfterThisJobType0,
+        )
+        from ..models.backup_server_backup_job_schedule_backup_window_type_0 import (
+            BackupServerBackupJobScheduleBackupWindowType0,
+        )
+        from ..models.backup_server_backup_job_schedule_daily_type_0 import BackupServerBackupJobScheduleDailyType0
+        from ..models.backup_server_backup_job_schedule_monthly_type_0 import BackupServerBackupJobScheduleMonthlyType0
+        from ..models.backup_server_backup_job_schedule_periodically_type_0 import (
+            BackupServerBackupJobSchedulePeriodicallyType0,
+        )
+        from ..models.backup_server_backup_job_schedule_retry_type_0 import BackupServerBackupJobScheduleRetryType0
 
         d = dict(src_dict)
         run_automatically = d.pop("runAutomatically", UNSET)
 
-        _daily = d.pop("daily", UNSET)
-        daily: BackupServerBackupJobScheduleDaily | Unset
-        if isinstance(_daily, Unset):
-            daily = UNSET
-        else:
-            daily = BackupServerBackupJobScheduleDaily.from_dict(_daily)
+        def _parse_daily(data: object) -> BackupServerBackupJobScheduleDailyType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_schedule_daily_type_0 = (
+                    BackupServerBackupJobScheduleDailyType0.from_dict(data)
+                )
 
-        _monthly = d.pop("monthly", UNSET)
-        monthly: BackupServerBackupJobScheduleMonthly | Unset
-        if isinstance(_monthly, Unset):
-            monthly = UNSET
-        else:
-            monthly = BackupServerBackupJobScheduleMonthly.from_dict(_monthly)
+                return componentsschemas_backup_server_backup_job_schedule_daily_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobScheduleDailyType0 | None | Unset, data)
 
-        _periodically = d.pop("periodically", UNSET)
-        periodically: BackupServerBackupJobSchedulePeriodically | Unset
-        if isinstance(_periodically, Unset):
-            periodically = UNSET
-        else:
-            periodically = BackupServerBackupJobSchedulePeriodically.from_dict(_periodically)
+        daily = _parse_daily(d.pop("daily", UNSET))
 
-        _continuously = d.pop("continuously", UNSET)
-        continuously: BackupServerBackupJobScheduleBackupWindow | Unset
-        if isinstance(_continuously, Unset):
-            continuously = UNSET
-        else:
-            continuously = BackupServerBackupJobScheduleBackupWindow.from_dict(_continuously)
+        def _parse_monthly(data: object) -> BackupServerBackupJobScheduleMonthlyType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_schedule_monthly_type_0 = (
+                    BackupServerBackupJobScheduleMonthlyType0.from_dict(data)
+                )
 
-        _after_this_job = d.pop("afterThisJob", UNSET)
-        after_this_job: BackupServerBackupJobScheduleAfterThisJob | Unset
-        if isinstance(_after_this_job, Unset):
-            after_this_job = UNSET
-        else:
-            after_this_job = BackupServerBackupJobScheduleAfterThisJob.from_dict(_after_this_job)
+                return componentsschemas_backup_server_backup_job_schedule_monthly_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobScheduleMonthlyType0 | None | Unset, data)
 
-        _retry = d.pop("retry", UNSET)
-        retry: BackupServerBackupJobScheduleRetry | Unset
-        if isinstance(_retry, Unset):
-            retry = UNSET
-        else:
-            retry = BackupServerBackupJobScheduleRetry.from_dict(_retry)
+        monthly = _parse_monthly(d.pop("monthly", UNSET))
 
-        _backup_window = d.pop("backupWindow", UNSET)
-        backup_window: BackupServerBackupJobScheduleBackupWindow | Unset
-        if isinstance(_backup_window, Unset):
-            backup_window = UNSET
-        else:
-            backup_window = BackupServerBackupJobScheduleBackupWindow.from_dict(_backup_window)
+        def _parse_periodically(data: object) -> BackupServerBackupJobSchedulePeriodicallyType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_schedule_periodically_type_0 = (
+                    BackupServerBackupJobSchedulePeriodicallyType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_schedule_periodically_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobSchedulePeriodicallyType0 | None | Unset, data)
+
+        periodically = _parse_periodically(d.pop("periodically", UNSET))
+
+        def _parse_continuously(data: object) -> BackupServerBackupJobScheduleBackupWindowType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_schedule_backup_window_type_0 = (
+                    BackupServerBackupJobScheduleBackupWindowType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_schedule_backup_window_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobScheduleBackupWindowType0 | None | Unset, data)
+
+        continuously = _parse_continuously(d.pop("continuously", UNSET))
+
+        def _parse_after_this_job(data: object) -> BackupServerBackupJobScheduleAfterThisJobType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_schedule_after_this_job_type_0 = (
+                    BackupServerBackupJobScheduleAfterThisJobType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_schedule_after_this_job_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobScheduleAfterThisJobType0 | None | Unset, data)
+
+        after_this_job = _parse_after_this_job(d.pop("afterThisJob", UNSET))
+
+        def _parse_retry(data: object) -> BackupServerBackupJobScheduleRetryType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_schedule_retry_type_0 = (
+                    BackupServerBackupJobScheduleRetryType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_schedule_retry_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobScheduleRetryType0 | None | Unset, data)
+
+        retry = _parse_retry(d.pop("retry", UNSET))
+
+        def _parse_backup_window(data: object) -> BackupServerBackupJobScheduleBackupWindowType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_schedule_backup_window_type_0 = (
+                    BackupServerBackupJobScheduleBackupWindowType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_schedule_backup_window_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobScheduleBackupWindowType0 | None | Unset, data)
+
+        backup_window = _parse_backup_window(d.pop("backupWindow", UNSET))
 
         backup_server_backup_job_schedule = cls(
             run_automatically=run_automatically,

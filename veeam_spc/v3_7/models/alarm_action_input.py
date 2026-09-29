@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -24,16 +24,16 @@ class AlarmActionInput:
         type_ (AlarmActionType):
         condition (AlarmActionCondition):
         is_enabled (bool | Unset): Whether the alarm action is enabled. Default: True.
-        value (str | Unset): Action value: email address for SendCustomEmail, script path for Execute* types, webhook
-            UID for SendWebhook.
-        comment (str | Unset): Comment for the alarm action.
+        value (None | str | Unset): Action value: email address for SendCustomEmail, script path for Execute* types,
+            webhook UID for SendWebhook.
+        comment (None | str | Unset): Comment for the alarm action.
     """
 
     type_: AlarmActionType
     condition: AlarmActionCondition
     is_enabled: bool | Unset = True
-    value: str | Unset = UNSET
-    comment: str | Unset = UNSET
+    value: None | str | Unset = UNSET
+    comment: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -43,9 +43,17 @@ class AlarmActionInput:
 
         is_enabled = self.is_enabled
 
-        value = self.value
+        value: None | str | Unset
+        if isinstance(self.value, Unset):
+            value = UNSET
+        else:
+            value = self.value
 
-        comment = self.comment
+        comment: None | str | Unset
+        if isinstance(self.comment, Unset):
+            comment = UNSET
+        else:
+            comment = self.comment
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -73,9 +81,23 @@ class AlarmActionInput:
 
         is_enabled = d.pop("isEnabled", UNSET)
 
-        value = d.pop("value", UNSET)
+        def _parse_value(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        comment = d.pop("comment", UNSET)
+        value = _parse_value(d.pop("value", UNSET))
+
+        def _parse_comment(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        comment = _parse_comment(d.pop("comment", UNSET))
 
         alarm_action_input = cls(
             type_=type_,

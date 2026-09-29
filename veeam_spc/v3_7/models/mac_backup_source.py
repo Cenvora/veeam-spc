@@ -25,12 +25,13 @@ class MacBackupSource:
         include_usb_drives (bool | Unset): Indicates whether external USB drives are included in the backup.
             > USB flash drives are not supported.
              Default: False.
-        include_directories (list[str] | Unset):  Array of paths to folders containing the files that must be protected.
-        inclusion_masks (list[str] | Unset): Array of inclusion masks.
+        include_directories (list[str] | None | Unset):  Array of paths to folders containing the files that must be
+            protected.
+        inclusion_masks (list[str] | None | Unset): Array of inclusion masks.
             > Use `*` to represent any amount of letters, and `?` to represent a single letter.
-        exclude_directories (list[str] | Unset): Array of paths to folders containing the files that must be excluded
-            from the backup.
-        exclusion_masks (list[str] | Unset): Array of exclusion masks.
+        exclude_directories (list[str] | None | Unset): Array of paths to folders containing the files that must be
+            excluded from the backup.
+        exclusion_masks (list[str] | None | Unset): Array of exclusion masks.
             > Use `*` to represent any amount of letters, and `?` to represent a single letter. You can additionally specify
             path to a folder.
         personal_files_advanced_settings (MacPersonalFilesBackupAdvancedSettings | Unset):
@@ -38,10 +39,10 @@ class MacBackupSource:
 
     backup_directly_from_live_file_system: bool | Unset = False
     include_usb_drives: bool | Unset = False
-    include_directories: list[str] | Unset = UNSET
-    inclusion_masks: list[str] | Unset = UNSET
-    exclude_directories: list[str] | Unset = UNSET
-    exclusion_masks: list[str] | Unset = UNSET
+    include_directories: list[str] | None | Unset = UNSET
+    inclusion_masks: list[str] | None | Unset = UNSET
+    exclude_directories: list[str] | None | Unset = UNSET
+    exclusion_masks: list[str] | None | Unset = UNSET
     personal_files_advanced_settings: MacPersonalFilesBackupAdvancedSettings | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -50,20 +51,40 @@ class MacBackupSource:
 
         include_usb_drives = self.include_usb_drives
 
-        include_directories: list[str] | Unset = UNSET
-        if not isinstance(self.include_directories, Unset):
+        include_directories: list[str] | None | Unset
+        if isinstance(self.include_directories, Unset):
+            include_directories = UNSET
+        elif isinstance(self.include_directories, list):
             include_directories = self.include_directories
 
-        inclusion_masks: list[str] | Unset = UNSET
-        if not isinstance(self.inclusion_masks, Unset):
+        else:
+            include_directories = self.include_directories
+
+        inclusion_masks: list[str] | None | Unset
+        if isinstance(self.inclusion_masks, Unset):
+            inclusion_masks = UNSET
+        elif isinstance(self.inclusion_masks, list):
             inclusion_masks = self.inclusion_masks
 
-        exclude_directories: list[str] | Unset = UNSET
-        if not isinstance(self.exclude_directories, Unset):
+        else:
+            inclusion_masks = self.inclusion_masks
+
+        exclude_directories: list[str] | None | Unset
+        if isinstance(self.exclude_directories, Unset):
+            exclude_directories = UNSET
+        elif isinstance(self.exclude_directories, list):
             exclude_directories = self.exclude_directories
 
-        exclusion_masks: list[str] | Unset = UNSET
-        if not isinstance(self.exclusion_masks, Unset):
+        else:
+            exclude_directories = self.exclude_directories
+
+        exclusion_masks: list[str] | None | Unset
+        if isinstance(self.exclusion_masks, Unset):
+            exclusion_masks = UNSET
+        elif isinstance(self.exclusion_masks, list):
+            exclusion_masks = self.exclusion_masks
+
+        else:
             exclusion_masks = self.exclusion_masks
 
         personal_files_advanced_settings: dict[str, Any] | Unset = UNSET
@@ -99,13 +120,73 @@ class MacBackupSource:
 
         include_usb_drives = d.pop("includeUsbDrives", UNSET)
 
-        include_directories = cast(list[str], d.pop("includeDirectories", UNSET))
+        def _parse_include_directories(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                include_directories_type_0 = cast(list[str], data)
 
-        inclusion_masks = cast(list[str], d.pop("inclusionMasks", UNSET))
+                return include_directories_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
 
-        exclude_directories = cast(list[str], d.pop("excludeDirectories", UNSET))
+        include_directories = _parse_include_directories(d.pop("includeDirectories", UNSET))
 
-        exclusion_masks = cast(list[str], d.pop("exclusionMasks", UNSET))
+        def _parse_inclusion_masks(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                inclusion_masks_type_0 = cast(list[str], data)
+
+                return inclusion_masks_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        inclusion_masks = _parse_inclusion_masks(d.pop("inclusionMasks", UNSET))
+
+        def _parse_exclude_directories(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                exclude_directories_type_0 = cast(list[str], data)
+
+                return exclude_directories_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        exclude_directories = _parse_exclude_directories(d.pop("excludeDirectories", UNSET))
+
+        def _parse_exclusion_masks(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                exclusion_masks_type_0 = cast(list[str], data)
+
+                return exclusion_masks_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        exclusion_masks = _parse_exclusion_masks(d.pop("exclusionMasks", UNSET))
 
         _personal_files_advanced_settings = d.pop("personalFilesAdvancedSettings", UNSET)
         personal_files_advanced_settings: MacPersonalFilesBackupAdvancedSettings | Unset

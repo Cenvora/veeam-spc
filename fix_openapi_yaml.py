@@ -135,6 +135,13 @@ def fix_response_keys(input_path: str, output_path: str) -> None:
                         "Type of a Veeam Service Provider Console entity."
                     )
 
+                # Swagger 2.0 has no `nullable`, so 3.7 marks nullability with a
+                # vendor extension that swagger2openapi carries over untouched.
+                # openapi-python-client ignores it, so translate it or every
+                # nullable field is generated as non-nullable.
+                if node_dict.pop("x-veeam-nullable", None) is True:
+                    node_dict["nullable"] = True
+
                 # Collapse JSON Schema nullable unions (e.g. ["string", "null"]) to
                 # OpenAPI-compatible representation for openapi-python-client.
                 type_any = node_dict.get("type")

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -38,15 +38,15 @@ class ConsoleLicense:
         licensee_administrator_email (str | Unset): Email address of a license administrator in a company.
         contact_person (str | Unset): [Legacy] Name of a contact person in an organization to which the license is
             issued.
-        expiration_date (datetime.datetime | Unset): License expiration date and time.
-        support_expiration_date (datetime.datetime | Unset): Support expiration date and time.
+        expiration_date (datetime.datetime | None | Unset): License expiration date and time.
+        support_expiration_date (datetime.datetime | None | Unset): Support expiration date and time.
         support_id (str | Unset): Support ID required for contacting Veeam Support.
         status (ConsoleLicenseStatus | Unset): Current status of the license.
         status_message (str | Unset): Description of a license status.
         cloud_connect (ConsoleLicenseCloudConnect | Unset): Indicates whether a license includes Veeam Cloud Connect.
         instances (float | Unset): Total number of available instances.
         type_ (ConsoleLicenseType | Unset): Type of a license.
-        last_update_date (datetime.datetime | Unset): Date and time when license was last updated.
+        last_update_date (datetime.datetime | None | Unset): Date and time when license was last updated.
         last_update_message (str | Unset): Message to the last license update.
         last_update_status (ConsoleLicenseLastUpdateStatus | Unset): Status of the last license update.
     """
@@ -58,15 +58,15 @@ class ConsoleLicense:
     licensee_email: str | Unset = UNSET
     licensee_administrator_email: str | Unset = UNSET
     contact_person: str | Unset = UNSET
-    expiration_date: datetime.datetime | Unset = UNSET
-    support_expiration_date: datetime.datetime | Unset = UNSET
+    expiration_date: datetime.datetime | None | Unset = UNSET
+    support_expiration_date: datetime.datetime | None | Unset = UNSET
     support_id: str | Unset = UNSET
     status: ConsoleLicenseStatus | Unset = UNSET
     status_message: str | Unset = UNSET
     cloud_connect: ConsoleLicenseCloudConnect | Unset = UNSET
     instances: float | Unset = UNSET
     type_: ConsoleLicenseType | Unset = UNSET
-    last_update_date: datetime.datetime | Unset = UNSET
+    last_update_date: datetime.datetime | None | Unset = UNSET
     last_update_message: str | Unset = UNSET
     last_update_status: ConsoleLicenseLastUpdateStatus | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -88,13 +88,21 @@ class ConsoleLicense:
 
         contact_person = self.contact_person
 
-        expiration_date: str | Unset = UNSET
-        if not isinstance(self.expiration_date, Unset):
+        expiration_date: None | str | Unset
+        if isinstance(self.expiration_date, Unset):
+            expiration_date = UNSET
+        elif isinstance(self.expiration_date, datetime.datetime):
             expiration_date = self.expiration_date.isoformat()
+        else:
+            expiration_date = self.expiration_date
 
-        support_expiration_date: str | Unset = UNSET
-        if not isinstance(self.support_expiration_date, Unset):
+        support_expiration_date: None | str | Unset
+        if isinstance(self.support_expiration_date, Unset):
+            support_expiration_date = UNSET
+        elif isinstance(self.support_expiration_date, datetime.datetime):
             support_expiration_date = self.support_expiration_date.isoformat()
+        else:
+            support_expiration_date = self.support_expiration_date
 
         support_id = self.support_id
 
@@ -114,9 +122,13 @@ class ConsoleLicense:
         if not isinstance(self.type_, Unset):
             type_ = self.type_.value
 
-        last_update_date: str | Unset = UNSET
-        if not isinstance(self.last_update_date, Unset):
+        last_update_date: None | str | Unset
+        if isinstance(self.last_update_date, Unset):
+            last_update_date = UNSET
+        elif isinstance(self.last_update_date, datetime.datetime):
             last_update_date = self.last_update_date.isoformat()
+        else:
+            last_update_date = self.last_update_date
 
         last_update_message = self.last_update_message
 
@@ -188,19 +200,39 @@ class ConsoleLicense:
 
         contact_person = d.pop("contactPerson", UNSET)
 
-        _expiration_date = d.pop("expirationDate", UNSET)
-        expiration_date: datetime.datetime | Unset
-        if isinstance(_expiration_date, Unset):
-            expiration_date = UNSET
-        else:
-            expiration_date = isoparse(_expiration_date)
+        def _parse_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                expiration_date_type_0 = isoparse(data)
 
-        _support_expiration_date = d.pop("supportExpirationDate", UNSET)
-        support_expiration_date: datetime.datetime | Unset
-        if isinstance(_support_expiration_date, Unset):
-            support_expiration_date = UNSET
-        else:
-            support_expiration_date = isoparse(_support_expiration_date)
+                return expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        expiration_date = _parse_expiration_date(d.pop("expirationDate", UNSET))
+
+        def _parse_support_expiration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                support_expiration_date_type_0 = isoparse(data)
+
+                return support_expiration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        support_expiration_date = _parse_support_expiration_date(d.pop("supportExpirationDate", UNSET))
 
         support_id = d.pop("supportId", UNSET)
 
@@ -229,12 +261,22 @@ class ConsoleLicense:
         else:
             type_ = ConsoleLicenseType(_type_)
 
-        _last_update_date = d.pop("lastUpdateDate", UNSET)
-        last_update_date: datetime.datetime | Unset
-        if isinstance(_last_update_date, Unset):
-            last_update_date = UNSET
-        else:
-            last_update_date = isoparse(_last_update_date)
+        def _parse_last_update_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_update_date_type_0 = isoparse(data)
+
+                return last_update_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        last_update_date = _parse_last_update_date(d.pop("lastUpdateDate", UNSET))
 
         last_update_message = d.pop("lastUpdateMessage", UNSET)
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,10 +24,10 @@ class BackupHardwarePlan:
         name (str | Unset): Name of a hardware plan.
         backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server on which a hardware plan
             is configured.
-        cpu_quota (int | Unset): Maximum CPU resources that VM replicas can utilize, in MHz.
+        cpu_quota (int | None | Unset): Maximum CPU resources that VM replicas can utilize, in MHz.
         is_cpu_quota_unlimited (bool | Unset): Indicates whether CPU resources that VM replicas can utilize are
             unlimited.
-        memory_quota (int | Unset): Maximum RAM resources that VM replicas can utilize, in bytes.
+        memory_quota (int | None | Unset): Maximum RAM resources that VM replicas can utilize, in bytes.
         is_memory_quota_unlimited (bool | Unset): Indicates whether RAM resources that VM replicas can utilize are
             unlimited.
         network_with_internet_quota (int | Unset): Number of IP networks with internet access that are available to
@@ -39,9 +39,9 @@ class BackupHardwarePlan:
     instance_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
-    cpu_quota: int | Unset = UNSET
+    cpu_quota: int | None | Unset = UNSET
     is_cpu_quota_unlimited: bool | Unset = UNSET
-    memory_quota: int | Unset = UNSET
+    memory_quota: int | None | Unset = UNSET
     is_memory_quota_unlimited: bool | Unset = UNSET
     network_with_internet_quota: int | Unset = UNSET
     network_without_internet_quota: int | Unset = UNSET
@@ -58,11 +58,19 @@ class BackupHardwarePlan:
         if not isinstance(self.backup_server_uid, Unset):
             backup_server_uid = str(self.backup_server_uid)
 
-        cpu_quota = self.cpu_quota
+        cpu_quota: int | None | Unset
+        if isinstance(self.cpu_quota, Unset):
+            cpu_quota = UNSET
+        else:
+            cpu_quota = self.cpu_quota
 
         is_cpu_quota_unlimited = self.is_cpu_quota_unlimited
 
-        memory_quota = self.memory_quota
+        memory_quota: int | None | Unset
+        if isinstance(self.memory_quota, Unset):
+            memory_quota = UNSET
+        else:
+            memory_quota = self.memory_quota
 
         is_memory_quota_unlimited = self.is_memory_quota_unlimited
 
@@ -113,11 +121,25 @@ class BackupHardwarePlan:
         else:
             backup_server_uid = UUID(_backup_server_uid)
 
-        cpu_quota = d.pop("cpuQuota", UNSET)
+        def _parse_cpu_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        cpu_quota = _parse_cpu_quota(d.pop("cpuQuota", UNSET))
 
         is_cpu_quota_unlimited = d.pop("isCpuQuotaUnlimited", UNSET)
 
-        memory_quota = d.pop("memoryQuota", UNSET)
+        def _parse_memory_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        memory_quota = _parse_memory_quota(d.pop("memoryQuota", UNSET))
 
         is_memory_quota_unlimited = d.pop("isMemoryQuotaUnlimited", UNSET)
 

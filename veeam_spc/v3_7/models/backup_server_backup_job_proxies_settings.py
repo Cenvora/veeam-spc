@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -18,22 +18,27 @@ class BackupServerBackupJobProxiesSettings:
 
     Attributes:
         auto_selection (bool): Indicates whether backup proxies are detected and assigned automatically. Default: True.
-        proxy_ids (list[UUID] | Unset): Array of UIDs assigned to a backup proxy.
+        proxy_ids (list[UUID] | None | Unset): Array of UIDs assigned to a backup proxy.
     """
 
     auto_selection: bool = True
-    proxy_ids: list[UUID] | Unset = UNSET
+    proxy_ids: list[UUID] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         auto_selection = self.auto_selection
 
-        proxy_ids: list[str] | Unset = UNSET
-        if not isinstance(self.proxy_ids, Unset):
+        proxy_ids: list[str] | None | Unset
+        if isinstance(self.proxy_ids, Unset):
+            proxy_ids = UNSET
+        elif isinstance(self.proxy_ids, list):
             proxy_ids = []
-            for proxy_ids_item_data in self.proxy_ids:
-                proxy_ids_item = str(proxy_ids_item_data)
-                proxy_ids.append(proxy_ids_item)
+            for proxy_ids_type_0_item_data in self.proxy_ids:
+                proxy_ids_type_0_item = str(proxy_ids_type_0_item_data)
+                proxy_ids.append(proxy_ids_type_0_item)
+
+        else:
+            proxy_ids = self.proxy_ids
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,14 +57,27 @@ class BackupServerBackupJobProxiesSettings:
         d = dict(src_dict)
         auto_selection = d.pop("autoSelection")
 
-        _proxy_ids = d.pop("proxyIds", UNSET)
-        proxy_ids: list[UUID] | Unset = UNSET
-        if _proxy_ids is not UNSET:
-            proxy_ids = []
-            for proxy_ids_item_data in _proxy_ids:
-                proxy_ids_item = UUID(proxy_ids_item_data)
+        def _parse_proxy_ids(data: object) -> list[UUID] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                proxy_ids_type_0 = []
+                _proxy_ids_type_0 = data
+                for proxy_ids_type_0_item_data in _proxy_ids_type_0:
+                    proxy_ids_type_0_item = UUID(proxy_ids_type_0_item_data)
 
-                proxy_ids.append(proxy_ids_item)
+                    proxy_ids_type_0.append(proxy_ids_type_0_item)
+
+                return proxy_ids_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[UUID] | None | Unset, data)
+
+        proxy_ids = _parse_proxy_ids(d.pop("proxyIds", UNSET))
 
         backup_server_backup_job_proxies_settings = cls(
             auto_selection=auto_selection,

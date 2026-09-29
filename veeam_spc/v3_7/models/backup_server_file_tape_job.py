@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -10,7 +10,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+    from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
 
 T = TypeVar("T", bound="BackupServerFileTapeJob")
@@ -24,18 +24,20 @@ class BackupServerFileTapeJob:
         unique_uid (UUID | Unset): UID assigned to a job in Veeam Service Provider Console.
         full_media_pool_uid (UUID | Unset): UID assigned to a media pool for full backups.
         incremental_media_pool_uid (UUID | Unset): UID assigned to a media pool for increment backups.
-        field_embedded (EmbeddedForBackupServerJobChildren | Unset): Resource representation of the related Veeam Backup
-            & Replication server job entity.
+        field_embedded (EmbeddedForBackupServerJobChildrenType0 | None | Unset): Resource representation of the related
+            Veeam Backup & Replication server job entity.
     """
 
     instance_uid: UUID | Unset = UNSET
     unique_uid: UUID | Unset = UNSET
     full_media_pool_uid: UUID | Unset = UNSET
     incremental_media_pool_uid: UUID | Unset = UNSET
-    field_embedded: EmbeddedForBackupServerJobChildren | Unset = UNSET
+    field_embedded: EmbeddedForBackupServerJobChildrenType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
+
         instance_uid: str | Unset = UNSET
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
@@ -52,9 +54,13 @@ class BackupServerFileTapeJob:
         if not isinstance(self.incremental_media_pool_uid, Unset):
             incremental_media_pool_uid = str(self.incremental_media_pool_uid)
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForBackupServerJobChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -74,7 +80,7 @@ class BackupServerFileTapeJob:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
         d = dict(src_dict)
         _instance_uid = d.pop("instanceUid", UNSET)
@@ -105,12 +111,24 @@ class BackupServerFileTapeJob:
         else:
             incremental_media_pool_uid = UUID(_incremental_media_pool_uid)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForBackupServerJobChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForBackupServerJobChildren.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> EmbeddedForBackupServerJobChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_backup_server_job_children_type_0 = (
+                    EmbeddedForBackupServerJobChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_backup_server_job_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForBackupServerJobChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         backup_server_file_tape_job = cls(
             instance_uid=instance_uid,

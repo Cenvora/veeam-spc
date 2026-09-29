@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,13 +22,13 @@ class BackupServerJobScheduleOptionsPeriodically:
     Attributes:
         kind (BackupServerJobScheduleOptionsPeriodicallyKind | Unset): Measurement units of the intervals between
             periodical job runs.
-        full_period (int | Unset): Numerical value of the intervals between periodical job runs.
-        schedule (list[BackupServerJobTimePeriod] | Unset): Permitted time window of a job.
+        full_period (int | None | Unset): Numerical value of the intervals between periodical job runs.
+        schedule (list[BackupServerJobTimePeriod] | None | Unset): Permitted time window of a job.
     """
 
     kind: BackupServerJobScheduleOptionsPeriodicallyKind | Unset = UNSET
-    full_period: int | Unset = UNSET
-    schedule: list[BackupServerJobTimePeriod] | Unset = UNSET
+    full_period: int | None | Unset = UNSET
+    schedule: list[BackupServerJobTimePeriod] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,14 +36,23 @@ class BackupServerJobScheduleOptionsPeriodically:
         if not isinstance(self.kind, Unset):
             kind = self.kind.value
 
-        full_period = self.full_period
+        full_period: int | None | Unset
+        if isinstance(self.full_period, Unset):
+            full_period = UNSET
+        else:
+            full_period = self.full_period
 
-        schedule: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.schedule, Unset):
+        schedule: list[dict[str, Any]] | None | Unset
+        if isinstance(self.schedule, Unset):
+            schedule = UNSET
+        elif isinstance(self.schedule, list):
             schedule = []
-            for schedule_item_data in self.schedule:
-                schedule_item = schedule_item_data.to_dict()
-                schedule.append(schedule_item)
+            for schedule_type_0_item_data in self.schedule:
+                schedule_type_0_item = schedule_type_0_item_data.to_dict()
+                schedule.append(schedule_type_0_item)
+
+        else:
+            schedule = self.schedule
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -69,16 +78,36 @@ class BackupServerJobScheduleOptionsPeriodically:
         else:
             kind = BackupServerJobScheduleOptionsPeriodicallyKind(_kind)
 
-        full_period = d.pop("fullPeriod", UNSET)
+        def _parse_full_period(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        _schedule = d.pop("schedule", UNSET)
-        schedule: list[BackupServerJobTimePeriod] | Unset = UNSET
-        if _schedule is not UNSET:
-            schedule = []
-            for schedule_item_data in _schedule:
-                schedule_item = BackupServerJobTimePeriod.from_dict(schedule_item_data)
+        full_period = _parse_full_period(d.pop("fullPeriod", UNSET))
 
-                schedule.append(schedule_item)
+        def _parse_schedule(data: object) -> list[BackupServerJobTimePeriod] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                schedule_type_0 = []
+                _schedule_type_0 = data
+                for schedule_type_0_item_data in _schedule_type_0:
+                    schedule_type_0_item = BackupServerJobTimePeriod.from_dict(schedule_type_0_item_data)
+
+                    schedule_type_0.append(schedule_type_0_item)
+
+                return schedule_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[BackupServerJobTimePeriod] | None | Unset, data)
+
+        schedule = _parse_schedule(d.pop("schedule", UNSET))
 
         backup_server_job_schedule_options_periodically = cls(
             kind=kind,

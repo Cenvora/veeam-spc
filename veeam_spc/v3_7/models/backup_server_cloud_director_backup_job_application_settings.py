@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -11,10 +11,12 @@ from ..models.backup_server_transaction_logs_settings import BackupServerTransac
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.backup_server_backup_job_backup_fs_exclusions import BackupServerBackupJobBackupFSExclusions
-    from ..models.backup_server_backup_job_oracle_settings import BackupServerBackupJobOracleSettings
-    from ..models.backup_server_backup_job_script_settings import BackupServerBackupJobScriptSettings
-    from ..models.backup_server_backup_job_sql_settings import BackupServerBackupJobSQLSettings
+    from ..models.backup_server_backup_job_backup_fs_exclusions_type_0 import (
+        BackupServerBackupJobBackupFSExclusionsType0,
+    )
+    from ..models.backup_server_backup_job_oracle_settings_type_0 import BackupServerBackupJobOracleSettingsType0
+    from ..models.backup_server_backup_job_script_settings_type_0 import BackupServerBackupJobScriptSettingsType0
+    from ..models.backup_server_backup_job_sql_settings_type_0 import BackupServerBackupJobSQLSettingsType0
     from ..models.backup_server_cloud_director_object import BackupServerCloudDirectorObject
 
 
@@ -31,23 +33,30 @@ class BackupServerCloudDirectorBackupJobApplicationSettings:
             for application-aware processing. Default: False.
         transaction_logs (BackupServerTransactionLogsSettings | Unset): Indicates whether Veeam Backup & Replication
             must process application logs or create copy-only backups.
-        sql (BackupServerBackupJobSQLSettings | Unset): Microsoft SQL Server transaction log settings.
-        oracle (BackupServerBackupJobOracleSettings | Unset): Oracle archived log settings.
-        exclusions (BackupServerBackupJobBackupFSExclusions | Unset): VM guest OS file exclusion.
-        scripts (BackupServerBackupJobScriptSettings | Unset): Pre-freeze and post-thaw scripts.
+        sql (BackupServerBackupJobSQLSettingsType0 | None | Unset): Microsoft SQL Server transaction log settings.
+        oracle (BackupServerBackupJobOracleSettingsType0 | None | Unset): Oracle archived log settings.
+        exclusions (BackupServerBackupJobBackupFSExclusionsType0 | None | Unset): VM guest OS file exclusion.
+        scripts (BackupServerBackupJobScriptSettingsType0 | None | Unset): Pre-freeze and post-thaw scripts.
     """
 
     vm_object: BackupServerCloudDirectorObject
     vss: BackupServerApplicationSettingsVSS | Unset = UNSET
     use_persistent_guest_agent: bool | Unset = False
     transaction_logs: BackupServerTransactionLogsSettings | Unset = UNSET
-    sql: BackupServerBackupJobSQLSettings | Unset = UNSET
-    oracle: BackupServerBackupJobOracleSettings | Unset = UNSET
-    exclusions: BackupServerBackupJobBackupFSExclusions | Unset = UNSET
-    scripts: BackupServerBackupJobScriptSettings | Unset = UNSET
+    sql: BackupServerBackupJobSQLSettingsType0 | None | Unset = UNSET
+    oracle: BackupServerBackupJobOracleSettingsType0 | None | Unset = UNSET
+    exclusions: BackupServerBackupJobBackupFSExclusionsType0 | None | Unset = UNSET
+    scripts: BackupServerBackupJobScriptSettingsType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.backup_server_backup_job_backup_fs_exclusions_type_0 import (
+            BackupServerBackupJobBackupFSExclusionsType0,
+        )
+        from ..models.backup_server_backup_job_oracle_settings_type_0 import BackupServerBackupJobOracleSettingsType0
+        from ..models.backup_server_backup_job_script_settings_type_0 import BackupServerBackupJobScriptSettingsType0
+        from ..models.backup_server_backup_job_sql_settings_type_0 import BackupServerBackupJobSQLSettingsType0
+
         vm_object = self.vm_object.to_dict()
 
         vss: str | Unset = UNSET
@@ -60,21 +69,37 @@ class BackupServerCloudDirectorBackupJobApplicationSettings:
         if not isinstance(self.transaction_logs, Unset):
             transaction_logs = self.transaction_logs.value
 
-        sql: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.sql, Unset):
+        sql: dict[str, Any] | None | Unset
+        if isinstance(self.sql, Unset):
+            sql = UNSET
+        elif isinstance(self.sql, BackupServerBackupJobSQLSettingsType0):
             sql = self.sql.to_dict()
+        else:
+            sql = self.sql
 
-        oracle: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.oracle, Unset):
+        oracle: dict[str, Any] | None | Unset
+        if isinstance(self.oracle, Unset):
+            oracle = UNSET
+        elif isinstance(self.oracle, BackupServerBackupJobOracleSettingsType0):
             oracle = self.oracle.to_dict()
+        else:
+            oracle = self.oracle
 
-        exclusions: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.exclusions, Unset):
+        exclusions: dict[str, Any] | None | Unset
+        if isinstance(self.exclusions, Unset):
+            exclusions = UNSET
+        elif isinstance(self.exclusions, BackupServerBackupJobBackupFSExclusionsType0):
             exclusions = self.exclusions.to_dict()
+        else:
+            exclusions = self.exclusions
 
-        scripts: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.scripts, Unset):
+        scripts: dict[str, Any] | None | Unset
+        if isinstance(self.scripts, Unset):
+            scripts = UNSET
+        elif isinstance(self.scripts, BackupServerBackupJobScriptSettingsType0):
             scripts = self.scripts.to_dict()
+        else:
+            scripts = self.scripts
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -102,10 +127,12 @@ class BackupServerCloudDirectorBackupJobApplicationSettings:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.backup_server_backup_job_backup_fs_exclusions import BackupServerBackupJobBackupFSExclusions
-        from ..models.backup_server_backup_job_oracle_settings import BackupServerBackupJobOracleSettings
-        from ..models.backup_server_backup_job_script_settings import BackupServerBackupJobScriptSettings
-        from ..models.backup_server_backup_job_sql_settings import BackupServerBackupJobSQLSettings
+        from ..models.backup_server_backup_job_backup_fs_exclusions_type_0 import (
+            BackupServerBackupJobBackupFSExclusionsType0,
+        )
+        from ..models.backup_server_backup_job_oracle_settings_type_0 import BackupServerBackupJobOracleSettingsType0
+        from ..models.backup_server_backup_job_script_settings_type_0 import BackupServerBackupJobScriptSettingsType0
+        from ..models.backup_server_backup_job_sql_settings_type_0 import BackupServerBackupJobSQLSettingsType0
         from ..models.backup_server_cloud_director_object import BackupServerCloudDirectorObject
 
         d = dict(src_dict)
@@ -127,33 +154,81 @@ class BackupServerCloudDirectorBackupJobApplicationSettings:
         else:
             transaction_logs = BackupServerTransactionLogsSettings(_transaction_logs)
 
-        _sql = d.pop("sql", UNSET)
-        sql: BackupServerBackupJobSQLSettings | Unset
-        if isinstance(_sql, Unset):
-            sql = UNSET
-        else:
-            sql = BackupServerBackupJobSQLSettings.from_dict(_sql)
+        def _parse_sql(data: object) -> BackupServerBackupJobSQLSettingsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_sql_settings_type_0 = (
+                    BackupServerBackupJobSQLSettingsType0.from_dict(data)
+                )
 
-        _oracle = d.pop("oracle", UNSET)
-        oracle: BackupServerBackupJobOracleSettings | Unset
-        if isinstance(_oracle, Unset):
-            oracle = UNSET
-        else:
-            oracle = BackupServerBackupJobOracleSettings.from_dict(_oracle)
+                return componentsschemas_backup_server_backup_job_sql_settings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobSQLSettingsType0 | None | Unset, data)
 
-        _exclusions = d.pop("exclusions", UNSET)
-        exclusions: BackupServerBackupJobBackupFSExclusions | Unset
-        if isinstance(_exclusions, Unset):
-            exclusions = UNSET
-        else:
-            exclusions = BackupServerBackupJobBackupFSExclusions.from_dict(_exclusions)
+        sql = _parse_sql(d.pop("sql", UNSET))
 
-        _scripts = d.pop("scripts", UNSET)
-        scripts: BackupServerBackupJobScriptSettings | Unset
-        if isinstance(_scripts, Unset):
-            scripts = UNSET
-        else:
-            scripts = BackupServerBackupJobScriptSettings.from_dict(_scripts)
+        def _parse_oracle(data: object) -> BackupServerBackupJobOracleSettingsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_oracle_settings_type_0 = (
+                    BackupServerBackupJobOracleSettingsType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_oracle_settings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobOracleSettingsType0 | None | Unset, data)
+
+        oracle = _parse_oracle(d.pop("oracle", UNSET))
+
+        def _parse_exclusions(data: object) -> BackupServerBackupJobBackupFSExclusionsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_backup_fs_exclusions_type_0 = (
+                    BackupServerBackupJobBackupFSExclusionsType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_backup_fs_exclusions_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobBackupFSExclusionsType0 | None | Unset, data)
+
+        exclusions = _parse_exclusions(d.pop("exclusions", UNSET))
+
+        def _parse_scripts(data: object) -> BackupServerBackupJobScriptSettingsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_script_settings_type_0 = (
+                    BackupServerBackupJobScriptSettingsType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_script_settings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobScriptSettingsType0 | None | Unset, data)
+
+        scripts = _parse_scripts(d.pop("scripts", UNSET))
 
         backup_server_cloud_director_backup_job_application_settings = cls(
             vm_object=vm_object,

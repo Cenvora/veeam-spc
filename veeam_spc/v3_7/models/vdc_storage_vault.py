@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -13,7 +13,7 @@ from ..models.vdc_vault_type import VdcVaultType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.vdc_storage_vault_embedded import VdcStorageVaultEmbedded
+    from ..models.vdc_storage_vault_embedded_type_0 import VdcStorageVaultEmbeddedType0
 
 
 T = TypeVar("T", bound="VdcStorageVault")
@@ -30,13 +30,13 @@ class VdcStorageVault:
         tenant_uid (UUID | Unset): Name of a storage vault.
         country_id (str | Unset): ID assigned to a country in Veeam Data Cloud Vault.
         data_center_id (str | Unset): ID assigned to a data center.
-        storage_quota (int | Unset): Maximum amount of storage space available on storage vault, in bytes.
+        storage_quota (int | None | Unset): Maximum amount of storage space available on storage vault, in bytes.
         consumed_space (int | Unset): Amount of consumed storage space, in bytes.
         status (VdcStorageVaultStatusReadonly | Unset): Storage vault status.
-        read_only_reason (str | Unset): Reason for storage vault parameters to be read-only.
+        read_only_reason (None | str | Unset): Reason for storage vault parameters to be read-only.
         vault_type (VdcVaultType | Unset): Type of a Veeam Data Cloud storage vault.
         platform (VdcVaultPlatform | Unset): Cloud platform of a Veeam Data Cloud storage vault.
-        field_embedded (VdcStorageVaultEmbedded | Unset):
+        field_embedded (None | Unset | VdcStorageVaultEmbeddedType0):
     """
 
     quota_enforced: bool
@@ -46,16 +46,18 @@ class VdcStorageVault:
     tenant_uid: UUID | Unset = UNSET
     country_id: str | Unset = UNSET
     data_center_id: str | Unset = UNSET
-    storage_quota: int | Unset = UNSET
+    storage_quota: int | None | Unset = UNSET
     consumed_space: int | Unset = UNSET
     status: VdcStorageVaultStatusReadonly | Unset = UNSET
-    read_only_reason: str | Unset = UNSET
+    read_only_reason: None | str | Unset = UNSET
     vault_type: VdcVaultType | Unset = UNSET
     platform: VdcVaultPlatform | Unset = UNSET
-    field_embedded: VdcStorageVaultEmbedded | Unset = UNSET
+    field_embedded: None | Unset | VdcStorageVaultEmbeddedType0 = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.vdc_storage_vault_embedded_type_0 import VdcStorageVaultEmbeddedType0
+
         quota_enforced = self.quota_enforced
 
         is_read_only = self.is_read_only
@@ -74,7 +76,11 @@ class VdcStorageVault:
 
         data_center_id = self.data_center_id
 
-        storage_quota = self.storage_quota
+        storage_quota: int | None | Unset
+        if isinstance(self.storage_quota, Unset):
+            storage_quota = UNSET
+        else:
+            storage_quota = self.storage_quota
 
         consumed_space = self.consumed_space
 
@@ -82,7 +88,11 @@ class VdcStorageVault:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        read_only_reason = self.read_only_reason
+        read_only_reason: None | str | Unset
+        if isinstance(self.read_only_reason, Unset):
+            read_only_reason = UNSET
+        else:
+            read_only_reason = self.read_only_reason
 
         vault_type: str | Unset = UNSET
         if not isinstance(self.vault_type, Unset):
@@ -92,9 +102,13 @@ class VdcStorageVault:
         if not isinstance(self.platform, Unset):
             platform = self.platform.value
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, VdcStorageVaultEmbeddedType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -133,7 +147,7 @@ class VdcStorageVault:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.vdc_storage_vault_embedded import VdcStorageVaultEmbedded
+        from ..models.vdc_storage_vault_embedded_type_0 import VdcStorageVaultEmbeddedType0
 
         d = dict(src_dict)
         quota_enforced = d.pop("quotaEnforced")
@@ -160,7 +174,14 @@ class VdcStorageVault:
 
         data_center_id = d.pop("dataCenterId", UNSET)
 
-        storage_quota = d.pop("storageQuota", UNSET)
+        def _parse_storage_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        storage_quota = _parse_storage_quota(d.pop("storageQuota", UNSET))
 
         consumed_space = d.pop("consumedSpace", UNSET)
 
@@ -171,7 +192,14 @@ class VdcStorageVault:
         else:
             status = VdcStorageVaultStatusReadonly(_status)
 
-        read_only_reason = d.pop("readOnlyReason", UNSET)
+        def _parse_read_only_reason(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        read_only_reason = _parse_read_only_reason(d.pop("readOnlyReason", UNSET))
 
         _vault_type = d.pop("vaultType", UNSET)
         vault_type: VdcVaultType | Unset
@@ -187,12 +215,22 @@ class VdcStorageVault:
         else:
             platform = VdcVaultPlatform(_platform)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: VdcStorageVaultEmbedded | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = VdcStorageVaultEmbedded.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> None | Unset | VdcStorageVaultEmbeddedType0:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_vdc_storage_vault_embedded_type_0 = VdcStorageVaultEmbeddedType0.from_dict(data)
+
+                return componentsschemas_vdc_storage_vault_embedded_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | VdcStorageVaultEmbeddedType0, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         vdc_storage_vault = cls(
             quota_enforced=quota_enforced,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -22,17 +22,17 @@ class AlarmActivation:
         instance_uid (UUID | Unset): UID assigned to an alarm trigger.
         time (datetime.datetime | Unset): Date and time of an alarm trigger.
         status (AlarmActivationStatus | Unset): Alarm status.
-        message (str | Unset): Cause of an alarm trigger.
+        message (None | str | Unset): Cause of an alarm trigger.
             > Every line break is represented by the `\r\n` control characters.
-        remark (str | Unset): Comment to the resolved alarm.
+        remark (None | str | Unset): Comment to the resolved alarm.
             > Every line break is represented by the `\r\n` control characters.
     """
 
     instance_uid: UUID | Unset = UNSET
     time: datetime.datetime | Unset = UNSET
     status: AlarmActivationStatus | Unset = UNSET
-    message: str | Unset = UNSET
-    remark: str | Unset = UNSET
+    message: None | str | Unset = UNSET
+    remark: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -48,9 +48,17 @@ class AlarmActivation:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        message = self.message
+        message: None | str | Unset
+        if isinstance(self.message, Unset):
+            message = UNSET
+        else:
+            message = self.message
 
-        remark = self.remark
+        remark: None | str | Unset
+        if isinstance(self.remark, Unset):
+            remark = UNSET
+        else:
+            remark = self.remark
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -92,9 +100,23 @@ class AlarmActivation:
         else:
             status = AlarmActivationStatus(_status)
 
-        message = d.pop("message", UNSET)
+        def _parse_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        remark = d.pop("remark", UNSET)
+        message = _parse_message(d.pop("message", UNSET))
+
+        def _parse_remark(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        remark = _parse_remark(d.pop("remark", UNSET))
 
         alarm_activation = cls(
             instance_uid=instance_uid,

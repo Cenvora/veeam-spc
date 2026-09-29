@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -18,9 +18,10 @@ class TenantTrafficResource:
     Attributes:
         site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site.
         tenant_uid (UUID | Unset): UID assigned to a tenant.
-        company_uid (UUID | Unset): UID of a company to which a tenant is assigned. Has the `null` value if no tenant is
-            assigned.
-        data_transfer_out_quota (int | Unset): Maximum amount of data transfer out traffic available to a tenant, in GB.
+        company_uid (None | Unset | UUID): UID of a company to which a tenant is assigned. Has the `null` value if no
+            tenant is assigned.
+        data_transfer_out_quota (int | None | Unset): Maximum amount of data transfer out traffic available to a tenant,
+            in GB.
             > Minimum value is equal to 1 GB. <br>
             > Maximum value is equal to 976 TB. <br>
             > If quota is unlimited, the property value is `null`.'
@@ -30,8 +31,8 @@ class TenantTrafficResource:
 
     site_uid: UUID | Unset = UNSET
     tenant_uid: UUID | Unset = UNSET
-    company_uid: UUID | Unset = UNSET
-    data_transfer_out_quota: int | Unset = UNSET
+    company_uid: None | Unset | UUID = UNSET
+    data_transfer_out_quota: int | None | Unset = UNSET
     is_data_transfer_out_quota_unlimited: bool | Unset = True
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -44,11 +45,19 @@ class TenantTrafficResource:
         if not isinstance(self.tenant_uid, Unset):
             tenant_uid = str(self.tenant_uid)
 
-        company_uid: str | Unset = UNSET
-        if not isinstance(self.company_uid, Unset):
+        company_uid: None | str | Unset
+        if isinstance(self.company_uid, Unset):
+            company_uid = UNSET
+        elif isinstance(self.company_uid, UUID):
             company_uid = str(self.company_uid)
+        else:
+            company_uid = self.company_uid
 
-        data_transfer_out_quota = self.data_transfer_out_quota
+        data_transfer_out_quota: int | None | Unset
+        if isinstance(self.data_transfer_out_quota, Unset):
+            data_transfer_out_quota = UNSET
+        else:
+            data_transfer_out_quota = self.data_transfer_out_quota
 
         is_data_transfer_out_quota_unlimited = self.is_data_transfer_out_quota_unlimited
 
@@ -85,14 +94,31 @@ class TenantTrafficResource:
         else:
             tenant_uid = UUID(_tenant_uid)
 
-        _company_uid = d.pop("companyUid", UNSET)
-        company_uid: UUID | Unset
-        if isinstance(_company_uid, Unset):
-            company_uid = UNSET
-        else:
-            company_uid = UUID(_company_uid)
+        def _parse_company_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                company_uid_type_0 = UUID(data)
 
-        data_transfer_out_quota = d.pop("dataTransferOutQuota", UNSET)
+                return company_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        company_uid = _parse_company_uid(d.pop("companyUid", UNSET))
+
+        def _parse_data_transfer_out_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        data_transfer_out_quota = _parse_data_transfer_out_quota(d.pop("dataTransferOutQuota", UNSET))
 
         is_data_transfer_out_quota_unlimited = d.pop("isDataTransferOutQuotaUnlimited", UNSET)
 

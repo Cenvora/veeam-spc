@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,17 +16,21 @@ class LinuxJobScript:
     r"""
     Attributes:
         file_name (str): Script file name. Must match the following pattern: '^[^/]+\.sh$'.
-        content (str | Unset): Script content in the Base64 format. The property is write-only.
+        content (None | str | Unset): Script content in the Base64 format. The property is write-only.
     """
 
     file_name: str
-    content: str | Unset = UNSET
+    content: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         file_name = self.file_name
 
-        content = self.content
+        content: None | str | Unset
+        if isinstance(self.content, Unset):
+            content = UNSET
+        else:
+            content = self.content
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -45,7 +49,14 @@ class LinuxJobScript:
         d = dict(src_dict)
         file_name = d.pop("fileName")
 
-        content = d.pop("content", UNSET)
+        def _parse_content(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        content = _parse_content(d.pop("content", UNSET))
 
         linux_job_script = cls(
             file_name=file_name,

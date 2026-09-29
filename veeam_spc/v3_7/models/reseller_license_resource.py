@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -27,8 +27,8 @@ class ResellerLicenseResource:
             Pulse using a provider token. Default: False.
         is_license_management_enabled (bool | Unset): Indicates whether license management is enabled for a reseller.
             Default: False.
-        license_contract_id (str | Unset): ID assigned to a license rental agreement contract.
-        license_points_quota (int | Unset): Number of license points available to a reseller.
+        license_contract_id (None | str | Unset): ID assigned to a license rental agreement contract.
+        license_points_quota (int | None | Unset): Number of license points available to a reseller.
         is_license_points_quota_unlimited (bool | Unset): Indicates whether a reseller can use an unlimited number of
             license points. Default: True.
         license_points_usage (float | Unset): Number of license points used by a reseller.
@@ -41,8 +41,8 @@ class ResellerLicenseResource:
     pulse_configuration_status_message: str | Unset = UNSET
     pulse_auto_connect_with_provider_token: bool | Unset = False
     is_license_management_enabled: bool | Unset = False
-    license_contract_id: str | Unset = UNSET
-    license_points_quota: int | Unset = UNSET
+    license_contract_id: None | str | Unset = UNSET
+    license_points_quota: int | None | Unset = UNSET
     is_license_points_quota_unlimited: bool | Unset = True
     license_points_usage: float | Unset = UNSET
     is_creating_new_companies_to_pulse_enabled: bool | Unset = UNSET
@@ -63,9 +63,17 @@ class ResellerLicenseResource:
 
         is_license_management_enabled = self.is_license_management_enabled
 
-        license_contract_id = self.license_contract_id
+        license_contract_id: None | str | Unset
+        if isinstance(self.license_contract_id, Unset):
+            license_contract_id = UNSET
+        else:
+            license_contract_id = self.license_contract_id
 
-        license_points_quota = self.license_points_quota
+        license_points_quota: int | None | Unset
+        if isinstance(self.license_points_quota, Unset):
+            license_points_quota = UNSET
+        else:
+            license_points_quota = self.license_points_quota
 
         is_license_points_quota_unlimited = self.is_license_points_quota_unlimited
 
@@ -122,9 +130,23 @@ class ResellerLicenseResource:
 
         is_license_management_enabled = d.pop("isLicenseManagementEnabled", UNSET)
 
-        license_contract_id = d.pop("licenseContractId", UNSET)
+        def _parse_license_contract_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        license_points_quota = d.pop("licensePointsQuota", UNSET)
+        license_contract_id = _parse_license_contract_id(d.pop("licenseContractId", UNSET))
+
+        def _parse_license_points_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        license_points_quota = _parse_license_points_quota(d.pop("licensePointsQuota", UNSET))
 
         is_license_points_quota_unlimited = d.pop("isLicensePointsQuotaUnlimited", UNSET)
 

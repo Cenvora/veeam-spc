@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -10,8 +10,8 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.backup_server_backup_job_advanced_settings import BackupServerBackupJobAdvancedSettings
-    from ..models.backup_server_backup_job_gfs_policy_settings import BackupServerBackupJobGFSPolicySettings
+    from ..models.backup_server_backup_job_advanced_settings_type_0 import BackupServerBackupJobAdvancedSettingsType0
+    from ..models.backup_server_backup_job_gfs_policy_settings_type_0 import BackupServerBackupJobGFSPolicySettingsType0
     from ..models.backup_server_backup_job_proxies_settings import BackupServerBackupJobProxiesSettings
     from ..models.backup_server_backup_job_retention_policy_settings import BackupServerBackupJobRetentionPolicySettings
 
@@ -27,31 +27,46 @@ class BackupServerBackupJobStorage:
         backup_repository_id (UUID): UID assigned to a backup repository.
         backup_proxies (BackupServerBackupJobProxiesSettings): Backup proxy settings.
         retention_policy (BackupServerBackupJobRetentionPolicySettings): Retention policy settings.
-        gfs_policy (BackupServerBackupJobGFSPolicySettings | Unset): Long-term retention policy settings.
-        advanced_settings (BackupServerBackupJobAdvancedSettings | Unset): Backup job advanced settings.
+        gfs_policy (BackupServerBackupJobGFSPolicySettingsType0 | None | Unset): Long-term retention policy settings.
+        advanced_settings (BackupServerBackupJobAdvancedSettingsType0 | None | Unset): Backup job advanced settings.
     """
 
     backup_repository_id: UUID
     backup_proxies: BackupServerBackupJobProxiesSettings
     retention_policy: BackupServerBackupJobRetentionPolicySettings
-    gfs_policy: BackupServerBackupJobGFSPolicySettings | Unset = UNSET
-    advanced_settings: BackupServerBackupJobAdvancedSettings | Unset = UNSET
+    gfs_policy: BackupServerBackupJobGFSPolicySettingsType0 | None | Unset = UNSET
+    advanced_settings: BackupServerBackupJobAdvancedSettingsType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.backup_server_backup_job_advanced_settings_type_0 import (
+            BackupServerBackupJobAdvancedSettingsType0,
+        )
+        from ..models.backup_server_backup_job_gfs_policy_settings_type_0 import (
+            BackupServerBackupJobGFSPolicySettingsType0,
+        )
+
         backup_repository_id = str(self.backup_repository_id)
 
         backup_proxies = self.backup_proxies.to_dict()
 
         retention_policy = self.retention_policy.to_dict()
 
-        gfs_policy: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.gfs_policy, Unset):
+        gfs_policy: dict[str, Any] | None | Unset
+        if isinstance(self.gfs_policy, Unset):
+            gfs_policy = UNSET
+        elif isinstance(self.gfs_policy, BackupServerBackupJobGFSPolicySettingsType0):
             gfs_policy = self.gfs_policy.to_dict()
+        else:
+            gfs_policy = self.gfs_policy
 
-        advanced_settings: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.advanced_settings, Unset):
+        advanced_settings: dict[str, Any] | None | Unset
+        if isinstance(self.advanced_settings, Unset):
+            advanced_settings = UNSET
+        elif isinstance(self.advanced_settings, BackupServerBackupJobAdvancedSettingsType0):
             advanced_settings = self.advanced_settings.to_dict()
+        else:
+            advanced_settings = self.advanced_settings
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -71,8 +86,12 @@ class BackupServerBackupJobStorage:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.backup_server_backup_job_advanced_settings import BackupServerBackupJobAdvancedSettings
-        from ..models.backup_server_backup_job_gfs_policy_settings import BackupServerBackupJobGFSPolicySettings
+        from ..models.backup_server_backup_job_advanced_settings_type_0 import (
+            BackupServerBackupJobAdvancedSettingsType0,
+        )
+        from ..models.backup_server_backup_job_gfs_policy_settings_type_0 import (
+            BackupServerBackupJobGFSPolicySettingsType0,
+        )
         from ..models.backup_server_backup_job_proxies_settings import BackupServerBackupJobProxiesSettings
         from ..models.backup_server_backup_job_retention_policy_settings import (
             BackupServerBackupJobRetentionPolicySettings,
@@ -85,19 +104,43 @@ class BackupServerBackupJobStorage:
 
         retention_policy = BackupServerBackupJobRetentionPolicySettings.from_dict(d.pop("retentionPolicy"))
 
-        _gfs_policy = d.pop("gfsPolicy", UNSET)
-        gfs_policy: BackupServerBackupJobGFSPolicySettings | Unset
-        if isinstance(_gfs_policy, Unset):
-            gfs_policy = UNSET
-        else:
-            gfs_policy = BackupServerBackupJobGFSPolicySettings.from_dict(_gfs_policy)
+        def _parse_gfs_policy(data: object) -> BackupServerBackupJobGFSPolicySettingsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_gfs_policy_settings_type_0 = (
+                    BackupServerBackupJobGFSPolicySettingsType0.from_dict(data)
+                )
 
-        _advanced_settings = d.pop("advancedSettings", UNSET)
-        advanced_settings: BackupServerBackupJobAdvancedSettings | Unset
-        if isinstance(_advanced_settings, Unset):
-            advanced_settings = UNSET
-        else:
-            advanced_settings = BackupServerBackupJobAdvancedSettings.from_dict(_advanced_settings)
+                return componentsschemas_backup_server_backup_job_gfs_policy_settings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobGFSPolicySettingsType0 | None | Unset, data)
+
+        gfs_policy = _parse_gfs_policy(d.pop("gfsPolicy", UNSET))
+
+        def _parse_advanced_settings(data: object) -> BackupServerBackupJobAdvancedSettingsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_advanced_settings_type_0 = (
+                    BackupServerBackupJobAdvancedSettingsType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_advanced_settings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobAdvancedSettingsType0 | None | Unset, data)
+
+        advanced_settings = _parse_advanced_settings(d.pop("advancedSettings", UNSET))
 
         backup_server_backup_job_storage = cls(
             backup_repository_id=backup_repository_id,

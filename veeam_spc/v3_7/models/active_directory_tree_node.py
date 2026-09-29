@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -18,14 +18,14 @@ class ActiveDirectoryTreeNode:
     Attributes:
         id (str | Unset): ID assigned to an organizational unit.
         name (str | Unset): Name of an organizational unit.
-        children (list[ActiveDirectoryTreeNode] | Unset): Array of child organizational units.
+        children (list[ActiveDirectoryTreeNode] | None | Unset): Array of child organizational units.
         type_ (ActiveDirectoryTreeNodeType | Unset): Type of an organizational unit.
         leaf (bool | Unset): Indicates whether an organizational unit has child objects.
     """
 
     id: str | Unset = UNSET
     name: str | Unset = UNSET
-    children: list[ActiveDirectoryTreeNode] | Unset = UNSET
+    children: list[ActiveDirectoryTreeNode] | None | Unset = UNSET
     type_: ActiveDirectoryTreeNodeType | Unset = UNSET
     leaf: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -35,12 +35,17 @@ class ActiveDirectoryTreeNode:
 
         name = self.name
 
-        children: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.children, Unset):
+        children: list[dict[str, Any]] | None | Unset
+        if isinstance(self.children, Unset):
+            children = UNSET
+        elif isinstance(self.children, list):
             children = []
-            for children_item_data in self.children:
-                children_item = children_item_data.to_dict()
-                children.append(children_item)
+            for children_type_0_item_data in self.children:
+                children_type_0_item = children_type_0_item_data.to_dict()
+                children.append(children_type_0_item)
+
+        else:
+            children = self.children
 
         type_: str | Unset = UNSET
         if not isinstance(self.type_, Unset):
@@ -71,14 +76,27 @@ class ActiveDirectoryTreeNode:
 
         name = d.pop("name", UNSET)
 
-        _children = d.pop("children", UNSET)
-        children: list[ActiveDirectoryTreeNode] | Unset = UNSET
-        if _children is not UNSET:
-            children = []
-            for children_item_data in _children:
-                children_item = ActiveDirectoryTreeNode.from_dict(children_item_data)
+        def _parse_children(data: object) -> list[ActiveDirectoryTreeNode] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                children_type_0 = []
+                _children_type_0 = data
+                for children_type_0_item_data in _children_type_0:
+                    children_type_0_item = ActiveDirectoryTreeNode.from_dict(children_type_0_item_data)
 
-                children.append(children_item)
+                    children_type_0.append(children_type_0_item)
+
+                return children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[ActiveDirectoryTreeNode] | None | Unset, data)
+
+        children = _parse_children(d.pop("children", UNSET))
 
         _type_ = d.pop("type", UNSET)
         type_: ActiveDirectoryTreeNodeType | Unset

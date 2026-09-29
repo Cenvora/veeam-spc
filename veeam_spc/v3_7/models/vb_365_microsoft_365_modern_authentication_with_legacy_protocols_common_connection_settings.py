@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -25,12 +25,12 @@ class Vb365Microsoft365ModernAuthenticationWithLegacyProtocolsCommonConnectionSe
             To assign the ApplicationImpersonation role, make sure the account that you use is a member of the Organization
             Management group and has been granted the Role Management role in advance.
              Default: False.
-        application_secret (str | Unset): Application secret for the Azure AD application.
+        application_secret (None | str | Unset): Application secret for the Azure AD application.
             > Use either `applicationSecret` or `applicationCertificate`.
-        application_certificate (str | Unset): SSL certificate in the Base64 format that is used to access the Azure AD
-            application.
+        application_certificate (None | str | Unset): SSL certificate in the Base64 format that is used to access the
+            Azure AD application.
             Use either `applicationSecret` or `applicationCertificate`.
-        application_certificate_password (str | Unset): Password for the SSL certificate.
+        application_certificate_password (None | str | Unset): Password for the SSL certificate.
         application_certificate_thumbprint (str | Unset): Application certificate thumbprint for a Microsoft 365
             organization.
     """
@@ -39,9 +39,9 @@ class Vb365Microsoft365ModernAuthenticationWithLegacyProtocolsCommonConnectionSe
     password: str
     application_id: UUID
     grant_admin_access: bool | Unset = False
-    application_secret: str | Unset = UNSET
-    application_certificate: str | Unset = UNSET
-    application_certificate_password: str | Unset = UNSET
+    application_secret: None | str | Unset = UNSET
+    application_certificate: None | str | Unset = UNSET
+    application_certificate_password: None | str | Unset = UNSET
     application_certificate_thumbprint: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -54,11 +54,23 @@ class Vb365Microsoft365ModernAuthenticationWithLegacyProtocolsCommonConnectionSe
 
         grant_admin_access = self.grant_admin_access
 
-        application_secret = self.application_secret
+        application_secret: None | str | Unset
+        if isinstance(self.application_secret, Unset):
+            application_secret = UNSET
+        else:
+            application_secret = self.application_secret
 
-        application_certificate = self.application_certificate
+        application_certificate: None | str | Unset
+        if isinstance(self.application_certificate, Unset):
+            application_certificate = UNSET
+        else:
+            application_certificate = self.application_certificate
 
-        application_certificate_password = self.application_certificate_password
+        application_certificate_password: None | str | Unset
+        if isinstance(self.application_certificate_password, Unset):
+            application_certificate_password = UNSET
+        else:
+            application_certificate_password = self.application_certificate_password
 
         application_certificate_thumbprint = self.application_certificate_thumbprint
 
@@ -95,11 +107,34 @@ class Vb365Microsoft365ModernAuthenticationWithLegacyProtocolsCommonConnectionSe
 
         grant_admin_access = d.pop("grantAdminAccess", UNSET)
 
-        application_secret = d.pop("applicationSecret", UNSET)
+        def _parse_application_secret(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        application_certificate = d.pop("applicationCertificate", UNSET)
+        application_secret = _parse_application_secret(d.pop("applicationSecret", UNSET))
 
-        application_certificate_password = d.pop("applicationCertificatePassword", UNSET)
+        def _parse_application_certificate(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        application_certificate = _parse_application_certificate(d.pop("applicationCertificate", UNSET))
+
+        def _parse_application_certificate_password(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        application_certificate_password = _parse_application_certificate_password(
+            d.pop("applicationCertificatePassword", UNSET)
+        )
 
         application_certificate_thumbprint = d.pop("applicationCertificateThumbprint", UNSET)
 

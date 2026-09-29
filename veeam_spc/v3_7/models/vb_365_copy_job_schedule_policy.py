@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -28,7 +28,7 @@ class Vb365CopyJobSchedulePolicy:
         daily_type (Vb365CopyJobSchedulePolicyDailyType | Unset): Days when the daily job runs.
         backup_window_enabled (bool | Unset): Indicates whether backup window is enabled. Default: False.
         backup_window_settings (Vb365BackupWindowSettings | Unset):
-        daily_time (str | Unset): Time of the day when a daily job is started in the `hh:mm` format.
+        daily_time (None | str | Unset): Time of the day when a daily job is started in the `hh:mm` format.
     """
 
     schedule_policy_type: Vb365CopyJobSchedulePolicySchedulePolicyType | Unset = UNSET
@@ -36,7 +36,7 @@ class Vb365CopyJobSchedulePolicy:
     daily_type: Vb365CopyJobSchedulePolicyDailyType | Unset = UNSET
     backup_window_enabled: bool | Unset = False
     backup_window_settings: Vb365BackupWindowSettings | Unset = UNSET
-    daily_time: str | Unset = UNSET
+    daily_time: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -58,7 +58,11 @@ class Vb365CopyJobSchedulePolicy:
         if not isinstance(self.backup_window_settings, Unset):
             backup_window_settings = self.backup_window_settings.to_dict()
 
-        daily_time = self.daily_time
+        daily_time: None | str | Unset
+        if isinstance(self.daily_time, Unset):
+            daily_time = UNSET
+        else:
+            daily_time = self.daily_time
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -113,7 +117,14 @@ class Vb365CopyJobSchedulePolicy:
         else:
             backup_window_settings = Vb365BackupWindowSettings.from_dict(_backup_window_settings)
 
-        daily_time = d.pop("dailyTime", UNSET)
+        def _parse_daily_time(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        daily_time = _parse_daily_time(d.pop("dailyTime", UNSET))
 
         vb_365_copy_job_schedule_policy = cls(
             schedule_policy_type=schedule_policy_type,

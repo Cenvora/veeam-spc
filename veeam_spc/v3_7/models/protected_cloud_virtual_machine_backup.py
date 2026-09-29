@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,24 +20,25 @@ class ProtectedCloudVirtualMachineBackup:
     """
     Attributes:
         cloud_virtual_machine_uid (UUID | Unset): UID assigned to a cloud VM.
-        policy_uid (UUID | Unset): UID assigned to a backup policy.
-        policy_name (str | Unset): Name of a backup policy.
+        policy_uid (None | Unset | UUID): UID assigned to a backup policy.
+        policy_name (None | str | Unset): Name of a backup policy.
         backup_type (ProtectedCloudVirtualMachineBackupBackupType | Unset): Backup policy type.
         destination (str | Unset): Location where backup chain resides.
         size (int | Unset): Total size of a backup chain, in bytes.
             > For the `Snapshot` and `ReplicaSnapshot` policy types, size of a cloud VM, in bytes.
         restore_points (int | Unset): Number of restore points.
-        latest_restore_point_date (datetime.datetime | Unset): Time and date of the latest restore point creation.
+        latest_restore_point_date (datetime.datetime | None | Unset): Time and date of the latest restore point
+            creation.
     """
 
     cloud_virtual_machine_uid: UUID | Unset = UNSET
-    policy_uid: UUID | Unset = UNSET
-    policy_name: str | Unset = UNSET
+    policy_uid: None | Unset | UUID = UNSET
+    policy_name: None | str | Unset = UNSET
     backup_type: ProtectedCloudVirtualMachineBackupBackupType | Unset = UNSET
     destination: str | Unset = UNSET
     size: int | Unset = UNSET
     restore_points: int | Unset = UNSET
-    latest_restore_point_date: datetime.datetime | Unset = UNSET
+    latest_restore_point_date: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -45,11 +46,19 @@ class ProtectedCloudVirtualMachineBackup:
         if not isinstance(self.cloud_virtual_machine_uid, Unset):
             cloud_virtual_machine_uid = str(self.cloud_virtual_machine_uid)
 
-        policy_uid: str | Unset = UNSET
-        if not isinstance(self.policy_uid, Unset):
+        policy_uid: None | str | Unset
+        if isinstance(self.policy_uid, Unset):
+            policy_uid = UNSET
+        elif isinstance(self.policy_uid, UUID):
             policy_uid = str(self.policy_uid)
+        else:
+            policy_uid = self.policy_uid
 
-        policy_name = self.policy_name
+        policy_name: None | str | Unset
+        if isinstance(self.policy_name, Unset):
+            policy_name = UNSET
+        else:
+            policy_name = self.policy_name
 
         backup_type: str | Unset = UNSET
         if not isinstance(self.backup_type, Unset):
@@ -61,9 +70,13 @@ class ProtectedCloudVirtualMachineBackup:
 
         restore_points = self.restore_points
 
-        latest_restore_point_date: str | Unset = UNSET
-        if not isinstance(self.latest_restore_point_date, Unset):
+        latest_restore_point_date: None | str | Unset
+        if isinstance(self.latest_restore_point_date, Unset):
+            latest_restore_point_date = UNSET
+        elif isinstance(self.latest_restore_point_date, datetime.datetime):
             latest_restore_point_date = self.latest_restore_point_date.isoformat()
+        else:
+            latest_restore_point_date = self.latest_restore_point_date
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -97,14 +110,31 @@ class ProtectedCloudVirtualMachineBackup:
         else:
             cloud_virtual_machine_uid = UUID(_cloud_virtual_machine_uid)
 
-        _policy_uid = d.pop("policyUid", UNSET)
-        policy_uid: UUID | Unset
-        if isinstance(_policy_uid, Unset):
-            policy_uid = UNSET
-        else:
-            policy_uid = UUID(_policy_uid)
+        def _parse_policy_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                policy_uid_type_0 = UUID(data)
 
-        policy_name = d.pop("policyName", UNSET)
+                return policy_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        policy_uid = _parse_policy_uid(d.pop("policyUid", UNSET))
+
+        def _parse_policy_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        policy_name = _parse_policy_name(d.pop("policyName", UNSET))
 
         _backup_type = d.pop("backupType", UNSET)
         backup_type: ProtectedCloudVirtualMachineBackupBackupType | Unset
@@ -119,12 +149,22 @@ class ProtectedCloudVirtualMachineBackup:
 
         restore_points = d.pop("restorePoints", UNSET)
 
-        _latest_restore_point_date = d.pop("latestRestorePointDate", UNSET)
-        latest_restore_point_date: datetime.datetime | Unset
-        if isinstance(_latest_restore_point_date, Unset):
-            latest_restore_point_date = UNSET
-        else:
-            latest_restore_point_date = isoparse(_latest_restore_point_date)
+        def _parse_latest_restore_point_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                latest_restore_point_date_type_0 = isoparse(data)
+
+                return latest_restore_point_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        latest_restore_point_date = _parse_latest_restore_point_date(d.pop("latestRestorePointDate", UNSET))
 
         protected_cloud_virtual_machine_backup = cls(
             cloud_virtual_machine_uid=cloud_virtual_machine_uid,

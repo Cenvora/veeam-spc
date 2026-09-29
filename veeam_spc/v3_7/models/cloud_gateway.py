@@ -25,13 +25,13 @@ class CloudGateway:
         instance_uid (UUID | Unset): UID assigned to a cloud gateway.
         name (str | Unset): Name of a cloud gateway.
         backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server.
-        gateway_pool_uid (UUID | Unset): UID assigned to a cloud gateway pool that includes the cloud gateway.
+        gateway_pool_uid (None | Unset | UUID): UID assigned to a cloud gateway pool that includes the cloud gateway.
         port (int | Unset): Internal port that is listening to external connections.
         external_port (int | Unset): Port for external connections.
         external_address (str | Unset): IP address or DNS name of a network interface card on a cloud gateway used to
             communicate with tenant Veeam Backup & Replication servers.
             > For cloud gateways with version 12, only the DNS name is returned.
-        external_ip_list (list[str] | Unset): List of available network interface cards.
+        external_ip_list (list[str] | None | Unset): List of available network interface cards.
         is_out_of_date (bool | Unset): Indicates whether a cloud gateway service is outdated.
         host_uid (UUID | Unset): UID assigned to a server that performs a role of a cloud gateway.
         is_disabled (bool | Unset): Indicates whether a cloud gateway is disabled.
@@ -41,11 +41,11 @@ class CloudGateway:
     instance_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
     backup_server_uid: UUID | Unset = UNSET
-    gateway_pool_uid: UUID | Unset = UNSET
+    gateway_pool_uid: None | Unset | UUID = UNSET
     port: int | Unset = UNSET
     external_port: int | Unset = UNSET
     external_address: str | Unset = UNSET
-    external_ip_list: list[str] | Unset = UNSET
+    external_ip_list: list[str] | None | Unset = UNSET
     is_out_of_date: bool | Unset = UNSET
     host_uid: UUID | Unset = UNSET
     is_disabled: bool | Unset = UNSET
@@ -63,9 +63,13 @@ class CloudGateway:
         if not isinstance(self.backup_server_uid, Unset):
             backup_server_uid = str(self.backup_server_uid)
 
-        gateway_pool_uid: str | Unset = UNSET
-        if not isinstance(self.gateway_pool_uid, Unset):
+        gateway_pool_uid: None | str | Unset
+        if isinstance(self.gateway_pool_uid, Unset):
+            gateway_pool_uid = UNSET
+        elif isinstance(self.gateway_pool_uid, UUID):
             gateway_pool_uid = str(self.gateway_pool_uid)
+        else:
+            gateway_pool_uid = self.gateway_pool_uid
 
         port = self.port
 
@@ -73,8 +77,13 @@ class CloudGateway:
 
         external_address = self.external_address
 
-        external_ip_list: list[str] | Unset = UNSET
-        if not isinstance(self.external_ip_list, Unset):
+        external_ip_list: list[str] | None | Unset
+        if isinstance(self.external_ip_list, Unset):
+            external_ip_list = UNSET
+        elif isinstance(self.external_ip_list, list):
+            external_ip_list = self.external_ip_list
+
+        else:
             external_ip_list = self.external_ip_list
 
         is_out_of_date = self.is_out_of_date
@@ -138,12 +147,22 @@ class CloudGateway:
         else:
             backup_server_uid = UUID(_backup_server_uid)
 
-        _gateway_pool_uid = d.pop("gatewayPoolUid", UNSET)
-        gateway_pool_uid: UUID | Unset
-        if isinstance(_gateway_pool_uid, Unset):
-            gateway_pool_uid = UNSET
-        else:
-            gateway_pool_uid = UUID(_gateway_pool_uid)
+        def _parse_gateway_pool_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                gateway_pool_uid_type_0 = UUID(data)
+
+                return gateway_pool_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        gateway_pool_uid = _parse_gateway_pool_uid(d.pop("gatewayPoolUid", UNSET))
 
         port = d.pop("port", UNSET)
 
@@ -151,7 +170,22 @@ class CloudGateway:
 
         external_address = d.pop("externalAddress", UNSET)
 
-        external_ip_list = cast(list[str], d.pop("externalIpList", UNSET))
+        def _parse_external_ip_list(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                external_ip_list_type_0 = cast(list[str], data)
+
+                return external_ip_list_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        external_ip_list = _parse_external_ip_list(d.pop("externalIpList", UNSET))
 
         is_out_of_date = d.pop("isOutOfDate", UNSET)
 

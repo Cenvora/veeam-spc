@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -9,7 +9,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.backup_server_backup_job_object_indexing import BackupServerBackupJobObjectIndexing
+    from ..models.backup_server_backup_job_object_indexing_type_0 import BackupServerBackupJobObjectIndexingType0
     from ..models.backup_server_vmware_object import BackupServerVmwareObject
 
 
@@ -22,25 +22,35 @@ class BackupServerBackupJobIndexingSettings:
 
     Attributes:
         vm_object (BackupServerVmwareObject): VMware vSphere object.
-        windows_indexing (BackupServerBackupJobObjectIndexing | Unset): Guest OS indexing options for a VM.
-        linux_indexing (BackupServerBackupJobObjectIndexing | Unset): Guest OS indexing options for a VM.
+        windows_indexing (BackupServerBackupJobObjectIndexingType0 | None | Unset): Guest OS indexing options for a VM.
+        linux_indexing (BackupServerBackupJobObjectIndexingType0 | None | Unset): Guest OS indexing options for a VM.
     """
 
     vm_object: BackupServerVmwareObject
-    windows_indexing: BackupServerBackupJobObjectIndexing | Unset = UNSET
-    linux_indexing: BackupServerBackupJobObjectIndexing | Unset = UNSET
+    windows_indexing: BackupServerBackupJobObjectIndexingType0 | None | Unset = UNSET
+    linux_indexing: BackupServerBackupJobObjectIndexingType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.backup_server_backup_job_object_indexing_type_0 import BackupServerBackupJobObjectIndexingType0
+
         vm_object = self.vm_object.to_dict()
 
-        windows_indexing: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.windows_indexing, Unset):
+        windows_indexing: dict[str, Any] | None | Unset
+        if isinstance(self.windows_indexing, Unset):
+            windows_indexing = UNSET
+        elif isinstance(self.windows_indexing, BackupServerBackupJobObjectIndexingType0):
             windows_indexing = self.windows_indexing.to_dict()
+        else:
+            windows_indexing = self.windows_indexing
 
-        linux_indexing: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.linux_indexing, Unset):
+        linux_indexing: dict[str, Any] | None | Unset
+        if isinstance(self.linux_indexing, Unset):
+            linux_indexing = UNSET
+        elif isinstance(self.linux_indexing, BackupServerBackupJobObjectIndexingType0):
             linux_indexing = self.linux_indexing.to_dict()
+        else:
+            linux_indexing = self.linux_indexing
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -58,25 +68,49 @@ class BackupServerBackupJobIndexingSettings:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.backup_server_backup_job_object_indexing import BackupServerBackupJobObjectIndexing
+        from ..models.backup_server_backup_job_object_indexing_type_0 import BackupServerBackupJobObjectIndexingType0
         from ..models.backup_server_vmware_object import BackupServerVmwareObject
 
         d = dict(src_dict)
         vm_object = BackupServerVmwareObject.from_dict(d.pop("vmObject"))
 
-        _windows_indexing = d.pop("windowsIndexing", UNSET)
-        windows_indexing: BackupServerBackupJobObjectIndexing | Unset
-        if isinstance(_windows_indexing, Unset):
-            windows_indexing = UNSET
-        else:
-            windows_indexing = BackupServerBackupJobObjectIndexing.from_dict(_windows_indexing)
+        def _parse_windows_indexing(data: object) -> BackupServerBackupJobObjectIndexingType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_object_indexing_type_0 = (
+                    BackupServerBackupJobObjectIndexingType0.from_dict(data)
+                )
 
-        _linux_indexing = d.pop("linuxIndexing", UNSET)
-        linux_indexing: BackupServerBackupJobObjectIndexing | Unset
-        if isinstance(_linux_indexing, Unset):
-            linux_indexing = UNSET
-        else:
-            linux_indexing = BackupServerBackupJobObjectIndexing.from_dict(_linux_indexing)
+                return componentsschemas_backup_server_backup_job_object_indexing_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobObjectIndexingType0 | None | Unset, data)
+
+        windows_indexing = _parse_windows_indexing(d.pop("windowsIndexing", UNSET))
+
+        def _parse_linux_indexing(data: object) -> BackupServerBackupJobObjectIndexingType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_object_indexing_type_0 = (
+                    BackupServerBackupJobObjectIndexingType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_object_indexing_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobObjectIndexingType0 | None | Unset, data)
+
+        linux_indexing = _parse_linux_indexing(d.pop("linuxIndexing", UNSET))
 
         backup_server_backup_job_indexing_settings = cls(
             vm_object=vm_object,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -22,11 +22,12 @@ class LinuxVbrUpgradeConfiguration:
 
     Attributes:
         update_ids (list[UUID]): List of VeeamUpdater update identifiers to install.
-        stop_all_activities (bool | Unset): If `true`, all backup jobs and activities will be terminated before upgrade.
+        stop_all_activities (bool | None | Unset): If `true`, all backup jobs and activities will be terminated before
+            upgrade.
     """
 
     update_ids: list[UUID]
-    stop_all_activities: bool | Unset = UNSET
+    stop_all_activities: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -35,7 +36,11 @@ class LinuxVbrUpgradeConfiguration:
             update_ids_item = str(update_ids_item_data)
             update_ids.append(update_ids_item)
 
-        stop_all_activities = self.stop_all_activities
+        stop_all_activities: bool | None | Unset
+        if isinstance(self.stop_all_activities, Unset):
+            stop_all_activities = UNSET
+        else:
+            stop_all_activities = self.stop_all_activities
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -59,7 +64,14 @@ class LinuxVbrUpgradeConfiguration:
 
             update_ids.append(update_ids_item)
 
-        stop_all_activities = d.pop("stopAllActivities", UNSET)
+        def _parse_stop_all_activities(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        stop_all_activities = _parse_stop_all_activities(d.pop("stopAllActivities", UNSET))
 
         linux_vbr_upgrade_configuration = cls(
             update_ids=update_ids,

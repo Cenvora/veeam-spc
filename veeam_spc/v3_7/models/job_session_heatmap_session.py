@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -33,7 +33,7 @@ class JobSessionHeatmapSession:
         end_time (datetime.datetime | Unset): Date and time when a job session ended.
         duration (int | Unset): Time taken to complete a job session, in seconds.
         session_uid (UUID | Unset): UID assigned to a job session.
-        failure_message (str | Unset): Information on job sessions that finished with errors and warnings.
+        failure_message (None | str | Unset): Information on job sessions that finished with errors and warnings.
         time_shift_minutes (int | Unset): Offset from the local time of a job session, in minutes.
         result (JobSessionHeatmapJobResult | Unset): Result of a job session.
         job_type (JobSessionHeatmapJobType | Unset): Type of a job.
@@ -52,7 +52,7 @@ class JobSessionHeatmapSession:
     end_time: datetime.datetime | Unset = UNSET
     duration: int | Unset = UNSET
     session_uid: UUID | Unset = UNSET
-    failure_message: str | Unset = UNSET
+    failure_message: None | str | Unset = UNSET
     time_shift_minutes: int | Unset = UNSET
     result: JobSessionHeatmapJobResult | Unset = UNSET
     job_type: JobSessionHeatmapJobType | Unset = UNSET
@@ -95,7 +95,11 @@ class JobSessionHeatmapSession:
         if not isinstance(self.session_uid, Unset):
             session_uid = str(self.session_uid)
 
-        failure_message = self.failure_message
+        failure_message: None | str | Unset
+        if isinstance(self.failure_message, Unset):
+            failure_message = UNSET
+        else:
+            failure_message = self.failure_message
 
         time_shift_minutes = self.time_shift_minutes
 
@@ -210,7 +214,14 @@ class JobSessionHeatmapSession:
         else:
             session_uid = UUID(_session_uid)
 
-        failure_message = d.pop("failureMessage", UNSET)
+        def _parse_failure_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        failure_message = _parse_failure_message(d.pop("failureMessage", UNSET))
 
         time_shift_minutes = d.pop("timeShiftMinutes", UNSET)
 

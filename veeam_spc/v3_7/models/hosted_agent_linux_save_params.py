@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -16,28 +16,37 @@ T = TypeVar("T", bound="HostedAgentLinuxSaveParams")
 class HostedAgentLinuxSaveParams:
     """
     Attributes:
-        description (str): Description of a deployment.
-        clustered_agent_uid (UUID | Unset): UID assigned to a clustered agent registration in case a management agent
-            runs on a secondary node of a High Availability cluster. Has empty value in case of non-clustered and primary-
-            only deployments.
-        management_agent_uid (UUID | Unset): UID assigned to a management agent.
+        description (None | str): Description of a deployment.
+        clustered_agent_uid (None | Unset | UUID): UID assigned to a clustered agent registration in case a management
+            agent runs on a secondary node of a High Availability cluster. Has empty value in case of non-clustered and
+            primary-only deployments.
+        management_agent_uid (None | Unset | UUID): UID assigned to a management agent.
     """
 
-    description: str
-    clustered_agent_uid: UUID | Unset = UNSET
-    management_agent_uid: UUID | Unset = UNSET
+    description: None | str
+    clustered_agent_uid: None | Unset | UUID = UNSET
+    management_agent_uid: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        description: None | str
         description = self.description
 
-        clustered_agent_uid: str | Unset = UNSET
-        if not isinstance(self.clustered_agent_uid, Unset):
+        clustered_agent_uid: None | str | Unset
+        if isinstance(self.clustered_agent_uid, Unset):
+            clustered_agent_uid = UNSET
+        elif isinstance(self.clustered_agent_uid, UUID):
             clustered_agent_uid = str(self.clustered_agent_uid)
+        else:
+            clustered_agent_uid = self.clustered_agent_uid
 
-        management_agent_uid: str | Unset = UNSET
-        if not isinstance(self.management_agent_uid, Unset):
+        management_agent_uid: None | str | Unset
+        if isinstance(self.management_agent_uid, Unset):
+            management_agent_uid = UNSET
+        elif isinstance(self.management_agent_uid, UUID):
             management_agent_uid = str(self.management_agent_uid)
+        else:
+            management_agent_uid = self.management_agent_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -56,21 +65,47 @@ class HostedAgentLinuxSaveParams:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        description = d.pop("description")
 
-        _clustered_agent_uid = d.pop("clusteredAgentUid", UNSET)
-        clustered_agent_uid: UUID | Unset
-        if isinstance(_clustered_agent_uid, Unset):
-            clustered_agent_uid = UNSET
-        else:
-            clustered_agent_uid = UUID(_clustered_agent_uid)
+        def _parse_description(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
 
-        _management_agent_uid = d.pop("managementAgentUid", UNSET)
-        management_agent_uid: UUID | Unset
-        if isinstance(_management_agent_uid, Unset):
-            management_agent_uid = UNSET
-        else:
-            management_agent_uid = UUID(_management_agent_uid)
+        description = _parse_description(d.pop("description"))
+
+        def _parse_clustered_agent_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                clustered_agent_uid_type_0 = UUID(data)
+
+                return clustered_agent_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        clustered_agent_uid = _parse_clustered_agent_uid(d.pop("clusteredAgentUid", UNSET))
+
+        def _parse_management_agent_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                management_agent_uid_type_0 = UUID(data)
+
+                return management_agent_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        management_agent_uid = _parse_management_agent_uid(d.pop("managementAgentUid", UNSET))
 
         hosted_agent_linux_save_params = cls(
             description=description,

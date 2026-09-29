@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -18,23 +18,28 @@ class BackupServerObjectStorageConnection:
     """
     Attributes:
         connection_type (BackupServerRepositoryConnectionType):
-        gateway_server_ids (list[UUID] | Unset): Array of gateway server IDs. The property has the `null` value, if the
-            `connectionType` property has the `Direct` value.
+        gateway_server_ids (list[UUID] | None | Unset): Array of gateway server IDs. The property has the `null` value,
+            if the `connectionType` property has the `Direct` value.
     """
 
     connection_type: BackupServerRepositoryConnectionType
-    gateway_server_ids: list[UUID] | Unset = UNSET
+    gateway_server_ids: list[UUID] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         connection_type = self.connection_type.value
 
-        gateway_server_ids: list[str] | Unset = UNSET
-        if not isinstance(self.gateway_server_ids, Unset):
+        gateway_server_ids: list[str] | None | Unset
+        if isinstance(self.gateway_server_ids, Unset):
+            gateway_server_ids = UNSET
+        elif isinstance(self.gateway_server_ids, list):
             gateway_server_ids = []
-            for gateway_server_ids_item_data in self.gateway_server_ids:
-                gateway_server_ids_item = str(gateway_server_ids_item_data)
-                gateway_server_ids.append(gateway_server_ids_item)
+            for gateway_server_ids_type_0_item_data in self.gateway_server_ids:
+                gateway_server_ids_type_0_item = str(gateway_server_ids_type_0_item_data)
+                gateway_server_ids.append(gateway_server_ids_type_0_item)
+
+        else:
+            gateway_server_ids = self.gateway_server_ids
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -53,14 +58,27 @@ class BackupServerObjectStorageConnection:
         d = dict(src_dict)
         connection_type = BackupServerRepositoryConnectionType(d.pop("connectionType"))
 
-        _gateway_server_ids = d.pop("gatewayServerIds", UNSET)
-        gateway_server_ids: list[UUID] | Unset = UNSET
-        if _gateway_server_ids is not UNSET:
-            gateway_server_ids = []
-            for gateway_server_ids_item_data in _gateway_server_ids:
-                gateway_server_ids_item = UUID(gateway_server_ids_item_data)
+        def _parse_gateway_server_ids(data: object) -> list[UUID] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                gateway_server_ids_type_0 = []
+                _gateway_server_ids_type_0 = data
+                for gateway_server_ids_type_0_item_data in _gateway_server_ids_type_0:
+                    gateway_server_ids_type_0_item = UUID(gateway_server_ids_type_0_item_data)
 
-                gateway_server_ids.append(gateway_server_ids_item)
+                    gateway_server_ids_type_0.append(gateway_server_ids_type_0_item)
+
+                return gateway_server_ids_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[UUID] | None | Unset, data)
+
+        gateway_server_ids = _parse_gateway_server_ids(d.pop("gatewayServerIds", UNSET))
 
         backup_server_object_storage_connection = cls(
             connection_type=connection_type,

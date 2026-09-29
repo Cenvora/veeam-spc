@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,12 +22,12 @@ class OAuth2Error:
     Attributes:
         error (OAuth2ErrorError | Unset): Error type.
         error_description (str | Unset): Error description.
-        error_uri (str | Unset): Error URI.
+        error_uri (None | str | Unset): Error URI.
     """
 
     error: OAuth2ErrorError | Unset = UNSET
     error_description: str | Unset = UNSET
-    error_uri: str | Unset = UNSET
+    error_uri: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -37,7 +37,11 @@ class OAuth2Error:
 
         error_description = self.error_description
 
-        error_uri = self.error_uri
+        error_uri: None | str | Unset
+        if isinstance(self.error_uri, Unset):
+            error_uri = UNSET
+        else:
+            error_uri = self.error_uri
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -63,7 +67,14 @@ class OAuth2Error:
 
         error_description = d.pop("error_description", UNSET)
 
-        error_uri = d.pop("error_uri", UNSET)
+        def _parse_error_uri(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        error_uri = _parse_error_uri(d.pop("error_uri", UNSET))
 
         o_auth_2_error = cls(
             error=error,

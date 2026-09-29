@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,12 +22,12 @@ class MacBackupServerSettings:
     Attributes:
         connection (MacConnectionSettings):
         credentials (MacCommonCredentials):
-        remote_repository_name (str | Unset): Name of a remote backup repository.
+        remote_repository_name (None | str | Unset): Name of a remote backup repository.
     """
 
     connection: MacConnectionSettings
     credentials: MacCommonCredentials
-    remote_repository_name: str | Unset = UNSET
+    remote_repository_name: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -35,7 +35,11 @@ class MacBackupServerSettings:
 
         credentials = self.credentials.to_dict()
 
-        remote_repository_name = self.remote_repository_name
+        remote_repository_name: None | str | Unset
+        if isinstance(self.remote_repository_name, Unset):
+            remote_repository_name = UNSET
+        else:
+            remote_repository_name = self.remote_repository_name
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,7 +64,14 @@ class MacBackupServerSettings:
 
         credentials = MacCommonCredentials.from_dict(d.pop("credentials"))
 
-        remote_repository_name = d.pop("remoteRepositoryName", UNSET)
+        def _parse_remote_repository_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        remote_repository_name = _parse_remote_repository_name(d.pop("remoteRepositoryName", UNSET))
 
         mac_backup_server_settings = cls(
             connection=connection,

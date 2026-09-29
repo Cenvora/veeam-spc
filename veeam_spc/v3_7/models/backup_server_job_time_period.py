@@ -17,12 +17,12 @@ class BackupServerJobTimePeriod:
     """
     Attributes:
         day (BackupServerJobTimePeriodDay | Unset): Name of the week day.
-        hours (list[int] | Unset): Array which contains 24 digits that correspond to hours of the day. `0` means that
-            job is permitted to run during the hour. `1` means that job is not permitted to run during the hour.
+        hours (list[int] | None | Unset): Array which contains 24 digits that correspond to hours of the day. `0` means
+            that job is permitted to run during the hour. `1` means that job is not permitted to run during the hour.
     """
 
     day: BackupServerJobTimePeriodDay | Unset = UNSET
-    hours: list[int] | Unset = UNSET
+    hours: list[int] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -30,8 +30,13 @@ class BackupServerJobTimePeriod:
         if not isinstance(self.day, Unset):
             day = self.day.value
 
-        hours: list[int] | Unset = UNSET
-        if not isinstance(self.hours, Unset):
+        hours: list[int] | None | Unset
+        if isinstance(self.hours, Unset):
+            hours = UNSET
+        elif isinstance(self.hours, list):
+            hours = self.hours
+
+        else:
             hours = self.hours
 
         field_dict: dict[str, Any] = {}
@@ -54,7 +59,22 @@ class BackupServerJobTimePeriod:
         else:
             day = BackupServerJobTimePeriodDay(_day)
 
-        hours = cast(list[int], d.pop("hours", UNSET))
+        def _parse_hours(data: object) -> list[int] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                hours_type_0 = cast(list[int], data)
+
+                return hours_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[int] | None | Unset, data)
+
+        hours = _parse_hours(d.pop("hours", UNSET))
 
         backup_server_job_time_period = cls(
             day=day,

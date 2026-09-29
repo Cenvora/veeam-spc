@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -35,7 +35,7 @@ class BackupPolicy:
         instance_uid (UUID | Unset): UID assigned to a backup policy.
         id (int | Unset): System ID assigned to a backup policy.
         organization_uid (UUID | Unset): UID assigned to an organization to whose agents a backup policy is assigned.
-        description (str | Unset): Backup policy description.
+        description (None | str | Unset): Backup policy description.
         config_id (UUID | Unset): System ID assigned to a backup policy configuration.
         type_ (BackupPolicyTypeReadonly | Unset): Backup policy type.
         system_type (BackupPolicySystemType | Unset): Type of guest OS on a managed computer.
@@ -55,7 +55,7 @@ class BackupPolicy:
     instance_uid: UUID | Unset = UNSET
     id: int | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     config_id: UUID | Unset = UNSET
     type_: BackupPolicyTypeReadonly | Unset = UNSET
     system_type: BackupPolicySystemType | Unset = UNSET
@@ -83,7 +83,11 @@ class BackupPolicy:
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         config_id: str | Unset = UNSET
         if not isinstance(self.config_id, Unset):
@@ -185,7 +189,14 @@ class BackupPolicy:
         else:
             organization_uid = UUID(_organization_uid)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         _config_id = d.pop("configId", UNSET)
         config_id: UUID | Unset

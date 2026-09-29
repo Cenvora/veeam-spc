@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -39,30 +39,32 @@ class Vb365OrganizationBase:
             organization services.
         vb_365_server_uid (UUID | Unset): UID assigned to a Veeam Backup for Microsoft 365 server.
         vb_365_server_name (str | Unset): Name of a Veeam Backup for Microsoft 365 server.
-        location_uid (UUID | Unset): UID assigned to a location of a management agent installed on a Veeam Backup for
+        location_uid (None | Unset | UUID): UID assigned to a location of a management agent installed on a Veeam Backup
+            for Microsoft 365 server.
+            > If a Veeam Backup for Microsoft 365 server is not managed by Veeam Service Provider Console, the property
+            value is `null`.
+        location_name (None | str | Unset): Name of a location of a management agent installed on a Veeam Backup for
             Microsoft 365 server.
             > If a Veeam Backup for Microsoft 365 server is not managed by Veeam Service Provider Console, the property
             value is `null`.
-        location_name (str | Unset): Name of a location of a management agent installed on a Veeam Backup for Microsoft
-            365 server.
-            > If a Veeam Backup for Microsoft 365 server is not managed by Veeam Service Provider Console, the property
-            value is `null`.
-        first_backup_time (datetime.datetime | Unset): Date and time when Microsoft organization were processed by a
-            backup job for the first time.
-        last_backup_time (datetime.datetime | Unset): Date and time when Microsoft organization files were processed by
-            a backup job for the last time.
-        registered_by (str | Unset): Name of a Veeam Service Provider Console organization that registered a Microsoft
-            organization.
+        first_backup_time (datetime.datetime | None | Unset): Date and time when Microsoft organization were processed
+            by a backup job for the first time.
+        last_backup_time (datetime.datetime | None | Unset): Date and time when Microsoft organization files were
+            processed by a backup job for the last time.
+        registered_by (None | str | Unset): Name of a Veeam Service Provider Console organization that registered a
+            Microsoft organization.
             If a Microsoft organization was not created in Veeam Service Provider Console or was deleted, the property value
             is `null`.
-        registration_date (datetime.datetime | Unset): Date and time when a Microsoft organization was registered.
+        registration_date (datetime.datetime | None | Unset): Date and time when a Microsoft organization was
+            registered.
             If a Microsoft organization was not created in Veeam Service Provider Console, the property value is `null`.
         is_removing (bool | Unset): Indicates whether a Microsoft organization is currently being removed.
-        is_job_scheduling_enabled (bool | Unset): Indicates whether the current user can apply changes to a Microsoft
-            organization job schedule.
-        mapped_organization_uid (UUID | Unset): UID assigned to an organization that is mapped to a Microsoft
+        is_job_scheduling_enabled (bool | None | Unset): Indicates whether the current user can apply changes to a
+            Microsoft organization job schedule.
+        mapped_organization_uid (None | Unset | UUID): UID assigned to an organization that is mapped to a Microsoft
             organization.
-        mapped_organization_name (str | Unset): Name of an organization that is mapped to a Microsoft organization.
+        mapped_organization_name (None | str | Unset): Name of an organization that is mapped to a Microsoft
+            organization.
         field_embedded (Vb365OrganizationBaseEmbedded | Unset):
     """
 
@@ -75,16 +77,16 @@ class Vb365OrganizationBase:
     protected_services: list[Vb365OrganizationBaseProtectedServicesItem] | Unset = UNSET
     vb_365_server_uid: UUID | Unset = UNSET
     vb_365_server_name: str | Unset = UNSET
-    location_uid: UUID | Unset = UNSET
-    location_name: str | Unset = UNSET
-    first_backup_time: datetime.datetime | Unset = UNSET
-    last_backup_time: datetime.datetime | Unset = UNSET
-    registered_by: str | Unset = UNSET
-    registration_date: datetime.datetime | Unset = UNSET
+    location_uid: None | Unset | UUID = UNSET
+    location_name: None | str | Unset = UNSET
+    first_backup_time: datetime.datetime | None | Unset = UNSET
+    last_backup_time: datetime.datetime | None | Unset = UNSET
+    registered_by: None | str | Unset = UNSET
+    registration_date: datetime.datetime | None | Unset = UNSET
     is_removing: bool | Unset = UNSET
-    is_job_scheduling_enabled: bool | Unset = UNSET
-    mapped_organization_uid: UUID | Unset = UNSET
-    mapped_organization_name: str | Unset = UNSET
+    is_job_scheduling_enabled: bool | None | Unset = UNSET
+    mapped_organization_uid: None | Unset | UUID = UNSET
+    mapped_organization_name: None | str | Unset = UNSET
     field_embedded: Vb365OrganizationBaseEmbedded | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -120,35 +122,71 @@ class Vb365OrganizationBase:
 
         vb_365_server_name = self.vb_365_server_name
 
-        location_uid: str | Unset = UNSET
-        if not isinstance(self.location_uid, Unset):
+        location_uid: None | str | Unset
+        if isinstance(self.location_uid, Unset):
+            location_uid = UNSET
+        elif isinstance(self.location_uid, UUID):
             location_uid = str(self.location_uid)
+        else:
+            location_uid = self.location_uid
 
-        location_name = self.location_name
+        location_name: None | str | Unset
+        if isinstance(self.location_name, Unset):
+            location_name = UNSET
+        else:
+            location_name = self.location_name
 
-        first_backup_time: str | Unset = UNSET
-        if not isinstance(self.first_backup_time, Unset):
+        first_backup_time: None | str | Unset
+        if isinstance(self.first_backup_time, Unset):
+            first_backup_time = UNSET
+        elif isinstance(self.first_backup_time, datetime.datetime):
             first_backup_time = self.first_backup_time.isoformat()
+        else:
+            first_backup_time = self.first_backup_time
 
-        last_backup_time: str | Unset = UNSET
-        if not isinstance(self.last_backup_time, Unset):
+        last_backup_time: None | str | Unset
+        if isinstance(self.last_backup_time, Unset):
+            last_backup_time = UNSET
+        elif isinstance(self.last_backup_time, datetime.datetime):
             last_backup_time = self.last_backup_time.isoformat()
+        else:
+            last_backup_time = self.last_backup_time
 
-        registered_by = self.registered_by
+        registered_by: None | str | Unset
+        if isinstance(self.registered_by, Unset):
+            registered_by = UNSET
+        else:
+            registered_by = self.registered_by
 
-        registration_date: str | Unset = UNSET
-        if not isinstance(self.registration_date, Unset):
+        registration_date: None | str | Unset
+        if isinstance(self.registration_date, Unset):
+            registration_date = UNSET
+        elif isinstance(self.registration_date, datetime.datetime):
             registration_date = self.registration_date.isoformat()
+        else:
+            registration_date = self.registration_date
 
         is_removing = self.is_removing
 
-        is_job_scheduling_enabled = self.is_job_scheduling_enabled
+        is_job_scheduling_enabled: bool | None | Unset
+        if isinstance(self.is_job_scheduling_enabled, Unset):
+            is_job_scheduling_enabled = UNSET
+        else:
+            is_job_scheduling_enabled = self.is_job_scheduling_enabled
 
-        mapped_organization_uid: str | Unset = UNSET
-        if not isinstance(self.mapped_organization_uid, Unset):
+        mapped_organization_uid: None | str | Unset
+        if isinstance(self.mapped_organization_uid, Unset):
+            mapped_organization_uid = UNSET
+        elif isinstance(self.mapped_organization_uid, UUID):
             mapped_organization_uid = str(self.mapped_organization_uid)
+        else:
+            mapped_organization_uid = self.mapped_organization_uid
 
-        mapped_organization_name = self.mapped_organization_name
+        mapped_organization_name: None | str | Unset
+        if isinstance(self.mapped_organization_name, Unset):
+            mapped_organization_name = UNSET
+        else:
+            mapped_organization_name = self.mapped_organization_name
 
         field_embedded: dict[str, Any] | Unset = UNSET
         if not isinstance(self.field_embedded, Unset):
@@ -250,50 +288,128 @@ class Vb365OrganizationBase:
 
         vb_365_server_name = d.pop("vb365ServerName", UNSET)
 
-        _location_uid = d.pop("locationUid", UNSET)
-        location_uid: UUID | Unset
-        if isinstance(_location_uid, Unset):
-            location_uid = UNSET
-        else:
-            location_uid = UUID(_location_uid)
+        def _parse_location_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                location_uid_type_0 = UUID(data)
 
-        location_name = d.pop("locationName", UNSET)
+                return location_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-        _first_backup_time = d.pop("firstBackupTime", UNSET)
-        first_backup_time: datetime.datetime | Unset
-        if isinstance(_first_backup_time, Unset):
-            first_backup_time = UNSET
-        else:
-            first_backup_time = isoparse(_first_backup_time)
+        location_uid = _parse_location_uid(d.pop("locationUid", UNSET))
 
-        _last_backup_time = d.pop("lastBackupTime", UNSET)
-        last_backup_time: datetime.datetime | Unset
-        if isinstance(_last_backup_time, Unset):
-            last_backup_time = UNSET
-        else:
-            last_backup_time = isoparse(_last_backup_time)
+        def _parse_location_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        registered_by = d.pop("registeredBy", UNSET)
+        location_name = _parse_location_name(d.pop("locationName", UNSET))
 
-        _registration_date = d.pop("registrationDate", UNSET)
-        registration_date: datetime.datetime | Unset
-        if isinstance(_registration_date, Unset):
-            registration_date = UNSET
-        else:
-            registration_date = isoparse(_registration_date)
+        def _parse_first_backup_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                first_backup_time_type_0 = isoparse(data)
+
+                return first_backup_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        first_backup_time = _parse_first_backup_time(d.pop("firstBackupTime", UNSET))
+
+        def _parse_last_backup_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_backup_time_type_0 = isoparse(data)
+
+                return last_backup_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        last_backup_time = _parse_last_backup_time(d.pop("lastBackupTime", UNSET))
+
+        def _parse_registered_by(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        registered_by = _parse_registered_by(d.pop("registeredBy", UNSET))
+
+        def _parse_registration_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                registration_date_type_0 = isoparse(data)
+
+                return registration_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        registration_date = _parse_registration_date(d.pop("registrationDate", UNSET))
 
         is_removing = d.pop("isRemoving", UNSET)
 
-        is_job_scheduling_enabled = d.pop("isJobSchedulingEnabled", UNSET)
+        def _parse_is_job_scheduling_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        _mapped_organization_uid = d.pop("mappedOrganizationUid", UNSET)
-        mapped_organization_uid: UUID | Unset
-        if isinstance(_mapped_organization_uid, Unset):
-            mapped_organization_uid = UNSET
-        else:
-            mapped_organization_uid = UUID(_mapped_organization_uid)
+        is_job_scheduling_enabled = _parse_is_job_scheduling_enabled(d.pop("isJobSchedulingEnabled", UNSET))
 
-        mapped_organization_name = d.pop("mappedOrganizationName", UNSET)
+        def _parse_mapped_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                mapped_organization_uid_type_0 = UUID(data)
+
+                return mapped_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        mapped_organization_uid = _parse_mapped_organization_uid(d.pop("mappedOrganizationUid", UNSET))
+
+        def _parse_mapped_organization_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        mapped_organization_name = _parse_mapped_organization_name(d.pop("mappedOrganizationName", UNSET))
 
         _field_embedded = d.pop("_embedded", UNSET)
         field_embedded: Vb365OrganizationBaseEmbedded | Unset

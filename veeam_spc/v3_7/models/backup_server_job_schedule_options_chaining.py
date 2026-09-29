@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -16,20 +16,28 @@ T = TypeVar("T", bound="BackupServerJobScheduleOptionsChaining")
 class BackupServerJobScheduleOptionsChaining:
     """
     Attributes:
-        previous_job_id (UUID | Unset): UID assigned to the previous job in a chain.
-        previous_job_name (str | Unset): Name of the previous job in a chain.
+        previous_job_id (None | Unset | UUID): UID assigned to the previous job in a chain.
+        previous_job_name (None | str | Unset): Name of the previous job in a chain.
     """
 
-    previous_job_id: UUID | Unset = UNSET
-    previous_job_name: str | Unset = UNSET
+    previous_job_id: None | Unset | UUID = UNSET
+    previous_job_name: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        previous_job_id: str | Unset = UNSET
-        if not isinstance(self.previous_job_id, Unset):
+        previous_job_id: None | str | Unset
+        if isinstance(self.previous_job_id, Unset):
+            previous_job_id = UNSET
+        elif isinstance(self.previous_job_id, UUID):
             previous_job_id = str(self.previous_job_id)
+        else:
+            previous_job_id = self.previous_job_id
 
-        previous_job_name = self.previous_job_name
+        previous_job_name: None | str | Unset
+        if isinstance(self.previous_job_name, Unset):
+            previous_job_name = UNSET
+        else:
+            previous_job_name = self.previous_job_name
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -44,14 +52,32 @@ class BackupServerJobScheduleOptionsChaining:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        _previous_job_id = d.pop("previousJobId", UNSET)
-        previous_job_id: UUID | Unset
-        if isinstance(_previous_job_id, Unset):
-            previous_job_id = UNSET
-        else:
-            previous_job_id = UUID(_previous_job_id)
 
-        previous_job_name = d.pop("previousJobName", UNSET)
+        def _parse_previous_job_id(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                previous_job_id_type_0 = UUID(data)
+
+                return previous_job_id_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        previous_job_id = _parse_previous_job_id(d.pop("previousJobId", UNSET))
+
+        def _parse_previous_job_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        previous_job_name = _parse_previous_job_name(d.pop("previousJobName", UNSET))
 
         backup_server_job_schedule_options_chaining = cls(
             previous_job_id=previous_job_id,

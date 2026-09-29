@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,13 +20,13 @@ class BackupServerVmwareObject:
         host_name (str): Name of a VMware vSphere server that hosts the object.
         name (str): Name of the VMware vSphere object.
         type_ (BackupServerVmwareInventoryType): Type of a VMware vSphere object.
-        object_id (str | Unset): URN assigned to a VMware vSphere object.
+        object_id (None | str | Unset): URN assigned to a VMware vSphere object.
     """
 
     host_name: str
     name: str
     type_: BackupServerVmwareInventoryType
-    object_id: str | Unset = UNSET
+    object_id: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,7 +36,11 @@ class BackupServerVmwareObject:
 
         type_ = self.type_.value
 
-        object_id = self.object_id
+        object_id: None | str | Unset
+        if isinstance(self.object_id, Unset):
+            object_id = UNSET
+        else:
+            object_id = self.object_id
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -61,7 +65,14 @@ class BackupServerVmwareObject:
 
         type_ = BackupServerVmwareInventoryType(d.pop("type"))
 
-        object_id = d.pop("objectId", UNSET)
+        def _parse_object_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        object_id = _parse_object_id(d.pop("objectId", UNSET))
 
         backup_server_vmware_object = cls(
             host_name=host_name,

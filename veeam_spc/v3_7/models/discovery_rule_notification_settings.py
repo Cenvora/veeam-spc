@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -10,8 +10,8 @@ from ..models.discovery_rule_notification_settings_schedule_type import Discover
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.discovery_rule_notification_settings_week_settings import (
-        DiscoveryRuleNotificationSettingsWeekSettings,
+    from ..models.discovery_rule_notification_settings_week_settings_type_0 import (
+        DiscoveryRuleNotificationSettingsWeekSettingsType0,
     )
 
 
@@ -29,9 +29,9 @@ class DiscoveryRuleNotificationSettings:
         schedule_type (DiscoveryRuleNotificationSettingsScheduleType): Notification frequency.
         is_enabled (bool | Unset): Indicates whether notifications about discovery results are enabled. Default: True.
         schedule_time (str | Unset): Time at which notifications must are sent in the `hh:mm` format. Default: '10:00'.
-        week_settings (DiscoveryRuleNotificationSettingsWeekSettings | Unset):
-        to (str | Unset): Email address at which notifications must be sent.
-        subject (str | Unset): Subject of a notification message.
+        week_settings (DiscoveryRuleNotificationSettingsWeekSettingsType0 | None | Unset):
+        to (None | str | Unset): Email address at which notifications must be sent.
+        subject (None | str | Unset): Subject of a notification message.
         notify_on_the_first_run (bool | Unset): Indicates whether a notification must be sent on the first  Default:
             False.
     """
@@ -39,26 +39,42 @@ class DiscoveryRuleNotificationSettings:
     schedule_type: DiscoveryRuleNotificationSettingsScheduleType
     is_enabled: bool | Unset = True
     schedule_time: str | Unset = "10:00"
-    week_settings: DiscoveryRuleNotificationSettingsWeekSettings | Unset = UNSET
-    to: str | Unset = UNSET
-    subject: str | Unset = UNSET
+    week_settings: DiscoveryRuleNotificationSettingsWeekSettingsType0 | None | Unset = UNSET
+    to: None | str | Unset = UNSET
+    subject: None | str | Unset = UNSET
     notify_on_the_first_run: bool | Unset = False
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.discovery_rule_notification_settings_week_settings_type_0 import (
+            DiscoveryRuleNotificationSettingsWeekSettingsType0,
+        )
+
         schedule_type = self.schedule_type.value
 
         is_enabled = self.is_enabled
 
         schedule_time = self.schedule_time
 
-        week_settings: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.week_settings, Unset):
+        week_settings: dict[str, Any] | None | Unset
+        if isinstance(self.week_settings, Unset):
+            week_settings = UNSET
+        elif isinstance(self.week_settings, DiscoveryRuleNotificationSettingsWeekSettingsType0):
             week_settings = self.week_settings.to_dict()
+        else:
+            week_settings = self.week_settings
 
-        to = self.to
+        to: None | str | Unset
+        if isinstance(self.to, Unset):
+            to = UNSET
+        else:
+            to = self.to
 
-        subject = self.subject
+        subject: None | str | Unset
+        if isinstance(self.subject, Unset):
+            subject = UNSET
+        else:
+            subject = self.subject
 
         notify_on_the_first_run = self.notify_on_the_first_run
 
@@ -86,8 +102,8 @@ class DiscoveryRuleNotificationSettings:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.discovery_rule_notification_settings_week_settings import (
-            DiscoveryRuleNotificationSettingsWeekSettings,
+        from ..models.discovery_rule_notification_settings_week_settings_type_0 import (
+            DiscoveryRuleNotificationSettingsWeekSettingsType0,
         )
 
         d = dict(src_dict)
@@ -97,16 +113,40 @@ class DiscoveryRuleNotificationSettings:
 
         schedule_time = d.pop("scheduleTime", UNSET)
 
-        _week_settings = d.pop("weekSettings", UNSET)
-        week_settings: DiscoveryRuleNotificationSettingsWeekSettings | Unset
-        if isinstance(_week_settings, Unset):
-            week_settings = UNSET
-        else:
-            week_settings = DiscoveryRuleNotificationSettingsWeekSettings.from_dict(_week_settings)
+        def _parse_week_settings(data: object) -> DiscoveryRuleNotificationSettingsWeekSettingsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                week_settings_type_0 = DiscoveryRuleNotificationSettingsWeekSettingsType0.from_dict(data)
 
-        to = d.pop("to", UNSET)
+                return week_settings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(DiscoveryRuleNotificationSettingsWeekSettingsType0 | None | Unset, data)
 
-        subject = d.pop("subject", UNSET)
+        week_settings = _parse_week_settings(d.pop("weekSettings", UNSET))
+
+        def _parse_to(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        to = _parse_to(d.pop("to", UNSET))
+
+        def _parse_subject(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        subject = _parse_subject(d.pop("subject", UNSET))
 
         notify_on_the_first_run = d.pop("notifyOnTheFirstRun", UNSET)
 

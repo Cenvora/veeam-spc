@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -22,35 +22,35 @@ class BackupServerAgentJobObject:
     Attributes:
         instance_uid (UUID | Unset): UID assigned to a job object in Veeam Backup & Replication.
         unique_uid (UUID | Unset): UID assigned to a job object in Veeam Service Provider Console.
-        backup_server_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server.
-        agent_uid (UUID | Unset): UID assigned to a Veeam backup agent.
+        backup_server_uid (None | Unset | UUID): UID assigned to a Veeam Backup & Replication server.
+        agent_uid (None | Unset | UUID): UID assigned to a Veeam backup agent.
         job_uid (UUID | Unset): UID assigned to a job in Veeam Backup & Replication.
         unique_job_uid (UUID | Unset): UID assigned to a job in Veeam Service Provider Console.
-        computer (str | Unset): Computer name of a Veeam backup agent.
+        computer (None | str | Unset): Computer name of a Veeam backup agent.
         backup_status (BackupServerAgentJobObjectBackupStatus | Unset): Status of a job.
-        last_run (datetime.datetime | Unset): Date and time when the latest job session started.
-        last_end_time (datetime.datetime | Unset): Date and time when the latest job session ended.
-        last_duration (int | Unset): Duration of the latest job session, in seconds.
+        last_run (datetime.datetime | None | Unset): Date and time when the latest job session started.
+        last_end_time (datetime.datetime | None | Unset): Date and time when the latest job session ended.
+        last_duration (int | None | Unset): Duration of the latest job session, in seconds.
         restore_points_count (int | Unset): Number of restore points available in the backup chain.
         os_type (BackupServerAgentJobObjectOsType | Unset): Type of a protected computer operating system.
-        failure_message (str | Unset): Message that is displayed in case a backup job fails.
+        failure_message (None | str | Unset): Message that is displayed in case a backup job fails.
             > Every line break is represented by the `\r\n` control characters.
     """
 
     instance_uid: UUID | Unset = UNSET
     unique_uid: UUID | Unset = UNSET
-    backup_server_uid: UUID | Unset = UNSET
-    agent_uid: UUID | Unset = UNSET
+    backup_server_uid: None | Unset | UUID = UNSET
+    agent_uid: None | Unset | UUID = UNSET
     job_uid: UUID | Unset = UNSET
     unique_job_uid: UUID | Unset = UNSET
-    computer: str | Unset = UNSET
+    computer: None | str | Unset = UNSET
     backup_status: BackupServerAgentJobObjectBackupStatus | Unset = UNSET
-    last_run: datetime.datetime | Unset = UNSET
-    last_end_time: datetime.datetime | Unset = UNSET
-    last_duration: int | Unset = UNSET
+    last_run: datetime.datetime | None | Unset = UNSET
+    last_end_time: datetime.datetime | None | Unset = UNSET
+    last_duration: int | None | Unset = UNSET
     restore_points_count: int | Unset = UNSET
     os_type: BackupServerAgentJobObjectOsType | Unset = UNSET
-    failure_message: str | Unset = UNSET
+    failure_message: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -62,13 +62,21 @@ class BackupServerAgentJobObject:
         if not isinstance(self.unique_uid, Unset):
             unique_uid = str(self.unique_uid)
 
-        backup_server_uid: str | Unset = UNSET
-        if not isinstance(self.backup_server_uid, Unset):
+        backup_server_uid: None | str | Unset
+        if isinstance(self.backup_server_uid, Unset):
+            backup_server_uid = UNSET
+        elif isinstance(self.backup_server_uid, UUID):
             backup_server_uid = str(self.backup_server_uid)
+        else:
+            backup_server_uid = self.backup_server_uid
 
-        agent_uid: str | Unset = UNSET
-        if not isinstance(self.agent_uid, Unset):
+        agent_uid: None | str | Unset
+        if isinstance(self.agent_uid, Unset):
+            agent_uid = UNSET
+        elif isinstance(self.agent_uid, UUID):
             agent_uid = str(self.agent_uid)
+        else:
+            agent_uid = self.agent_uid
 
         job_uid: str | Unset = UNSET
         if not isinstance(self.job_uid, Unset):
@@ -78,21 +86,37 @@ class BackupServerAgentJobObject:
         if not isinstance(self.unique_job_uid, Unset):
             unique_job_uid = str(self.unique_job_uid)
 
-        computer = self.computer
+        computer: None | str | Unset
+        if isinstance(self.computer, Unset):
+            computer = UNSET
+        else:
+            computer = self.computer
 
         backup_status: str | Unset = UNSET
         if not isinstance(self.backup_status, Unset):
             backup_status = self.backup_status.value
 
-        last_run: str | Unset = UNSET
-        if not isinstance(self.last_run, Unset):
+        last_run: None | str | Unset
+        if isinstance(self.last_run, Unset):
+            last_run = UNSET
+        elif isinstance(self.last_run, datetime.datetime):
             last_run = self.last_run.isoformat()
+        else:
+            last_run = self.last_run
 
-        last_end_time: str | Unset = UNSET
-        if not isinstance(self.last_end_time, Unset):
+        last_end_time: None | str | Unset
+        if isinstance(self.last_end_time, Unset):
+            last_end_time = UNSET
+        elif isinstance(self.last_end_time, datetime.datetime):
             last_end_time = self.last_end_time.isoformat()
+        else:
+            last_end_time = self.last_end_time
 
-        last_duration = self.last_duration
+        last_duration: int | None | Unset
+        if isinstance(self.last_duration, Unset):
+            last_duration = UNSET
+        else:
+            last_duration = self.last_duration
 
         restore_points_count = self.restore_points_count
 
@@ -100,7 +124,11 @@ class BackupServerAgentJobObject:
         if not isinstance(self.os_type, Unset):
             os_type = self.os_type.value
 
-        failure_message = self.failure_message
+        failure_message: None | str | Unset
+        if isinstance(self.failure_message, Unset):
+            failure_message = UNSET
+        else:
+            failure_message = self.failure_message
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -153,19 +181,39 @@ class BackupServerAgentJobObject:
         else:
             unique_uid = UUID(_unique_uid)
 
-        _backup_server_uid = d.pop("backupServerUid", UNSET)
-        backup_server_uid: UUID | Unset
-        if isinstance(_backup_server_uid, Unset):
-            backup_server_uid = UNSET
-        else:
-            backup_server_uid = UUID(_backup_server_uid)
+        def _parse_backup_server_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                backup_server_uid_type_0 = UUID(data)
 
-        _agent_uid = d.pop("agentUid", UNSET)
-        agent_uid: UUID | Unset
-        if isinstance(_agent_uid, Unset):
-            agent_uid = UNSET
-        else:
-            agent_uid = UUID(_agent_uid)
+                return backup_server_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        backup_server_uid = _parse_backup_server_uid(d.pop("backupServerUid", UNSET))
+
+        def _parse_agent_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                agent_uid_type_0 = UUID(data)
+
+                return agent_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        agent_uid = _parse_agent_uid(d.pop("agentUid", UNSET))
 
         _job_uid = d.pop("jobUid", UNSET)
         job_uid: UUID | Unset
@@ -181,7 +229,14 @@ class BackupServerAgentJobObject:
         else:
             unique_job_uid = UUID(_unique_job_uid)
 
-        computer = d.pop("computer", UNSET)
+        def _parse_computer(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        computer = _parse_computer(d.pop("computer", UNSET))
 
         _backup_status = d.pop("backupStatus", UNSET)
         backup_status: BackupServerAgentJobObjectBackupStatus | Unset
@@ -190,21 +245,48 @@ class BackupServerAgentJobObject:
         else:
             backup_status = BackupServerAgentJobObjectBackupStatus(_backup_status)
 
-        _last_run = d.pop("lastRun", UNSET)
-        last_run: datetime.datetime | Unset
-        if isinstance(_last_run, Unset):
-            last_run = UNSET
-        else:
-            last_run = isoparse(_last_run)
+        def _parse_last_run(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_run_type_0 = isoparse(data)
 
-        _last_end_time = d.pop("lastEndTime", UNSET)
-        last_end_time: datetime.datetime | Unset
-        if isinstance(_last_end_time, Unset):
-            last_end_time = UNSET
-        else:
-            last_end_time = isoparse(_last_end_time)
+                return last_run_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
 
-        last_duration = d.pop("lastDuration", UNSET)
+        last_run = _parse_last_run(d.pop("lastRun", UNSET))
+
+        def _parse_last_end_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_end_time_type_0 = isoparse(data)
+
+                return last_end_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        last_end_time = _parse_last_end_time(d.pop("lastEndTime", UNSET))
+
+        def _parse_last_duration(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        last_duration = _parse_last_duration(d.pop("lastDuration", UNSET))
 
         restore_points_count = d.pop("restorePointsCount", UNSET)
 
@@ -215,7 +297,14 @@ class BackupServerAgentJobObject:
         else:
             os_type = BackupServerAgentJobObjectOsType(_os_type)
 
-        failure_message = d.pop("failureMessage", UNSET)
+        def _parse_failure_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        failure_message = _parse_failure_message(d.pop("failureMessage", UNSET))
 
         backup_server_agent_job_object = cls(
             instance_uid=instance_uid,

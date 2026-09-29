@@ -25,7 +25,7 @@ class Vb365JobItemComposed:
     Attributes:
         id (str | Unset): ID assigned to a backup job item.
         item_type (Vb365JobItemComposedItemType | Unset): Type of a backup job item.
-        folders (list[str] | Unset): Array of folders included in a backup job.
+        folders (list[str] | None | Unset): Array of folders included in a backup job.
         backup_mailbox (bool | Unset): Indicates whether a backup job must include mailboxes. Default: False.
         backup_one_drive (bool | Unset): Indicates whether a backup job must include OneDrive data. Default: False.
         backup_archive_mailbox (bool | Unset): Indicates whether a backup job must include mailbox archive. Default:
@@ -53,7 +53,7 @@ class Vb365JobItemComposed:
 
     id: str | Unset = UNSET
     item_type: Vb365JobItemComposedItemType | Unset = UNSET
-    folders: list[str] | Unset = UNSET
+    folders: list[str] | None | Unset = UNSET
     backup_mailbox: bool | Unset = False
     backup_one_drive: bool | Unset = False
     backup_archive_mailbox: bool | Unset = False
@@ -80,8 +80,13 @@ class Vb365JobItemComposed:
         if not isinstance(self.item_type, Unset):
             item_type = self.item_type.value
 
-        folders: list[str] | Unset = UNSET
-        if not isinstance(self.folders, Unset):
+        folders: list[str] | None | Unset
+        if isinstance(self.folders, Unset):
+            folders = UNSET
+        elif isinstance(self.folders, list):
+            folders = self.folders
+
+        else:
             folders = self.folders
 
         backup_mailbox = self.backup_mailbox
@@ -189,7 +194,22 @@ class Vb365JobItemComposed:
         else:
             item_type = Vb365JobItemComposedItemType(_item_type)
 
-        folders = cast(list[str], d.pop("folders", UNSET))
+        def _parse_folders(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                folders_type_0 = cast(list[str], data)
+
+                return folders_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        folders = _parse_folders(d.pop("folders", UNSET))
 
         backup_mailbox = d.pop("backupMailbox", UNSET)
 

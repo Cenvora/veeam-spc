@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,28 +20,36 @@ T = TypeVar("T", bound="ProductLicenseUsage")
 class ProductLicenseUsage:
     """
     Attributes:
-        license_id (str | Unset): License ID.
+        license_id (None | str | Unset): License ID.
         product_type (ProductLicenseUsageProductType | Unset): Product type.
-        license_edition (str | Unset): License edition.
+        license_edition (None | str | Unset): License edition.
         used_points (float | Unset): Number of license points used by an organization.
         workload_usage (list[WorkloadLicenseUsage] | Unset): License usage for each workload type.
     """
 
-    license_id: str | Unset = UNSET
+    license_id: None | str | Unset = UNSET
     product_type: ProductLicenseUsageProductType | Unset = UNSET
-    license_edition: str | Unset = UNSET
+    license_edition: None | str | Unset = UNSET
     used_points: float | Unset = UNSET
     workload_usage: list[WorkloadLicenseUsage] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        license_id = self.license_id
+        license_id: None | str | Unset
+        if isinstance(self.license_id, Unset):
+            license_id = UNSET
+        else:
+            license_id = self.license_id
 
         product_type: str | Unset = UNSET
         if not isinstance(self.product_type, Unset):
             product_type = self.product_type.value
 
-        license_edition = self.license_edition
+        license_edition: None | str | Unset
+        if isinstance(self.license_edition, Unset):
+            license_edition = UNSET
+        else:
+            license_edition = self.license_edition
 
         used_points = self.used_points
 
@@ -73,7 +81,15 @@ class ProductLicenseUsage:
         from ..models.workload_license_usage import WorkloadLicenseUsage
 
         d = dict(src_dict)
-        license_id = d.pop("licenseId", UNSET)
+
+        def _parse_license_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        license_id = _parse_license_id(d.pop("licenseId", UNSET))
 
         _product_type = d.pop("productType", UNSET)
         product_type: ProductLicenseUsageProductType | Unset
@@ -82,7 +98,14 @@ class ProductLicenseUsage:
         else:
             product_type = ProductLicenseUsageProductType(_product_type)
 
-        license_edition = d.pop("licenseEdition", UNSET)
+        def _parse_license_edition(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        license_edition = _parse_license_edition(d.pop("licenseEdition", UNSET))
 
         used_points = d.pop("usedPoints", UNSET)
 

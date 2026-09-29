@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -27,14 +27,14 @@ class AlarmSchedule:
             days (list[AlarmScheduleDaysItem]): Days of the week during which the alarm is active.
             time_window (AlarmScheduleTimeWindow): A time window within a day defined by start and end time in HH:mm format.
                 Overnight windows are supported (e.g. startTime 22:00 with endTime 06:00).
-            time_zone_id (str | Unset): IANA / Windows time-zone id used to interpret days and the time window. If
+            time_zone_id (None | str | Unset): IANA / Windows time-zone id used to interpret days and the time window. If
                 null or unrecognized, the service-local time zone is used.
     """
 
     is_enabled: bool
     days: list[AlarmScheduleDaysItem]
     time_window: AlarmScheduleTimeWindow
-    time_zone_id: str | Unset = UNSET
+    time_zone_id: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -47,7 +47,11 @@ class AlarmSchedule:
 
         time_window = self.time_window.to_dict()
 
-        time_zone_id = self.time_zone_id
+        time_zone_id: None | str | Unset
+        if isinstance(self.time_zone_id, Unset):
+            time_zone_id = UNSET
+        else:
+            time_zone_id = self.time_zone_id
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -79,7 +83,14 @@ class AlarmSchedule:
 
         time_window = AlarmScheduleTimeWindow.from_dict(d.pop("timeWindow"))
 
-        time_zone_id = d.pop("timeZoneId", UNSET)
+        def _parse_time_zone_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        time_zone_id = _parse_time_zone_id(d.pop("timeZoneId", UNSET))
 
         alarm_schedule = cls(
             is_enabled=is_enabled,

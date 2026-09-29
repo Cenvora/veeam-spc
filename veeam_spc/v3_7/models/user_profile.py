@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,36 +20,56 @@ class UserProfile:
             'address': '90 West Broad St Columbus OH 43215', 'phone': '(524) 745-5371'}
 
     Attributes:
-        first_name (str | Unset): User first name.
-        last_name (str | Unset): User last name.
+        first_name (None | str | Unset): User first name.
+        last_name (None | str | Unset): User last name.
         title (UserProfileTitle | Unset): User title. Default: UserProfileTitle.UNKNOWN.
-        email (str | Unset): User email address.
-        address (str | Unset): Address of a user or user organization.
-        phone (str | Unset): Telephone number of a user or user organization.
+        email (None | str | Unset): User email address.
+        address (None | str | Unset): Address of a user or user organization.
+        phone (None | str | Unset): Telephone number of a user or user organization.
     """
 
-    first_name: str | Unset = UNSET
-    last_name: str | Unset = UNSET
+    first_name: None | str | Unset = UNSET
+    last_name: None | str | Unset = UNSET
     title: UserProfileTitle | Unset = UserProfileTitle.UNKNOWN
-    email: str | Unset = UNSET
-    address: str | Unset = UNSET
-    phone: str | Unset = UNSET
+    email: None | str | Unset = UNSET
+    address: None | str | Unset = UNSET
+    phone: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        first_name = self.first_name
+        first_name: None | str | Unset
+        if isinstance(self.first_name, Unset):
+            first_name = UNSET
+        else:
+            first_name = self.first_name
 
-        last_name = self.last_name
+        last_name: None | str | Unset
+        if isinstance(self.last_name, Unset):
+            last_name = UNSET
+        else:
+            last_name = self.last_name
 
         title: str | Unset = UNSET
         if not isinstance(self.title, Unset):
             title = self.title.value
 
-        email = self.email
+        email: None | str | Unset
+        if isinstance(self.email, Unset):
+            email = UNSET
+        else:
+            email = self.email
 
-        address = self.address
+        address: None | str | Unset
+        if isinstance(self.address, Unset):
+            address = UNSET
+        else:
+            address = self.address
 
-        phone = self.phone
+        phone: None | str | Unset
+        if isinstance(self.phone, Unset):
+            phone = UNSET
+        else:
+            phone = self.phone
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -72,9 +92,24 @@ class UserProfile:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        first_name = d.pop("firstName", UNSET)
 
-        last_name = d.pop("lastName", UNSET)
+        def _parse_first_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        first_name = _parse_first_name(d.pop("firstName", UNSET))
+
+        def _parse_last_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        last_name = _parse_last_name(d.pop("lastName", UNSET))
 
         _title = d.pop("title", UNSET)
         title: UserProfileTitle | Unset
@@ -83,11 +118,32 @@ class UserProfile:
         else:
             title = UserProfileTitle(_title)
 
-        email = d.pop("email", UNSET)
+        def _parse_email(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        address = d.pop("address", UNSET)
+        email = _parse_email(d.pop("email", UNSET))
 
-        phone = d.pop("phone", UNSET)
+        def _parse_address(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        address = _parse_address(d.pop("address", UNSET))
+
+        def _parse_phone(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        phone = _parse_phone(d.pop("phone", UNSET))
 
         user_profile = cls(
             first_name=first_name,

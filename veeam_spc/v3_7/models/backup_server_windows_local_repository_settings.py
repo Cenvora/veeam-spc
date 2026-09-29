@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,32 +19,52 @@ T = TypeVar("T", bound="BackupServerWindowsLocalRepositorySettings")
 class BackupServerWindowsLocalRepositorySettings:
     """
     Attributes:
-        max_task_count (int | Unset): Maximum number of concurrent tasks.
-        path (str | Unset): Path to the repository folder.
-        read_write_limit_enabled (bool | Unset): Indicates whether read/write rate limit is enabled.
-        read_write_rate (int | Unset): Read/write rate limit, in MB/s.
-        task_limit_enabled (bool | Unset): Indicates whether task limit is enabled.
+        max_task_count (int | None | Unset): Maximum number of concurrent tasks.
+        path (None | str | Unset): Path to the repository folder.
+        read_write_limit_enabled (bool | None | Unset): Indicates whether read/write rate limit is enabled.
+        read_write_rate (int | None | Unset): Read/write rate limit, in MB/s.
+        task_limit_enabled (bool | None | Unset): Indicates whether task limit is enabled.
         advanced_settings (BackupServerRepositoryAdvancedSettings | Unset):
     """
 
-    max_task_count: int | Unset = UNSET
-    path: str | Unset = UNSET
-    read_write_limit_enabled: bool | Unset = UNSET
-    read_write_rate: int | Unset = UNSET
-    task_limit_enabled: bool | Unset = UNSET
+    max_task_count: int | None | Unset = UNSET
+    path: None | str | Unset = UNSET
+    read_write_limit_enabled: bool | None | Unset = UNSET
+    read_write_rate: int | None | Unset = UNSET
+    task_limit_enabled: bool | None | Unset = UNSET
     advanced_settings: BackupServerRepositoryAdvancedSettings | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        max_task_count = self.max_task_count
+        max_task_count: int | None | Unset
+        if isinstance(self.max_task_count, Unset):
+            max_task_count = UNSET
+        else:
+            max_task_count = self.max_task_count
 
-        path = self.path
+        path: None | str | Unset
+        if isinstance(self.path, Unset):
+            path = UNSET
+        else:
+            path = self.path
 
-        read_write_limit_enabled = self.read_write_limit_enabled
+        read_write_limit_enabled: bool | None | Unset
+        if isinstance(self.read_write_limit_enabled, Unset):
+            read_write_limit_enabled = UNSET
+        else:
+            read_write_limit_enabled = self.read_write_limit_enabled
 
-        read_write_rate = self.read_write_rate
+        read_write_rate: int | None | Unset
+        if isinstance(self.read_write_rate, Unset):
+            read_write_rate = UNSET
+        else:
+            read_write_rate = self.read_write_rate
 
-        task_limit_enabled = self.task_limit_enabled
+        task_limit_enabled: bool | None | Unset
+        if isinstance(self.task_limit_enabled, Unset):
+            task_limit_enabled = UNSET
+        else:
+            task_limit_enabled = self.task_limit_enabled
 
         advanced_settings: dict[str, Any] | Unset = UNSET
         if not isinstance(self.advanced_settings, Unset):
@@ -73,15 +93,51 @@ class BackupServerWindowsLocalRepositorySettings:
         from ..models.backup_server_repository_advanced_settings import BackupServerRepositoryAdvancedSettings
 
         d = dict(src_dict)
-        max_task_count = d.pop("maxTaskCount", UNSET)
 
-        path = d.pop("path", UNSET)
+        def _parse_max_task_count(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        read_write_limit_enabled = d.pop("readWriteLimitEnabled", UNSET)
+        max_task_count = _parse_max_task_count(d.pop("maxTaskCount", UNSET))
 
-        read_write_rate = d.pop("readWriteRate", UNSET)
+        def _parse_path(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        task_limit_enabled = d.pop("taskLimitEnabled", UNSET)
+        path = _parse_path(d.pop("path", UNSET))
+
+        def _parse_read_write_limit_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        read_write_limit_enabled = _parse_read_write_limit_enabled(d.pop("readWriteLimitEnabled", UNSET))
+
+        def _parse_read_write_rate(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        read_write_rate = _parse_read_write_rate(d.pop("readWriteRate", UNSET))
+
+        def _parse_task_limit_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        task_limit_enabled = _parse_task_limit_enabled(d.pop("taskLimitEnabled", UNSET))
 
         _advanced_settings = d.pop("advancedSettings", UNSET)
         advanced_settings: BackupServerRepositoryAdvancedSettings | Unset

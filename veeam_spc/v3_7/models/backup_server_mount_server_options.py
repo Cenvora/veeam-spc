@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,19 +19,23 @@ T = TypeVar("T", bound="BackupServerMountServerOptions")
 class BackupServerMountServerOptions:
     """
     Attributes:
-        v_power_nfs_enabled (bool | Unset): Indicates whether the Veeam vPower NFS Service is allowed to access an
-            object storage repository.
+        v_power_nfs_enabled (bool | None | Unset): Indicates whether the Veeam vPower NFS Service is allowed to access
+            an object storage repository.
         write_cache_folder (str | Unset): Path to a write cache folder.
         v_power_nfs_port_settings (BackupServerVPowerNFSPortSettings | Unset):
     """
 
-    v_power_nfs_enabled: bool | Unset = UNSET
+    v_power_nfs_enabled: bool | None | Unset = UNSET
     write_cache_folder: str | Unset = UNSET
     v_power_nfs_port_settings: BackupServerVPowerNFSPortSettings | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        v_power_nfs_enabled = self.v_power_nfs_enabled
+        v_power_nfs_enabled: bool | None | Unset
+        if isinstance(self.v_power_nfs_enabled, Unset):
+            v_power_nfs_enabled = UNSET
+        else:
+            v_power_nfs_enabled = self.v_power_nfs_enabled
 
         write_cache_folder = self.write_cache_folder
 
@@ -56,7 +60,15 @@ class BackupServerMountServerOptions:
         from ..models.backup_server_v_power_nfs_port_settings import BackupServerVPowerNFSPortSettings
 
         d = dict(src_dict)
-        v_power_nfs_enabled = d.pop("vPowerNFSEnabled", UNSET)
+
+        def _parse_v_power_nfs_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        v_power_nfs_enabled = _parse_v_power_nfs_enabled(d.pop("vPowerNFSEnabled", UNSET))
 
         write_cache_folder = d.pop("writeCacheFolder", UNSET)
 

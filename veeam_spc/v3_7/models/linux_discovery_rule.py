@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -11,7 +11,7 @@ from ..models.linux_discovery_rule_method import LinuxDiscoveryRuleMethod
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.embedded_for_discovery_rule_children import EmbeddedForDiscoveryRuleChildren
+    from ..models.embedded_for_discovery_rule_children_type_0 import EmbeddedForDiscoveryRuleChildrenType0
     from ..models.linux_discovery_credentials import LinuxDiscoveryCredentials
     from ..models.linux_discovery_rule_deployment_settings import LinuxDiscoveryRuleDeploymentSettings
 
@@ -27,18 +27,20 @@ class LinuxDiscoveryRule:
         instance_uid (UUID | Unset): UID assigned to a discovery rule.
         method (LinuxDiscoveryRuleMethod | Unset): Discovery method. Default: LinuxDiscoveryRuleMethod.NETWORKBASED.
         deployment_settings (LinuxDiscoveryRuleDeploymentSettings | Unset):
-        field_embedded (EmbeddedForDiscoveryRuleChildren | Unset): Resource representation of the related discovery rule
-            entity.
+        field_embedded (EmbeddedForDiscoveryRuleChildrenType0 | None | Unset): Resource representation of the related
+            discovery rule entity.
     """
 
     credentials: list[LinuxDiscoveryCredentials]
     instance_uid: UUID | Unset = UNSET
     method: LinuxDiscoveryRuleMethod | Unset = LinuxDiscoveryRuleMethod.NETWORKBASED
     deployment_settings: LinuxDiscoveryRuleDeploymentSettings | Unset = UNSET
-    field_embedded: EmbeddedForDiscoveryRuleChildren | Unset = UNSET
+    field_embedded: EmbeddedForDiscoveryRuleChildrenType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_discovery_rule_children_type_0 import EmbeddedForDiscoveryRuleChildrenType0
+
         credentials = []
         for credentials_item_data in self.credentials:
             credentials_item = credentials_item_data.to_dict()
@@ -56,9 +58,13 @@ class LinuxDiscoveryRule:
         if not isinstance(self.deployment_settings, Unset):
             deployment_settings = self.deployment_settings.to_dict()
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForDiscoveryRuleChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -80,7 +86,7 @@ class LinuxDiscoveryRule:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.embedded_for_discovery_rule_children import EmbeddedForDiscoveryRuleChildren
+        from ..models.embedded_for_discovery_rule_children_type_0 import EmbeddedForDiscoveryRuleChildrenType0
         from ..models.linux_discovery_credentials import LinuxDiscoveryCredentials
         from ..models.linux_discovery_rule_deployment_settings import LinuxDiscoveryRuleDeploymentSettings
 
@@ -113,12 +119,24 @@ class LinuxDiscoveryRule:
         else:
             deployment_settings = LinuxDiscoveryRuleDeploymentSettings.from_dict(_deployment_settings)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForDiscoveryRuleChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForDiscoveryRuleChildren.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> EmbeddedForDiscoveryRuleChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_discovery_rule_children_type_0 = (
+                    EmbeddedForDiscoveryRuleChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_discovery_rule_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForDiscoveryRuleChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         linux_discovery_rule = cls(
             credentials=credentials,

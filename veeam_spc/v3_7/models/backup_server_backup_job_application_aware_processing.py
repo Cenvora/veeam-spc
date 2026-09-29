@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,23 +21,28 @@ class BackupServerBackupJobApplicationAwareProcessing:
 
     Attributes:
         is_enabled (bool | Unset): Indicates whether application-aware processing is enabled. Default: False.
-        app_settings (list[BackupServerBackupJobApplicationSettings] | Unset): Array of VMware vSphere objects and their
-            application settings.
+        app_settings (list[BackupServerBackupJobApplicationSettings] | None | Unset): Array of VMware vSphere objects
+            and their application settings.
     """
 
     is_enabled: bool | Unset = False
-    app_settings: list[BackupServerBackupJobApplicationSettings] | Unset = UNSET
+    app_settings: list[BackupServerBackupJobApplicationSettings] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         is_enabled = self.is_enabled
 
-        app_settings: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.app_settings, Unset):
+        app_settings: list[dict[str, Any]] | None | Unset
+        if isinstance(self.app_settings, Unset):
+            app_settings = UNSET
+        elif isinstance(self.app_settings, list):
             app_settings = []
-            for app_settings_item_data in self.app_settings:
-                app_settings_item = app_settings_item_data.to_dict()
-                app_settings.append(app_settings_item)
+            for app_settings_type_0_item_data in self.app_settings:
+                app_settings_type_0_item = app_settings_type_0_item_data.to_dict()
+                app_settings.append(app_settings_type_0_item)
+
+        else:
+            app_settings = self.app_settings
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -56,14 +61,29 @@ class BackupServerBackupJobApplicationAwareProcessing:
         d = dict(src_dict)
         is_enabled = d.pop("isEnabled", UNSET)
 
-        _app_settings = d.pop("appSettings", UNSET)
-        app_settings: list[BackupServerBackupJobApplicationSettings] | Unset = UNSET
-        if _app_settings is not UNSET:
-            app_settings = []
-            for app_settings_item_data in _app_settings:
-                app_settings_item = BackupServerBackupJobApplicationSettings.from_dict(app_settings_item_data)
+        def _parse_app_settings(data: object) -> list[BackupServerBackupJobApplicationSettings] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                app_settings_type_0 = []
+                _app_settings_type_0 = data
+                for app_settings_type_0_item_data in _app_settings_type_0:
+                    app_settings_type_0_item = BackupServerBackupJobApplicationSettings.from_dict(
+                        app_settings_type_0_item_data
+                    )
 
-                app_settings.append(app_settings_item)
+                    app_settings_type_0.append(app_settings_type_0_item)
+
+                return app_settings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[BackupServerBackupJobApplicationSettings] | None | Unset, data)
+
+        app_settings = _parse_app_settings(d.pop("appSettings", UNSET))
 
         backup_server_backup_job_application_aware_processing = cls(
             is_enabled=is_enabled,

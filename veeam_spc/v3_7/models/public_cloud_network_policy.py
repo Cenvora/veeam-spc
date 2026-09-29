@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -27,7 +27,7 @@ class PublicCloudNetworkPolicy:
     Attributes:
         instance_uid (UUID | Unset): UID assigned to a cloud network policy.
         name (str | Unset): Name of a cloud network policy.
-        appliance_uid (UUID | Unset): UID assigned to a Veeam Backup for Public Clouds appliance.
+        appliance_uid (None | Unset | UUID): UID assigned to a Veeam Backup for Public Clouds appliance.
         status (PublicCloudPolicyStatus | Unset): Status of a Veeam Backup for Public Clouds policy.
         state (PublicCloudPolicyState | Unset): State of a Veeam Backup for Public Clouds policy.
         appliance_management_type (BackupServerPublicCloudApplianceManagementType | Unset): Management type of a Veeam
@@ -44,7 +44,7 @@ class PublicCloudNetworkPolicy:
 
     instance_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
-    appliance_uid: UUID | Unset = UNSET
+    appliance_uid: None | Unset | UUID = UNSET
     status: PublicCloudPolicyStatus | Unset = UNSET
     state: PublicCloudPolicyState | Unset = UNSET
     appliance_management_type: BackupServerPublicCloudApplianceManagementType | Unset = UNSET
@@ -64,9 +64,13 @@ class PublicCloudNetworkPolicy:
 
         name = self.name
 
-        appliance_uid: str | Unset = UNSET
-        if not isinstance(self.appliance_uid, Unset):
+        appliance_uid: None | str | Unset
+        if isinstance(self.appliance_uid, Unset):
+            appliance_uid = UNSET
+        elif isinstance(self.appliance_uid, UUID):
             appliance_uid = str(self.appliance_uid)
+        else:
+            appliance_uid = self.appliance_uid
 
         status: str | Unset = UNSET
         if not isinstance(self.status, Unset):
@@ -150,12 +154,22 @@ class PublicCloudNetworkPolicy:
 
         name = d.pop("name", UNSET)
 
-        _appliance_uid = d.pop("applianceUid", UNSET)
-        appliance_uid: UUID | Unset
-        if isinstance(_appliance_uid, Unset):
-            appliance_uid = UNSET
-        else:
-            appliance_uid = UUID(_appliance_uid)
+        def _parse_appliance_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                appliance_uid_type_0 = UUID(data)
+
+                return appliance_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        appliance_uid = _parse_appliance_uid(d.pop("applianceUid", UNSET))
 
         _status = d.pop("status", UNSET)
         status: PublicCloudPolicyStatus | Unset

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -18,15 +18,15 @@ class BackupServerJobScheduleOptionsDaily:
     """
     Attributes:
         kind (BackupServerJobScheduleOptionsDailyKind | Unset): Type of daily schedule.
-        days (list[DaysOfWeek] | Unset): Days of the week when a job must start.
-        time (str | Unset): Time of the day when a job must start.
-        time_utc (str | Unset): Time of the day when a job must start, in UTC.
+        days (list[DaysOfWeek] | None | Unset): Days of the week when a job must start.
+        time (None | str | Unset): Time of the day when a job must start.
+        time_utc (None | str | Unset): Time of the day when a job must start, in UTC.
     """
 
     kind: BackupServerJobScheduleOptionsDailyKind | Unset = UNSET
-    days: list[DaysOfWeek] | Unset = UNSET
-    time: str | Unset = UNSET
-    time_utc: str | Unset = UNSET
+    days: list[DaysOfWeek] | None | Unset = UNSET
+    time: None | str | Unset = UNSET
+    time_utc: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -34,16 +34,29 @@ class BackupServerJobScheduleOptionsDaily:
         if not isinstance(self.kind, Unset):
             kind = self.kind.value
 
-        days: list[str] | Unset = UNSET
-        if not isinstance(self.days, Unset):
+        days: list[str] | None | Unset
+        if isinstance(self.days, Unset):
+            days = UNSET
+        elif isinstance(self.days, list):
             days = []
-            for days_item_data in self.days:
-                days_item = days_item_data.value
-                days.append(days_item)
+            for days_type_0_item_data in self.days:
+                days_type_0_item = days_type_0_item_data.value
+                days.append(days_type_0_item)
 
-        time = self.time
+        else:
+            days = self.days
 
-        time_utc = self.time_utc
+        time: None | str | Unset
+        if isinstance(self.time, Unset):
+            time = UNSET
+        else:
+            time = self.time
+
+        time_utc: None | str | Unset
+        if isinstance(self.time_utc, Unset):
+            time_utc = UNSET
+        else:
+            time_utc = self.time_utc
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -69,18 +82,45 @@ class BackupServerJobScheduleOptionsDaily:
         else:
             kind = BackupServerJobScheduleOptionsDailyKind(_kind)
 
-        _days = d.pop("days", UNSET)
-        days: list[DaysOfWeek] | Unset = UNSET
-        if _days is not UNSET:
-            days = []
-            for days_item_data in _days:
-                days_item = DaysOfWeek(days_item_data)
+        def _parse_days(data: object) -> list[DaysOfWeek] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                days_type_0 = []
+                _days_type_0 = data
+                for days_type_0_item_data in _days_type_0:
+                    days_type_0_item = DaysOfWeek(days_type_0_item_data)
 
-                days.append(days_item)
+                    days_type_0.append(days_type_0_item)
 
-        time = d.pop("time", UNSET)
+                return days_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[DaysOfWeek] | None | Unset, data)
 
-        time_utc = d.pop("timeUtc", UNSET)
+        days = _parse_days(d.pop("days", UNSET))
+
+        def _parse_time(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        time = _parse_time(d.pop("time", UNSET))
+
+        def _parse_time_utc(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        time_utc = _parse_time_utc(d.pop("timeUtc", UNSET))
 
         backup_server_job_schedule_options_daily = cls(
             kind=kind,

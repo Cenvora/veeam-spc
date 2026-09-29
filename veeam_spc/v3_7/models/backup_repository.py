@@ -10,7 +10,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.backup_repository_info import BackupRepositoryInfo
+    from ..models.backup_repository_info_type_0 import BackupRepositoryInfoType0
 
 
 T = TypeVar("T", bound="BackupRepository")
@@ -31,7 +31,7 @@ class BackupRepository:
         label_target_uid (UUID | Unset): UID that identifies a repository as a label assignment target. The
             `GetLabelAssignments` operation returns the same value in the `targetUid` property of an assignment whose
             `targetType` property value is `VbrRepository`.
-        field_embedded (BackupRepositoryInfo | Unset):
+        field_embedded (BackupRepositoryInfoType0 | None | Unset):
     """
 
     instance_uid: UUID | Unset = UNSET
@@ -39,10 +39,12 @@ class BackupRepository:
     backup_server_uid: UUID | Unset = UNSET
     labels: list[str] | Unset = UNSET
     label_target_uid: UUID | Unset = UNSET
-    field_embedded: BackupRepositoryInfo | Unset = UNSET
+    field_embedded: BackupRepositoryInfoType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.backup_repository_info_type_0 import BackupRepositoryInfoType0
+
         instance_uid: str | Unset = UNSET
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
@@ -61,9 +63,13 @@ class BackupRepository:
         if not isinstance(self.label_target_uid, Unset):
             label_target_uid = str(self.label_target_uid)
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, BackupRepositoryInfoType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -85,7 +91,7 @@ class BackupRepository:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.backup_repository_info import BackupRepositoryInfo
+        from ..models.backup_repository_info_type_0 import BackupRepositoryInfoType0
 
         d = dict(src_dict)
         _instance_uid = d.pop("instanceUid", UNSET)
@@ -113,12 +119,22 @@ class BackupRepository:
         else:
             label_target_uid = UUID(_label_target_uid)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: BackupRepositoryInfo | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = BackupRepositoryInfo.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> BackupRepositoryInfoType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_repository_info_type_0 = BackupRepositoryInfoType0.from_dict(data)
+
+                return componentsschemas_backup_repository_info_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupRepositoryInfoType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         backup_repository = cls(
             instance_uid=instance_uid,

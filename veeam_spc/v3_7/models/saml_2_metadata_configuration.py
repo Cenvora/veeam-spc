@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -30,7 +30,7 @@ class Saml2MetadataConfiguration:
             fails. Default: '7.00:00:00'.
         want_assertions_signed (bool | Unset): Indicates whether service provider requires signing Assertions in
             addition to signing the SAML response. Default: True.
-        requested_attributes (list[Saml2RequestedAttribute] | Unset): Array of attributes that a service provider
+        requested_attributes (list[Saml2RequestedAttribute] | None | Unset): Array of attributes that a service provider
             expects an identity provider to include in Assertions.
     """
 
@@ -39,7 +39,7 @@ class Saml2MetadataConfiguration:
     cache_duration: str | Unset = "PT1H"
     valid_duration: str | Unset = "7.00:00:00"
     want_assertions_signed: bool | Unset = True
-    requested_attributes: list[Saml2RequestedAttribute] | Unset = UNSET
+    requested_attributes: list[Saml2RequestedAttribute] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -53,12 +53,17 @@ class Saml2MetadataConfiguration:
 
         want_assertions_signed = self.want_assertions_signed
 
-        requested_attributes: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.requested_attributes, Unset):
+        requested_attributes: list[dict[str, Any]] | None | Unset
+        if isinstance(self.requested_attributes, Unset):
+            requested_attributes = UNSET
+        elif isinstance(self.requested_attributes, list):
             requested_attributes = []
-            for requested_attributes_item_data in self.requested_attributes:
-                requested_attributes_item = requested_attributes_item_data.to_dict()
-                requested_attributes.append(requested_attributes_item)
+            for requested_attributes_type_0_item_data in self.requested_attributes:
+                requested_attributes_type_0_item = requested_attributes_type_0_item_data.to_dict()
+                requested_attributes.append(requested_attributes_type_0_item)
+
+        else:
+            requested_attributes = self.requested_attributes
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -96,14 +101,29 @@ class Saml2MetadataConfiguration:
 
         want_assertions_signed = d.pop("wantAssertionsSigned", UNSET)
 
-        _requested_attributes = d.pop("requestedAttributes", UNSET)
-        requested_attributes: list[Saml2RequestedAttribute] | Unset = UNSET
-        if _requested_attributes is not UNSET:
-            requested_attributes = []
-            for requested_attributes_item_data in _requested_attributes:
-                requested_attributes_item = Saml2RequestedAttribute.from_dict(requested_attributes_item_data)
+        def _parse_requested_attributes(data: object) -> list[Saml2RequestedAttribute] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                requested_attributes_type_0 = []
+                _requested_attributes_type_0 = data
+                for requested_attributes_type_0_item_data in _requested_attributes_type_0:
+                    requested_attributes_type_0_item = Saml2RequestedAttribute.from_dict(
+                        requested_attributes_type_0_item_data
+                    )
 
-                requested_attributes.append(requested_attributes_item)
+                    requested_attributes_type_0.append(requested_attributes_type_0_item)
+
+                return requested_attributes_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[Saml2RequestedAttribute] | None | Unset, data)
+
+        requested_attributes = _parse_requested_attributes(d.pop("requestedAttributes", UNSET))
 
         saml_2_metadata_configuration = cls(
             organization=organization,

@@ -19,20 +19,20 @@ class BackupServerJobObjectLastSession:
     """
     Attributes:
         backup_status (BackupServerJobObjectLastSessionBackupStatus | Unset): Status of the latest job session.
-        total_backed_size (int | Unset): Size of backup files, in bytes.
-        source_size (int | Unset): Size of processed data, in bytes.
-        start_time (datetime.datetime | Unset): Date and time when the latest job session started.
-        end_time (datetime.datetime | Unset): Date and time when the latest job session finished.
-        duration (int | Unset): Time taken to complete the latest job session, in seconds.
+        total_backed_size (int | None | Unset): Size of backup files, in bytes.
+        source_size (int | None | Unset): Size of processed data, in bytes.
+        start_time (datetime.datetime | None | Unset): Date and time when the latest job session started.
+        end_time (datetime.datetime | None | Unset): Date and time when the latest job session finished.
+        duration (int | None | Unset): Time taken to complete the latest job session, in seconds.
         messages (list[str] | Unset): Array of job session messages.
     """
 
     backup_status: BackupServerJobObjectLastSessionBackupStatus | Unset = UNSET
-    total_backed_size: int | Unset = UNSET
-    source_size: int | Unset = UNSET
-    start_time: datetime.datetime | Unset = UNSET
-    end_time: datetime.datetime | Unset = UNSET
-    duration: int | Unset = UNSET
+    total_backed_size: int | None | Unset = UNSET
+    source_size: int | None | Unset = UNSET
+    start_time: datetime.datetime | None | Unset = UNSET
+    end_time: datetime.datetime | None | Unset = UNSET
+    duration: int | None | Unset = UNSET
     messages: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -41,19 +41,39 @@ class BackupServerJobObjectLastSession:
         if not isinstance(self.backup_status, Unset):
             backup_status = self.backup_status.value
 
-        total_backed_size = self.total_backed_size
+        total_backed_size: int | None | Unset
+        if isinstance(self.total_backed_size, Unset):
+            total_backed_size = UNSET
+        else:
+            total_backed_size = self.total_backed_size
 
-        source_size = self.source_size
+        source_size: int | None | Unset
+        if isinstance(self.source_size, Unset):
+            source_size = UNSET
+        else:
+            source_size = self.source_size
 
-        start_time: str | Unset = UNSET
-        if not isinstance(self.start_time, Unset):
+        start_time: None | str | Unset
+        if isinstance(self.start_time, Unset):
+            start_time = UNSET
+        elif isinstance(self.start_time, datetime.datetime):
             start_time = self.start_time.isoformat()
+        else:
+            start_time = self.start_time
 
-        end_time: str | Unset = UNSET
-        if not isinstance(self.end_time, Unset):
+        end_time: None | str | Unset
+        if isinstance(self.end_time, Unset):
+            end_time = UNSET
+        elif isinstance(self.end_time, datetime.datetime):
             end_time = self.end_time.isoformat()
+        else:
+            end_time = self.end_time
 
-        duration = self.duration
+        duration: int | None | Unset
+        if isinstance(self.duration, Unset):
+            duration = UNSET
+        else:
+            duration = self.duration
 
         messages: list[str] | Unset = UNSET
         if not isinstance(self.messages, Unset):
@@ -89,25 +109,66 @@ class BackupServerJobObjectLastSession:
         else:
             backup_status = BackupServerJobObjectLastSessionBackupStatus(_backup_status)
 
-        total_backed_size = d.pop("totalBackedSize", UNSET)
+        def _parse_total_backed_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        source_size = d.pop("sourceSize", UNSET)
+        total_backed_size = _parse_total_backed_size(d.pop("totalBackedSize", UNSET))
 
-        _start_time = d.pop("startTime", UNSET)
-        start_time: datetime.datetime | Unset
-        if isinstance(_start_time, Unset):
-            start_time = UNSET
-        else:
-            start_time = isoparse(_start_time)
+        def _parse_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        _end_time = d.pop("endTime", UNSET)
-        end_time: datetime.datetime | Unset
-        if isinstance(_end_time, Unset):
-            end_time = UNSET
-        else:
-            end_time = isoparse(_end_time)
+        source_size = _parse_source_size(d.pop("sourceSize", UNSET))
 
-        duration = d.pop("duration", UNSET)
+        def _parse_start_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                start_time_type_0 = isoparse(data)
+
+                return start_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        start_time = _parse_start_time(d.pop("startTime", UNSET))
+
+        def _parse_end_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                end_time_type_0 = isoparse(data)
+
+                return end_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        end_time = _parse_end_time(d.pop("endTime", UNSET))
+
+        def _parse_duration(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        duration = _parse_duration(d.pop("duration", UNSET))
 
         messages = cast(list[str], d.pop("messages", UNSET))
 

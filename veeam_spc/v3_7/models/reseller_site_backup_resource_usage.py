@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,12 +20,12 @@ class ResellerSiteBackupResourceUsage:
         reseller_uid (UUID | Unset): UID assigned to a reseller.
         storage_quota (int | Unset): Amount of space allocated to a reseller, in bytes.
         used_storage_quota (int | Unset): Amount of space consumed by all companies of a reseller, in bytes.
-        archive_tier_usage (int | Unset): Amount of archive tier space consumed by all companies of a reseller, in
-            bytes.
-        capacity_tier_usage (int | Unset): Amount of capacity tier space consumed by all company backups excluding
-            backup copies, in bytes.
-        performance_tier_usage (int | Unset): Amount of performance tier space consumed by all companies of a reseller,
+        archive_tier_usage (int | None | Unset): Amount of archive tier space consumed by all companies of a reseller,
             in bytes.
+        capacity_tier_usage (int | None | Unset): Amount of capacity tier space consumed by all company backups
+            excluding backup copies, in bytes.
+        performance_tier_usage (int | None | Unset): Amount of performance tier space consumed by all companies of a
+            reseller, in bytes.
         server_backups (int | Unset): Number of server backups that a reseller stores on a cloud repository.
         workstation_backups (int | Unset): Number of workstation backups that a reseller stores on a cloud repository.
         vm_backups (int | Unset): Number of VM backups that a reseller stores on a cloud repository.
@@ -35,9 +35,9 @@ class ResellerSiteBackupResourceUsage:
     reseller_uid: UUID | Unset = UNSET
     storage_quota: int | Unset = UNSET
     used_storage_quota: int | Unset = UNSET
-    archive_tier_usage: int | Unset = UNSET
-    capacity_tier_usage: int | Unset = UNSET
-    performance_tier_usage: int | Unset = UNSET
+    archive_tier_usage: int | None | Unset = UNSET
+    capacity_tier_usage: int | None | Unset = UNSET
+    performance_tier_usage: int | None | Unset = UNSET
     server_backups: int | Unset = UNSET
     workstation_backups: int | Unset = UNSET
     vm_backups: int | Unset = UNSET
@@ -56,11 +56,23 @@ class ResellerSiteBackupResourceUsage:
 
         used_storage_quota = self.used_storage_quota
 
-        archive_tier_usage = self.archive_tier_usage
+        archive_tier_usage: int | None | Unset
+        if isinstance(self.archive_tier_usage, Unset):
+            archive_tier_usage = UNSET
+        else:
+            archive_tier_usage = self.archive_tier_usage
 
-        capacity_tier_usage = self.capacity_tier_usage
+        capacity_tier_usage: int | None | Unset
+        if isinstance(self.capacity_tier_usage, Unset):
+            capacity_tier_usage = UNSET
+        else:
+            capacity_tier_usage = self.capacity_tier_usage
 
-        performance_tier_usage = self.performance_tier_usage
+        performance_tier_usage: int | None | Unset
+        if isinstance(self.performance_tier_usage, Unset):
+            performance_tier_usage = UNSET
+        else:
+            performance_tier_usage = self.performance_tier_usage
 
         server_backups = self.server_backups
 
@@ -115,11 +127,32 @@ class ResellerSiteBackupResourceUsage:
 
         used_storage_quota = d.pop("usedStorageQuota", UNSET)
 
-        archive_tier_usage = d.pop("archiveTierUsage", UNSET)
+        def _parse_archive_tier_usage(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        capacity_tier_usage = d.pop("capacityTierUsage", UNSET)
+        archive_tier_usage = _parse_archive_tier_usage(d.pop("archiveTierUsage", UNSET))
 
-        performance_tier_usage = d.pop("performanceTierUsage", UNSET)
+        def _parse_capacity_tier_usage(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        capacity_tier_usage = _parse_capacity_tier_usage(d.pop("capacityTierUsage", UNSET))
+
+        def _parse_performance_tier_usage(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        performance_tier_usage = _parse_performance_tier_usage(d.pop("performanceTierUsage", UNSET))
 
         server_backups = d.pop("serverBackups", UNSET)
 

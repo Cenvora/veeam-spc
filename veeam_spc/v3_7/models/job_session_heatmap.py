@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,13 +22,14 @@ class JobSessionHeatmap:
         success_jobs_count (int | Unset): Number of successful job sessions.
         warning_jobs_count (int | Unset): Number of job sessions that ended with warnings.
         fail_jobs_count (int | Unset): Number of failed job sessions.
-        data_per_days (list[JobSessionHeatmapDailyData] | Unset): Detailed information on job sessions on each day.
+        data_per_days (list[JobSessionHeatmapDailyData] | None | Unset): Detailed information on job sessions on each
+            day.
     """
 
     success_jobs_count: int | Unset = UNSET
     warning_jobs_count: int | Unset = UNSET
     fail_jobs_count: int | Unset = UNSET
-    data_per_days: list[JobSessionHeatmapDailyData] | Unset = UNSET
+    data_per_days: list[JobSessionHeatmapDailyData] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -38,12 +39,17 @@ class JobSessionHeatmap:
 
         fail_jobs_count = self.fail_jobs_count
 
-        data_per_days: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.data_per_days, Unset):
+        data_per_days: list[dict[str, Any]] | None | Unset
+        if isinstance(self.data_per_days, Unset):
+            data_per_days = UNSET
+        elif isinstance(self.data_per_days, list):
             data_per_days = []
-            for data_per_days_item_data in self.data_per_days:
-                data_per_days_item = data_per_days_item_data.to_dict()
-                data_per_days.append(data_per_days_item)
+            for data_per_days_type_0_item_data in self.data_per_days:
+                data_per_days_type_0_item = data_per_days_type_0_item_data.to_dict()
+                data_per_days.append(data_per_days_type_0_item)
+
+        else:
+            data_per_days = self.data_per_days
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -70,14 +76,27 @@ class JobSessionHeatmap:
 
         fail_jobs_count = d.pop("failJobsCount", UNSET)
 
-        _data_per_days = d.pop("dataPerDays", UNSET)
-        data_per_days: list[JobSessionHeatmapDailyData] | Unset = UNSET
-        if _data_per_days is not UNSET:
-            data_per_days = []
-            for data_per_days_item_data in _data_per_days:
-                data_per_days_item = JobSessionHeatmapDailyData.from_dict(data_per_days_item_data)
+        def _parse_data_per_days(data: object) -> list[JobSessionHeatmapDailyData] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                data_per_days_type_0 = []
+                _data_per_days_type_0 = data
+                for data_per_days_type_0_item_data in _data_per_days_type_0:
+                    data_per_days_type_0_item = JobSessionHeatmapDailyData.from_dict(data_per_days_type_0_item_data)
 
-                data_per_days.append(data_per_days_item)
+                    data_per_days_type_0.append(data_per_days_type_0_item)
+
+                return data_per_days_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[JobSessionHeatmapDailyData] | None | Unset, data)
+
+        data_per_days = _parse_data_per_days(d.pop("dataPerDays", UNSET))
 
         job_session_heatmap = cls(
             success_jobs_count=success_jobs_count,
