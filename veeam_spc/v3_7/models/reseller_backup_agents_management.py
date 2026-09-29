@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,22 +15,30 @@ T = TypeVar("T", bound="ResellerBackupAgentsManagement")
 class ResellerBackupAgentsManagement:
     """
     Attributes:
-        workstation_agents_quota (int | Unset): Maximum number of Veeam backup agents in the Workstation mode that a
-            reseller is allowed to manage.
+        workstation_agents_quota (int | None | Unset): Maximum number of Veeam backup agents in the Workstation mode
+            that a reseller is allowed to manage.
             > The `null` value indicates that the number is unlimited.
-        server_agents_quota (int | Unset): Maximum number of Veeam backup agents in the Server mode that a reseller is
-            allowed to manage.
+        server_agents_quota (int | None | Unset): Maximum number of Veeam backup agents in the Server mode that a
+            reseller is allowed to manage.
             > The `null` value indicates that the number is unlimited.
     """
 
-    workstation_agents_quota: int | Unset = UNSET
-    server_agents_quota: int | Unset = UNSET
+    workstation_agents_quota: int | None | Unset = UNSET
+    server_agents_quota: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        workstation_agents_quota = self.workstation_agents_quota
+        workstation_agents_quota: int | None | Unset
+        if isinstance(self.workstation_agents_quota, Unset):
+            workstation_agents_quota = UNSET
+        else:
+            workstation_agents_quota = self.workstation_agents_quota
 
-        server_agents_quota = self.server_agents_quota
+        server_agents_quota: int | None | Unset
+        if isinstance(self.server_agents_quota, Unset):
+            server_agents_quota = UNSET
+        else:
+            server_agents_quota = self.server_agents_quota
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -45,9 +53,24 @@ class ResellerBackupAgentsManagement:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        workstation_agents_quota = d.pop("workstationAgentsQuota", UNSET)
 
-        server_agents_quota = d.pop("serverAgentsQuota", UNSET)
+        def _parse_workstation_agents_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        workstation_agents_quota = _parse_workstation_agents_quota(d.pop("workstationAgentsQuota", UNSET))
+
+        def _parse_server_agents_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        server_agents_quota = _parse_server_agents_quota(d.pop("serverAgentsQuota", UNSET))
 
         reseller_backup_agents_management = cls(
             workstation_agents_quota=workstation_agents_quota,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -25,18 +25,18 @@ class DeploymentTask:
             server.
         type_ (DeploymentTaskType | Unset): Type of a deployment task.
         status (DeploymentTaskStatus | Unset): Status of a deployment task.
-        start_date (datetime.datetime | Unset): Date and time when a task started.
-        end_date (datetime.datetime | Unset): Date and time when a task ended.
-        error_message (str | Unset): Error message for failed deployment task.
+        start_date (datetime.datetime | None | Unset): Date and time when a task started.
+        end_date (datetime.datetime | None | Unset): Date and time when a task ended.
+        error_message (None | str | Unset): Error message for failed deployment task.
     """
 
     instance_uid: UUID | Unset = UNSET
     management_agent_uid: UUID | Unset = UNSET
     type_: DeploymentTaskType | Unset = UNSET
     status: DeploymentTaskStatus | Unset = UNSET
-    start_date: datetime.datetime | Unset = UNSET
-    end_date: datetime.datetime | Unset = UNSET
-    error_message: str | Unset = UNSET
+    start_date: datetime.datetime | None | Unset = UNSET
+    end_date: datetime.datetime | None | Unset = UNSET
+    error_message: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -56,15 +56,27 @@ class DeploymentTask:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        start_date: str | Unset = UNSET
-        if not isinstance(self.start_date, Unset):
+        start_date: None | str | Unset
+        if isinstance(self.start_date, Unset):
+            start_date = UNSET
+        elif isinstance(self.start_date, datetime.datetime):
             start_date = self.start_date.isoformat()
+        else:
+            start_date = self.start_date
 
-        end_date: str | Unset = UNSET
-        if not isinstance(self.end_date, Unset):
+        end_date: None | str | Unset
+        if isinstance(self.end_date, Unset):
+            end_date = UNSET
+        elif isinstance(self.end_date, datetime.datetime):
             end_date = self.end_date.isoformat()
+        else:
+            end_date = self.end_date
 
-        error_message = self.error_message
+        error_message: None | str | Unset
+        if isinstance(self.error_message, Unset):
+            error_message = UNSET
+        else:
+            error_message = self.error_message
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -117,21 +129,48 @@ class DeploymentTask:
         else:
             status = DeploymentTaskStatus(_status)
 
-        _start_date = d.pop("startDate", UNSET)
-        start_date: datetime.datetime | Unset
-        if isinstance(_start_date, Unset):
-            start_date = UNSET
-        else:
-            start_date = isoparse(_start_date)
+        def _parse_start_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                start_date_type_0 = isoparse(data)
 
-        _end_date = d.pop("endDate", UNSET)
-        end_date: datetime.datetime | Unset
-        if isinstance(_end_date, Unset):
-            end_date = UNSET
-        else:
-            end_date = isoparse(_end_date)
+                return start_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
 
-        error_message = d.pop("errorMessage", UNSET)
+        start_date = _parse_start_date(d.pop("startDate", UNSET))
+
+        def _parse_end_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                end_date_type_0 = isoparse(data)
+
+                return end_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        end_date = _parse_end_date(d.pop("endDate", UNSET))
+
+        def _parse_error_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        error_message = _parse_error_message(d.pop("errorMessage", UNSET))
 
         deployment_task = cls(
             instance_uid=instance_uid,

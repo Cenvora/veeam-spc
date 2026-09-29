@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -18,26 +18,34 @@ class Saml2CompatibilityConfiguration:
     Attributes:
         ignore_missing_in_response_to (bool | Unset): Indicates whether SAML2 must ignore the lack of the `InResponseTo`
             attribute in identity provider responses. Default: False.
-        ignore_authentication_context_in_response (bool | Unset): Indicates whether SAML2 must ignore the
+        ignore_authentication_context_in_response (bool | None | Unset): Indicates whether SAML2 must ignore the
             `<AuthnContext>` element in identity provider responses.
-        unpack_entities_descriptor_in_identity_provider_metadata (bool | Unset): Indicates whether SAML2 must
+        unpack_entities_descriptor_in_identity_provider_metadata (bool | None | Unset): Indicates whether SAML2 must
             automatically use the `EntityDescriptor` value in case it is the only such value in the `EntitiesDescriptor`
             element of the identity provider metadata.
     """
 
     ignore_missing_in_response_to: bool | Unset = False
-    ignore_authentication_context_in_response: bool | Unset = UNSET
-    unpack_entities_descriptor_in_identity_provider_metadata: bool | Unset = UNSET
+    ignore_authentication_context_in_response: bool | None | Unset = UNSET
+    unpack_entities_descriptor_in_identity_provider_metadata: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         ignore_missing_in_response_to = self.ignore_missing_in_response_to
 
-        ignore_authentication_context_in_response = self.ignore_authentication_context_in_response
+        ignore_authentication_context_in_response: bool | None | Unset
+        if isinstance(self.ignore_authentication_context_in_response, Unset):
+            ignore_authentication_context_in_response = UNSET
+        else:
+            ignore_authentication_context_in_response = self.ignore_authentication_context_in_response
 
-        unpack_entities_descriptor_in_identity_provider_metadata = (
-            self.unpack_entities_descriptor_in_identity_provider_metadata
-        )
+        unpack_entities_descriptor_in_identity_provider_metadata: bool | None | Unset
+        if isinstance(self.unpack_entities_descriptor_in_identity_provider_metadata, Unset):
+            unpack_entities_descriptor_in_identity_provider_metadata = UNSET
+        else:
+            unpack_entities_descriptor_in_identity_provider_metadata = (
+                self.unpack_entities_descriptor_in_identity_provider_metadata
+            )
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -58,10 +66,28 @@ class Saml2CompatibilityConfiguration:
         d = dict(src_dict)
         ignore_missing_in_response_to = d.pop("ignoreMissingInResponseTo", UNSET)
 
-        ignore_authentication_context_in_response = d.pop("ignoreAuthenticationContextInResponse", UNSET)
+        def _parse_ignore_authentication_context_in_response(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        unpack_entities_descriptor_in_identity_provider_metadata = d.pop(
-            "unpackEntitiesDescriptorInIdentityProviderMetadata", UNSET
+        ignore_authentication_context_in_response = _parse_ignore_authentication_context_in_response(
+            d.pop("ignoreAuthenticationContextInResponse", UNSET)
+        )
+
+        def _parse_unpack_entities_descriptor_in_identity_provider_metadata(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        unpack_entities_descriptor_in_identity_provider_metadata = (
+            _parse_unpack_entities_descriptor_in_identity_provider_metadata(
+                d.pop("unpackEntitiesDescriptorInIdentityProviderMetadata", UNSET)
+            )
         )
 
         saml_2_compatibility_configuration = cls(

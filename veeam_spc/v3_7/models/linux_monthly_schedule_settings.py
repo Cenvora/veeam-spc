@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,18 +22,18 @@ class LinuxMonthlyScheduleSettings:
         monthly_mode (LinuxMonthlyScheduleSettingsMonthlyMode): Monthly schedule type.
         week_day_number (LinuxMonthlyScheduleSettingsWeekDayNumber | Unset): Ordinal number of the week on which a job
             must start.
-        day_of_month (int | Unset): Numerical value of the day of the month on which a job must start.
+        day_of_month (int | None | Unset): Numerical value of the day of the month on which a job must start.
         day_of_week (LinuxMonthlyScheduleSettingsDayOfWeek | Unset): Name of the week day on which a job must start.
             > Required for all `weekDayNumber` property values except `Every`.
              Default: LinuxMonthlyScheduleSettingsDayOfWeek.SUNDAY.
-        months (list[Month] | Unset): Array of months when a job must start.
+        months (list[Month] | None | Unset): Array of months when a job must start.
     """
 
     monthly_mode: LinuxMonthlyScheduleSettingsMonthlyMode
     week_day_number: LinuxMonthlyScheduleSettingsWeekDayNumber | Unset = UNSET
-    day_of_month: int | Unset = UNSET
+    day_of_month: int | None | Unset = UNSET
     day_of_week: LinuxMonthlyScheduleSettingsDayOfWeek | Unset = LinuxMonthlyScheduleSettingsDayOfWeek.SUNDAY
-    months: list[Month] | Unset = UNSET
+    months: list[Month] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -43,18 +43,27 @@ class LinuxMonthlyScheduleSettings:
         if not isinstance(self.week_day_number, Unset):
             week_day_number = self.week_day_number.value
 
-        day_of_month = self.day_of_month
+        day_of_month: int | None | Unset
+        if isinstance(self.day_of_month, Unset):
+            day_of_month = UNSET
+        else:
+            day_of_month = self.day_of_month
 
         day_of_week: str | Unset = UNSET
         if not isinstance(self.day_of_week, Unset):
             day_of_week = self.day_of_week.value
 
-        months: list[str] | Unset = UNSET
-        if not isinstance(self.months, Unset):
+        months: list[str] | None | Unset
+        if isinstance(self.months, Unset):
+            months = UNSET
+        elif isinstance(self.months, list):
             months = []
-            for months_item_data in self.months:
-                months_item = months_item_data.value
-                months.append(months_item)
+            for months_type_0_item_data in self.months:
+                months_type_0_item = months_type_0_item_data.value
+                months.append(months_type_0_item)
+
+        else:
+            months = self.months
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -86,7 +95,14 @@ class LinuxMonthlyScheduleSettings:
         else:
             week_day_number = LinuxMonthlyScheduleSettingsWeekDayNumber(_week_day_number)
 
-        day_of_month = d.pop("dayOfMonth", UNSET)
+        def _parse_day_of_month(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        day_of_month = _parse_day_of_month(d.pop("dayOfMonth", UNSET))
 
         _day_of_week = d.pop("dayOfWeek", UNSET)
         day_of_week: LinuxMonthlyScheduleSettingsDayOfWeek | Unset
@@ -95,14 +111,27 @@ class LinuxMonthlyScheduleSettings:
         else:
             day_of_week = LinuxMonthlyScheduleSettingsDayOfWeek(_day_of_week)
 
-        _months = d.pop("months", UNSET)
-        months: list[Month] | Unset = UNSET
-        if _months is not UNSET:
-            months = []
-            for months_item_data in _months:
-                months_item = Month(months_item_data)
+        def _parse_months(data: object) -> list[Month] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                months_type_0 = []
+                _months_type_0 = data
+                for months_type_0_item_data in _months_type_0:
+                    months_type_0_item = Month(months_type_0_item_data)
 
-                months.append(months_item)
+                    months_type_0.append(months_type_0_item)
+
+                return months_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[Month] | None | Unset, data)
+
+        months = _parse_months(d.pop("months", UNSET))
 
         linux_monthly_schedule_settings = cls(
             monthly_mode=monthly_mode,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -14,16 +14,17 @@ class DomainCredentials:
     """
     Attributes:
         user_name (str): Domain credentials user name.
-        password (str): Domain credentials password.
+        password (None | str): Domain credentials password.
     """
 
     user_name: str
-    password: str
+    password: None | str
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         user_name = self.user_name
 
+        password: None | str
         password = self.password
 
         field_dict: dict[str, Any] = {}
@@ -42,7 +43,12 @@ class DomainCredentials:
         d = dict(src_dict)
         user_name = d.pop("userName")
 
-        password = d.pop("password")
+        def _parse_password(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        password = _parse_password(d.pop("password"))
 
         domain_credentials = cls(
             user_name=user_name,

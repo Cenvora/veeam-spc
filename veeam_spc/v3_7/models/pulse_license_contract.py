@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,7 +19,7 @@ class PulseLicenseContract:
     Attributes:
         contract_id (str | Unset): ID assigned to a rental agreement contract.
         expiration_date (datetime.datetime | Unset): Date of rental agreement contract expiration.
-        points_limit (float | Unset): Maximum number of license points that can be consumed according to rental
+        points_limit (float | None | Unset): Maximum number of license points that can be consumed according to rental
             agreement contract.
         automatic_extension_always_on (bool | Unset): Indicates whether rental agreement contract must be automatically
             updated.
@@ -27,7 +27,7 @@ class PulseLicenseContract:
 
     contract_id: str | Unset = UNSET
     expiration_date: datetime.datetime | Unset = UNSET
-    points_limit: float | Unset = UNSET
+    points_limit: float | None | Unset = UNSET
     automatic_extension_always_on: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -38,7 +38,11 @@ class PulseLicenseContract:
         if not isinstance(self.expiration_date, Unset):
             expiration_date = self.expiration_date.isoformat()
 
-        points_limit = self.points_limit
+        points_limit: float | None | Unset
+        if isinstance(self.points_limit, Unset):
+            points_limit = UNSET
+        else:
+            points_limit = self.points_limit
 
         automatic_extension_always_on = self.automatic_extension_always_on
 
@@ -68,7 +72,14 @@ class PulseLicenseContract:
         else:
             expiration_date = isoparse(_expiration_date)
 
-        points_limit = d.pop("pointsLimit", UNSET)
+        def _parse_points_limit(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        points_limit = _parse_points_limit(d.pop("pointsLimit", UNSET))
 
         automatic_extension_always_on = d.pop("automaticExtensionAlwaysOn", UNSET)
 

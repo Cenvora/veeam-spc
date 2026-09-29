@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -12,8 +12,8 @@ from ..models.backup_server_job_schedule_options_monthly_day_number_in_month imp
 from ..models.backup_server_job_schedule_options_monthly_day_of_week import (
     BackupServerJobScheduleOptionsMonthlyDayOfWeek,
 )
-from ..models.backup_server_job_schedule_options_monthly_months_item import (
-    BackupServerJobScheduleOptionsMonthlyMonthsItem,
+from ..models.backup_server_job_schedule_options_monthly_months_type_0_item import (
+    BackupServerJobScheduleOptionsMonthlyMonthsType0Item,
 )
 from ..types import UNSET, Unset
 
@@ -24,26 +24,34 @@ T = TypeVar("T", bound="BackupServerJobScheduleOptionsMonthly")
 class BackupServerJobScheduleOptionsMonthly:
     """
     Attributes:
-        time (str | Unset): Time of the day when a job must start.
-        time_utc (str | Unset): Time of the day when a job must start, in UTC.
+        time (None | str | Unset): Time of the day when a job must start.
+        time_utc (None | str | Unset): Time of the day when a job must start, in UTC.
         day_number_in_month (BackupServerJobScheduleOptionsMonthlyDayNumberInMonth | Unset): Ordinal number of the week
             on which a job must start.
         day_of_week (BackupServerJobScheduleOptionsMonthlyDayOfWeek | Unset): Day of the week on which a job must start.
-        months (list[BackupServerJobScheduleOptionsMonthlyMonthsItem] | Unset): Array of the monthswhen a job must
-            start.
+        months (list[BackupServerJobScheduleOptionsMonthlyMonthsType0Item] | None | Unset): Array of the monthswhen a
+            job must start.
     """
 
-    time: str | Unset = UNSET
-    time_utc: str | Unset = UNSET
+    time: None | str | Unset = UNSET
+    time_utc: None | str | Unset = UNSET
     day_number_in_month: BackupServerJobScheduleOptionsMonthlyDayNumberInMonth | Unset = UNSET
     day_of_week: BackupServerJobScheduleOptionsMonthlyDayOfWeek | Unset = UNSET
-    months: list[BackupServerJobScheduleOptionsMonthlyMonthsItem] | Unset = UNSET
+    months: list[BackupServerJobScheduleOptionsMonthlyMonthsType0Item] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        time = self.time
+        time: None | str | Unset
+        if isinstance(self.time, Unset):
+            time = UNSET
+        else:
+            time = self.time
 
-        time_utc = self.time_utc
+        time_utc: None | str | Unset
+        if isinstance(self.time_utc, Unset):
+            time_utc = UNSET
+        else:
+            time_utc = self.time_utc
 
         day_number_in_month: str | Unset = UNSET
         if not isinstance(self.day_number_in_month, Unset):
@@ -53,12 +61,17 @@ class BackupServerJobScheduleOptionsMonthly:
         if not isinstance(self.day_of_week, Unset):
             day_of_week = self.day_of_week.value
 
-        months: list[str] | Unset = UNSET
-        if not isinstance(self.months, Unset):
+        months: list[str] | None | Unset
+        if isinstance(self.months, Unset):
+            months = UNSET
+        elif isinstance(self.months, list):
             months = []
-            for months_item_data in self.months:
-                months_item = months_item_data.value
-                months.append(months_item)
+            for months_type_0_item_data in self.months:
+                months_type_0_item = months_type_0_item_data.value
+                months.append(months_type_0_item)
+
+        else:
+            months = self.months
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -79,9 +92,24 @@ class BackupServerJobScheduleOptionsMonthly:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        time = d.pop("time", UNSET)
 
-        time_utc = d.pop("timeUtc", UNSET)
+        def _parse_time(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        time = _parse_time(d.pop("time", UNSET))
+
+        def _parse_time_utc(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        time_utc = _parse_time_utc(d.pop("timeUtc", UNSET))
 
         _day_number_in_month = d.pop("dayNumberInMonth", UNSET)
         day_number_in_month: BackupServerJobScheduleOptionsMonthlyDayNumberInMonth | Unset
@@ -97,14 +125,27 @@ class BackupServerJobScheduleOptionsMonthly:
         else:
             day_of_week = BackupServerJobScheduleOptionsMonthlyDayOfWeek(_day_of_week)
 
-        _months = d.pop("months", UNSET)
-        months: list[BackupServerJobScheduleOptionsMonthlyMonthsItem] | Unset = UNSET
-        if _months is not UNSET:
-            months = []
-            for months_item_data in _months:
-                months_item = BackupServerJobScheduleOptionsMonthlyMonthsItem(months_item_data)
+        def _parse_months(data: object) -> list[BackupServerJobScheduleOptionsMonthlyMonthsType0Item] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                months_type_0 = []
+                _months_type_0 = data
+                for months_type_0_item_data in _months_type_0:
+                    months_type_0_item = BackupServerJobScheduleOptionsMonthlyMonthsType0Item(months_type_0_item_data)
 
-                months.append(months_item)
+                    months_type_0.append(months_type_0_item)
+
+                return months_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[BackupServerJobScheduleOptionsMonthlyMonthsType0Item] | None | Unset, data)
+
+        months = _parse_months(d.pop("months", UNSET))
 
         backup_server_job_schedule_options_monthly = cls(
             time=time,

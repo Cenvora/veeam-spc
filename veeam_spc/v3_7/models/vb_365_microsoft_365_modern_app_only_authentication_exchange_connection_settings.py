@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -18,20 +18,24 @@ class Vb365Microsoft365ModernAppOnlyAuthenticationExchangeConnectionSettings:
         office_organization_name (str | Unset): Name of a Microsoft Exchange Online organization in the following
             format: `<name>.onmicrosoft.com`.
             > Required only for an existing Azure AD application.
-        account (str | Unset): Name of a Microsoft Exchange Online organization account.
+        account (None | str | Unset): Name of a Microsoft Exchange Online organization account.
             > Required only for an existing Azure AD application.
             > Is not required if Microsoft SharePoint Online connection settings and the `officeOrganizationName` property
             value are specified.
     """
 
     office_organization_name: str | Unset = UNSET
-    account: str | Unset = UNSET
+    account: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         office_organization_name = self.office_organization_name
 
-        account = self.account
+        account: None | str | Unset
+        if isinstance(self.account, Unset):
+            account = UNSET
+        else:
+            account = self.account
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -48,7 +52,14 @@ class Vb365Microsoft365ModernAppOnlyAuthenticationExchangeConnectionSettings:
         d = dict(src_dict)
         office_organization_name = d.pop("officeOrganizationName", UNSET)
 
-        account = d.pop("account", UNSET)
+        def _parse_account(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        account = _parse_account(d.pop("account", UNSET))
 
         vb_365_microsoft_365_modern_app_only_authentication_exchange_connection_settings = cls(
             office_organization_name=office_organization_name,

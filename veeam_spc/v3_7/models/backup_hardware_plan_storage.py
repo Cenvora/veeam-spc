@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,13 +19,13 @@ class BackupHardwarePlanStorage:
         instance_uid (UUID | Unset): UID assigned to a hardware plan storage.
         name (str | Unset): Friendly name of a hardware plan storage.
         hardware_plan_uid (UUID | Unset): UID assigned to a hardware plan.
-        quota (int | Unset): Amount of disk space provided to a tenant.
+        quota (int | None | Unset): Amount of disk space provided to a tenant.
     """
 
     instance_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
     hardware_plan_uid: UUID | Unset = UNSET
-    quota: int | Unset = UNSET
+    quota: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -39,7 +39,11 @@ class BackupHardwarePlanStorage:
         if not isinstance(self.hardware_plan_uid, Unset):
             hardware_plan_uid = str(self.hardware_plan_uid)
 
-        quota = self.quota
+        quota: int | None | Unset
+        if isinstance(self.quota, Unset):
+            quota = UNSET
+        else:
+            quota = self.quota
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -74,7 +78,14 @@ class BackupHardwarePlanStorage:
         else:
             hardware_plan_uid = UUID(_hardware_plan_uid)
 
-        quota = d.pop("quota", UNSET)
+        def _parse_quota(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        quota = _parse_quota(d.pop("quota", UNSET))
 
         backup_hardware_plan_storage = cls(
             instance_uid=instance_uid,

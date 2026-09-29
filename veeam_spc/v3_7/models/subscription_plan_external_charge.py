@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -19,12 +19,12 @@ class SubscriptionPlanExternalCharge:
     Attributes:
         charge_uid (UUID | Unset): UID assigned to a charge rate.
         measure_type (MeasureUnitType | Unset): Measurement units of provided services.
-        price (float | Unset): Charge rate.
+        price (float | None | Unset): Charge rate.
     """
 
     charge_uid: UUID | Unset = UNSET
     measure_type: MeasureUnitType | Unset = UNSET
-    price: float | Unset = UNSET
+    price: float | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,7 +36,11 @@ class SubscriptionPlanExternalCharge:
         if not isinstance(self.measure_type, Unset):
             measure_type = self.measure_type.value
 
-        price = self.price
+        price: float | None | Unset
+        if isinstance(self.price, Unset):
+            price = UNSET
+        else:
+            price = self.price
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -67,7 +71,14 @@ class SubscriptionPlanExternalCharge:
         else:
             measure_type = MeasureUnitType(_measure_type)
 
-        price = d.pop("price", UNSET)
+        def _parse_price(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
+
+        price = _parse_price(d.pop("price", UNSET))
 
         subscription_plan_external_charge = cls(
             charge_uid=charge_uid,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -18,12 +18,12 @@ class GrantPublicCloudCredentialsForMigrationResult:
     Attributes:
         account_uid (UUID): UID assigned to an account.
         success (bool): Indicates whether permissions are granted successfully.
-        message (str | Unset):
+        message (None | str | Unset):
     """
 
     account_uid: UUID
     success: bool
-    message: str | Unset = UNSET
+    message: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -31,7 +31,11 @@ class GrantPublicCloudCredentialsForMigrationResult:
 
         success = self.success
 
-        message = self.message
+        message: None | str | Unset
+        if isinstance(self.message, Unset):
+            message = UNSET
+        else:
+            message = self.message
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -53,7 +57,14 @@ class GrantPublicCloudCredentialsForMigrationResult:
 
         success = d.pop("success")
 
-        message = d.pop("message", UNSET)
+        def _parse_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        message = _parse_message(d.pop("message", UNSET))
 
         grant_public_cloud_credentials_for_migration_result = cls(
             account_uid=account_uid,

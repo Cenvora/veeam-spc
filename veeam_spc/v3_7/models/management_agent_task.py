@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -25,8 +25,8 @@ class ManagementAgentTask:
         status (ManagementAgentTaskStatus | Unset): Status of a management agent task.
         description (str | Unset): Description of a management agent task.
         management_agent_uid (UUID | Unset): UID assigned to a management agent.
-        start_time (datetime.datetime | Unset): Start date and time of a management agent task.
-        end_time (datetime.datetime | Unset): End date and time of a management agent task.
+        start_time (datetime.datetime | None | Unset): Start date and time of a management agent task.
+        end_time (datetime.datetime | None | Unset): End date and time of a management agent task.
     """
 
     instance_uid: UUID | Unset = UNSET
@@ -34,8 +34,8 @@ class ManagementAgentTask:
     status: ManagementAgentTaskStatus | Unset = UNSET
     description: str | Unset = UNSET
     management_agent_uid: UUID | Unset = UNSET
-    start_time: datetime.datetime | Unset = UNSET
-    end_time: datetime.datetime | Unset = UNSET
+    start_time: datetime.datetime | None | Unset = UNSET
+    end_time: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,13 +57,21 @@ class ManagementAgentTask:
         if not isinstance(self.management_agent_uid, Unset):
             management_agent_uid = str(self.management_agent_uid)
 
-        start_time: str | Unset = UNSET
-        if not isinstance(self.start_time, Unset):
+        start_time: None | str | Unset
+        if isinstance(self.start_time, Unset):
+            start_time = UNSET
+        elif isinstance(self.start_time, datetime.datetime):
             start_time = self.start_time.isoformat()
+        else:
+            start_time = self.start_time
 
-        end_time: str | Unset = UNSET
-        if not isinstance(self.end_time, Unset):
+        end_time: None | str | Unset
+        if isinstance(self.end_time, Unset):
+            end_time = UNSET
+        elif isinstance(self.end_time, datetime.datetime):
             end_time = self.end_time.isoformat()
+        else:
+            end_time = self.end_time
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -118,19 +126,39 @@ class ManagementAgentTask:
         else:
             management_agent_uid = UUID(_management_agent_uid)
 
-        _start_time = d.pop("startTime", UNSET)
-        start_time: datetime.datetime | Unset
-        if isinstance(_start_time, Unset):
-            start_time = UNSET
-        else:
-            start_time = isoparse(_start_time)
+        def _parse_start_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                start_time_type_0 = isoparse(data)
 
-        _end_time = d.pop("endTime", UNSET)
-        end_time: datetime.datetime | Unset
-        if isinstance(_end_time, Unset):
-            end_time = UNSET
-        else:
-            end_time = isoparse(_end_time)
+                return start_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        start_time = _parse_start_time(d.pop("startTime", UNSET))
+
+        def _parse_end_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                end_time_type_0 = isoparse(data)
+
+                return end_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        end_time = _parse_end_time(d.pop("endTime", UNSET))
 
         management_agent_task = cls(
             instance_uid=instance_uid,

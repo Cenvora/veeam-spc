@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -18,22 +18,26 @@ class LinuxDiscoveryRuleDeploymentSettings:
     Attributes:
         is_enabled (bool | Unset): Indicates whether Veeam backup agent is automatically installed on computers as part
             of discovery. Default: False.
-        backup_policy_uid (UUID | Unset): UID of a discovery rule that must be assigned after installation.
+        backup_policy_uid (None | Unset | UUID): UID of a discovery rule that must be assigned after installation.
         set_read_only_access (bool | Unset): Indicates whether the read-only access mode is enabled for Veeam Agent for
             Linux. Default: True.
     """
 
     is_enabled: bool | Unset = False
-    backup_policy_uid: UUID | Unset = UNSET
+    backup_policy_uid: None | Unset | UUID = UNSET
     set_read_only_access: bool | Unset = True
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         is_enabled = self.is_enabled
 
-        backup_policy_uid: str | Unset = UNSET
-        if not isinstance(self.backup_policy_uid, Unset):
+        backup_policy_uid: None | str | Unset
+        if isinstance(self.backup_policy_uid, Unset):
+            backup_policy_uid = UNSET
+        elif isinstance(self.backup_policy_uid, UUID):
             backup_policy_uid = str(self.backup_policy_uid)
+        else:
+            backup_policy_uid = self.backup_policy_uid
 
         set_read_only_access = self.set_read_only_access
 
@@ -54,12 +58,22 @@ class LinuxDiscoveryRuleDeploymentSettings:
         d = dict(src_dict)
         is_enabled = d.pop("isEnabled", UNSET)
 
-        _backup_policy_uid = d.pop("backupPolicyUid", UNSET)
-        backup_policy_uid: UUID | Unset
-        if isinstance(_backup_policy_uid, Unset):
-            backup_policy_uid = UNSET
-        else:
-            backup_policy_uid = UUID(_backup_policy_uid)
+        def _parse_backup_policy_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                backup_policy_uid_type_0 = UUID(data)
+
+                return backup_policy_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        backup_policy_uid = _parse_backup_policy_uid(d.pop("backupPolicyUid", UNSET))
 
         set_read_only_access = d.pop("setReadOnlyAccess", UNSET)
 

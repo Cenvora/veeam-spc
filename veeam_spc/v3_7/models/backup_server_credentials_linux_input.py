@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -37,9 +37,9 @@ class BackupServerCredentialsLinuxInput:
 
     Attributes:
         username (str): User name.
-        password (str | Unset): Password.
-        description (str | Unset): Description of credentials.
-        mapped_organization_uid (UUID | Unset): UID of a company to whom credentials must be assigned.
+        password (None | str | Unset): Password.
+        description (None | str | Unset): Description of credentials.
+        mapped_organization_uid (None | Unset | UUID): UID of a company to whom credentials must be assigned.
         ssh_port (int | Unset): SSH port used to connect to a Linux server. Default: 22.
         auto_elevated (bool | Unset): Indicates whether the account that owns credentials has permissions of a root
             user. Default: False.
@@ -47,34 +47,46 @@ class BackupServerCredentialsLinuxInput:
             Default: False.
         use_su (bool | Unset): Indicates whether the `su` command is used for Linux distributions where the `sudo`
             command is not available. Default: False.
-        private_key (str | Unset): Private key.
-        passphrase (str | Unset): Passphrase for the private key.
-        root_password (str | Unset): Password of a root account.
+        private_key (None | str | Unset): Private key.
+        passphrase (None | str | Unset): Passphrase for the private key.
+        root_password (None | str | Unset): Password of a root account.
     """
 
     username: str
-    password: str | Unset = UNSET
-    description: str | Unset = UNSET
-    mapped_organization_uid: UUID | Unset = UNSET
+    password: None | str | Unset = UNSET
+    description: None | str | Unset = UNSET
+    mapped_organization_uid: None | Unset | UUID = UNSET
     ssh_port: int | Unset = 22
     auto_elevated: bool | Unset = False
     add_to_sudoers: bool | Unset = False
     use_su: bool | Unset = False
-    private_key: str | Unset = UNSET
-    passphrase: str | Unset = UNSET
-    root_password: str | Unset = UNSET
+    private_key: None | str | Unset = UNSET
+    passphrase: None | str | Unset = UNSET
+    root_password: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         username = self.username
 
-        password = self.password
+        password: None | str | Unset
+        if isinstance(self.password, Unset):
+            password = UNSET
+        else:
+            password = self.password
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
-        mapped_organization_uid: str | Unset = UNSET
-        if not isinstance(self.mapped_organization_uid, Unset):
+        mapped_organization_uid: None | str | Unset
+        if isinstance(self.mapped_organization_uid, Unset):
+            mapped_organization_uid = UNSET
+        elif isinstance(self.mapped_organization_uid, UUID):
             mapped_organization_uid = str(self.mapped_organization_uid)
+        else:
+            mapped_organization_uid = self.mapped_organization_uid
 
         ssh_port = self.ssh_port
 
@@ -84,11 +96,23 @@ class BackupServerCredentialsLinuxInput:
 
         use_su = self.use_su
 
-        private_key = self.private_key
+        private_key: None | str | Unset
+        if isinstance(self.private_key, Unset):
+            private_key = UNSET
+        else:
+            private_key = self.private_key
 
-        passphrase = self.passphrase
+        passphrase: None | str | Unset
+        if isinstance(self.passphrase, Unset):
+            passphrase = UNSET
+        else:
+            passphrase = self.passphrase
 
-        root_password = self.root_password
+        root_password: None | str | Unset
+        if isinstance(self.root_password, Unset):
+            root_password = UNSET
+        else:
+            root_password = self.root_password
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -125,16 +149,40 @@ class BackupServerCredentialsLinuxInput:
         d = dict(src_dict)
         username = d.pop("username")
 
-        password = d.pop("password", UNSET)
+        def _parse_password(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        description = d.pop("description", UNSET)
+        password = _parse_password(d.pop("password", UNSET))
 
-        _mapped_organization_uid = d.pop("mappedOrganizationUid", UNSET)
-        mapped_organization_uid: UUID | Unset
-        if isinstance(_mapped_organization_uid, Unset):
-            mapped_organization_uid = UNSET
-        else:
-            mapped_organization_uid = UUID(_mapped_organization_uid)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
+
+        def _parse_mapped_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                mapped_organization_uid_type_0 = UUID(data)
+
+                return mapped_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        mapped_organization_uid = _parse_mapped_organization_uid(d.pop("mappedOrganizationUid", UNSET))
 
         ssh_port = d.pop("sshPort", UNSET)
 
@@ -144,11 +192,32 @@ class BackupServerCredentialsLinuxInput:
 
         use_su = d.pop("useSu", UNSET)
 
-        private_key = d.pop("privateKey", UNSET)
+        def _parse_private_key(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        passphrase = d.pop("passphrase", UNSET)
+        private_key = _parse_private_key(d.pop("privateKey", UNSET))
 
-        root_password = d.pop("rootPassword", UNSET)
+        def _parse_passphrase(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        passphrase = _parse_passphrase(d.pop("passphrase", UNSET))
+
+        def _parse_root_password(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        root_password = _parse_root_password(d.pop("rootPassword", UNSET))
 
         backup_server_credentials_linux_input = cls(
             username=username,

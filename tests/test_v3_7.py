@@ -9,6 +9,9 @@ conversion produced a package shaped like its predecessors.
 And that document references a MultiActionResult schema it never defines. fix_openapi_yaml.py
 reconstructs it from the response example alongside it, so the three endpoints returning it
 parse rather than failing on an unresolved model.
+
+It also marks nullability with an x-veeam-nullable extension, since Swagger 2.0 has no
+`nullable`; fix_openapi_yaml.py translates it so null fields parse.
 """
 
 import importlib
@@ -139,6 +142,93 @@ def test_the_results_are_typed_as_the_shared_result_schema():
     )
 
     assert isinstance(parsed.results[0], Result)
+
+
+# ---------------------------------------------------------------------------
+# Nullability: Swagger 2.0 has no `nullable`, so 3.7 marks it x-veeam-nullable
+# ---------------------------------------------------------------------------
+#
+# Until fix_openapi_yaml.py translated the extension, every field was generated as
+# non-nullable and the first null UUID in a response raised TypeError from UUID(None).
+# These payloads are the three a 9.3 console was observed failing on.
+
+
+def test_the_fixed_spec_carries_no_untranslated_nullability():
+    import json
+    from pathlib import Path
+
+    spec = Path(__file__).parent.parent / "openapi_schemas" / "vspc_rest_3_7_fixed.json"
+    text = spec.read_text(encoding="utf-8")
+
+    assert "x-veeam-nullable" not in text
+    assert (
+        json.loads(text)["components"]["schemas"]["LocationAggregatedUsage"][
+            "properties"
+        ]["resellerUid"]["nullable"]
+        is True
+    )
+
+
+def test_company_usage_tolerates_a_company_with_no_reseller():
+    from veeam_spc.v3_7.models import GetCompaniesAggregatedUsageResponse200
+
+    response = GetCompaniesAggregatedUsageResponse200.from_dict(
+        {
+            "data": [
+                {
+                    "companyUid": "0b47bb94-fd6c-4dda-8143-0f5c0bd65405",
+                    "resellerUid": None,
+                    "locationUid": "8f3a1d2e-6b47-4c9a-bf12-2a7c9e4d3b18",
+                    "date": "2026-09-28",
+                    "counters": [],
+                }
+            ]
+        }
+    )
+
+    assert response.data[0].reseller_uid is None
+
+
+def test_a_protected_vm_tolerates_no_job():
+    """Most VMs with only old restore points have no job left to point at."""
+    from veeam_spc.v3_7.models import GetProtectedVirtualMachinesResponse200
+
+    response = GetProtectedVirtualMachinesResponse200.from_dict(
+        {
+            "data": [
+                {
+                    "instanceUid": "0b47bb94-fd6c-4dda-8143-0f5c0bd65405",
+                    "name": "stg1-vone-01",
+                    "latestRestorePointDate": "2020-03-01T00:00:00Z",
+                    "jobUid": None,
+                }
+            ]
+        }
+    )
+
+    assert response.data[0].job_uid is None
+
+
+def test_an_active_alarm_tolerates_no_location():
+    from veeam_spc.v3_7.models import GetActiveAlarmsResponse200
+
+    response = GetActiveAlarmsResponse200.from_dict(
+        {
+            "data": [
+                {
+                    "instanceUid": "0b47bb94-fd6c-4dda-8143-0f5c0bd65405",
+                    "object": {
+                        "instanceUid": "8f3a1d2e-6b47-4c9a-bf12-2a7c9e4d3b18",
+                        "locationUid": None,
+                        "managementAgentUid": None,
+                        "objectUid": None,
+                    },
+                }
+            ]
+        }
+    )
+
+    assert response.data[0].object_.location_uid is None
 
 
 # ---------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -22,26 +22,35 @@ class BackupServerBackupJobGuestOsCredentialsPerMachine:
 
     Attributes:
         vm_object (BackupServerVmwareObject): VMware vSphere object.
-        windows_credentials_id (UUID | Unset): UID assigned to a credentials record that is used to access Microsoft
-            Windows VM.
-        linux_credentials_id (UUID | Unset): UID assigned to a credentials record that is used to access Linux VM.
+        windows_credentials_id (None | Unset | UUID): UID assigned to a credentials record that is used to access
+            Microsoft Windows VM.
+        linux_credentials_id (None | Unset | UUID): UID assigned to a credentials record that is used to access Linux
+            VM.
     """
 
     vm_object: BackupServerVmwareObject
-    windows_credentials_id: UUID | Unset = UNSET
-    linux_credentials_id: UUID | Unset = UNSET
+    windows_credentials_id: None | Unset | UUID = UNSET
+    linux_credentials_id: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         vm_object = self.vm_object.to_dict()
 
-        windows_credentials_id: str | Unset = UNSET
-        if not isinstance(self.windows_credentials_id, Unset):
+        windows_credentials_id: None | str | Unset
+        if isinstance(self.windows_credentials_id, Unset):
+            windows_credentials_id = UNSET
+        elif isinstance(self.windows_credentials_id, UUID):
             windows_credentials_id = str(self.windows_credentials_id)
+        else:
+            windows_credentials_id = self.windows_credentials_id
 
-        linux_credentials_id: str | Unset = UNSET
-        if not isinstance(self.linux_credentials_id, Unset):
+        linux_credentials_id: None | str | Unset
+        if isinstance(self.linux_credentials_id, Unset):
+            linux_credentials_id = UNSET
+        elif isinstance(self.linux_credentials_id, UUID):
             linux_credentials_id = str(self.linux_credentials_id)
+        else:
+            linux_credentials_id = self.linux_credentials_id
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -64,19 +73,39 @@ class BackupServerBackupJobGuestOsCredentialsPerMachine:
         d = dict(src_dict)
         vm_object = BackupServerVmwareObject.from_dict(d.pop("vmObject"))
 
-        _windows_credentials_id = d.pop("windowsCredentialsId", UNSET)
-        windows_credentials_id: UUID | Unset
-        if isinstance(_windows_credentials_id, Unset):
-            windows_credentials_id = UNSET
-        else:
-            windows_credentials_id = UUID(_windows_credentials_id)
+        def _parse_windows_credentials_id(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                windows_credentials_id_type_0 = UUID(data)
 
-        _linux_credentials_id = d.pop("linuxCredentialsId", UNSET)
-        linux_credentials_id: UUID | Unset
-        if isinstance(_linux_credentials_id, Unset):
-            linux_credentials_id = UNSET
-        else:
-            linux_credentials_id = UUID(_linux_credentials_id)
+                return windows_credentials_id_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        windows_credentials_id = _parse_windows_credentials_id(d.pop("windowsCredentialsId", UNSET))
+
+        def _parse_linux_credentials_id(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                linux_credentials_id_type_0 = UUID(data)
+
+                return linux_credentials_id_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        linux_credentials_id = _parse_linux_credentials_id(d.pop("linuxCredentialsId", UNSET))
 
         backup_server_backup_job_guest_os_credentials_per_machine = cls(
             vm_object=vm_object,

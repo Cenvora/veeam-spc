@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -23,23 +23,28 @@ class BackupServerCloudDirectorBackupJobGuestFileSystemIndexing:
 
     Attributes:
         is_enabled (bool | Unset): Indicates whether file indexing is enabled. Default: False.
-        indexing_settings (list[BackupServerCloudDirectorBackupJobIndexingSettings] | Unset): Array of VMs with guest OS
-            file indexing options.
+        indexing_settings (list[BackupServerCloudDirectorBackupJobIndexingSettings] | None | Unset): Array of VMs with
+            guest OS file indexing options.
     """
 
     is_enabled: bool | Unset = False
-    indexing_settings: list[BackupServerCloudDirectorBackupJobIndexingSettings] | Unset = UNSET
+    indexing_settings: list[BackupServerCloudDirectorBackupJobIndexingSettings] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         is_enabled = self.is_enabled
 
-        indexing_settings: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.indexing_settings, Unset):
+        indexing_settings: list[dict[str, Any]] | None | Unset
+        if isinstance(self.indexing_settings, Unset):
+            indexing_settings = UNSET
+        elif isinstance(self.indexing_settings, list):
             indexing_settings = []
-            for indexing_settings_item_data in self.indexing_settings:
-                indexing_settings_item = indexing_settings_item_data.to_dict()
-                indexing_settings.append(indexing_settings_item)
+            for indexing_settings_type_0_item_data in self.indexing_settings:
+                indexing_settings_type_0_item = indexing_settings_type_0_item_data.to_dict()
+                indexing_settings.append(indexing_settings_type_0_item)
+
+        else:
+            indexing_settings = self.indexing_settings
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,16 +65,31 @@ class BackupServerCloudDirectorBackupJobGuestFileSystemIndexing:
         d = dict(src_dict)
         is_enabled = d.pop("isEnabled", UNSET)
 
-        _indexing_settings = d.pop("indexingSettings", UNSET)
-        indexing_settings: list[BackupServerCloudDirectorBackupJobIndexingSettings] | Unset = UNSET
-        if _indexing_settings is not UNSET:
-            indexing_settings = []
-            for indexing_settings_item_data in _indexing_settings:
-                indexing_settings_item = BackupServerCloudDirectorBackupJobIndexingSettings.from_dict(
-                    indexing_settings_item_data
-                )
+        def _parse_indexing_settings(
+            data: object,
+        ) -> list[BackupServerCloudDirectorBackupJobIndexingSettings] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                indexing_settings_type_0 = []
+                _indexing_settings_type_0 = data
+                for indexing_settings_type_0_item_data in _indexing_settings_type_0:
+                    indexing_settings_type_0_item = BackupServerCloudDirectorBackupJobIndexingSettings.from_dict(
+                        indexing_settings_type_0_item_data
+                    )
 
-                indexing_settings.append(indexing_settings_item)
+                    indexing_settings_type_0.append(indexing_settings_type_0_item)
+
+                return indexing_settings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[BackupServerCloudDirectorBackupJobIndexingSettings] | None | Unset, data)
+
+        indexing_settings = _parse_indexing_settings(d.pop("indexingSettings", UNSET))
 
         backup_server_cloud_director_backup_job_guest_file_system_indexing = cls(
             is_enabled=is_enabled,

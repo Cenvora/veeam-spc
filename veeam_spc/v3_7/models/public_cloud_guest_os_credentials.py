@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -23,12 +23,12 @@ class PublicCloudGuestOsCredentials:
         guest_os_credentials_uid (UUID | Unset): UID assgined to guest OS credentials record.
         role (PublicCloudGuestOsCredentialsRole | Unset):
         username (str | Unset): User name.
-        description (str | Unset): Description of credentials.
+        description (None | str | Unset): Description of credentials.
         organization_uid (UUID | Unset): UID assigned to an organization to which an account belongs.
-        site_uid (UUID | Unset): UID assigned to a Veeam Cloud Connect site.
-        appliances (list[UUID] | Unset): Array of UIDs assigned to Veeam Backup for Public Clouds appliances that can be
-            accessed using the credentials.
-        last_change_timestamp (datetime.datetime | Unset): Date and time when the latest change was applied to
+        site_uid (None | Unset | UUID): UID assigned to a Veeam Cloud Connect site.
+        appliances (list[UUID] | None | Unset): Array of UIDs assigned to Veeam Backup for Public Clouds appliances that
+            can be accessed using the credentials.
+        last_change_timestamp (datetime.datetime | None | Unset): Date and time when the latest change was applied to
             credentials.
     """
 
@@ -36,11 +36,11 @@ class PublicCloudGuestOsCredentials:
     guest_os_credentials_uid: UUID | Unset = UNSET
     role: PublicCloudGuestOsCredentialsRole | Unset = UNSET
     username: str | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
-    site_uid: UUID | Unset = UNSET
-    appliances: list[UUID] | Unset = UNSET
-    last_change_timestamp: datetime.datetime | Unset = UNSET
+    site_uid: None | Unset | UUID = UNSET
+    appliances: list[UUID] | None | Unset = UNSET
+    last_change_timestamp: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -56,26 +56,43 @@ class PublicCloudGuestOsCredentials:
 
         username = self.username
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         organization_uid: str | Unset = UNSET
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        site_uid: str | Unset = UNSET
-        if not isinstance(self.site_uid, Unset):
+        site_uid: None | str | Unset
+        if isinstance(self.site_uid, Unset):
+            site_uid = UNSET
+        elif isinstance(self.site_uid, UUID):
             site_uid = str(self.site_uid)
+        else:
+            site_uid = self.site_uid
 
-        appliances: list[str] | Unset = UNSET
-        if not isinstance(self.appliances, Unset):
+        appliances: list[str] | None | Unset
+        if isinstance(self.appliances, Unset):
+            appliances = UNSET
+        elif isinstance(self.appliances, list):
             appliances = []
-            for appliances_item_data in self.appliances:
-                appliances_item = str(appliances_item_data)
-                appliances.append(appliances_item)
+            for appliances_type_0_item_data in self.appliances:
+                appliances_type_0_item = str(appliances_type_0_item_data)
+                appliances.append(appliances_type_0_item)
 
-        last_change_timestamp: str | Unset = UNSET
-        if not isinstance(self.last_change_timestamp, Unset):
+        else:
+            appliances = self.appliances
+
+        last_change_timestamp: None | str | Unset
+        if isinstance(self.last_change_timestamp, Unset):
+            last_change_timestamp = UNSET
+        elif isinstance(self.last_change_timestamp, datetime.datetime):
             last_change_timestamp = self.last_change_timestamp.isoformat()
+        else:
+            last_change_timestamp = self.last_change_timestamp
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -124,7 +141,14 @@ class PublicCloudGuestOsCredentials:
 
         username = d.pop("username", UNSET)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         _organization_uid = d.pop("organizationUid", UNSET)
         organization_uid: UUID | Unset
@@ -133,28 +157,61 @@ class PublicCloudGuestOsCredentials:
         else:
             organization_uid = UUID(_organization_uid)
 
-        _site_uid = d.pop("siteUid", UNSET)
-        site_uid: UUID | Unset
-        if isinstance(_site_uid, Unset):
-            site_uid = UNSET
-        else:
-            site_uid = UUID(_site_uid)
+        def _parse_site_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                site_uid_type_0 = UUID(data)
 
-        _appliances = d.pop("appliances", UNSET)
-        appliances: list[UUID] | Unset = UNSET
-        if _appliances is not UNSET:
-            appliances = []
-            for appliances_item_data in _appliances:
-                appliances_item = UUID(appliances_item_data)
+                return site_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
 
-                appliances.append(appliances_item)
+        site_uid = _parse_site_uid(d.pop("siteUid", UNSET))
 
-        _last_change_timestamp = d.pop("lastChangeTimestamp", UNSET)
-        last_change_timestamp: datetime.datetime | Unset
-        if isinstance(_last_change_timestamp, Unset):
-            last_change_timestamp = UNSET
-        else:
-            last_change_timestamp = isoparse(_last_change_timestamp)
+        def _parse_appliances(data: object) -> list[UUID] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                appliances_type_0 = []
+                _appliances_type_0 = data
+                for appliances_type_0_item_data in _appliances_type_0:
+                    appliances_type_0_item = UUID(appliances_type_0_item_data)
+
+                    appliances_type_0.append(appliances_type_0_item)
+
+                return appliances_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[UUID] | None | Unset, data)
+
+        appliances = _parse_appliances(d.pop("appliances", UNSET))
+
+        def _parse_last_change_timestamp(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_change_timestamp_type_0 = isoparse(data)
+
+                return last_change_timestamp_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        last_change_timestamp = _parse_last_change_timestamp(d.pop("lastChangeTimestamp", UNSET))
 
         public_cloud_guest_os_credentials = cls(
             password=password,

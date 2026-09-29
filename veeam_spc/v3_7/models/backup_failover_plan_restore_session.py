@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,18 +21,19 @@ class BackupFailoverPlanRestoreSession:
     Attributes:
         instance_uid (UUID | Unset): UID assigned to a protected VM.
         backup_status (BackupFailoverPlanRestoreSessionBackupStatus | Unset): Status of a failover session.
-        restore_point_uid (UUID | Unset): UID assigned to a replication restore point.
-        restore_point_date_time (datetime.datetime | Unset): Date and time of the replication restore point creation.
+        restore_point_uid (None | Unset | UUID): UID assigned to a replication restore point.
+        restore_point_date_time (datetime.datetime | None | Unset): Date and time of the replication restore point
+            creation.
         start_date_time (datetime.datetime | Unset): Failover session start date and time.
-        end_date_time (datetime.datetime | Unset): Failover session end date and time.
+        end_date_time (datetime.datetime | None | Unset): Failover session end date and time.
     """
 
     instance_uid: UUID | Unset = UNSET
     backup_status: BackupFailoverPlanRestoreSessionBackupStatus | Unset = UNSET
-    restore_point_uid: UUID | Unset = UNSET
-    restore_point_date_time: datetime.datetime | Unset = UNSET
+    restore_point_uid: None | Unset | UUID = UNSET
+    restore_point_date_time: datetime.datetime | None | Unset = UNSET
     start_date_time: datetime.datetime | Unset = UNSET
-    end_date_time: datetime.datetime | Unset = UNSET
+    end_date_time: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -44,21 +45,33 @@ class BackupFailoverPlanRestoreSession:
         if not isinstance(self.backup_status, Unset):
             backup_status = self.backup_status.value
 
-        restore_point_uid: str | Unset = UNSET
-        if not isinstance(self.restore_point_uid, Unset):
+        restore_point_uid: None | str | Unset
+        if isinstance(self.restore_point_uid, Unset):
+            restore_point_uid = UNSET
+        elif isinstance(self.restore_point_uid, UUID):
             restore_point_uid = str(self.restore_point_uid)
+        else:
+            restore_point_uid = self.restore_point_uid
 
-        restore_point_date_time: str | Unset = UNSET
-        if not isinstance(self.restore_point_date_time, Unset):
+        restore_point_date_time: None | str | Unset
+        if isinstance(self.restore_point_date_time, Unset):
+            restore_point_date_time = UNSET
+        elif isinstance(self.restore_point_date_time, datetime.datetime):
             restore_point_date_time = self.restore_point_date_time.isoformat()
+        else:
+            restore_point_date_time = self.restore_point_date_time
 
         start_date_time: str | Unset = UNSET
         if not isinstance(self.start_date_time, Unset):
             start_date_time = self.start_date_time.isoformat()
 
-        end_date_time: str | Unset = UNSET
-        if not isinstance(self.end_date_time, Unset):
+        end_date_time: None | str | Unset
+        if isinstance(self.end_date_time, Unset):
+            end_date_time = UNSET
+        elif isinstance(self.end_date_time, datetime.datetime):
             end_date_time = self.end_date_time.isoformat()
+        else:
+            end_date_time = self.end_date_time
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -95,19 +108,39 @@ class BackupFailoverPlanRestoreSession:
         else:
             backup_status = BackupFailoverPlanRestoreSessionBackupStatus(_backup_status)
 
-        _restore_point_uid = d.pop("restorePointUid", UNSET)
-        restore_point_uid: UUID | Unset
-        if isinstance(_restore_point_uid, Unset):
-            restore_point_uid = UNSET
-        else:
-            restore_point_uid = UUID(_restore_point_uid)
+        def _parse_restore_point_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                restore_point_uid_type_0 = UUID(data)
 
-        _restore_point_date_time = d.pop("restorePointDateTime", UNSET)
-        restore_point_date_time: datetime.datetime | Unset
-        if isinstance(_restore_point_date_time, Unset):
-            restore_point_date_time = UNSET
-        else:
-            restore_point_date_time = isoparse(_restore_point_date_time)
+                return restore_point_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        restore_point_uid = _parse_restore_point_uid(d.pop("restorePointUid", UNSET))
+
+        def _parse_restore_point_date_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                restore_point_date_time_type_0 = isoparse(data)
+
+                return restore_point_date_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        restore_point_date_time = _parse_restore_point_date_time(d.pop("restorePointDateTime", UNSET))
 
         _start_date_time = d.pop("startDateTime", UNSET)
         start_date_time: datetime.datetime | Unset
@@ -116,12 +149,22 @@ class BackupFailoverPlanRestoreSession:
         else:
             start_date_time = isoparse(_start_date_time)
 
-        _end_date_time = d.pop("endDateTime", UNSET)
-        end_date_time: datetime.datetime | Unset
-        if isinstance(_end_date_time, Unset):
-            end_date_time = UNSET
-        else:
-            end_date_time = isoparse(_end_date_time)
+        def _parse_end_date_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                end_date_time_type_0 = isoparse(data)
+
+                return end_date_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        end_date_time = _parse_end_date_time(d.pop("endDateTime", UNSET))
 
         backup_failover_plan_restore_session = cls(
             instance_uid=instance_uid,

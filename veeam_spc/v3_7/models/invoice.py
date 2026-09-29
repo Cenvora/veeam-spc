@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -28,12 +28,12 @@ class Invoice:
         name (str | Unset): Name of an organization.
         organization_uid (UUID | Unset): UID assigned to an organization.
         instance_uid (UUID | Unset): UID assigned to an invoice.
-        amount (float | Unset): Total cost of consumed backup services
-        currency_code (str | Unset): Currency code.
-        subscription_plan_uid (UUID | Unset): UID assigned to a subscription plan.
+        amount (float | None | Unset): Total cost of consumed backup services
+        currency_code (None | str | Unset): Currency code.
+        subscription_plan_uid (None | Unset | UUID): UID assigned to a subscription plan.
         creation_date (datetime.datetime | Unset): Date and time when an invoice was generated.
-        paid_date (datetime.datetime | Unset): Date and time when an invoice was marked as paid.
-        due_date (datetime.datetime | Unset): Date and time by which a payment must be made.
+        paid_date (datetime.datetime | None | Unset): Date and time when an invoice was marked as paid.
+        due_date (datetime.datetime | None | Unset): Date and time by which a payment must be made.
         status (InvoiceStatus | Unset): Invoice status.
         type_ (InvoiceType | Unset): Type of an invoice.
     """
@@ -42,12 +42,12 @@ class Invoice:
     name: str | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
     instance_uid: UUID | Unset = UNSET
-    amount: float | Unset = UNSET
-    currency_code: str | Unset = UNSET
-    subscription_plan_uid: UUID | Unset = UNSET
+    amount: float | None | Unset = UNSET
+    currency_code: None | str | Unset = UNSET
+    subscription_plan_uid: None | Unset | UUID = UNSET
     creation_date: datetime.datetime | Unset = UNSET
-    paid_date: datetime.datetime | Unset = UNSET
-    due_date: datetime.datetime | Unset = UNSET
+    paid_date: datetime.datetime | None | Unset = UNSET
+    due_date: datetime.datetime | None | Unset = UNSET
     status: InvoiceStatus | Unset = UNSET
     type_: InvoiceType | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -65,25 +65,45 @@ class Invoice:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        amount = self.amount
+        amount: float | None | Unset
+        if isinstance(self.amount, Unset):
+            amount = UNSET
+        else:
+            amount = self.amount
 
-        currency_code = self.currency_code
+        currency_code: None | str | Unset
+        if isinstance(self.currency_code, Unset):
+            currency_code = UNSET
+        else:
+            currency_code = self.currency_code
 
-        subscription_plan_uid: str | Unset = UNSET
-        if not isinstance(self.subscription_plan_uid, Unset):
+        subscription_plan_uid: None | str | Unset
+        if isinstance(self.subscription_plan_uid, Unset):
+            subscription_plan_uid = UNSET
+        elif isinstance(self.subscription_plan_uid, UUID):
             subscription_plan_uid = str(self.subscription_plan_uid)
+        else:
+            subscription_plan_uid = self.subscription_plan_uid
 
         creation_date: str | Unset = UNSET
         if not isinstance(self.creation_date, Unset):
             creation_date = self.creation_date.isoformat()
 
-        paid_date: str | Unset = UNSET
-        if not isinstance(self.paid_date, Unset):
+        paid_date: None | str | Unset
+        if isinstance(self.paid_date, Unset):
+            paid_date = UNSET
+        elif isinstance(self.paid_date, datetime.datetime):
             paid_date = self.paid_date.isoformat()
+        else:
+            paid_date = self.paid_date
 
-        due_date: str | Unset = UNSET
-        if not isinstance(self.due_date, Unset):
+        due_date: None | str | Unset
+        if isinstance(self.due_date, Unset):
+            due_date = UNSET
+        elif isinstance(self.due_date, datetime.datetime):
             due_date = self.due_date.isoformat()
+        else:
+            due_date = self.due_date
 
         status: str | Unset = UNSET
         if not isinstance(self.status, Unset):
@@ -148,16 +168,40 @@ class Invoice:
         else:
             instance_uid = UUID(_instance_uid)
 
-        amount = d.pop("amount", UNSET)
+        def _parse_amount(data: object) -> float | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(float | None | Unset, data)
 
-        currency_code = d.pop("currencyCode", UNSET)
+        amount = _parse_amount(d.pop("amount", UNSET))
 
-        _subscription_plan_uid = d.pop("subscriptionPlanUid", UNSET)
-        subscription_plan_uid: UUID | Unset
-        if isinstance(_subscription_plan_uid, Unset):
-            subscription_plan_uid = UNSET
-        else:
-            subscription_plan_uid = UUID(_subscription_plan_uid)
+        def _parse_currency_code(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        currency_code = _parse_currency_code(d.pop("currencyCode", UNSET))
+
+        def _parse_subscription_plan_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                subscription_plan_uid_type_0 = UUID(data)
+
+                return subscription_plan_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        subscription_plan_uid = _parse_subscription_plan_uid(d.pop("subscriptionPlanUid", UNSET))
 
         _creation_date = d.pop("creationDate", UNSET)
         creation_date: datetime.datetime | Unset
@@ -166,19 +210,39 @@ class Invoice:
         else:
             creation_date = isoparse(_creation_date)
 
-        _paid_date = d.pop("paidDate", UNSET)
-        paid_date: datetime.datetime | Unset
-        if isinstance(_paid_date, Unset):
-            paid_date = UNSET
-        else:
-            paid_date = isoparse(_paid_date)
+        def _parse_paid_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                paid_date_type_0 = isoparse(data)
 
-        _due_date = d.pop("dueDate", UNSET)
-        due_date: datetime.datetime | Unset
-        if isinstance(_due_date, Unset):
-            due_date = UNSET
-        else:
-            due_date = isoparse(_due_date)
+                return paid_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        paid_date = _parse_paid_date(d.pop("paidDate", UNSET))
+
+        def _parse_due_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                due_date_type_0 = isoparse(data)
+
+                return due_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        due_date = _parse_due_date(d.pop("dueDate", UNSET))
 
         _status = d.pop("status", UNSET)
         status: InvoiceStatus | Unset

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -32,14 +32,14 @@ class Vb365BackupJobSchedulePolicy:
         backup_window_enabled (bool | Unset): Indicates whether backup window is enabled. Default: False.
         backup_window_settings (Vb365BackupWindowSettings | Unset):
         periodically_window_settings (Vb365BackupWindowSettings | Unset):
-        periodically_window_enabled (bool | Unset): Indicates whether backup window is enabled for periodically running
-            jobs.
-        periodically_offset_minutes (int | Unset): Number of minutes that must be skipped after specified job starting
-            time. Default: 0.
-        daily_time (str | Unset): Time of day when job must start in the `hh:mm` format.
+        periodically_window_enabled (bool | None | Unset): Indicates whether backup window is enabled for periodically
+            running jobs.
+        periodically_offset_minutes (int | None | Unset): Number of minutes that must be skipped after specified job
+            starting time. Default: 0.
+        daily_time (None | str | Unset): Time of day when job must start in the `hh:mm` format.
         retry_enabled (bool | Unset): Indicates whether job retry is enabled. Default: False.
-        retry_number (int | Unset): Number of allowed retries.
-        retry_wait_interval (int | Unset): Time interval between job retries.
+        retry_number (int | None | Unset): Number of allowed retries.
+        retry_wait_interval (int | None | Unset): Time interval between job retries.
     """
 
     schedule_policy_type: Vb365BackupJobSchedulePolicySchedulePolicyType
@@ -49,12 +49,12 @@ class Vb365BackupJobSchedulePolicy:
     backup_window_enabled: bool | Unset = False
     backup_window_settings: Vb365BackupWindowSettings | Unset = UNSET
     periodically_window_settings: Vb365BackupWindowSettings | Unset = UNSET
-    periodically_window_enabled: bool | Unset = UNSET
-    periodically_offset_minutes: int | Unset = 0
-    daily_time: str | Unset = UNSET
+    periodically_window_enabled: bool | None | Unset = UNSET
+    periodically_offset_minutes: int | None | Unset = 0
+    daily_time: None | str | Unset = UNSET
     retry_enabled: bool | Unset = False
-    retry_number: int | Unset = UNSET
-    retry_wait_interval: int | Unset = UNSET
+    retry_number: int | None | Unset = UNSET
+    retry_wait_interval: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -80,17 +80,37 @@ class Vb365BackupJobSchedulePolicy:
         if not isinstance(self.periodically_window_settings, Unset):
             periodically_window_settings = self.periodically_window_settings.to_dict()
 
-        periodically_window_enabled = self.periodically_window_enabled
+        periodically_window_enabled: bool | None | Unset
+        if isinstance(self.periodically_window_enabled, Unset):
+            periodically_window_enabled = UNSET
+        else:
+            periodically_window_enabled = self.periodically_window_enabled
 
-        periodically_offset_minutes = self.periodically_offset_minutes
+        periodically_offset_minutes: int | None | Unset
+        if isinstance(self.periodically_offset_minutes, Unset):
+            periodically_offset_minutes = UNSET
+        else:
+            periodically_offset_minutes = self.periodically_offset_minutes
 
-        daily_time = self.daily_time
+        daily_time: None | str | Unset
+        if isinstance(self.daily_time, Unset):
+            daily_time = UNSET
+        else:
+            daily_time = self.daily_time
 
         retry_enabled = self.retry_enabled
 
-        retry_number = self.retry_number
+        retry_number: int | None | Unset
+        if isinstance(self.retry_number, Unset):
+            retry_number = UNSET
+        else:
+            retry_number = self.retry_number
 
-        retry_wait_interval = self.retry_wait_interval
+        retry_wait_interval: int | None | Unset
+        if isinstance(self.retry_wait_interval, Unset):
+            retry_wait_interval = UNSET
+        else:
+            retry_wait_interval = self.retry_wait_interval
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -165,17 +185,52 @@ class Vb365BackupJobSchedulePolicy:
         else:
             periodically_window_settings = Vb365BackupWindowSettings.from_dict(_periodically_window_settings)
 
-        periodically_window_enabled = d.pop("periodicallyWindowEnabled", UNSET)
+        def _parse_periodically_window_enabled(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
 
-        periodically_offset_minutes = d.pop("periodicallyOffsetMinutes", UNSET)
+        periodically_window_enabled = _parse_periodically_window_enabled(d.pop("periodicallyWindowEnabled", UNSET))
 
-        daily_time = d.pop("dailyTime", UNSET)
+        def _parse_periodically_offset_minutes(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        periodically_offset_minutes = _parse_periodically_offset_minutes(d.pop("periodicallyOffsetMinutes", UNSET))
+
+        def _parse_daily_time(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        daily_time = _parse_daily_time(d.pop("dailyTime", UNSET))
 
         retry_enabled = d.pop("retryEnabled", UNSET)
 
-        retry_number = d.pop("retryNumber", UNSET)
+        def _parse_retry_number(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        retry_wait_interval = d.pop("retryWaitInterval", UNSET)
+        retry_number = _parse_retry_number(d.pop("retryNumber", UNSET))
+
+        def _parse_retry_wait_interval(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        retry_wait_interval = _parse_retry_wait_interval(d.pop("retryWaitInterval", UNSET))
 
         vb_365_backup_job_schedule_policy = cls(
             schedule_policy_type=schedule_policy_type,

@@ -21,16 +21,18 @@ class WindowsVolumeLevelBackupSource:
         backup_operating_system (bool | Unset): Indicates whether agent operating system is included in a backup scope.
             >Available only if the `InclusionMode` filter type is selected.
              Default: False.
-        inclusions (list[str] | Unset): Array of drive letters of volumes that must be included in the backup scope.
+        inclusions (list[str] | None | Unset): Array of drive letters of volumes that must be included in the backup
+            scope.
             > Drive letters must be specified in the following format: `C:\`.
-        exclusions (list[str] | Unset): Array of drive letters of volumes that must be excluded from the backup scope.
+        exclusions (list[str] | None | Unset): Array of drive letters of volumes that must be excluded from the backup
+            scope.
             > Drive letters must be specified in the following format: `C:\`.
     """
 
     mode: WindowsVolumeLevelBackupSourceMode | Unset = WindowsVolumeLevelBackupSourceMode.INCLUSIONMODE
     backup_operating_system: bool | Unset = False
-    inclusions: list[str] | Unset = UNSET
-    exclusions: list[str] | Unset = UNSET
+    inclusions: list[str] | None | Unset = UNSET
+    exclusions: list[str] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -40,12 +42,22 @@ class WindowsVolumeLevelBackupSource:
 
         backup_operating_system = self.backup_operating_system
 
-        inclusions: list[str] | Unset = UNSET
-        if not isinstance(self.inclusions, Unset):
+        inclusions: list[str] | None | Unset
+        if isinstance(self.inclusions, Unset):
+            inclusions = UNSET
+        elif isinstance(self.inclusions, list):
             inclusions = self.inclusions
 
-        exclusions: list[str] | Unset = UNSET
-        if not isinstance(self.exclusions, Unset):
+        else:
+            inclusions = self.inclusions
+
+        exclusions: list[str] | None | Unset
+        if isinstance(self.exclusions, Unset):
+            exclusions = UNSET
+        elif isinstance(self.exclusions, list):
+            exclusions = self.exclusions
+
+        else:
             exclusions = self.exclusions
 
         field_dict: dict[str, Any] = {}
@@ -74,9 +86,39 @@ class WindowsVolumeLevelBackupSource:
 
         backup_operating_system = d.pop("backupOperatingSystem", UNSET)
 
-        inclusions = cast(list[str], d.pop("inclusions", UNSET))
+        def _parse_inclusions(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                inclusions_type_0 = cast(list[str], data)
 
-        exclusions = cast(list[str], d.pop("exclusions", UNSET))
+                return inclusions_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        inclusions = _parse_inclusions(d.pop("inclusions", UNSET))
+
+        def _parse_exclusions(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                exclusions_type_0 = cast(list[str], data)
+
+                return exclusions_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        exclusions = _parse_exclusions(d.pop("exclusions", UNSET))
 
         windows_volume_level_backup_source = cls(
             mode=mode,

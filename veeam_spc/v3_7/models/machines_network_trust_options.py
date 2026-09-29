@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,17 +17,21 @@ class MachinesNetworkTrustOptions:
     """
     Attributes:
         trust_option (MachinesNetworkTrustOptionsTrustOption): Type of trusted computer selection.
-        known_host_list (str | Unset): List of trusted computers required for the `KnownList` type of selection.
+        known_host_list (None | str | Unset): List of trusted computers required for the `KnownList` type of selection.
     """
 
     trust_option: MachinesNetworkTrustOptionsTrustOption
-    known_host_list: str | Unset = UNSET
+    known_host_list: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         trust_option = self.trust_option.value
 
-        known_host_list = self.known_host_list
+        known_host_list: None | str | Unset
+        if isinstance(self.known_host_list, Unset):
+            known_host_list = UNSET
+        else:
+            known_host_list = self.known_host_list
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -46,7 +50,14 @@ class MachinesNetworkTrustOptions:
         d = dict(src_dict)
         trust_option = MachinesNetworkTrustOptionsTrustOption(d.pop("trustOption"))
 
-        known_host_list = d.pop("knownHostList", UNSET)
+        def _parse_known_host_list(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        known_host_list = _parse_known_host_list(d.pop("knownHostList", UNSET))
 
         machines_network_trust_options = cls(
             trust_option=trust_option,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,21 +17,29 @@ class MacScheduleRetrySettings:
     Attributes:
         enabled (bool | Unset): Indicates whether Veeam Agent for Mac must attempt to run the backup job again if the
             job fails. Default: False.
-        retry_times (int | Unset): Number of attempts to run a job. Default: 3.
-        wait_timeout_minutes (int | Unset): Time interval between attempts to run a job. Default: 10.
+        retry_times (int | None | Unset): Number of attempts to run a job. Default: 3.
+        wait_timeout_minutes (int | None | Unset): Time interval between attempts to run a job. Default: 10.
     """
 
     enabled: bool | Unset = False
-    retry_times: int | Unset = 3
-    wait_timeout_minutes: int | Unset = 10
+    retry_times: int | None | Unset = 3
+    wait_timeout_minutes: int | None | Unset = 10
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         enabled = self.enabled
 
-        retry_times = self.retry_times
+        retry_times: int | None | Unset
+        if isinstance(self.retry_times, Unset):
+            retry_times = UNSET
+        else:
+            retry_times = self.retry_times
 
-        wait_timeout_minutes = self.wait_timeout_minutes
+        wait_timeout_minutes: int | None | Unset
+        if isinstance(self.wait_timeout_minutes, Unset):
+            wait_timeout_minutes = UNSET
+        else:
+            wait_timeout_minutes = self.wait_timeout_minutes
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -50,9 +58,23 @@ class MacScheduleRetrySettings:
         d = dict(src_dict)
         enabled = d.pop("enabled", UNSET)
 
-        retry_times = d.pop("retryTimes", UNSET)
+        def _parse_retry_times(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        wait_timeout_minutes = d.pop("waitTimeoutMinutes", UNSET)
+        retry_times = _parse_retry_times(d.pop("retryTimes", UNSET))
+
+        def _parse_wait_timeout_minutes(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        wait_timeout_minutes = _parse_wait_timeout_minutes(d.pop("waitTimeoutMinutes", UNSET))
 
         mac_schedule_retry_settings = cls(
             enabled=enabled,

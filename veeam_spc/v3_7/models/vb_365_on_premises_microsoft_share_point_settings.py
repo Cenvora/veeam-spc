@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,8 +16,8 @@ class Vb365OnPremisesMicrosoftSharePointSettings:
     """
     Attributes:
         server_name (str | Unset): Microsoft SharePoint Online server EWS endpoint URL.
-        server_port (int | Unset): Port that is used to access a Microsoft SharePoint Online server. Default port is
-            5985.
+        server_port (int | None | Unset): Port that is used to access a Microsoft SharePoint Online server. Default port
+            is 5985.
         grant_impersonation (bool | Unset): Indicates whether backup jobs can process all items within a Microsoft
             SharePoint Online organization.
         user_name (str | Unset): User name of an account that is used to access an on-premises Microsoft SharePoint
@@ -33,7 +33,7 @@ class Vb365OnPremisesMicrosoftSharePointSettings:
     """
 
     server_name: str | Unset = UNSET
-    server_port: int | Unset = UNSET
+    server_port: int | None | Unset = UNSET
     grant_impersonation: bool | Unset = UNSET
     user_name: str | Unset = UNSET
     use_ssl: bool | Unset = UNSET
@@ -45,7 +45,11 @@ class Vb365OnPremisesMicrosoftSharePointSettings:
     def to_dict(self) -> dict[str, Any]:
         server_name = self.server_name
 
-        server_port = self.server_port
+        server_port: int | None | Unset
+        if isinstance(self.server_port, Unset):
+            server_port = UNSET
+        else:
+            server_port = self.server_port
 
         grant_impersonation = self.grant_impersonation
 
@@ -86,7 +90,14 @@ class Vb365OnPremisesMicrosoftSharePointSettings:
         d = dict(src_dict)
         server_name = d.pop("serverName", UNSET)
 
-        server_port = d.pop("serverPort", UNSET)
+        def _parse_server_port(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        server_port = _parse_server_port(d.pop("serverPort", UNSET))
 
         grant_impersonation = d.pop("grantImpersonation", UNSET)
 

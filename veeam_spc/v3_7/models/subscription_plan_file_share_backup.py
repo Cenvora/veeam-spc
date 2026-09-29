@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -56,8 +56,8 @@ class SubscriptionPlanFileShareBackup:
         file_share_remote_backup_used_space_units (SubscriptionPlanFileShareBackupFileShareRemoteBackupUsedSpaceUnits |
             Unset): Measurement units of backup repository space consumed by file share backups. Default:
             SubscriptionPlanFileShareBackupFileShareRemoteBackupUsedSpaceUnits.GB.
-        free_file_share_remote_backup_used_space (int | Unset): Amount of backup repository space that can be consumed
-            by file share backups for free.
+        free_file_share_remote_backup_used_space (int | None | Unset): Amount of backup repository space that can be
+            consumed by file share backups for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         free_file_share_remote_backup_used_space_units
             (SubscriptionPlanFileShareBackupFreeFileShareRemoteBackupUsedSpaceUnits | Unset): Measurement units of backup
@@ -68,8 +68,8 @@ class SubscriptionPlanFileShareBackup:
         file_share_remote_archive_used_space_units (SubscriptionPlanFileShareBackupFileShareRemoteArchiveUsedSpaceUnits
             | Unset): Measurement units of archive repository space consumed by file share backups. Default:
             SubscriptionPlanFileShareBackupFileShareRemoteArchiveUsedSpaceUnits.GB.
-        free_file_share_remote_archive_used_space (int | Unset): Amount of archive repository space that can be consumed
-            by file share backups for free.
+        free_file_share_remote_archive_used_space (int | None | Unset): Amount of archive repository space that can be
+            consumed by file share backups for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         free_file_share_remote_archive_used_space_units
             (SubscriptionPlanFileShareBackupFreeFileShareRemoteArchiveUsedSpaceUnits | Unset): Measurement units of archive
@@ -78,7 +78,7 @@ class SubscriptionPlanFileShareBackup:
         source_remote_amount_of_data_price (float | Unset): Charge rate for one GB or TB of source data. Default: 0.0.
         source_remote_amount_of_data_units (SubscriptionPlanFileShareBackupSourceRemoteAmountOfDataUnits | Unset):
             Measurement units of source data. Default: SubscriptionPlanFileShareBackupSourceRemoteAmountOfDataUnits.GB.
-        free_source_remote_amount_of_data (int | Unset): Amount of source data that is processed for free.
+        free_source_remote_amount_of_data (int | None | Unset): Amount of source data that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         free_source_remote_amount_of_data_units (SubscriptionPlanFileShareBackupFreeSourceRemoteAmountOfDataUnits |
             Unset): Measurement units of source data that is processed for free. Default:
@@ -88,8 +88,8 @@ class SubscriptionPlanFileShareBackup:
         file_share_hosted_backup_used_space_units (SubscriptionPlanFileShareBackupFileShareHostedBackupUsedSpaceUnits |
             Unset): Measurement units of backup repository space consumed by file share backups. Default:
             SubscriptionPlanFileShareBackupFileShareHostedBackupUsedSpaceUnits.GB.
-        free_file_share_hosted_backup_used_space (int | Unset): Amount of backup repository space that can be consumed
-            by file share backups for free.
+        free_file_share_hosted_backup_used_space (int | None | Unset): Amount of backup repository space that can be
+            consumed by file share backups for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         free_file_share_hosted_backup_used_space_units
             (SubscriptionPlanFileShareBackupFreeFileShareHostedBackupUsedSpaceUnits | Unset): Measurement units of backup
@@ -100,8 +100,8 @@ class SubscriptionPlanFileShareBackup:
         file_share_hosted_archive_used_space_units (SubscriptionPlanFileShareBackupFileShareHostedArchiveUsedSpaceUnits
             | Unset): Measurement units of archive repository space consumed by file share backups. Default:
             SubscriptionPlanFileShareBackupFileShareHostedArchiveUsedSpaceUnits.GB.
-        free_file_share_hosted_archive_used_space (int | Unset): Amount of archive repository space that can be consumed
-            by file share backups for free.
+        free_file_share_hosted_archive_used_space (int | None | Unset): Amount of archive repository space that can be
+            consumed by file share backups for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         free_file_share_hosted_archive_used_space_units
             (SubscriptionPlanFileShareBackupFreeFileShareHostedArchiveUsedSpaceUnits | Unset): Measurement units of archive
@@ -110,7 +110,7 @@ class SubscriptionPlanFileShareBackup:
         source_hosted_amount_of_data_price (float | Unset): Charge rate for one GB or TB of source data. Default: 0.0.
         source_hosted_amount_of_data_units (SubscriptionPlanFileShareBackupSourceHostedAmountOfDataUnits | Unset):
             Measurement units of source data. Default: SubscriptionPlanFileShareBackupSourceHostedAmountOfDataUnits.GB.
-        free_source_hosted_amount_of_data (int | Unset): Amount of source data that is processed for free.
+        free_source_hosted_amount_of_data (int | None | Unset): Amount of source data that is processed for free.
             > Maximum value is `1048576` for GB and `1024` for TB.
         free_source_hosted_amount_of_data_units (SubscriptionPlanFileShareBackupFreeSourceHostedAmountOfDataUnits |
             Unset): Measurement units of source data that is processed for free. Default:
@@ -121,7 +121,7 @@ class SubscriptionPlanFileShareBackup:
     file_share_remote_backup_used_space_units: (
         SubscriptionPlanFileShareBackupFileShareRemoteBackupUsedSpaceUnits | Unset
     ) = SubscriptionPlanFileShareBackupFileShareRemoteBackupUsedSpaceUnits.GB
-    free_file_share_remote_backup_used_space: int | Unset = UNSET
+    free_file_share_remote_backup_used_space: int | None | Unset = UNSET
     free_file_share_remote_backup_used_space_units: (
         SubscriptionPlanFileShareBackupFreeFileShareRemoteBackupUsedSpaceUnits | Unset
     ) = SubscriptionPlanFileShareBackupFreeFileShareRemoteBackupUsedSpaceUnits.GB
@@ -129,7 +129,7 @@ class SubscriptionPlanFileShareBackup:
     file_share_remote_archive_used_space_units: (
         SubscriptionPlanFileShareBackupFileShareRemoteArchiveUsedSpaceUnits | Unset
     ) = SubscriptionPlanFileShareBackupFileShareRemoteArchiveUsedSpaceUnits.GB
-    free_file_share_remote_archive_used_space: int | Unset = UNSET
+    free_file_share_remote_archive_used_space: int | None | Unset = UNSET
     free_file_share_remote_archive_used_space_units: (
         SubscriptionPlanFileShareBackupFreeFileShareRemoteArchiveUsedSpaceUnits | Unset
     ) = SubscriptionPlanFileShareBackupFreeFileShareRemoteArchiveUsedSpaceUnits.GB
@@ -137,7 +137,7 @@ class SubscriptionPlanFileShareBackup:
     source_remote_amount_of_data_units: SubscriptionPlanFileShareBackupSourceRemoteAmountOfDataUnits | Unset = (
         SubscriptionPlanFileShareBackupSourceRemoteAmountOfDataUnits.GB
     )
-    free_source_remote_amount_of_data: int | Unset = UNSET
+    free_source_remote_amount_of_data: int | None | Unset = UNSET
     free_source_remote_amount_of_data_units: (
         SubscriptionPlanFileShareBackupFreeSourceRemoteAmountOfDataUnits | Unset
     ) = SubscriptionPlanFileShareBackupFreeSourceRemoteAmountOfDataUnits.GB
@@ -145,7 +145,7 @@ class SubscriptionPlanFileShareBackup:
     file_share_hosted_backup_used_space_units: (
         SubscriptionPlanFileShareBackupFileShareHostedBackupUsedSpaceUnits | Unset
     ) = SubscriptionPlanFileShareBackupFileShareHostedBackupUsedSpaceUnits.GB
-    free_file_share_hosted_backup_used_space: int | Unset = UNSET
+    free_file_share_hosted_backup_used_space: int | None | Unset = UNSET
     free_file_share_hosted_backup_used_space_units: (
         SubscriptionPlanFileShareBackupFreeFileShareHostedBackupUsedSpaceUnits | Unset
     ) = SubscriptionPlanFileShareBackupFreeFileShareHostedBackupUsedSpaceUnits.GB
@@ -153,7 +153,7 @@ class SubscriptionPlanFileShareBackup:
     file_share_hosted_archive_used_space_units: (
         SubscriptionPlanFileShareBackupFileShareHostedArchiveUsedSpaceUnits | Unset
     ) = SubscriptionPlanFileShareBackupFileShareHostedArchiveUsedSpaceUnits.GB
-    free_file_share_hosted_archive_used_space: int | Unset = UNSET
+    free_file_share_hosted_archive_used_space: int | None | Unset = UNSET
     free_file_share_hosted_archive_used_space_units: (
         SubscriptionPlanFileShareBackupFreeFileShareHostedArchiveUsedSpaceUnits | Unset
     ) = SubscriptionPlanFileShareBackupFreeFileShareHostedArchiveUsedSpaceUnits.GB
@@ -161,7 +161,7 @@ class SubscriptionPlanFileShareBackup:
     source_hosted_amount_of_data_units: SubscriptionPlanFileShareBackupSourceHostedAmountOfDataUnits | Unset = (
         SubscriptionPlanFileShareBackupSourceHostedAmountOfDataUnits.GB
     )
-    free_source_hosted_amount_of_data: int | Unset = UNSET
+    free_source_hosted_amount_of_data: int | None | Unset = UNSET
     free_source_hosted_amount_of_data_units: (
         SubscriptionPlanFileShareBackupFreeSourceHostedAmountOfDataUnits | Unset
     ) = SubscriptionPlanFileShareBackupFreeSourceHostedAmountOfDataUnits.GB
@@ -174,7 +174,11 @@ class SubscriptionPlanFileShareBackup:
         if not isinstance(self.file_share_remote_backup_used_space_units, Unset):
             file_share_remote_backup_used_space_units = self.file_share_remote_backup_used_space_units.value
 
-        free_file_share_remote_backup_used_space = self.free_file_share_remote_backup_used_space
+        free_file_share_remote_backup_used_space: int | None | Unset
+        if isinstance(self.free_file_share_remote_backup_used_space, Unset):
+            free_file_share_remote_backup_used_space = UNSET
+        else:
+            free_file_share_remote_backup_used_space = self.free_file_share_remote_backup_used_space
 
         free_file_share_remote_backup_used_space_units: str | Unset = UNSET
         if not isinstance(self.free_file_share_remote_backup_used_space_units, Unset):
@@ -186,7 +190,11 @@ class SubscriptionPlanFileShareBackup:
         if not isinstance(self.file_share_remote_archive_used_space_units, Unset):
             file_share_remote_archive_used_space_units = self.file_share_remote_archive_used_space_units.value
 
-        free_file_share_remote_archive_used_space = self.free_file_share_remote_archive_used_space
+        free_file_share_remote_archive_used_space: int | None | Unset
+        if isinstance(self.free_file_share_remote_archive_used_space, Unset):
+            free_file_share_remote_archive_used_space = UNSET
+        else:
+            free_file_share_remote_archive_used_space = self.free_file_share_remote_archive_used_space
 
         free_file_share_remote_archive_used_space_units: str | Unset = UNSET
         if not isinstance(self.free_file_share_remote_archive_used_space_units, Unset):
@@ -198,7 +206,11 @@ class SubscriptionPlanFileShareBackup:
         if not isinstance(self.source_remote_amount_of_data_units, Unset):
             source_remote_amount_of_data_units = self.source_remote_amount_of_data_units.value
 
-        free_source_remote_amount_of_data = self.free_source_remote_amount_of_data
+        free_source_remote_amount_of_data: int | None | Unset
+        if isinstance(self.free_source_remote_amount_of_data, Unset):
+            free_source_remote_amount_of_data = UNSET
+        else:
+            free_source_remote_amount_of_data = self.free_source_remote_amount_of_data
 
         free_source_remote_amount_of_data_units: str | Unset = UNSET
         if not isinstance(self.free_source_remote_amount_of_data_units, Unset):
@@ -210,7 +222,11 @@ class SubscriptionPlanFileShareBackup:
         if not isinstance(self.file_share_hosted_backup_used_space_units, Unset):
             file_share_hosted_backup_used_space_units = self.file_share_hosted_backup_used_space_units.value
 
-        free_file_share_hosted_backup_used_space = self.free_file_share_hosted_backup_used_space
+        free_file_share_hosted_backup_used_space: int | None | Unset
+        if isinstance(self.free_file_share_hosted_backup_used_space, Unset):
+            free_file_share_hosted_backup_used_space = UNSET
+        else:
+            free_file_share_hosted_backup_used_space = self.free_file_share_hosted_backup_used_space
 
         free_file_share_hosted_backup_used_space_units: str | Unset = UNSET
         if not isinstance(self.free_file_share_hosted_backup_used_space_units, Unset):
@@ -222,7 +238,11 @@ class SubscriptionPlanFileShareBackup:
         if not isinstance(self.file_share_hosted_archive_used_space_units, Unset):
             file_share_hosted_archive_used_space_units = self.file_share_hosted_archive_used_space_units.value
 
-        free_file_share_hosted_archive_used_space = self.free_file_share_hosted_archive_used_space
+        free_file_share_hosted_archive_used_space: int | None | Unset
+        if isinstance(self.free_file_share_hosted_archive_used_space, Unset):
+            free_file_share_hosted_archive_used_space = UNSET
+        else:
+            free_file_share_hosted_archive_used_space = self.free_file_share_hosted_archive_used_space
 
         free_file_share_hosted_archive_used_space_units: str | Unset = UNSET
         if not isinstance(self.free_file_share_hosted_archive_used_space_units, Unset):
@@ -234,7 +254,11 @@ class SubscriptionPlanFileShareBackup:
         if not isinstance(self.source_hosted_amount_of_data_units, Unset):
             source_hosted_amount_of_data_units = self.source_hosted_amount_of_data_units.value
 
-        free_source_hosted_amount_of_data = self.free_source_hosted_amount_of_data
+        free_source_hosted_amount_of_data: int | None | Unset
+        if isinstance(self.free_source_hosted_amount_of_data, Unset):
+            free_source_hosted_amount_of_data = UNSET
+        else:
+            free_source_hosted_amount_of_data = self.free_source_hosted_amount_of_data
 
         free_source_hosted_amount_of_data_units: str | Unset = UNSET
         if not isinstance(self.free_source_hosted_amount_of_data_units, Unset):
@@ -312,7 +336,16 @@ class SubscriptionPlanFileShareBackup:
                 )
             )
 
-        free_file_share_remote_backup_used_space = d.pop("freeFileShareRemoteBackupUsedSpace", UNSET)
+        def _parse_free_file_share_remote_backup_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        free_file_share_remote_backup_used_space = _parse_free_file_share_remote_backup_used_space(
+            d.pop("freeFileShareRemoteBackupUsedSpace", UNSET)
+        )
 
         _free_file_share_remote_backup_used_space_units = d.pop("freeFileShareRemoteBackupUsedSpaceUnits", UNSET)
         free_file_share_remote_backup_used_space_units: (
@@ -342,7 +375,16 @@ class SubscriptionPlanFileShareBackup:
                 )
             )
 
-        free_file_share_remote_archive_used_space = d.pop("freeFileShareRemoteArchiveUsedSpace", UNSET)
+        def _parse_free_file_share_remote_archive_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        free_file_share_remote_archive_used_space = _parse_free_file_share_remote_archive_used_space(
+            d.pop("freeFileShareRemoteArchiveUsedSpace", UNSET)
+        )
 
         _free_file_share_remote_archive_used_space_units = d.pop("freeFileShareRemoteArchiveUsedSpaceUnits", UNSET)
         free_file_share_remote_archive_used_space_units: (
@@ -368,7 +410,16 @@ class SubscriptionPlanFileShareBackup:
                 _source_remote_amount_of_data_units
             )
 
-        free_source_remote_amount_of_data = d.pop("freeSourceRemoteAmountOfData", UNSET)
+        def _parse_free_source_remote_amount_of_data(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        free_source_remote_amount_of_data = _parse_free_source_remote_amount_of_data(
+            d.pop("freeSourceRemoteAmountOfData", UNSET)
+        )
 
         _free_source_remote_amount_of_data_units = d.pop("freeSourceRemoteAmountOfDataUnits", UNSET)
         free_source_remote_amount_of_data_units: (
@@ -396,7 +447,16 @@ class SubscriptionPlanFileShareBackup:
                 )
             )
 
-        free_file_share_hosted_backup_used_space = d.pop("freeFileShareHostedBackupUsedSpace", UNSET)
+        def _parse_free_file_share_hosted_backup_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        free_file_share_hosted_backup_used_space = _parse_free_file_share_hosted_backup_used_space(
+            d.pop("freeFileShareHostedBackupUsedSpace", UNSET)
+        )
 
         _free_file_share_hosted_backup_used_space_units = d.pop("freeFileShareHostedBackupUsedSpaceUnits", UNSET)
         free_file_share_hosted_backup_used_space_units: (
@@ -426,7 +486,16 @@ class SubscriptionPlanFileShareBackup:
                 )
             )
 
-        free_file_share_hosted_archive_used_space = d.pop("freeFileShareHostedArchiveUsedSpace", UNSET)
+        def _parse_free_file_share_hosted_archive_used_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        free_file_share_hosted_archive_used_space = _parse_free_file_share_hosted_archive_used_space(
+            d.pop("freeFileShareHostedArchiveUsedSpace", UNSET)
+        )
 
         _free_file_share_hosted_archive_used_space_units = d.pop("freeFileShareHostedArchiveUsedSpaceUnits", UNSET)
         free_file_share_hosted_archive_used_space_units: (
@@ -452,7 +521,16 @@ class SubscriptionPlanFileShareBackup:
                 _source_hosted_amount_of_data_units
             )
 
-        free_source_hosted_amount_of_data = d.pop("freeSourceHostedAmountOfData", UNSET)
+        def _parse_free_source_hosted_amount_of_data(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        free_source_hosted_amount_of_data = _parse_free_source_hosted_amount_of_data(
+            d.pop("freeSourceHostedAmountOfData", UNSET)
+        )
 
         _free_source_hosted_amount_of_data_units = d.pop("freeSourceHostedAmountOfDataUnits", UNSET)
         free_source_hosted_amount_of_data_units: (

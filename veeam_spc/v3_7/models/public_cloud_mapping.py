@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -15,21 +15,29 @@ class PublicCloudMapping:
     """
     Attributes:
         appliance_uid (UUID): UID assigned to a Veeam Backup for Public Clouds appliance.
-        company_uid (UUID): UID assigned to a company.
-        guest_os_credentials_uid (UUID): UID assigned to guest OS credentials record.
+        company_uid (None | UUID): UID assigned to a company.
+        guest_os_credentials_uid (None | UUID): UID assigned to guest OS credentials record.
     """
 
     appliance_uid: UUID
-    company_uid: UUID
-    guest_os_credentials_uid: UUID
+    company_uid: None | UUID
+    guest_os_credentials_uid: None | UUID
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         appliance_uid = str(self.appliance_uid)
 
-        company_uid = str(self.company_uid)
+        company_uid: None | str
+        if isinstance(self.company_uid, UUID):
+            company_uid = str(self.company_uid)
+        else:
+            company_uid = self.company_uid
 
-        guest_os_credentials_uid = str(self.guest_os_credentials_uid)
+        guest_os_credentials_uid: None | str
+        if isinstance(self.guest_os_credentials_uid, UUID):
+            guest_os_credentials_uid = str(self.guest_os_credentials_uid)
+        else:
+            guest_os_credentials_uid = self.guest_os_credentials_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -48,9 +56,35 @@ class PublicCloudMapping:
         d = dict(src_dict)
         appliance_uid = UUID(d.pop("applianceUid"))
 
-        company_uid = UUID(d.pop("companyUid"))
+        def _parse_company_uid(data: object) -> None | UUID:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                company_uid_type_0 = UUID(data)
 
-        guest_os_credentials_uid = UUID(d.pop("guestOsCredentialsUid"))
+                return company_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | UUID, data)
+
+        company_uid = _parse_company_uid(d.pop("companyUid"))
+
+        def _parse_guest_os_credentials_uid(data: object) -> None | UUID:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                guest_os_credentials_uid_type_0 = UUID(data)
+
+                return guest_os_credentials_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | UUID, data)
+
+        guest_os_credentials_uid = _parse_guest_os_credentials_uid(d.pop("guestOsCredentialsUid"))
 
         public_cloud_mapping = cls(
             appliance_uid=appliance_uid,

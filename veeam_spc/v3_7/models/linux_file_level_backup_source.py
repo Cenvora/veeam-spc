@@ -15,35 +15,55 @@ T = TypeVar("T", bound="LinuxFileLevelBackupSource")
 class LinuxFileLevelBackupSource:
     """
     Attributes:
-        directories (list[str]): Array of paths to folders containing the files that must be protected.
-        inclusion_masks (list[str] | Unset): Array of inclusion masks.
+        directories (list[str] | None): Array of paths to folders containing the files that must be protected.
+        inclusion_masks (list[str] | None | Unset): Array of inclusion masks.
             > Use `*` to represent any amount of letters, and `?` to represent a single letter.
-        exclude_directories (list[str] | Unset): Array of paths to folders containing the files that must be excluded
-            from the backup.
-        exclusion_masks (list[str] | Unset): Array of exclusion masks.
+        exclude_directories (list[str] | None | Unset): Array of paths to folders containing the files that must be
+            excluded from the backup.
+        exclusion_masks (list[str] | None | Unset): Array of exclusion masks.
             > Use `*` to represent any amount of letters, and `?` to represent a single letter. You can additionally specify
             path to a folder.
     """
 
-    directories: list[str]
-    inclusion_masks: list[str] | Unset = UNSET
-    exclude_directories: list[str] | Unset = UNSET
-    exclusion_masks: list[str] | Unset = UNSET
+    directories: list[str] | None
+    inclusion_masks: list[str] | None | Unset = UNSET
+    exclude_directories: list[str] | None | Unset = UNSET
+    exclusion_masks: list[str] | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        directories = self.directories
+        directories: list[str] | None
+        if isinstance(self.directories, list):
+            directories = self.directories
 
-        inclusion_masks: list[str] | Unset = UNSET
-        if not isinstance(self.inclusion_masks, Unset):
+        else:
+            directories = self.directories
+
+        inclusion_masks: list[str] | None | Unset
+        if isinstance(self.inclusion_masks, Unset):
+            inclusion_masks = UNSET
+        elif isinstance(self.inclusion_masks, list):
             inclusion_masks = self.inclusion_masks
 
-        exclude_directories: list[str] | Unset = UNSET
-        if not isinstance(self.exclude_directories, Unset):
+        else:
+            inclusion_masks = self.inclusion_masks
+
+        exclude_directories: list[str] | None | Unset
+        if isinstance(self.exclude_directories, Unset):
+            exclude_directories = UNSET
+        elif isinstance(self.exclude_directories, list):
             exclude_directories = self.exclude_directories
 
-        exclusion_masks: list[str] | Unset = UNSET
-        if not isinstance(self.exclusion_masks, Unset):
+        else:
+            exclude_directories = self.exclude_directories
+
+        exclusion_masks: list[str] | None | Unset
+        if isinstance(self.exclusion_masks, Unset):
+            exclusion_masks = UNSET
+        elif isinstance(self.exclusion_masks, list):
+            exclusion_masks = self.exclusion_masks
+
+        else:
             exclusion_masks = self.exclusion_masks
 
         field_dict: dict[str, Any] = {}
@@ -65,13 +85,72 @@ class LinuxFileLevelBackupSource:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        directories = cast(list[str], d.pop("directories"))
 
-        inclusion_masks = cast(list[str], d.pop("inclusionMasks", UNSET))
+        def _parse_directories(data: object) -> list[str] | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                directories_type_0 = cast(list[str], data)
 
-        exclude_directories = cast(list[str], d.pop("excludeDirectories", UNSET))
+                return directories_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None, data)
 
-        exclusion_masks = cast(list[str], d.pop("exclusionMasks", UNSET))
+        directories = _parse_directories(d.pop("directories"))
+
+        def _parse_inclusion_masks(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                inclusion_masks_type_0 = cast(list[str], data)
+
+                return inclusion_masks_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        inclusion_masks = _parse_inclusion_masks(d.pop("inclusionMasks", UNSET))
+
+        def _parse_exclude_directories(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                exclude_directories_type_0 = cast(list[str], data)
+
+                return exclude_directories_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        exclude_directories = _parse_exclude_directories(d.pop("excludeDirectories", UNSET))
+
+        def _parse_exclusion_masks(data: object) -> list[str] | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                exclusion_masks_type_0 = cast(list[str], data)
+
+                return exclusion_masks_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(list[str] | None | Unset, data)
+
+        exclusion_masks = _parse_exclusion_masks(d.pop("exclusionMasks", UNSET))
 
         linux_file_level_backup_source = cls(
             directories=directories,

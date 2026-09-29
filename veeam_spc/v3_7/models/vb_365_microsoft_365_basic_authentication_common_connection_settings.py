@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,7 +16,7 @@ class Vb365Microsoft365BasicAuthenticationCommonConnectionSettings:
     """
     Attributes:
         account (str): User name of an account.
-        password (str): Password of an account.
+        password (None | str): Password of an account.
         grant_admin_access (bool | Unset): Indicates whether the `ApplicationImpersonation` role is assigned to an
             account. This role is required to back up Microsoft Exchange Online mailboxes.
             To assign the ApplicationImpersonation role, make sure the account that you use is a member of the Organization
@@ -27,7 +27,7 @@ class Vb365Microsoft365BasicAuthenticationCommonConnectionSettings:
     """
 
     account: str
-    password: str
+    password: None | str
     grant_admin_access: bool | Unset = False
     use_custom_veeam_aad_application: bool | Unset = False
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -35,6 +35,7 @@ class Vb365Microsoft365BasicAuthenticationCommonConnectionSettings:
     def to_dict(self) -> dict[str, Any]:
         account = self.account
 
+        password: None | str
         password = self.password
 
         grant_admin_access = self.grant_admin_access
@@ -61,7 +62,12 @@ class Vb365Microsoft365BasicAuthenticationCommonConnectionSettings:
         d = dict(src_dict)
         account = d.pop("account")
 
-        password = d.pop("password")
+        def _parse_password(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        password = _parse_password(d.pop("password"))
 
         grant_admin_access = d.pop("grantAdminAccess", UNSET)
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -24,16 +24,16 @@ class ActivityLog:
         activity_log_type (ActivityLogType | Unset): Activity variation.
         activity_kind (ActivityLogKind | Unset): Type of an activity.
         date (datetime.datetime | Unset): Date and time when an activity was performed.
-        user_uid (UUID | Unset): UID assigned to a user that initiated an activity.
-        organization_uid (UUID | Unset): UID assigned to an organization.
+        user_uid (None | Unset | UUID): UID assigned to a user that initiated an activity.
+        organization_uid (None | Unset | UUID): UID assigned to an organization.
     """
 
     message: str | Unset = UNSET
     activity_log_type: ActivityLogType | Unset = UNSET
     activity_kind: ActivityLogKind | Unset = UNSET
     date: datetime.datetime | Unset = UNSET
-    user_uid: UUID | Unset = UNSET
-    organization_uid: UUID | Unset = UNSET
+    user_uid: None | Unset | UUID = UNSET
+    organization_uid: None | Unset | UUID = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -51,13 +51,21 @@ class ActivityLog:
         if not isinstance(self.date, Unset):
             date = self.date.isoformat()
 
-        user_uid: str | Unset = UNSET
-        if not isinstance(self.user_uid, Unset):
+        user_uid: None | str | Unset
+        if isinstance(self.user_uid, Unset):
+            user_uid = UNSET
+        elif isinstance(self.user_uid, UUID):
             user_uid = str(self.user_uid)
+        else:
+            user_uid = self.user_uid
 
-        organization_uid: str | Unset = UNSET
-        if not isinstance(self.organization_uid, Unset):
+        organization_uid: None | str | Unset
+        if isinstance(self.organization_uid, Unset):
+            organization_uid = UNSET
+        elif isinstance(self.organization_uid, UUID):
             organization_uid = str(self.organization_uid)
+        else:
+            organization_uid = self.organization_uid
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -103,19 +111,39 @@ class ActivityLog:
         else:
             date = isoparse(_date)
 
-        _user_uid = d.pop("userUid", UNSET)
-        user_uid: UUID | Unset
-        if isinstance(_user_uid, Unset):
-            user_uid = UNSET
-        else:
-            user_uid = UUID(_user_uid)
+        def _parse_user_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                user_uid_type_0 = UUID(data)
 
-        _organization_uid = d.pop("organizationUid", UNSET)
-        organization_uid: UUID | Unset
-        if isinstance(_organization_uid, Unset):
-            organization_uid = UNSET
-        else:
-            organization_uid = UUID(_organization_uid)
+                return user_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        user_uid = _parse_user_uid(d.pop("userUid", UNSET))
+
+        def _parse_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                organization_uid_type_0 = UUID(data)
+
+                return organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        organization_uid = _parse_organization_uid(d.pop("organizationUid", UNSET))
 
         activity_log = cls(
             message=message,

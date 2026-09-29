@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -37,7 +37,7 @@ class BackupServer:
         status (BackupServerStatus | Unset): Backup server status.
         in_high_availability_cluster (bool | Unset): Indicates whether a Veeam Backup & Replication server is a part of
             a High Availability cluster.
-        label (str | Unset): Label assigned to a backup server.
+        label (None | str | Unset): Label assigned to a backup server.
     """
 
     instance_uid: UUID | Unset = UNSET
@@ -51,7 +51,7 @@ class BackupServer:
     backup_server_role_type: BackupServerBackupServerRoleType | Unset = UNSET
     status: BackupServerStatus | Unset = UNSET
     in_high_availability_cluster: bool | Unset = UNSET
-    label: str | Unset = UNSET
+    label: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -89,7 +89,11 @@ class BackupServer:
 
         in_high_availability_cluster = self.in_high_availability_cluster
 
-        label = self.label
+        label: None | str | Unset
+        if isinstance(self.label, Unset):
+            label = UNSET
+        else:
+            label = self.label
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -176,7 +180,14 @@ class BackupServer:
 
         in_high_availability_cluster = d.pop("inHighAvailabilityCluster", UNSET)
 
-        label = d.pop("label", UNSET)
+        def _parse_label(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        label = _parse_label(d.pop("label", UNSET))
 
         backup_server = cls(
             instance_uid=instance_uid,

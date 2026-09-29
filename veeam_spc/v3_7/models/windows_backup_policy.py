@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -33,14 +33,14 @@ class WindowsBackupPolicy:
         id (int | Unset): System ID assigned to a backup policy.
         organization_uid (UUID | Unset): UID assigned to an organization to whose Veeam backup agents a backup policy is
             assigned.
-        description (str | Unset): Description of a backup policy.
+        description (None | str | Unset): Description of a backup policy.
         create_subtenants (bool | Unset): Indicates whether a subtenant must be created for each Veeam backup agent.
             Default: True.
         create_sub_folders (bool | Unset): Indicates whether a subfolder must be created for each Veeam backup agent on
             the shared folder. Default: False.
         unlimited_subtenant_quota (bool | Unset): Indicates whether a subtenant can consume unlimited amount of space on
             a repository. Default: False.
-        repository_quota_gb (int | Unset): Maximum amount of space that a subtenant can consume on a repository.
+        repository_quota_gb (int | None | Unset): Maximum amount of space that a subtenant can consume on a repository.
             > If a subtenant can consume unlimited amount of space, the value of this property is ignored.
              Default: 100.
         type_ (BackupPolicyTypeReadonly | Unset): Backup policy type.
@@ -61,11 +61,11 @@ class WindowsBackupPolicy:
     instance_uid: UUID | Unset = UNSET
     id: int | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     create_subtenants: bool | Unset = True
     create_sub_folders: bool | Unset = False
     unlimited_subtenant_quota: bool | Unset = False
-    repository_quota_gb: int | Unset = 100
+    repository_quota_gb: int | None | Unset = 100
     type_: BackupPolicyTypeReadonly | Unset = UNSET
     created_by: str | Unset = UNSET
     modified_date: datetime.datetime | Unset = UNSET
@@ -93,7 +93,11 @@ class WindowsBackupPolicy:
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         create_subtenants = self.create_subtenants
 
@@ -101,7 +105,11 @@ class WindowsBackupPolicy:
 
         unlimited_subtenant_quota = self.unlimited_subtenant_quota
 
-        repository_quota_gb = self.repository_quota_gb
+        repository_quota_gb: int | None | Unset
+        if isinstance(self.repository_quota_gb, Unset):
+            repository_quota_gb = UNSET
+        else:
+            repository_quota_gb = self.repository_quota_gb
 
         type_: str | Unset = UNSET
         if not isinstance(self.type_, Unset):
@@ -204,7 +212,14 @@ class WindowsBackupPolicy:
         else:
             organization_uid = UUID(_organization_uid)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         create_subtenants = d.pop("createSubtenants", UNSET)
 
@@ -212,7 +227,14 @@ class WindowsBackupPolicy:
 
         unlimited_subtenant_quota = d.pop("unlimitedSubtenantQuota", UNSET)
 
-        repository_quota_gb = d.pop("repositoryQuotaGb", UNSET)
+        def _parse_repository_quota_gb(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        repository_quota_gb = _parse_repository_quota_gb(d.pop("repositoryQuotaGb", UNSET))
 
         _type_ = d.pop("type", UNSET)
         type_: BackupPolicyTypeReadonly | Unset

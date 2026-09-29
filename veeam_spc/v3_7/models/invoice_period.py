@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -18,22 +18,30 @@ class InvoicePeriod:
     """Period for which information about services consumed by each company is included in an invoice.
 
     Attributes:
-        from_date (datetime.datetime | Unset): Start date and time.
-        to_date (datetime.datetime | Unset): End date and time.
+        from_date (datetime.datetime | None | Unset): Start date and time.
+        to_date (datetime.datetime | None | Unset): End date and time.
     """
 
-    from_date: datetime.datetime | Unset = UNSET
-    to_date: datetime.datetime | Unset = UNSET
+    from_date: datetime.datetime | None | Unset = UNSET
+    to_date: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from_date: str | Unset = UNSET
-        if not isinstance(self.from_date, Unset):
+        from_date: None | str | Unset
+        if isinstance(self.from_date, Unset):
+            from_date = UNSET
+        elif isinstance(self.from_date, datetime.datetime):
             from_date = self.from_date.isoformat()
+        else:
+            from_date = self.from_date
 
-        to_date: str | Unset = UNSET
-        if not isinstance(self.to_date, Unset):
+        to_date: None | str | Unset
+        if isinstance(self.to_date, Unset):
+            to_date = UNSET
+        elif isinstance(self.to_date, datetime.datetime):
             to_date = self.to_date.isoformat()
+        else:
+            to_date = self.to_date
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -48,19 +56,40 @@ class InvoicePeriod:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        _from_date = d.pop("fromDate", UNSET)
-        from_date: datetime.datetime | Unset
-        if isinstance(_from_date, Unset):
-            from_date = UNSET
-        else:
-            from_date = isoparse(_from_date)
 
-        _to_date = d.pop("toDate", UNSET)
-        to_date: datetime.datetime | Unset
-        if isinstance(_to_date, Unset):
-            to_date = UNSET
-        else:
-            to_date = isoparse(_to_date)
+        def _parse_from_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                from_date_type_0 = isoparse(data)
+
+                return from_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        from_date = _parse_from_date(d.pop("fromDate", UNSET))
+
+        def _parse_to_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                to_date_type_0 = isoparse(data)
+
+                return to_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        to_date = _parse_to_date(d.pop("toDate", UNSET))
 
         invoice_period = cls(
             from_date=from_date,

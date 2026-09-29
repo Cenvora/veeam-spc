@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -28,9 +28,9 @@ class BackupServerCredentialsRecord:
         type_ (BackupServerCredentialsType): Credentials type.
         username (str): User name.
         creation_time (datetime.datetime): Date and time when credentials were created.
-        description (str | Unset): Description of credentials.
-        mapped_organization_uid (UUID | Unset): UID of a company to whom credentials are assigned.
-        mapped_organization_name (str | Unset): Name of a company to whom credentials are assigned.
+        description (None | str | Unset): Description of credentials.
+        mapped_organization_uid (None | Unset | UUID): UID of a company to whom credentials are assigned.
+        mapped_organization_name (None | str | Unset): Name of a company to whom credentials are assigned.
         linux_credentials_details (BackupServerCredentialsRecordLinuxDetails | Unset): Details of credentials used to
             access Linux computers.
     """
@@ -39,9 +39,9 @@ class BackupServerCredentialsRecord:
     type_: BackupServerCredentialsType
     username: str
     creation_time: datetime.datetime
-    description: str | Unset = UNSET
-    mapped_organization_uid: UUID | Unset = UNSET
-    mapped_organization_name: str | Unset = UNSET
+    description: None | str | Unset = UNSET
+    mapped_organization_uid: None | Unset | UUID = UNSET
+    mapped_organization_name: None | str | Unset = UNSET
     linux_credentials_details: BackupServerCredentialsRecordLinuxDetails | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -54,13 +54,25 @@ class BackupServerCredentialsRecord:
 
         creation_time = self.creation_time.isoformat()
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
-        mapped_organization_uid: str | Unset = UNSET
-        if not isinstance(self.mapped_organization_uid, Unset):
+        mapped_organization_uid: None | str | Unset
+        if isinstance(self.mapped_organization_uid, Unset):
+            mapped_organization_uid = UNSET
+        elif isinstance(self.mapped_organization_uid, UUID):
             mapped_organization_uid = str(self.mapped_organization_uid)
+        else:
+            mapped_organization_uid = self.mapped_organization_uid
 
-        mapped_organization_name = self.mapped_organization_name
+        mapped_organization_name: None | str | Unset
+        if isinstance(self.mapped_organization_name, Unset):
+            mapped_organization_name = UNSET
+        else:
+            mapped_organization_name = self.mapped_organization_name
 
         linux_credentials_details: dict[str, Any] | Unset = UNSET
         if not isinstance(self.linux_credentials_details, Unset):
@@ -100,16 +112,40 @@ class BackupServerCredentialsRecord:
 
         creation_time = isoparse(d.pop("creationTime"))
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _mapped_organization_uid = d.pop("mappedOrganizationUid", UNSET)
-        mapped_organization_uid: UUID | Unset
-        if isinstance(_mapped_organization_uid, Unset):
-            mapped_organization_uid = UNSET
-        else:
-            mapped_organization_uid = UUID(_mapped_organization_uid)
+        description = _parse_description(d.pop("description", UNSET))
 
-        mapped_organization_name = d.pop("mappedOrganizationName", UNSET)
+        def _parse_mapped_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                mapped_organization_uid_type_0 = UUID(data)
+
+                return mapped_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        mapped_organization_uid = _parse_mapped_organization_uid(d.pop("mappedOrganizationUid", UNSET))
+
+        def _parse_mapped_organization_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        mapped_organization_name = _parse_mapped_organization_name(d.pop("mappedOrganizationName", UNSET))
 
         _linux_credentials_details = d.pop("linuxCredentialsDetails", UNSET)
         linux_credentials_details: BackupServerCredentialsRecordLinuxDetails | Unset

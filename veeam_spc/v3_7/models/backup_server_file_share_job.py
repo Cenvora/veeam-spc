@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -12,7 +12,7 @@ from ..models.backup_server_file_share_job_retention_unit import BackupServerFil
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+    from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
 
 T = TypeVar("T", bound="BackupServerFileShareJob")
@@ -25,30 +25,32 @@ class BackupServerFileShareJob:
         instance_uid (UUID | Unset): UID assigned to a job in Veeam Backup & Replication.
         unique_uid (UUID | Unset): UID assigned to a job in Veeam Service Provider Console.
         target_repository_uid (UUID | Unset): UID assigned to a target backup repository.
-        archive_repository_uid (UUID | Unset): UID assigned to an archive repository.
+        archive_repository_uid (None | Unset | UUID): UID assigned to an archive repository.
         retention (int | Unset): Duration of file retention.
         retention_unit (BackupServerFileShareJobRetentionUnit | Unset): Measurement units of file retention duration.
         is_archive_retention_enabled (bool | Unset): Indicates whether long-term file retention is enabled.
         archive_retention (int | Unset): Duration of long-term file retention.
         archive_retention_unit (BackupServerFileShareJobArchiveRetentionUnit | Unset): Measurement units of long-term
             file retention duration.
-        field_embedded (EmbeddedForBackupServerJobChildren | Unset): Resource representation of the related Veeam Backup
-            & Replication server job entity.
+        field_embedded (EmbeddedForBackupServerJobChildrenType0 | None | Unset): Resource representation of the related
+            Veeam Backup & Replication server job entity.
     """
 
     instance_uid: UUID | Unset = UNSET
     unique_uid: UUID | Unset = UNSET
     target_repository_uid: UUID | Unset = UNSET
-    archive_repository_uid: UUID | Unset = UNSET
+    archive_repository_uid: None | Unset | UUID = UNSET
     retention: int | Unset = UNSET
     retention_unit: BackupServerFileShareJobRetentionUnit | Unset = UNSET
     is_archive_retention_enabled: bool | Unset = UNSET
     archive_retention: int | Unset = UNSET
     archive_retention_unit: BackupServerFileShareJobArchiveRetentionUnit | Unset = UNSET
-    field_embedded: EmbeddedForBackupServerJobChildren | Unset = UNSET
+    field_embedded: EmbeddedForBackupServerJobChildrenType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
+
         instance_uid: str | Unset = UNSET
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
@@ -61,9 +63,13 @@ class BackupServerFileShareJob:
         if not isinstance(self.target_repository_uid, Unset):
             target_repository_uid = str(self.target_repository_uid)
 
-        archive_repository_uid: str | Unset = UNSET
-        if not isinstance(self.archive_repository_uid, Unset):
+        archive_repository_uid: None | str | Unset
+        if isinstance(self.archive_repository_uid, Unset):
+            archive_repository_uid = UNSET
+        elif isinstance(self.archive_repository_uid, UUID):
             archive_repository_uid = str(self.archive_repository_uid)
+        else:
+            archive_repository_uid = self.archive_repository_uid
 
         retention = self.retention
 
@@ -79,9 +85,13 @@ class BackupServerFileShareJob:
         if not isinstance(self.archive_retention_unit, Unset):
             archive_retention_unit = self.archive_retention_unit.value
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForBackupServerJobChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -111,7 +121,7 @@ class BackupServerFileShareJob:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
         d = dict(src_dict)
         _instance_uid = d.pop("instanceUid", UNSET)
@@ -135,12 +145,22 @@ class BackupServerFileShareJob:
         else:
             target_repository_uid = UUID(_target_repository_uid)
 
-        _archive_repository_uid = d.pop("archiveRepositoryUid", UNSET)
-        archive_repository_uid: UUID | Unset
-        if isinstance(_archive_repository_uid, Unset):
-            archive_repository_uid = UNSET
-        else:
-            archive_repository_uid = UUID(_archive_repository_uid)
+        def _parse_archive_repository_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                archive_repository_uid_type_0 = UUID(data)
+
+                return archive_repository_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        archive_repository_uid = _parse_archive_repository_uid(d.pop("archiveRepositoryUid", UNSET))
 
         retention = d.pop("retention", UNSET)
 
@@ -162,12 +182,24 @@ class BackupServerFileShareJob:
         else:
             archive_retention_unit = BackupServerFileShareJobArchiveRetentionUnit(_archive_retention_unit)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForBackupServerJobChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForBackupServerJobChildren.from_dict(_field_embedded)
+        def _parse_field_embedded(data: object) -> EmbeddedForBackupServerJobChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_backup_server_job_children_type_0 = (
+                    EmbeddedForBackupServerJobChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_backup_server_job_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForBackupServerJobChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         backup_server_file_share_job = cls(
             instance_uid=instance_uid,

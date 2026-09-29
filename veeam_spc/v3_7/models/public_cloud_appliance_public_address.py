@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,12 +17,12 @@ class PublicCloudAppliancePublicAddress:
     Attributes:
         appliance_ip_address_id (str | Unset): Elastic IP address.
         ip_address (str | Unset): Public address of a Veeam Backup for Public Clouds appliance.
-        name (str | Unset): Name of a Veeam Backup for Public Clouds appliance.
+        name (None | str | Unset): Name of a Veeam Backup for Public Clouds appliance.
     """
 
     appliance_ip_address_id: str | Unset = UNSET
     ip_address: str | Unset = UNSET
-    name: str | Unset = UNSET
+    name: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -30,7 +30,11 @@ class PublicCloudAppliancePublicAddress:
 
         ip_address = self.ip_address
 
-        name = self.name
+        name: None | str | Unset
+        if isinstance(self.name, Unset):
+            name = UNSET
+        else:
+            name = self.name
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -51,7 +55,14 @@ class PublicCloudAppliancePublicAddress:
 
         ip_address = d.pop("ipAddress", UNSET)
 
-        name = d.pop("name", UNSET)
+        def _parse_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        name = _parse_name(d.pop("name", UNSET))
 
         public_cloud_appliance_public_address = cls(
             appliance_ip_address_id=appliance_ip_address_id,

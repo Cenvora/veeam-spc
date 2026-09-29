@@ -36,7 +36,8 @@ class ProtectedComputerManagedByBackupServer:
         platform_type (ProtectedComputerManagedByBackupServerPlatformType | Unset): Platform type of a protected
             computer.
         operation_mode (ProtectedComputerManagedByBackupServerOperationMode | Unset): Operation mode.
-        latest_restore_point_date (datetime.datetime | Unset): Date and time of the latest restore point creation.
+        latest_restore_point_date (datetime.datetime | None | Unset): Date and time of the latest restore point
+            creation.
         malware_state (MalwareState | Unset): Malware status.
     """
 
@@ -50,7 +51,7 @@ class ProtectedComputerManagedByBackupServer:
     guest_os: str | Unset = UNSET
     platform_type: ProtectedComputerManagedByBackupServerPlatformType | Unset = UNSET
     operation_mode: ProtectedComputerManagedByBackupServerOperationMode | Unset = UNSET
-    latest_restore_point_date: datetime.datetime | Unset = UNSET
+    latest_restore_point_date: datetime.datetime | None | Unset = UNSET
     malware_state: MalwareState | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -94,9 +95,13 @@ class ProtectedComputerManagedByBackupServer:
         if not isinstance(self.operation_mode, Unset):
             operation_mode = self.operation_mode.value
 
-        latest_restore_point_date: str | Unset = UNSET
-        if not isinstance(self.latest_restore_point_date, Unset):
+        latest_restore_point_date: None | str | Unset
+        if isinstance(self.latest_restore_point_date, Unset):
+            latest_restore_point_date = UNSET
+        elif isinstance(self.latest_restore_point_date, datetime.datetime):
             latest_restore_point_date = self.latest_restore_point_date.isoformat()
+        else:
+            latest_restore_point_date = self.latest_restore_point_date
 
         malware_state: str | Unset = UNSET
         if not isinstance(self.malware_state, Unset):
@@ -192,12 +197,22 @@ class ProtectedComputerManagedByBackupServer:
         else:
             operation_mode = ProtectedComputerManagedByBackupServerOperationMode(_operation_mode)
 
-        _latest_restore_point_date = d.pop("latestRestorePointDate", UNSET)
-        latest_restore_point_date: datetime.datetime | Unset
-        if isinstance(_latest_restore_point_date, Unset):
-            latest_restore_point_date = UNSET
-        else:
-            latest_restore_point_date = isoparse(_latest_restore_point_date)
+        def _parse_latest_restore_point_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                latest_restore_point_date_type_0 = isoparse(data)
+
+                return latest_restore_point_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        latest_restore_point_date = _parse_latest_restore_point_date(d.pop("latestRestorePointDate", UNSET))
 
         _malware_state = d.pop("malwareState", UNSET)
         malware_state: MalwareState | Unset

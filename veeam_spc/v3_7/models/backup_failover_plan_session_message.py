@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,15 +21,15 @@ class BackupFailoverPlanSessionMessage:
         title (str | Unset): Title of a message.
         description (str | Unset): Description of a process.
         severity (BackupFailoverPlanSessionMessageSeverity | Unset): Severity of a failover plan session message.
-        start_time (datetime.datetime | Unset): Start date and time of a process.
-        end_time (datetime.datetime | Unset): End date and time of a process.
+        start_time (datetime.datetime | None | Unset): Start date and time of a process.
+        end_time (datetime.datetime | None | Unset): End date and time of a process.
     """
 
     title: str | Unset = UNSET
     description: str | Unset = UNSET
     severity: BackupFailoverPlanSessionMessageSeverity | Unset = UNSET
-    start_time: datetime.datetime | Unset = UNSET
-    end_time: datetime.datetime | Unset = UNSET
+    start_time: datetime.datetime | None | Unset = UNSET
+    end_time: datetime.datetime | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -41,13 +41,21 @@ class BackupFailoverPlanSessionMessage:
         if not isinstance(self.severity, Unset):
             severity = self.severity.value
 
-        start_time: str | Unset = UNSET
-        if not isinstance(self.start_time, Unset):
+        start_time: None | str | Unset
+        if isinstance(self.start_time, Unset):
+            start_time = UNSET
+        elif isinstance(self.start_time, datetime.datetime):
             start_time = self.start_time.isoformat()
+        else:
+            start_time = self.start_time
 
-        end_time: str | Unset = UNSET
-        if not isinstance(self.end_time, Unset):
+        end_time: None | str | Unset
+        if isinstance(self.end_time, Unset):
+            end_time = UNSET
+        elif isinstance(self.end_time, datetime.datetime):
             end_time = self.end_time.isoformat()
+        else:
+            end_time = self.end_time
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -79,19 +87,39 @@ class BackupFailoverPlanSessionMessage:
         else:
             severity = BackupFailoverPlanSessionMessageSeverity(_severity)
 
-        _start_time = d.pop("startTime", UNSET)
-        start_time: datetime.datetime | Unset
-        if isinstance(_start_time, Unset):
-            start_time = UNSET
-        else:
-            start_time = isoparse(_start_time)
+        def _parse_start_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                start_time_type_0 = isoparse(data)
 
-        _end_time = d.pop("endTime", UNSET)
-        end_time: datetime.datetime | Unset
-        if isinstance(_end_time, Unset):
-            end_time = UNSET
-        else:
-            end_time = isoparse(_end_time)
+                return start_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        start_time = _parse_start_time(d.pop("startTime", UNSET))
+
+        def _parse_end_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                end_time_type_0 = isoparse(data)
+
+                return end_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        end_time = _parse_end_time(d.pop("endTime", UNSET))
 
         backup_failover_plan_session_message = cls(
             title=title,

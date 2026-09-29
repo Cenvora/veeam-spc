@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -25,36 +25,36 @@ class ProtectedComputerManagedByBackupServerRestorePoint:
         instance_uid (UUID | Unset): UID assigned to a restore point.
         backup_agent_uid (UUID | Unset): UID assigned to a Veeam backup agent.
         backup_uid (UUID | Unset): UID assigned to a backup chain.
-        job_uid (UUID | Unset): UID assigned to a backup job that created the restore point.
+        job_uid (None | Unset | UUID): UID assigned to a backup job that created the restore point.
         repository_uid (UUID | Unset): UID assigned to a target repository
         size (int | Unset): Size of the restore point, in bytes.
         provisioned_source_size (int | Unset): Total size of protected computer disks, in bytes.
-        used_source_size (int | Unset): Used space on protected computer disks, in bytes.
+        used_source_size (int | None | Unset): Used space on protected computer disks, in bytes.
         increment_raw_data_size (int | Unset): Size of the backup increment, in bytes.
         source_size (int | Unset): Size of protected data, in bytes.
         cpu_cores (int | Unset): Number of protected computer CPU cores.
         memory (int | Unset): Protected computer memory, in bytes.
         target_type (ProtectedComputerManagedByBackupServerRestorePointTargetType | Unset): Type of a target repository.
-        backup_creation_time (datetime.datetime | Unset): Date and time when backup was created.
-        file_creation_time (datetime.datetime | Unset): Date and time when a restore point was created.
+        backup_creation_time (datetime.datetime | None | Unset): Date and time when backup was created.
+        file_creation_time (datetime.datetime | None | Unset): Date and time when a restore point was created.
         malware_state (MalwareState | Unset): Malware status.
     """
 
     instance_uid: UUID | Unset = UNSET
     backup_agent_uid: UUID | Unset = UNSET
     backup_uid: UUID | Unset = UNSET
-    job_uid: UUID | Unset = UNSET
+    job_uid: None | Unset | UUID = UNSET
     repository_uid: UUID | Unset = UNSET
     size: int | Unset = UNSET
     provisioned_source_size: int | Unset = UNSET
-    used_source_size: int | Unset = UNSET
+    used_source_size: int | None | Unset = UNSET
     increment_raw_data_size: int | Unset = UNSET
     source_size: int | Unset = UNSET
     cpu_cores: int | Unset = UNSET
     memory: int | Unset = UNSET
     target_type: ProtectedComputerManagedByBackupServerRestorePointTargetType | Unset = UNSET
-    backup_creation_time: datetime.datetime | Unset = UNSET
-    file_creation_time: datetime.datetime | Unset = UNSET
+    backup_creation_time: datetime.datetime | None | Unset = UNSET
+    file_creation_time: datetime.datetime | None | Unset = UNSET
     malware_state: MalwareState | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -71,9 +71,13 @@ class ProtectedComputerManagedByBackupServerRestorePoint:
         if not isinstance(self.backup_uid, Unset):
             backup_uid = str(self.backup_uid)
 
-        job_uid: str | Unset = UNSET
-        if not isinstance(self.job_uid, Unset):
+        job_uid: None | str | Unset
+        if isinstance(self.job_uid, Unset):
+            job_uid = UNSET
+        elif isinstance(self.job_uid, UUID):
             job_uid = str(self.job_uid)
+        else:
+            job_uid = self.job_uid
 
         repository_uid: str | Unset = UNSET
         if not isinstance(self.repository_uid, Unset):
@@ -83,7 +87,11 @@ class ProtectedComputerManagedByBackupServerRestorePoint:
 
         provisioned_source_size = self.provisioned_source_size
 
-        used_source_size = self.used_source_size
+        used_source_size: int | None | Unset
+        if isinstance(self.used_source_size, Unset):
+            used_source_size = UNSET
+        else:
+            used_source_size = self.used_source_size
 
         increment_raw_data_size = self.increment_raw_data_size
 
@@ -97,13 +105,21 @@ class ProtectedComputerManagedByBackupServerRestorePoint:
         if not isinstance(self.target_type, Unset):
             target_type = self.target_type.value
 
-        backup_creation_time: str | Unset = UNSET
-        if not isinstance(self.backup_creation_time, Unset):
+        backup_creation_time: None | str | Unset
+        if isinstance(self.backup_creation_time, Unset):
+            backup_creation_time = UNSET
+        elif isinstance(self.backup_creation_time, datetime.datetime):
             backup_creation_time = self.backup_creation_time.isoformat()
+        else:
+            backup_creation_time = self.backup_creation_time
 
-        file_creation_time: str | Unset = UNSET
-        if not isinstance(self.file_creation_time, Unset):
+        file_creation_time: None | str | Unset
+        if isinstance(self.file_creation_time, Unset):
+            file_creation_time = UNSET
+        elif isinstance(self.file_creation_time, datetime.datetime):
             file_creation_time = self.file_creation_time.isoformat()
+        else:
+            file_creation_time = self.file_creation_time
 
         malware_state: str | Unset = UNSET
         if not isinstance(self.malware_state, Unset):
@@ -171,12 +187,22 @@ class ProtectedComputerManagedByBackupServerRestorePoint:
         else:
             backup_uid = UUID(_backup_uid)
 
-        _job_uid = d.pop("jobUid", UNSET)
-        job_uid: UUID | Unset
-        if isinstance(_job_uid, Unset):
-            job_uid = UNSET
-        else:
-            job_uid = UUID(_job_uid)
+        def _parse_job_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                job_uid_type_0 = UUID(data)
+
+                return job_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        job_uid = _parse_job_uid(d.pop("jobUid", UNSET))
 
         _repository_uid = d.pop("repositoryUid", UNSET)
         repository_uid: UUID | Unset
@@ -189,7 +215,14 @@ class ProtectedComputerManagedByBackupServerRestorePoint:
 
         provisioned_source_size = d.pop("provisionedSourceSize", UNSET)
 
-        used_source_size = d.pop("usedSourceSize", UNSET)
+        def _parse_used_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        used_source_size = _parse_used_source_size(d.pop("usedSourceSize", UNSET))
 
         increment_raw_data_size = d.pop("incrementRawDataSize", UNSET)
 
@@ -206,19 +239,39 @@ class ProtectedComputerManagedByBackupServerRestorePoint:
         else:
             target_type = ProtectedComputerManagedByBackupServerRestorePointTargetType(_target_type)
 
-        _backup_creation_time = d.pop("backupCreationTime", UNSET)
-        backup_creation_time: datetime.datetime | Unset
-        if isinstance(_backup_creation_time, Unset):
-            backup_creation_time = UNSET
-        else:
-            backup_creation_time = isoparse(_backup_creation_time)
+        def _parse_backup_creation_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                backup_creation_time_type_0 = isoparse(data)
 
-        _file_creation_time = d.pop("fileCreationTime", UNSET)
-        file_creation_time: datetime.datetime | Unset
-        if isinstance(_file_creation_time, Unset):
-            file_creation_time = UNSET
-        else:
-            file_creation_time = isoparse(_file_creation_time)
+                return backup_creation_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        backup_creation_time = _parse_backup_creation_time(d.pop("backupCreationTime", UNSET))
+
+        def _parse_file_creation_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                file_creation_time_type_0 = isoparse(data)
+
+                return file_creation_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        file_creation_time = _parse_file_creation_time(d.pop("fileCreationTime", UNSET))
 
         _malware_state = d.pop("malwareState", UNSET)
         malware_state: MalwareState | Unset

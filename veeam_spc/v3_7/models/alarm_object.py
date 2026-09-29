@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,21 +20,22 @@ class AlarmObject:
         instance_uid (UUID | Unset): UID assigned to an object for which an alarm was triggered.
         type_ (AlarmObjectType | Unset): Object type.
         organization_uid (UUID | Unset): UID assigned to a organization for which an alarm was triggered.
-        location_uid (UUID | Unset): UID assigned to a location for which an alarm was triggered.
-        management_agent_uid (UUID | Unset): UID assigned to a managed agent that is installed on an alarm object.
+        location_uid (None | Unset | UUID): UID assigned to a location for which an alarm was triggered.
+        management_agent_uid (None | Unset | UUID): UID assigned to a managed agent that is installed on an alarm
+            object.
         computer_name (str | Unset): Name of a computer for which an alarm was triggered.
-        object_uid (UUID | Unset): UID assigned to an alarm object.
-        object_name (str | Unset): Name of an alarm object.
+        object_uid (None | Unset | UUID): UID assigned to an alarm object.
+        object_name (None | str | Unset): Name of an alarm object.
     """
 
     instance_uid: UUID | Unset = UNSET
     type_: AlarmObjectType | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
-    location_uid: UUID | Unset = UNSET
-    management_agent_uid: UUID | Unset = UNSET
+    location_uid: None | Unset | UUID = UNSET
+    management_agent_uid: None | Unset | UUID = UNSET
     computer_name: str | Unset = UNSET
-    object_uid: UUID | Unset = UNSET
-    object_name: str | Unset = UNSET
+    object_uid: None | Unset | UUID = UNSET
+    object_name: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -50,21 +51,37 @@ class AlarmObject:
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        location_uid: str | Unset = UNSET
-        if not isinstance(self.location_uid, Unset):
+        location_uid: None | str | Unset
+        if isinstance(self.location_uid, Unset):
+            location_uid = UNSET
+        elif isinstance(self.location_uid, UUID):
             location_uid = str(self.location_uid)
+        else:
+            location_uid = self.location_uid
 
-        management_agent_uid: str | Unset = UNSET
-        if not isinstance(self.management_agent_uid, Unset):
+        management_agent_uid: None | str | Unset
+        if isinstance(self.management_agent_uid, Unset):
+            management_agent_uid = UNSET
+        elif isinstance(self.management_agent_uid, UUID):
             management_agent_uid = str(self.management_agent_uid)
+        else:
+            management_agent_uid = self.management_agent_uid
 
         computer_name = self.computer_name
 
-        object_uid: str | Unset = UNSET
-        if not isinstance(self.object_uid, Unset):
+        object_uid: None | str | Unset
+        if isinstance(self.object_uid, Unset):
+            object_uid = UNSET
+        elif isinstance(self.object_uid, UUID):
             object_uid = str(self.object_uid)
+        else:
+            object_uid = self.object_uid
 
-        object_name = self.object_name
+        object_name: None | str | Unset
+        if isinstance(self.object_name, Unset):
+            object_name = UNSET
+        else:
+            object_name = self.object_name
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -112,30 +129,67 @@ class AlarmObject:
         else:
             organization_uid = UUID(_organization_uid)
 
-        _location_uid = d.pop("locationUid", UNSET)
-        location_uid: UUID | Unset
-        if isinstance(_location_uid, Unset):
-            location_uid = UNSET
-        else:
-            location_uid = UUID(_location_uid)
+        def _parse_location_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                location_uid_type_0 = UUID(data)
 
-        _management_agent_uid = d.pop("managementAgentUid", UNSET)
-        management_agent_uid: UUID | Unset
-        if isinstance(_management_agent_uid, Unset):
-            management_agent_uid = UNSET
-        else:
-            management_agent_uid = UUID(_management_agent_uid)
+                return location_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        location_uid = _parse_location_uid(d.pop("locationUid", UNSET))
+
+        def _parse_management_agent_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                management_agent_uid_type_0 = UUID(data)
+
+                return management_agent_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        management_agent_uid = _parse_management_agent_uid(d.pop("managementAgentUid", UNSET))
 
         computer_name = d.pop("computerName", UNSET)
 
-        _object_uid = d.pop("objectUid", UNSET)
-        object_uid: UUID | Unset
-        if isinstance(_object_uid, Unset):
-            object_uid = UNSET
-        else:
-            object_uid = UUID(_object_uid)
+        def _parse_object_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                object_uid_type_0 = UUID(data)
 
-        object_name = d.pop("objectName", UNSET)
+                return object_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        object_uid = _parse_object_uid(d.pop("objectUid", UNSET))
+
+        def _parse_object_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        object_name = _parse_object_name(d.pop("objectName", UNSET))
 
         alarm_object = cls(
             instance_uid=instance_uid,

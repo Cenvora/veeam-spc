@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,7 +21,7 @@ class Vb365JobItemGroup:
         group_type (Vb365JobItemGroupGroupType): Type of an organization group.
         name (str): Name of an organization group.
         display_name (str): Display name of an organization group.
-        on_premises_sid (str | Unset): SID assigned to an on-premises organization group.
+        on_premises_sid (None | str | Unset): SID assigned to an on-premises organization group.
         location_type (Vb365JobItemGroupLocationType | Unset): Type of an organization group location.
         managed_by (str | Unset): Name of a user that manages an organization group.
         site (str | Unset): URL of an organization group site.
@@ -31,7 +31,7 @@ class Vb365JobItemGroup:
     group_type: Vb365JobItemGroupGroupType
     name: str
     display_name: str
-    on_premises_sid: str | Unset = UNSET
+    on_premises_sid: None | str | Unset = UNSET
     location_type: Vb365JobItemGroupLocationType | Unset = UNSET
     managed_by: str | Unset = UNSET
     site: str | Unset = UNSET
@@ -46,7 +46,11 @@ class Vb365JobItemGroup:
 
         display_name = self.display_name
 
-        on_premises_sid = self.on_premises_sid
+        on_premises_sid: None | str | Unset
+        if isinstance(self.on_premises_sid, Unset):
+            on_premises_sid = UNSET
+        else:
+            on_premises_sid = self.on_premises_sid
 
         location_type: str | Unset = UNSET
         if not isinstance(self.location_type, Unset):
@@ -88,7 +92,14 @@ class Vb365JobItemGroup:
 
         display_name = d.pop("displayName")
 
-        on_premises_sid = d.pop("onPremisesSid", UNSET)
+        def _parse_on_premises_sid(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        on_premises_sid = _parse_on_premises_sid(d.pop("onPremisesSid", UNSET))
 
         _location_type = d.pop("locationType", UNSET)
         location_type: Vb365JobItemGroupLocationType | Unset

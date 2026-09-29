@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,19 +15,27 @@ T = TypeVar("T", bound="MacJobRetentionSettings")
 class MacJobRetentionSettings:
     """
     Attributes:
-        restore_points_count (int | Unset): Number of restore points that must be kept in the target location.
-        retention_days (int | Unset): Number of days for which backup files must be stored in the target location. Days
-            without backups are not included.
+        restore_points_count (int | None | Unset): Number of restore points that must be kept in the target location.
+        retention_days (int | None | Unset): Number of days for which backup files must be stored in the target
+            location. Days without backups are not included.
     """
 
-    restore_points_count: int | Unset = UNSET
-    retention_days: int | Unset = UNSET
+    restore_points_count: int | None | Unset = UNSET
+    retention_days: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        restore_points_count = self.restore_points_count
+        restore_points_count: int | None | Unset
+        if isinstance(self.restore_points_count, Unset):
+            restore_points_count = UNSET
+        else:
+            restore_points_count = self.restore_points_count
 
-        retention_days = self.retention_days
+        retention_days: int | None | Unset
+        if isinstance(self.retention_days, Unset):
+            retention_days = UNSET
+        else:
+            retention_days = self.retention_days
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -42,9 +50,24 @@ class MacJobRetentionSettings:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        restore_points_count = d.pop("restorePointsCount", UNSET)
 
-        retention_days = d.pop("retentionDays", UNSET)
+        def _parse_restore_points_count(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        restore_points_count = _parse_restore_points_count(d.pop("restorePointsCount", UNSET))
+
+        def _parse_retention_days(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        retention_days = _parse_retention_days(d.pop("retentionDays", UNSET))
 
         mac_job_retention_settings = cls(
             restore_points_count=restore_points_count,

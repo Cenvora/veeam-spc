@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -21,14 +21,14 @@ class Label:
         key (str): Label key used for identification.
         scope (list[LabelScope]): Array of categories to which a label may be assigned.
         instance_uid (UUID | Unset): UID assigned to a label.
-        description (str | Unset): Description of a label.
+        description (None | str | Unset): Description of a label.
         object_count (int | Unset): Number of objects to which a label is assigned.
     """
 
     key: str
     scope: list[LabelScope]
     instance_uid: UUID | Unset = UNSET
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     object_count: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -44,7 +44,11 @@ class Label:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         object_count = self.object_count
 
@@ -84,7 +88,14 @@ class Label:
         else:
             instance_uid = UUID(_instance_uid)
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         object_count = d.pop("objectCount", UNSET)
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,10 +15,12 @@ if TYPE_CHECKING:
     from ..models.backup_server_backup_job_guest_file_system_indexing import (
         BackupServerBackupJobGuestFileSystemIndexing,
     )
-    from ..models.backup_server_backup_job_guest_interaction_proxies_settings import (
-        BackupServerBackupJobGuestInteractionProxiesSettings,
+    from ..models.backup_server_backup_job_guest_interaction_proxies_settings_type_0 import (
+        BackupServerBackupJobGuestInteractionProxiesSettingsType0,
     )
-    from ..models.backup_server_backup_job_guest_os_credentials import BackupServerBackupJobGuestOsCredentials
+    from ..models.backup_server_backup_job_guest_os_credentials_type_0 import (
+        BackupServerBackupJobGuestOsCredentialsType0,
+    )
 
 
 T = TypeVar("T", bound="BackupServerBackupJobGuestProcessing")
@@ -32,18 +34,25 @@ class BackupServerBackupJobGuestProcessing:
         app_aware_processing (BackupServerBackupJobApplicationAwareProcessing | Unset): Application-aware processing
             settings.
         guest_fs_indexing (BackupServerBackupJobGuestFileSystemIndexing | Unset): Guest OS file indexing.
-        guest_interaction_proxies (BackupServerBackupJobGuestInteractionProxiesSettings | Unset): Interaction proxy
-            settings.
-        guest_credentials (BackupServerBackupJobGuestOsCredentials | Unset): VM custom credentials.
+        guest_interaction_proxies (BackupServerBackupJobGuestInteractionProxiesSettingsType0 | None | Unset):
+            Interaction proxy settings.
+        guest_credentials (BackupServerBackupJobGuestOsCredentialsType0 | None | Unset): VM custom credentials.
     """
 
     app_aware_processing: BackupServerBackupJobApplicationAwareProcessing | Unset = UNSET
     guest_fs_indexing: BackupServerBackupJobGuestFileSystemIndexing | Unset = UNSET
-    guest_interaction_proxies: BackupServerBackupJobGuestInteractionProxiesSettings | Unset = UNSET
-    guest_credentials: BackupServerBackupJobGuestOsCredentials | Unset = UNSET
+    guest_interaction_proxies: BackupServerBackupJobGuestInteractionProxiesSettingsType0 | None | Unset = UNSET
+    guest_credentials: BackupServerBackupJobGuestOsCredentialsType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.backup_server_backup_job_guest_interaction_proxies_settings_type_0 import (
+            BackupServerBackupJobGuestInteractionProxiesSettingsType0,
+        )
+        from ..models.backup_server_backup_job_guest_os_credentials_type_0 import (
+            BackupServerBackupJobGuestOsCredentialsType0,
+        )
+
         app_aware_processing: dict[str, Any] | Unset = UNSET
         if not isinstance(self.app_aware_processing, Unset):
             app_aware_processing = self.app_aware_processing.to_dict()
@@ -52,13 +61,21 @@ class BackupServerBackupJobGuestProcessing:
         if not isinstance(self.guest_fs_indexing, Unset):
             guest_fs_indexing = self.guest_fs_indexing.to_dict()
 
-        guest_interaction_proxies: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.guest_interaction_proxies, Unset):
+        guest_interaction_proxies: dict[str, Any] | None | Unset
+        if isinstance(self.guest_interaction_proxies, Unset):
+            guest_interaction_proxies = UNSET
+        elif isinstance(self.guest_interaction_proxies, BackupServerBackupJobGuestInteractionProxiesSettingsType0):
             guest_interaction_proxies = self.guest_interaction_proxies.to_dict()
+        else:
+            guest_interaction_proxies = self.guest_interaction_proxies
 
-        guest_credentials: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.guest_credentials, Unset):
+        guest_credentials: dict[str, Any] | None | Unset
+        if isinstance(self.guest_credentials, Unset):
+            guest_credentials = UNSET
+        elif isinstance(self.guest_credentials, BackupServerBackupJobGuestOsCredentialsType0):
             guest_credentials = self.guest_credentials.to_dict()
+        else:
+            guest_credentials = self.guest_credentials
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -82,10 +99,12 @@ class BackupServerBackupJobGuestProcessing:
         from ..models.backup_server_backup_job_guest_file_system_indexing import (
             BackupServerBackupJobGuestFileSystemIndexing,
         )
-        from ..models.backup_server_backup_job_guest_interaction_proxies_settings import (
-            BackupServerBackupJobGuestInteractionProxiesSettings,
+        from ..models.backup_server_backup_job_guest_interaction_proxies_settings_type_0 import (
+            BackupServerBackupJobGuestInteractionProxiesSettingsType0,
         )
-        from ..models.backup_server_backup_job_guest_os_credentials import BackupServerBackupJobGuestOsCredentials
+        from ..models.backup_server_backup_job_guest_os_credentials_type_0 import (
+            BackupServerBackupJobGuestOsCredentialsType0,
+        )
 
         d = dict(src_dict)
         _app_aware_processing = d.pop("appAwareProcessing", UNSET)
@@ -102,21 +121,45 @@ class BackupServerBackupJobGuestProcessing:
         else:
             guest_fs_indexing = BackupServerBackupJobGuestFileSystemIndexing.from_dict(_guest_fs_indexing)
 
-        _guest_interaction_proxies = d.pop("guestInteractionProxies", UNSET)
-        guest_interaction_proxies: BackupServerBackupJobGuestInteractionProxiesSettings | Unset
-        if isinstance(_guest_interaction_proxies, Unset):
-            guest_interaction_proxies = UNSET
-        else:
-            guest_interaction_proxies = BackupServerBackupJobGuestInteractionProxiesSettings.from_dict(
-                _guest_interaction_proxies
-            )
+        def _parse_guest_interaction_proxies(
+            data: object,
+        ) -> BackupServerBackupJobGuestInteractionProxiesSettingsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_guest_interaction_proxies_settings_type_0 = (
+                    BackupServerBackupJobGuestInteractionProxiesSettingsType0.from_dict(data)
+                )
 
-        _guest_credentials = d.pop("guestCredentials", UNSET)
-        guest_credentials: BackupServerBackupJobGuestOsCredentials | Unset
-        if isinstance(_guest_credentials, Unset):
-            guest_credentials = UNSET
-        else:
-            guest_credentials = BackupServerBackupJobGuestOsCredentials.from_dict(_guest_credentials)
+                return componentsschemas_backup_server_backup_job_guest_interaction_proxies_settings_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobGuestInteractionProxiesSettingsType0 | None | Unset, data)
+
+        guest_interaction_proxies = _parse_guest_interaction_proxies(d.pop("guestInteractionProxies", UNSET))
+
+        def _parse_guest_credentials(data: object) -> BackupServerBackupJobGuestOsCredentialsType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_backup_server_backup_job_guest_os_credentials_type_0 = (
+                    BackupServerBackupJobGuestOsCredentialsType0.from_dict(data)
+                )
+
+                return componentsschemas_backup_server_backup_job_guest_os_credentials_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(BackupServerBackupJobGuestOsCredentialsType0 | None | Unset, data)
+
+        guest_credentials = _parse_guest_credentials(d.pop("guestCredentials", UNSET))
 
         backup_server_backup_job_guest_processing = cls(
             app_aware_processing=app_aware_processing,

@@ -23,13 +23,14 @@ class BackupServerCloudDirectorBackupJobDisk:
         vm_object (BackupServerCloudDirectorObject): VMware Cloud Director object.
         disks_to_process (BackupServerBackupJobVmwareDisksTypeToProcess): Type of a disk.
         disks (list[str]): Array of IDs assigned to VM disks.
-        remove_from_vm_configuration (bool | Unset): Indicates whether the disk is removed from the VM configuration.
+        remove_from_vm_configuration (bool | None | Unset): Indicates whether the disk is removed from the VM
+            configuration.
     """
 
     vm_object: BackupServerCloudDirectorObject
     disks_to_process: BackupServerBackupJobVmwareDisksTypeToProcess
     disks: list[str]
-    remove_from_vm_configuration: bool | Unset = UNSET
+    remove_from_vm_configuration: bool | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -39,7 +40,11 @@ class BackupServerCloudDirectorBackupJobDisk:
 
         disks = self.disks
 
-        remove_from_vm_configuration = self.remove_from_vm_configuration
+        remove_from_vm_configuration: bool | None | Unset
+        if isinstance(self.remove_from_vm_configuration, Unset):
+            remove_from_vm_configuration = UNSET
+        else:
+            remove_from_vm_configuration = self.remove_from_vm_configuration
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -66,7 +71,14 @@ class BackupServerCloudDirectorBackupJobDisk:
 
         disks = cast(list[str], d.pop("disks"))
 
-        remove_from_vm_configuration = d.pop("removeFromVMConfiguration", UNSET)
+        def _parse_remove_from_vm_configuration(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        remove_from_vm_configuration = _parse_remove_from_vm_configuration(d.pop("removeFromVMConfiguration", UNSET))
 
         backup_server_cloud_director_backup_job_disk = cls(
             vm_object=vm_object,

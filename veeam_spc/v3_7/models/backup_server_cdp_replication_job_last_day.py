@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,13 +21,14 @@ class BackupServerCdpReplicationJobLastDay:
         success_count (int | Unset): Number of task sessions that have completed with the `Success` status.
         warning_count (int | Unset): Number of task sessions that have completed with the `Warning` status.
         errors_count (int | Unset): Number of task sessions that have completed with the `Error` status.
-        total_size (int | Unset): Total size of the processed data, in kilobytes.
-        read_data (int | Unset): Amount of data read from the datastore prior to applying compression and deduplication,
-            in kilobytes.
-        transferred_data (int | Unset): Amount of data transferred from the source proxy to the target proxy, in
+        total_size (int | None | Unset): Total size of the processed data, in kilobytes.
+        read_data (int | None | Unset): Amount of data read from the datastore prior to applying compression and
+            deduplication, in kilobytes.
+        transferred_data (int | None | Unset): Amount of data transferred from the source proxy to the target proxy, in
             kilobytes.
-        sla (int | Unset): Percentage of sessions completed within the configured RPO.
-        max_delay (int | Unset): Difference between the configured RPO and time required to transfer and save data.
+        sla (int | None | Unset): Percentage of sessions completed within the configured RPO.
+        max_delay (int | None | Unset): Difference between the configured RPO and time required to transfer and save
+            data.
         bottleneck (BackupServerCdpReplicationJobLastDayBottleneck | Unset): Bottleneck in the data transmission
             process.
     """
@@ -35,11 +36,11 @@ class BackupServerCdpReplicationJobLastDay:
     success_count: int | Unset = UNSET
     warning_count: int | Unset = UNSET
     errors_count: int | Unset = UNSET
-    total_size: int | Unset = UNSET
-    read_data: int | Unset = UNSET
-    transferred_data: int | Unset = UNSET
-    sla: int | Unset = UNSET
-    max_delay: int | Unset = UNSET
+    total_size: int | None | Unset = UNSET
+    read_data: int | None | Unset = UNSET
+    transferred_data: int | None | Unset = UNSET
+    sla: int | None | Unset = UNSET
+    max_delay: int | None | Unset = UNSET
     bottleneck: BackupServerCdpReplicationJobLastDayBottleneck | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -50,15 +51,35 @@ class BackupServerCdpReplicationJobLastDay:
 
         errors_count = self.errors_count
 
-        total_size = self.total_size
+        total_size: int | None | Unset
+        if isinstance(self.total_size, Unset):
+            total_size = UNSET
+        else:
+            total_size = self.total_size
 
-        read_data = self.read_data
+        read_data: int | None | Unset
+        if isinstance(self.read_data, Unset):
+            read_data = UNSET
+        else:
+            read_data = self.read_data
 
-        transferred_data = self.transferred_data
+        transferred_data: int | None | Unset
+        if isinstance(self.transferred_data, Unset):
+            transferred_data = UNSET
+        else:
+            transferred_data = self.transferred_data
 
-        sla = self.sla
+        sla: int | None | Unset
+        if isinstance(self.sla, Unset):
+            sla = UNSET
+        else:
+            sla = self.sla
 
-        max_delay = self.max_delay
+        max_delay: int | None | Unset
+        if isinstance(self.max_delay, Unset):
+            max_delay = UNSET
+        else:
+            max_delay = self.max_delay
 
         bottleneck: str | Unset = UNSET
         if not isinstance(self.bottleneck, Unset):
@@ -97,15 +118,50 @@ class BackupServerCdpReplicationJobLastDay:
 
         errors_count = d.pop("errorsCount", UNSET)
 
-        total_size = d.pop("totalSize", UNSET)
+        def _parse_total_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        read_data = d.pop("readData", UNSET)
+        total_size = _parse_total_size(d.pop("totalSize", UNSET))
 
-        transferred_data = d.pop("transferredData", UNSET)
+        def _parse_read_data(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        sla = d.pop("sla", UNSET)
+        read_data = _parse_read_data(d.pop("readData", UNSET))
 
-        max_delay = d.pop("maxDelay", UNSET)
+        def _parse_transferred_data(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        transferred_data = _parse_transferred_data(d.pop("transferredData", UNSET))
+
+        def _parse_sla(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        sla = _parse_sla(d.pop("sla", UNSET))
+
+        def _parse_max_delay(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        max_delay = _parse_max_delay(d.pop("maxDelay", UNSET))
 
         _bottleneck = d.pop("bottleneck", UNSET)
         bottleneck: BackupServerCdpReplicationJobLastDayBottleneck | Unset

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -11,7 +11,7 @@ from ..models.backup_server_file_share_copy_job_retention_unit import BackupServ
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+    from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
 
 T = TypeVar("T", bound="BackupServerFileShareCopyJob")
@@ -30,9 +30,9 @@ class BackupServerFileShareCopyJob:
         retention (int | Unset): Duration of backup file retention.
         retention_unit (BackupServerFileShareCopyJobRetentionUnit | Unset): Measurement units of backup file retention
             duration.
-        source_size (int | Unset): Size of a job source, in bytes.
-        field_embedded (EmbeddedForBackupServerJobChildren | Unset): Resource representation of the related Veeam Backup
-            & Replication server job entity.
+        source_size (int | None | Unset): Size of a job source, in bytes.
+        field_embedded (EmbeddedForBackupServerJobChildrenType0 | None | Unset): Resource representation of the related
+            Veeam Backup & Replication server job entity.
     """
 
     instance_uid: UUID | Unset = UNSET
@@ -42,11 +42,13 @@ class BackupServerFileShareCopyJob:
     target_repository_uid: UUID | Unset = UNSET
     retention: int | Unset = UNSET
     retention_unit: BackupServerFileShareCopyJobRetentionUnit | Unset = UNSET
-    source_size: int | Unset = UNSET
-    field_embedded: EmbeddedForBackupServerJobChildren | Unset = UNSET
+    source_size: int | None | Unset = UNSET
+    field_embedded: EmbeddedForBackupServerJobChildrenType0 | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
+
         instance_uid: str | Unset = UNSET
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
@@ -73,11 +75,19 @@ class BackupServerFileShareCopyJob:
         if not isinstance(self.retention_unit, Unset):
             retention_unit = self.retention_unit.value
 
-        source_size = self.source_size
+        source_size: int | None | Unset
+        if isinstance(self.source_size, Unset):
+            source_size = UNSET
+        else:
+            source_size = self.source_size
 
-        field_embedded: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.field_embedded, Unset):
+        field_embedded: dict[str, Any] | None | Unset
+        if isinstance(self.field_embedded, Unset):
+            field_embedded = UNSET
+        elif isinstance(self.field_embedded, EmbeddedForBackupServerJobChildrenType0):
             field_embedded = self.field_embedded.to_dict()
+        else:
+            field_embedded = self.field_embedded
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -105,7 +115,7 @@ class BackupServerFileShareCopyJob:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.embedded_for_backup_server_job_children import EmbeddedForBackupServerJobChildren
+        from ..models.embedded_for_backup_server_job_children_type_0 import EmbeddedForBackupServerJobChildrenType0
 
         d = dict(src_dict)
         _instance_uid = d.pop("instanceUid", UNSET)
@@ -152,14 +162,33 @@ class BackupServerFileShareCopyJob:
         else:
             retention_unit = BackupServerFileShareCopyJobRetentionUnit(_retention_unit)
 
-        source_size = d.pop("sourceSize", UNSET)
+        def _parse_source_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        _field_embedded = d.pop("_embedded", UNSET)
-        field_embedded: EmbeddedForBackupServerJobChildren | Unset
-        if isinstance(_field_embedded, Unset):
-            field_embedded = UNSET
-        else:
-            field_embedded = EmbeddedForBackupServerJobChildren.from_dict(_field_embedded)
+        source_size = _parse_source_size(d.pop("sourceSize", UNSET))
+
+        def _parse_field_embedded(data: object) -> EmbeddedForBackupServerJobChildrenType0 | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_embedded_for_backup_server_job_children_type_0 = (
+                    EmbeddedForBackupServerJobChildrenType0.from_dict(data)
+                )
+
+                return componentsschemas_embedded_for_backup_server_job_children_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(EmbeddedForBackupServerJobChildrenType0 | None | Unset, data)
+
+        field_embedded = _parse_field_embedded(d.pop("_embedded", UNSET))
 
         backup_server_file_share_copy_job = cls(
             instance_uid=instance_uid,

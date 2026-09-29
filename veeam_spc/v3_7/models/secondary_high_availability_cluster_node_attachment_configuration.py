@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -27,7 +27,7 @@ class SecondaryHighAvailabilityClusterNodeAttachmentConfiguration:
             thumbprint.
         ssh_username (str): User name for SSH authentication to the secondary High Availability cluster node.
         ssh_password (str): Password for SSH authentication to the secondary High Availability cluster node.
-        description (str | Unset): Description of the deployment.
+        description (None | str | Unset): Description of the deployment.
     """
 
     hostname: str
@@ -35,7 +35,7 @@ class SecondaryHighAvailabilityClusterNodeAttachmentConfiguration:
     trusted_thumbprint: str
     ssh_username: str
     ssh_password: str
-    description: str | Unset = UNSET
+    description: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -49,7 +49,11 @@ class SecondaryHighAvailabilityClusterNodeAttachmentConfiguration:
 
         ssh_password = self.ssh_password
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -80,7 +84,14 @@ class SecondaryHighAvailabilityClusterNodeAttachmentConfiguration:
 
         ssh_password = d.pop("sshPassword")
 
-        description = d.pop("description", UNSET)
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         secondary_high_availability_cluster_node_attachment_configuration = cls(
             hostname=hostname,

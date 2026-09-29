@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,15 +20,15 @@ class VdcVaultTenant:
         instance_uid (UUID | Unset): UID assigned to a Veeam Data Cloud Vault tenant.
         name (str | Unset): Name of a Veeam Data Cloud Vault tenant.
         subscription_uid (UUID | Unset): UID assigned to a Veeam Data Cloud Vault subscription.
-        organization_uid (UUID | Unset): UID assigned to a mapped company. The `null` value indicates that no company is
-            mapped to the Veeam Data Cloud Vault tenant.
+        organization_uid (None | Unset | UUID): UID assigned to a mapped company. The `null` value indicates that no
+            company is mapped to the Veeam Data Cloud Vault tenant.
         vdc_status (VdcVaultTenantStatusReadonly | Unset): Status of a Veeam Data Cloud Vault tenant.
     """
 
     instance_uid: UUID | Unset = UNSET
     name: str | Unset = UNSET
     subscription_uid: UUID | Unset = UNSET
-    organization_uid: UUID | Unset = UNSET
+    organization_uid: None | Unset | UUID = UNSET
     vdc_status: VdcVaultTenantStatusReadonly | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -43,9 +43,13 @@ class VdcVaultTenant:
         if not isinstance(self.subscription_uid, Unset):
             subscription_uid = str(self.subscription_uid)
 
-        organization_uid: str | Unset = UNSET
-        if not isinstance(self.organization_uid, Unset):
+        organization_uid: None | str | Unset
+        if isinstance(self.organization_uid, Unset):
+            organization_uid = UNSET
+        elif isinstance(self.organization_uid, UUID):
             organization_uid = str(self.organization_uid)
+        else:
+            organization_uid = self.organization_uid
 
         vdc_status: str | Unset = UNSET
         if not isinstance(self.vdc_status, Unset):
@@ -86,12 +90,22 @@ class VdcVaultTenant:
         else:
             subscription_uid = UUID(_subscription_uid)
 
-        _organization_uid = d.pop("organizationUid", UNSET)
-        organization_uid: UUID | Unset
-        if isinstance(_organization_uid, Unset):
-            organization_uid = UNSET
-        else:
-            organization_uid = UUID(_organization_uid)
+        def _parse_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                organization_uid_type_0 = UUID(data)
+
+                return organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        organization_uid = _parse_organization_uid(d.pop("organizationUid", UNSET))
 
         _vdc_status = d.pop("vdcStatus", UNSET)
         vdc_status: VdcVaultTenantStatusReadonly | Unset

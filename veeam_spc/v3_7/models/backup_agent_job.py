@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -28,26 +28,26 @@ class BackupAgentJob:
         status (BackupAgentJobStatus): Status of the latest job session.
             > Can be changed to `Running` or `Stopping` using the PATCH endpoint.
         instance_uid (UUID | Unset): UID assigned to a Veeam backup agent job.
-        original_uid (UUID | Unset): UID assigned to a job on Veeam backup agent side.
+        original_uid (None | Unset | UUID): UID assigned to a job on Veeam backup agent side.
         backup_agent_uid (UUID | Unset): UID assigned to a Veeam backup agent.
         organization_uid (UUID | Unset): UID assigned to an organization.
-        name (str | Unset): Name of a Veeam backup agent job.
-        description (str | Unset): Description of a Veeam backup agent job.
+        name (None | str | Unset): Name of a Veeam backup agent job.
+        description (None | str | Unset): Description of a Veeam backup agent job.
         config_uid (UUID | Unset): UID assigned to a backup job configuration.
         system_type (BackupAgentJobSystemType | Unset): Type of guest OS on a managed computer.
-        backup_policy_uid (UUID | Unset): UID of a backup policy assigned to a Veeam backup agent.
-        backup_policy_name (str | Unset): Name of a backup policy assigned to a Veeam backup agent.
+        backup_policy_uid (None | Unset | UUID): UID of a backup policy assigned to a Veeam backup agent.
+        backup_policy_name (None | str | Unset): Name of a backup policy assigned to a Veeam backup agent.
         backup_policy_assign_status (BackupPolicyAssignStatus | Unset):
-        backup_policy_failure_message (str | Unset): Message that is displayed in case a backup policy job fails.
+        backup_policy_failure_message (None | str | Unset): Message that is displayed in case a backup policy job fails.
             > Every line break is represented by the `\r\n` control characters.
         operation_mode (BackupAgentOperationMode | Unset): Backup job operation mode.
-        destination (str | Unset): Location where backup files for a Veeam backup agent reside.
-        restore_points (int | Unset): Number of restore points.
-        last_run (datetime.datetime | Unset): Date and time when the latest job session started.
-        last_end_time (datetime.datetime | Unset): Date and time when the latest job session finished.
-        last_duration (int | Unset): Duration of the latest backup job session, in seconds.
-        next_run (datetime.datetime | Unset): Date and time of the next scheduled backup job session.
-        avg_duration (int | Unset): Average duration of a backup job session, in seconds.
+        destination (None | str | Unset): Location where backup files for a Veeam backup agent reside.
+        restore_points (int | None | Unset): Number of restore points.
+        last_run (datetime.datetime | None | Unset): Date and time when the latest job session started.
+        last_end_time (datetime.datetime | None | Unset): Date and time when the latest job session finished.
+        last_duration (int | None | Unset): Duration of the latest backup job session, in seconds.
+        next_run (datetime.datetime | None | Unset): Date and time of the next scheduled backup job session.
+        avg_duration (int | None | Unset): Average duration of a backup job session, in seconds.
         backup_mode (BackupAgentJobBackupMode | Unset): Type of backup operation mode.
         target_type (BackupAgentJobTargetTypeDetailed | Unset): Type of a location where backup files for a Veeam backup
             agent reside.
@@ -55,45 +55,46 @@ class BackupAgentJob:
             > Can be changed using the PATCH endpoint.
         schedule_type (BackupAgentJobScheduleType | Unset): Type of schedule configured for the job.
         schedule_display_name (str | Unset): Name of a backup job schedule.
-        last_modified_date (datetime.datetime | Unset): Date and time when settings of a backup job were last modified.
-        last_modified_by (str | Unset): Name of a user who last modified job settings.
-        failure_message (str | Unset): Message that is displayed in case a backup job fails.
-        backed_up_size (int | Unset): Total size of all restore points, in bytes.
-        free_space (int | Unset): Amount of free space available on the target repository.
+        last_modified_date (datetime.datetime | None | Unset): Date and time when settings of a backup job were last
+            modified.
+        last_modified_by (None | str | Unset): Name of a user who last modified job settings.
+        failure_message (None | str | Unset): Message that is displayed in case a backup job fails.
+        backed_up_size (int | None | Unset): Total size of all restore points, in bytes.
+        free_space (int | None | Unset): Amount of free space available on the target repository.
             > If the job has never been run, the property value is `null`.
     """
 
     status: BackupAgentJobStatus
     instance_uid: UUID | Unset = UNSET
-    original_uid: UUID | Unset = UNSET
+    original_uid: None | Unset | UUID = UNSET
     backup_agent_uid: UUID | Unset = UNSET
     organization_uid: UUID | Unset = UNSET
-    name: str | Unset = UNSET
-    description: str | Unset = UNSET
+    name: None | str | Unset = UNSET
+    description: None | str | Unset = UNSET
     config_uid: UUID | Unset = UNSET
     system_type: BackupAgentJobSystemType | Unset = UNSET
-    backup_policy_uid: UUID | Unset = UNSET
-    backup_policy_name: str | Unset = UNSET
+    backup_policy_uid: None | Unset | UUID = UNSET
+    backup_policy_name: None | str | Unset = UNSET
     backup_policy_assign_status: BackupPolicyAssignStatus | Unset = UNSET
-    backup_policy_failure_message: str | Unset = UNSET
+    backup_policy_failure_message: None | str | Unset = UNSET
     operation_mode: BackupAgentOperationMode | Unset = UNSET
-    destination: str | Unset = UNSET
-    restore_points: int | Unset = UNSET
-    last_run: datetime.datetime | Unset = UNSET
-    last_end_time: datetime.datetime | Unset = UNSET
-    last_duration: int | Unset = UNSET
-    next_run: datetime.datetime | Unset = UNSET
-    avg_duration: int | Unset = UNSET
+    destination: None | str | Unset = UNSET
+    restore_points: int | None | Unset = UNSET
+    last_run: datetime.datetime | None | Unset = UNSET
+    last_end_time: datetime.datetime | None | Unset = UNSET
+    last_duration: int | None | Unset = UNSET
+    next_run: datetime.datetime | None | Unset = UNSET
+    avg_duration: int | None | Unset = UNSET
     backup_mode: BackupAgentJobBackupMode | Unset = UNSET
     target_type: BackupAgentJobTargetTypeDetailed | Unset = UNSET
     is_enabled: bool | Unset = UNSET
     schedule_type: BackupAgentJobScheduleType | Unset = UNSET
     schedule_display_name: str | Unset = UNSET
-    last_modified_date: datetime.datetime | Unset = UNSET
-    last_modified_by: str | Unset = UNSET
-    failure_message: str | Unset = UNSET
-    backed_up_size: int | Unset = UNSET
-    free_space: int | Unset = UNSET
+    last_modified_date: datetime.datetime | None | Unset = UNSET
+    last_modified_by: None | str | Unset = UNSET
+    failure_message: None | str | Unset = UNSET
+    backed_up_size: int | None | Unset = UNSET
+    free_space: int | None | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -103,9 +104,13 @@ class BackupAgentJob:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        original_uid: str | Unset = UNSET
-        if not isinstance(self.original_uid, Unset):
+        original_uid: None | str | Unset
+        if isinstance(self.original_uid, Unset):
+            original_uid = UNSET
+        elif isinstance(self.original_uid, UUID):
             original_uid = str(self.original_uid)
+        else:
+            original_uid = self.original_uid
 
         backup_agent_uid: str | Unset = UNSET
         if not isinstance(self.backup_agent_uid, Unset):
@@ -115,9 +120,17 @@ class BackupAgentJob:
         if not isinstance(self.organization_uid, Unset):
             organization_uid = str(self.organization_uid)
 
-        name = self.name
+        name: None | str | Unset
+        if isinstance(self.name, Unset):
+            name = UNSET
+        else:
+            name = self.name
 
-        description = self.description
+        description: None | str | Unset
+        if isinstance(self.description, Unset):
+            description = UNSET
+        else:
+            description = self.description
 
         config_uid: str | Unset = UNSET
         if not isinstance(self.config_uid, Unset):
@@ -127,41 +140,81 @@ class BackupAgentJob:
         if not isinstance(self.system_type, Unset):
             system_type = self.system_type.value
 
-        backup_policy_uid: str | Unset = UNSET
-        if not isinstance(self.backup_policy_uid, Unset):
+        backup_policy_uid: None | str | Unset
+        if isinstance(self.backup_policy_uid, Unset):
+            backup_policy_uid = UNSET
+        elif isinstance(self.backup_policy_uid, UUID):
             backup_policy_uid = str(self.backup_policy_uid)
+        else:
+            backup_policy_uid = self.backup_policy_uid
 
-        backup_policy_name = self.backup_policy_name
+        backup_policy_name: None | str | Unset
+        if isinstance(self.backup_policy_name, Unset):
+            backup_policy_name = UNSET
+        else:
+            backup_policy_name = self.backup_policy_name
 
         backup_policy_assign_status: str | Unset = UNSET
         if not isinstance(self.backup_policy_assign_status, Unset):
             backup_policy_assign_status = self.backup_policy_assign_status.value
 
-        backup_policy_failure_message = self.backup_policy_failure_message
+        backup_policy_failure_message: None | str | Unset
+        if isinstance(self.backup_policy_failure_message, Unset):
+            backup_policy_failure_message = UNSET
+        else:
+            backup_policy_failure_message = self.backup_policy_failure_message
 
         operation_mode: str | Unset = UNSET
         if not isinstance(self.operation_mode, Unset):
             operation_mode = self.operation_mode.value
 
-        destination = self.destination
+        destination: None | str | Unset
+        if isinstance(self.destination, Unset):
+            destination = UNSET
+        else:
+            destination = self.destination
 
-        restore_points = self.restore_points
+        restore_points: int | None | Unset
+        if isinstance(self.restore_points, Unset):
+            restore_points = UNSET
+        else:
+            restore_points = self.restore_points
 
-        last_run: str | Unset = UNSET
-        if not isinstance(self.last_run, Unset):
+        last_run: None | str | Unset
+        if isinstance(self.last_run, Unset):
+            last_run = UNSET
+        elif isinstance(self.last_run, datetime.datetime):
             last_run = self.last_run.isoformat()
+        else:
+            last_run = self.last_run
 
-        last_end_time: str | Unset = UNSET
-        if not isinstance(self.last_end_time, Unset):
+        last_end_time: None | str | Unset
+        if isinstance(self.last_end_time, Unset):
+            last_end_time = UNSET
+        elif isinstance(self.last_end_time, datetime.datetime):
             last_end_time = self.last_end_time.isoformat()
+        else:
+            last_end_time = self.last_end_time
 
-        last_duration = self.last_duration
+        last_duration: int | None | Unset
+        if isinstance(self.last_duration, Unset):
+            last_duration = UNSET
+        else:
+            last_duration = self.last_duration
 
-        next_run: str | Unset = UNSET
-        if not isinstance(self.next_run, Unset):
+        next_run: None | str | Unset
+        if isinstance(self.next_run, Unset):
+            next_run = UNSET
+        elif isinstance(self.next_run, datetime.datetime):
             next_run = self.next_run.isoformat()
+        else:
+            next_run = self.next_run
 
-        avg_duration = self.avg_duration
+        avg_duration: int | None | Unset
+        if isinstance(self.avg_duration, Unset):
+            avg_duration = UNSET
+        else:
+            avg_duration = self.avg_duration
 
         backup_mode: str | Unset = UNSET
         if not isinstance(self.backup_mode, Unset):
@@ -179,17 +232,37 @@ class BackupAgentJob:
 
         schedule_display_name = self.schedule_display_name
 
-        last_modified_date: str | Unset = UNSET
-        if not isinstance(self.last_modified_date, Unset):
+        last_modified_date: None | str | Unset
+        if isinstance(self.last_modified_date, Unset):
+            last_modified_date = UNSET
+        elif isinstance(self.last_modified_date, datetime.datetime):
             last_modified_date = self.last_modified_date.isoformat()
+        else:
+            last_modified_date = self.last_modified_date
 
-        last_modified_by = self.last_modified_by
+        last_modified_by: None | str | Unset
+        if isinstance(self.last_modified_by, Unset):
+            last_modified_by = UNSET
+        else:
+            last_modified_by = self.last_modified_by
 
-        failure_message = self.failure_message
+        failure_message: None | str | Unset
+        if isinstance(self.failure_message, Unset):
+            failure_message = UNSET
+        else:
+            failure_message = self.failure_message
 
-        backed_up_size = self.backed_up_size
+        backed_up_size: int | None | Unset
+        if isinstance(self.backed_up_size, Unset):
+            backed_up_size = UNSET
+        else:
+            backed_up_size = self.backed_up_size
 
-        free_space = self.free_space
+        free_space: int | None | Unset
+        if isinstance(self.free_space, Unset):
+            free_space = UNSET
+        else:
+            free_space = self.free_space
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -273,12 +346,22 @@ class BackupAgentJob:
         else:
             instance_uid = UUID(_instance_uid)
 
-        _original_uid = d.pop("originalUid", UNSET)
-        original_uid: UUID | Unset
-        if isinstance(_original_uid, Unset):
-            original_uid = UNSET
-        else:
-            original_uid = UUID(_original_uid)
+        def _parse_original_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                original_uid_type_0 = UUID(data)
+
+                return original_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        original_uid = _parse_original_uid(d.pop("originalUid", UNSET))
 
         _backup_agent_uid = d.pop("backupAgentUid", UNSET)
         backup_agent_uid: UUID | Unset
@@ -294,9 +377,23 @@ class BackupAgentJob:
         else:
             organization_uid = UUID(_organization_uid)
 
-        name = d.pop("name", UNSET)
+        def _parse_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        description = d.pop("description", UNSET)
+        name = _parse_name(d.pop("name", UNSET))
+
+        def _parse_description(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        description = _parse_description(d.pop("description", UNSET))
 
         _config_uid = d.pop("configUid", UNSET)
         config_uid: UUID | Unset
@@ -312,14 +409,31 @@ class BackupAgentJob:
         else:
             system_type = BackupAgentJobSystemType(_system_type)
 
-        _backup_policy_uid = d.pop("backupPolicyUid", UNSET)
-        backup_policy_uid: UUID | Unset
-        if isinstance(_backup_policy_uid, Unset):
-            backup_policy_uid = UNSET
-        else:
-            backup_policy_uid = UUID(_backup_policy_uid)
+        def _parse_backup_policy_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                backup_policy_uid_type_0 = UUID(data)
 
-        backup_policy_name = d.pop("backupPolicyName", UNSET)
+                return backup_policy_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        backup_policy_uid = _parse_backup_policy_uid(d.pop("backupPolicyUid", UNSET))
+
+        def _parse_backup_policy_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        backup_policy_name = _parse_backup_policy_name(d.pop("backupPolicyName", UNSET))
 
         _backup_policy_assign_status = d.pop("backupPolicyAssignStatus", UNSET)
         backup_policy_assign_status: BackupPolicyAssignStatus | Unset
@@ -328,7 +442,14 @@ class BackupAgentJob:
         else:
             backup_policy_assign_status = BackupPolicyAssignStatus(_backup_policy_assign_status)
 
-        backup_policy_failure_message = d.pop("backupPolicyFailureMessage", UNSET)
+        def _parse_backup_policy_failure_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        backup_policy_failure_message = _parse_backup_policy_failure_message(d.pop("backupPolicyFailureMessage", UNSET))
 
         _operation_mode = d.pop("operationMode", UNSET)
         operation_mode: BackupAgentOperationMode | Unset
@@ -337,34 +458,92 @@ class BackupAgentJob:
         else:
             operation_mode = BackupAgentOperationMode(_operation_mode)
 
-        destination = d.pop("destination", UNSET)
+        def _parse_destination(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        restore_points = d.pop("restorePoints", UNSET)
+        destination = _parse_destination(d.pop("destination", UNSET))
 
-        _last_run = d.pop("lastRun", UNSET)
-        last_run: datetime.datetime | Unset
-        if isinstance(_last_run, Unset):
-            last_run = UNSET
-        else:
-            last_run = isoparse(_last_run)
+        def _parse_restore_points(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
 
-        _last_end_time = d.pop("lastEndTime", UNSET)
-        last_end_time: datetime.datetime | Unset
-        if isinstance(_last_end_time, Unset):
-            last_end_time = UNSET
-        else:
-            last_end_time = isoparse(_last_end_time)
+        restore_points = _parse_restore_points(d.pop("restorePoints", UNSET))
 
-        last_duration = d.pop("lastDuration", UNSET)
+        def _parse_last_run(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_run_type_0 = isoparse(data)
 
-        _next_run = d.pop("nextRun", UNSET)
-        next_run: datetime.datetime | Unset
-        if isinstance(_next_run, Unset):
-            next_run = UNSET
-        else:
-            next_run = isoparse(_next_run)
+                return last_run_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
 
-        avg_duration = d.pop("avgDuration", UNSET)
+        last_run = _parse_last_run(d.pop("lastRun", UNSET))
+
+        def _parse_last_end_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_end_time_type_0 = isoparse(data)
+
+                return last_end_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        last_end_time = _parse_last_end_time(d.pop("lastEndTime", UNSET))
+
+        def _parse_last_duration(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        last_duration = _parse_last_duration(d.pop("lastDuration", UNSET))
+
+        def _parse_next_run(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                next_run_type_0 = isoparse(data)
+
+                return next_run_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        next_run = _parse_next_run(d.pop("nextRun", UNSET))
+
+        def _parse_avg_duration(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        avg_duration = _parse_avg_duration(d.pop("avgDuration", UNSET))
 
         _backup_mode = d.pop("backupMode", UNSET)
         backup_mode: BackupAgentJobBackupMode | Unset
@@ -391,20 +570,58 @@ class BackupAgentJob:
 
         schedule_display_name = d.pop("scheduleDisplayName", UNSET)
 
-        _last_modified_date = d.pop("lastModifiedDate", UNSET)
-        last_modified_date: datetime.datetime | Unset
-        if isinstance(_last_modified_date, Unset):
-            last_modified_date = UNSET
-        else:
-            last_modified_date = isoparse(_last_modified_date)
+        def _parse_last_modified_date(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                last_modified_date_type_0 = isoparse(data)
 
-        last_modified_by = d.pop("lastModifiedBy", UNSET)
+                return last_modified_date_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
 
-        failure_message = d.pop("failureMessage", UNSET)
+        last_modified_date = _parse_last_modified_date(d.pop("lastModifiedDate", UNSET))
 
-        backed_up_size = d.pop("backedUpSize", UNSET)
+        def _parse_last_modified_by(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        free_space = d.pop("freeSpace", UNSET)
+        last_modified_by = _parse_last_modified_by(d.pop("lastModifiedBy", UNSET))
+
+        def _parse_failure_message(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        failure_message = _parse_failure_message(d.pop("failureMessage", UNSET))
+
+        def _parse_backed_up_size(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        backed_up_size = _parse_backed_up_size(d.pop("backedUpSize", UNSET))
+
+        def _parse_free_space(data: object) -> int | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(int | None | Unset, data)
+
+        free_space = _parse_free_space(d.pop("freeSpace", UNSET))
 
         backup_agent_job = cls(
             status=status,

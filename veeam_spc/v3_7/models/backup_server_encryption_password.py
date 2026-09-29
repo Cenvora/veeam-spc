@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 from uuid import UUID
 
 from attrs import define as _attrs_define
@@ -20,21 +20,21 @@ class BackupServerEncryptionPassword:
     Attributes:
         hint (str): Hint for a Veeam Backup & Replication server encryption password.
         instance_uid (UUID | Unset): UID assigned to a Veeam Backup & Replication server encryption password.
-        unique_id (str | Unset): Unique ID assigned to a Veeam Backup & Replication server encryption password.
-        modification_time (datetime.datetime | Unset): Date and time when a Veeam Backup & Replication server encryption
-            password was created or changed.
-        mapped_organization_uid (UUID | Unset): UID of a company to whom a Veeam Backup & Replication server encryption
-            password is assigned.
-        mapped_organization_name (str | Unset): Name of a company to whom a Veeam Backup & Replication server encryption
-            password is assigned.
+        unique_id (None | str | Unset): Unique ID assigned to a Veeam Backup & Replication server encryption password.
+        modification_time (datetime.datetime | None | Unset): Date and time when a Veeam Backup & Replication server
+            encryption password was created or changed.
+        mapped_organization_uid (None | Unset | UUID): UID of a company to whom a Veeam Backup & Replication server
+            encryption password is assigned.
+        mapped_organization_name (None | str | Unset): Name of a company to whom a Veeam Backup & Replication server
+            encryption password is assigned.
     """
 
     hint: str
     instance_uid: UUID | Unset = UNSET
-    unique_id: str | Unset = UNSET
-    modification_time: datetime.datetime | Unset = UNSET
-    mapped_organization_uid: UUID | Unset = UNSET
-    mapped_organization_name: str | Unset = UNSET
+    unique_id: None | str | Unset = UNSET
+    modification_time: datetime.datetime | None | Unset = UNSET
+    mapped_organization_uid: None | Unset | UUID = UNSET
+    mapped_organization_name: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -44,17 +44,33 @@ class BackupServerEncryptionPassword:
         if not isinstance(self.instance_uid, Unset):
             instance_uid = str(self.instance_uid)
 
-        unique_id = self.unique_id
+        unique_id: None | str | Unset
+        if isinstance(self.unique_id, Unset):
+            unique_id = UNSET
+        else:
+            unique_id = self.unique_id
 
-        modification_time: str | Unset = UNSET
-        if not isinstance(self.modification_time, Unset):
+        modification_time: None | str | Unset
+        if isinstance(self.modification_time, Unset):
+            modification_time = UNSET
+        elif isinstance(self.modification_time, datetime.datetime):
             modification_time = self.modification_time.isoformat()
+        else:
+            modification_time = self.modification_time
 
-        mapped_organization_uid: str | Unset = UNSET
-        if not isinstance(self.mapped_organization_uid, Unset):
+        mapped_organization_uid: None | str | Unset
+        if isinstance(self.mapped_organization_uid, Unset):
+            mapped_organization_uid = UNSET
+        elif isinstance(self.mapped_organization_uid, UUID):
             mapped_organization_uid = str(self.mapped_organization_uid)
+        else:
+            mapped_organization_uid = self.mapped_organization_uid
 
-        mapped_organization_name = self.mapped_organization_name
+        mapped_organization_name: None | str | Unset
+        if isinstance(self.mapped_organization_name, Unset):
+            mapped_organization_name = UNSET
+        else:
+            mapped_organization_name = self.mapped_organization_name
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -88,23 +104,57 @@ class BackupServerEncryptionPassword:
         else:
             instance_uid = UUID(_instance_uid)
 
-        unique_id = d.pop("uniqueId", UNSET)
+        def _parse_unique_id(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
 
-        _modification_time = d.pop("modificationTime", UNSET)
-        modification_time: datetime.datetime | Unset
-        if isinstance(_modification_time, Unset):
-            modification_time = UNSET
-        else:
-            modification_time = isoparse(_modification_time)
+        unique_id = _parse_unique_id(d.pop("uniqueId", UNSET))
 
-        _mapped_organization_uid = d.pop("mappedOrganizationUid", UNSET)
-        mapped_organization_uid: UUID | Unset
-        if isinstance(_mapped_organization_uid, Unset):
-            mapped_organization_uid = UNSET
-        else:
-            mapped_organization_uid = UUID(_mapped_organization_uid)
+        def _parse_modification_time(data: object) -> datetime.datetime | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                modification_time_type_0 = isoparse(data)
 
-        mapped_organization_name = d.pop("mappedOrganizationName", UNSET)
+                return modification_time_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(datetime.datetime | None | Unset, data)
+
+        modification_time = _parse_modification_time(d.pop("modificationTime", UNSET))
+
+        def _parse_mapped_organization_uid(data: object) -> None | Unset | UUID:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, str):
+                    raise TypeError()
+                mapped_organization_uid_type_0 = UUID(data)
+
+                return mapped_organization_uid_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UUID, data)
+
+        mapped_organization_uid = _parse_mapped_organization_uid(d.pop("mappedOrganizationUid", UNSET))
+
+        def _parse_mapped_organization_name(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        mapped_organization_name = _parse_mapped_organization_name(d.pop("mappedOrganizationName", UNSET))
 
         backup_server_encryption_password = cls(
             hint=hint,
